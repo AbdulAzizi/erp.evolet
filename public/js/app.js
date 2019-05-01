@@ -20310,8 +20310,6 @@ var render = function() {
       }
     },
     [
-      _c("v-toolbar-side-icon", { on: { blur: _vm.toggleDrawer } }),
-      _vm._v(" "),
       _c("v-toolbar-title", { staticClass: "mr-5 align-center" }, [
         _c(
           "a",

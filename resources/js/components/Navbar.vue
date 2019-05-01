@@ -8,7 +8,7 @@
 		fixed
 		dark
 		>
-			<v-toolbar-side-icon @blur="toggleDrawer"></v-toolbar-side-icon>
+			<!-- <v-toolbar-side-icon @blur="toggleDrawer"></v-toolbar-side-icon> -->
 			
 			<v-toolbar-title class="mr-5 align-center">
 				<a href="/">
