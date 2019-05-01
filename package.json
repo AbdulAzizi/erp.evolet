@@ -17,5 +17,9 @@
         "resolve-url-loader": "^2.3.1",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
+    },
+    "dependencies": {
+        "material-design-icons-iconfont": "^4.0.5",
+        "vuetify": "^1.5.14"
     }
 }

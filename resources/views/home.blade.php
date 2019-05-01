@@ -1,4 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.default')
+
+@section('content')
+    <v-btn color="success">Success</v-btn>
+@endsection
+
+{{-- @extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -16,8 +22,9 @@
 
                     You are logged in!
                 </div>
+                <v-btn color="success">Success</v-btn>
             </div>
         </div>
     </div>
 </div>
-@endsection
+@endsection --}}
