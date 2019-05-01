@@ -10,7 +10,17 @@ window.Vue = require("vue");
 
 // add vuetify
 import Vuetify from "vuetify";
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+    theme: {
+        primary: "#b8cf41",
+        secondary: "#333435"
+        // accent: "#689F38",
+        // success: "#4caf50",
+        // error: "#EF5350",
+        // warning: "#ffeb3b",
+        // info: "#2196f3",
+    }
+});
 import "vuetify/dist/vuetify.min.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 

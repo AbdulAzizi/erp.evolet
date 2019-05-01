@@ -1,10 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-    <v-btn color="success">
-        Success
-        <v-icon right dark>contact_support</v-icon>
-    </v-btn>
+    Content comes here
 @endsection
 
 {{-- @extends('layouts.app')

@@ -1,6 +1,6 @@
 <template>
 	<v-toolbar 
-		color="primary"  
+		color="secondary"  
 		app 
 		flat 
 		clipped-right
@@ -11,8 +11,11 @@
 			<v-toolbar-side-icon @blur="toggleDrawer"></v-toolbar-side-icon>
 			
 			<v-toolbar-title class="mr-5 align-center">
-				<a href="/" style="text-decoration:none;" class="font-weight-regular white--text">
-					EvoNet
+				<a href="/">
+					<v-img
+					:src="`${assetPath}img/white-logo.png`"
+					width="200"
+					></v-img>
 				</a>
 			</v-toolbar-title>
 
@@ -48,9 +51,11 @@
 				</form>
 			</div>
 	    </v-menu> -->
-            <v-btn @blur="toggleRightDrawer" icon>
+
+
+            <!-- <v-btn @blur="toggleRightDrawer" icon>
             <v-icon :style="rightDrawer ? '':'-ms-transform: rotate(180deg); -webkit-transform: rotate(180deg);transform: rotate(180deg);'">chevron_left</v-icon>
-            </v-btn>
+            </v-btn> -->
 	    
 		</v-toolbar>
 </template>
@@ -63,7 +68,8 @@ export default {
 			{ title: 'CV' , link:'/cv/create'}
 		],
 		csrf: window.Laravel.csrf_token,
-		user:window.Laravel.auth
+		user:window.Laravel.auth,
+		assetPath:window.Laravel.asset_path
 	}),
 	created(){
 		// this.items.unshift({title: this.user.name+' '+this.user.surname, link:'/users/'+this.user.id});
