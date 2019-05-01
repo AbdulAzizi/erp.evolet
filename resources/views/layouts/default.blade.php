@@ -2,7 +2,7 @@
 
 @section('layout')
 
-	<right-drawer></right-drawer>
+	{{-- <right-drawer></right-drawer> --}}
 	
 	<navbar></navbar>
 
@@ -10,6 +10,6 @@
 		@yield('content')
 	</v-content>
 	
-	<left-drawer></left-drawer>
+	{{-- <left-drawer></left-drawer> --}}
 	
 @endsection

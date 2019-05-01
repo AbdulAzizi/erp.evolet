@@ -12,6 +12,21 @@ window.Vue = require("vue");
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 import "vuetify/dist/vuetify.min.css";
+import "material-design-icons-iconfont/dist/material-design-icons.css";
+
+window.Event = new (class {
+    constructor() {
+        this.vue = new Vue();
+    }
+
+    fire(event, data = null) {
+        this.vue.$emit(event, data);
+    }
+
+    listen(event, callback) {
+        this.vue.$on(event, callback);
+    }
+})();
 
 /**
  * The following block of code may be used to automatically register your
@@ -28,6 +43,7 @@ Vue.component(
     "example-component",
     require("./components/ExampleComponent.vue").default
 );
+Vue.component("navbar", require("./components/Navbar.vue").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
