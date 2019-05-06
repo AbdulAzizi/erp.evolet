@@ -1787,6 +1787,405 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Form.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Form.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      years: ['2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+      mnn: null,
+      mnns: [],
+      mnnIsLoading: false,
+      mnnSearch: null,
+      form: null,
+      forms: [],
+      formSearch: null,
+      formPlaceholder: "Сначало выберите МНН",
+      formIsLoading: false,
+      formDisabled: true,
+      formHasErrors: false,
+      perviy_god: null,
+      perviy_god_children_disabled: true,
+      vtoroi_god: null,
+      vtoroi_god_children_disabled: true,
+      doza: null,
+      opu: null,
+      thchp: null,
+      summa_prodazh_za_perviy_god: null,
+      prodazhi_upakovok_za_perviy_god: null,
+      summa_prodazh_za_vtoroi_god: null,
+      prodazhi_upakovok_za_vtoroi_god: null,
+      kppr: null,
+      dolya_bg: null,
+      dolya_mst: null,
+      prirost_mst: null,
+      nkpn: Array(8),
+      nkpnSum: 0,
+      nkpf: Array(8),
+      nkpfSum: 0
+    };
+  },
+  watch: {
+    mnnSearch: function mnnSearch(val) {
+      if (!this.mnn) {
+        this.mnnIsLoading = true;
+        var self = this;
+        axios.get("".concat(window.Laravel.asset_path, "api/mnns?search=").concat(val)).then(function (response) {
+          self.mnns = response.data;
+          self.mnnIsLoading = false;
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      }
+    },
+    mnn: function mnn(val) {
+      this.formDisabled = false;
+      this.formIsLoading = true;
+      var self = this;
+      axios.get("".concat(window.Laravel.asset_path, "api/forms?mnn_id=").concat(val.id)).then(function (response) {
+        self.forms = response.data;
+        self.formIsLoading = false;
+        self.formPlaceholder = "";
+      })["catch"](function (error) {
+        console.log(error);
+      }); // console.log(val);
+    },
+    perviy_god: function perviy_god(val) {
+      this.perviy_god_children_disabled = false;
+    },
+    vtoroi_god: function vtoroi_god(val) {
+      this.vtoroi_god_children_disabled = false;
+    }
+  },
+  computed: {
+    formFields: function formFields() {
+      return {
+        mnn: this.mnn,
+        form: this.form,
+        doza: this.doza,
+        opu: this.opu,
+        thchp: this.thchp,
+        perviy_god: this.perviy_god,
+        summa_prodazh_za_perviy_god: this.summa_prodazh_za_perviy_god,
+        prodazhi_upakovok_za_perviy_god: this.prodazhi_upakovok_za_perviy_god,
+        vtoroi_god: this.vtoroi_god,
+        summa_prodazh_za_vtoroi_god: this.summa_prodazh_za_vtoroi_god,
+        prodazhi_upakovok_za_vtoroi_god: this.prodazhi_upakovok_za_vtoroi_god,
+        kppr: this.kppr,
+        dolya_bg: this.dolya_bg,
+        dolya_mst: this.dolya_mst,
+        prirost_mst: this.prirost_mst
+      };
+    }
+  },
+  methods: {
+    submit: function submit() {
+      var _this = this;
+
+      this.formHasErrors = false;
+      Object.keys(this.formFields).forEach(function (f) {
+        if (!_this.formFields[f]) _this.formHasErrors = true;
+
+        _this.$refs[f].validate(true);
+      });
+      this.nkpfSum = 0;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.nkpf[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var item = _step.value;
+          if (item) this.nkpfSum += Number(item);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      console.log(this.nkpfSum);
+    },
+    validate: function validate() {}
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Navbar.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Navbar.vue?vue&type=script&lang=js& ***!
@@ -20275,6 +20674,692 @@ var staticRenderFns = [
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Form.vue?vue&type=template&id=8048fca2&":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Form.vue?vue&type=template&id=8048fca2& ***!
+  \*******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "v-toolbar",
+        {
+          staticClass: "secondary--text",
+          attrs: { card: "", color: "primary", dark: "" }
+        },
+        [_c("v-toolbar-title", [_vm._v("Новое лекарственное средство")])],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-form",
+        { attrs: { action: "", method: "post" } },
+        [
+          _c(
+            "v-container",
+            [
+              _c(
+                "v-layout",
+                { attrs: { row: "", wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md6: "" } },
+                    [
+                      _c("v-autocomplete", {
+                        ref: "mnn",
+                        attrs: {
+                          items: _vm.mnns,
+                          loading: _vm.mnnIsLoading,
+                          "search-input": _vm.mnnSearch,
+                          box: "",
+                          "hide-no-data": "",
+                          "hide-selected": "",
+                          "item-text": "name",
+                          "item-value": "id",
+                          label: "МНН",
+                          placeholder: "Начните вводить для поиска",
+                          "return-object": "",
+                          dense: "",
+                          rules: [
+                            function() {
+                              return !!_vm.mnn || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        on: {
+                          "update:searchInput": function($event) {
+                            _vm.mnnSearch = $event
+                          },
+                          "update:search-input": function($event) {
+                            _vm.mnnSearch = $event
+                          }
+                        },
+                        model: {
+                          value: _vm.mnn,
+                          callback: function($$v) {
+                            _vm.mnn = $$v
+                          },
+                          expression: "mnn"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md6: "" } },
+                    [
+                      _c("v-select", {
+                        ref: "form",
+                        attrs: {
+                          items: _vm.forms,
+                          loading: _vm.formIsLoading,
+                          placeholder: _vm.formPlaceholder,
+                          "return-object": "",
+                          "item-text": "name",
+                          "item-value": "id",
+                          name: "form",
+                          label: "Форма",
+                          disabled: _vm.formDisabled,
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.form || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.form,
+                          callback: function($$v) {
+                            _vm.form = $$v
+                          },
+                          expression: "form"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md4: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "doza",
+                        attrs: {
+                          name: "doza",
+                          type: "text",
+                          label: "Доза",
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.doza || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.doza,
+                          callback: function($$v) {
+                            _vm.doza = $$v
+                          },
+                          expression: "doza"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md4: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "opu",
+                        attrs: {
+                          name: "opu",
+                          type: "text",
+                          label: "ОПУ",
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.opu || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.opu,
+                          callback: function($$v) {
+                            _vm.opu = $$v
+                          },
+                          expression: "opu"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md4: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "thchp",
+                        attrs: {
+                          name: "thchp",
+                          type: "text",
+                          label: "ТХЧП",
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.thchp || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.thchp,
+                          callback: function($$v) {
+                            _vm.thchp = $$v
+                          },
+                          expression: "thchp"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md4: "" } },
+                    [
+                      _c("v-select", {
+                        ref: "perviy_god",
+                        attrs: {
+                          items: _vm.years,
+                          name: "perviy_god",
+                          label: "Первый год",
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.perviy_god || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.perviy_god,
+                          callback: function($$v) {
+                            _vm.perviy_god = $$v
+                          },
+                          expression: "perviy_god"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md4: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "summa_prodazh_za_perviy_god",
+                        attrs: {
+                          name: "summa_prodazh_za_perviy_god",
+                          type: "text",
+                          label: "Сумма продаж за первый год",
+                          placeholder: _vm.perviy_god_children_disabled
+                            ? "Выберите первый год"
+                            : "",
+                          disabled: _vm.perviy_god_children_disabled,
+                          box: "",
+                          rules: [
+                            function() {
+                              return (
+                                !!_vm.summa_prodazh_za_perviy_god ||
+                                "Обязательное поле"
+                              )
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.summa_prodazh_za_perviy_god,
+                          callback: function($$v) {
+                            _vm.summa_prodazh_za_perviy_god = $$v
+                          },
+                          expression: "summa_prodazh_za_perviy_god"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md4: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "prodazhi_upakovok_za_perviy_god",
+                        attrs: {
+                          name: "prodazhi_upakovok_za_perviy_god",
+                          type: "text",
+                          label: "Продажы упаковок за первый год",
+                          placeholder: _vm.perviy_god_children_disabled
+                            ? "Выберите первый год"
+                            : "",
+                          disabled: _vm.perviy_god_children_disabled,
+                          box: "",
+                          rules: [
+                            function() {
+                              return (
+                                !!_vm.prodazhi_upakovok_za_perviy_god ||
+                                "Обязательное поле"
+                              )
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.prodazhi_upakovok_za_perviy_god,
+                          callback: function($$v) {
+                            _vm.prodazhi_upakovok_za_perviy_god = $$v
+                          },
+                          expression: "prodazhi_upakovok_za_perviy_god"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md4: "" } },
+                    [
+                      _c("v-select", {
+                        ref: "vtoroi_god",
+                        attrs: {
+                          items: _vm.years,
+                          name: "vtoroi_god",
+                          label: "Второй год",
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.vtoroi_god || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.vtoroi_god,
+                          callback: function($$v) {
+                            _vm.vtoroi_god = $$v
+                          },
+                          expression: "vtoroi_god"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md4: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "summa_prodazh_za_vtoroi_god",
+                        attrs: {
+                          name: "summa_prodazh_za_vtoroi_god",
+                          type: "text",
+                          label: "Сумма продаж за второй год",
+                          box: "",
+                          rules: [
+                            function() {
+                              return (
+                                !!_vm.summa_prodazh_za_vtoroi_god ||
+                                "Обязательное поле"
+                              )
+                            }
+                          ],
+                          placeholder: _vm.vtoroi_god_children_disabled
+                            ? "Выберите второй год"
+                            : "",
+                          disabled: _vm.vtoroi_god_children_disabled
+                        },
+                        model: {
+                          value: _vm.summa_prodazh_za_vtoroi_god,
+                          callback: function($$v) {
+                            _vm.summa_prodazh_za_vtoroi_god = $$v
+                          },
+                          expression: "summa_prodazh_za_vtoroi_god"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md4: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "prodazhi_upakovok_za_vtoroi_god",
+                        attrs: {
+                          name: "prodazhi_upakovok_za_vtoroi_god",
+                          type: "text",
+                          label: "Продажы упаковок за второй год",
+                          box: "",
+                          rules: [
+                            function() {
+                              return (
+                                !!_vm.prodazhi_upakovok_za_vtoroi_god ||
+                                "Обязательное поле"
+                              )
+                            }
+                          ],
+                          placeholder: _vm.vtoroi_god_children_disabled
+                            ? "Выберите второй год"
+                            : "",
+                          disabled: _vm.vtoroi_god_children_disabled
+                        },
+                        model: {
+                          value: _vm.prodazhi_upakovok_za_vtoroi_god,
+                          callback: function($$v) {
+                            _vm.prodazhi_upakovok_za_vtoroi_god = $$v
+                          },
+                          expression: "prodazhi_upakovok_za_vtoroi_god"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md3: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "kppr",
+                        attrs: {
+                          name: "kppr",
+                          type: "text",
+                          label: "КППР",
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.kppr || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.kppr,
+                          callback: function($$v) {
+                            _vm.kppr = $$v
+                          },
+                          expression: "kppr"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md3: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "dolya_bg",
+                        attrs: {
+                          name: "dolya_bg",
+                          type: "text",
+                          label: "Доля БГ",
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.dolya_bg || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.dolya_bg,
+                          callback: function($$v) {
+                            _vm.dolya_bg = $$v
+                          },
+                          expression: "dolya_bg"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md3: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "dolya_mst",
+                        attrs: {
+                          name: "dolya_mst",
+                          type: "text",
+                          label: "Доля Мст",
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.dolya_mst || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.dolya_mst,
+                          callback: function($$v) {
+                            _vm.dolya_mst = $$v
+                          },
+                          expression: "dolya_mst"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", md3: "" } },
+                    [
+                      _c("v-text-field", {
+                        ref: "prirost_mst",
+                        attrs: {
+                          name: "prirost_mst",
+                          type: "text",
+                          label: "Прир Мст",
+                          box: "",
+                          rules: [
+                            function() {
+                              return !!_vm.prirost_mst || "Обязательное поле"
+                            }
+                          ]
+                        },
+                        model: {
+                          value: _vm.prirost_mst,
+                          callback: function($$v) {
+                            _vm.prirost_mst = $$v
+                          },
+                          expression: "prirost_mst"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm12: "" } },
+                    [
+                      _c("span", { staticClass: "subheading" }, [
+                        _vm._v("НКПН")
+                      ]),
+                      _vm._v(" "),
+                      _vm.nkpnSum > 100
+                        ? _c("span", { staticClass: "red--text" }, [
+                            _vm._v(" не должен превышать 100%")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("v-divider")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm12: "" } },
+                    [
+                      _c(
+                        "v-container",
+                        { attrs: { "grid-list-sm": "", "pa-0": "" } },
+                        [
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "" } },
+                            _vm._l(_vm.nkpn, function(i, key) {
+                              return _c(
+                                "v-flex",
+                                { key: "nkpn" + (key + 1) },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      name: "nkpn" + (key + 1),
+                                      type: "number",
+                                      label: "" + (key + 1),
+                                      box: "",
+                                      rules: [_vm.nkpnSum <= 100 || ""]
+                                    },
+                                    model: {
+                                      value: _vm.nkpn[key],
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.nkpn, key, $$v)
+                                      },
+                                      expression: "nkpn[key]"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            }),
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm12: "" } },
+                    [
+                      _c("span", { staticClass: "subheading" }, [
+                        _vm._v("НКПФ")
+                      ]),
+                      _vm._v(" "),
+                      _vm.nkpfSum > 100
+                        ? _c("span", { staticClass: "red--text" }, [
+                            _vm._v(" не должен превышать 100%")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("v-divider")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm12: "" } },
+                    [
+                      _c(
+                        "v-container",
+                        { attrs: { "grid-list-sm": "", "pa-0": "" } },
+                        [
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "" } },
+                            _vm._l(_vm.nkpf, function(i, key) {
+                              return _c(
+                                "v-flex",
+                                { key: "nkpf" + (key + 1) },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      name: "nkpf" + (key + 1),
+                                      type: "number",
+                                      label: "" + (key + 1),
+                                      box: "",
+                                      rules: [_vm.nkpfSum <= 100 || ""]
+                                    },
+                                    model: {
+                                      value: _vm.nkpf[key],
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.nkpf, key, $$v)
+                                      },
+                                      expression: "nkpf[key]"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            }),
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "primary" },
+                          on: { click: _vm.submit }
+                        },
+                        [_vm._v("Создать")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -58560,6 +59645,7 @@ function () {
 
 Vue.component("example-component", __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 Vue.component("navbar", __webpack_require__(/*! ./components/Navbar.vue */ "./resources/js/components/Navbar.vue")["default"]);
+Vue.component("myform", __webpack_require__(/*! ./components/Form.vue */ "./resources/js/components/Form.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -58681,6 +59767,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Form.vue":
+/*!******************************************!*\
+  !*** ./resources/js/components/Form.vue ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Form_vue_vue_type_template_id_8048fca2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue?vue&type=template&id=8048fca2& */ "./resources/js/components/Form.vue?vue&type=template&id=8048fca2&");
+/* harmony import */ var _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form.vue?vue&type=script&lang=js& */ "./resources/js/components/Form.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Form_vue_vue_type_template_id_8048fca2___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Form_vue_vue_type_template_id_8048fca2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Form.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Form.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/Form.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Form.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Form.vue?vue&type=template&id=8048fca2&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/Form.vue?vue&type=template&id=8048fca2& ***!
+  \*************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_8048fca2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=8048fca2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Form.vue?vue&type=template&id=8048fca2&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_8048fca2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_8048fca2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

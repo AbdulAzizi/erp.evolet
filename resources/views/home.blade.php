@@ -1,7 +1,15 @@
 @extends('layouts.default')
 
 @section('content')
-    Content comes here
+    <v-container >
+        <v-layout justify-center>
+            <v-flex sm8>
+                <v-card>
+                    <myform></myform>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 @endsection
 
 {{-- @extends('layouts.app')
