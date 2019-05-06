@@ -12,12 +12,12 @@ class DivisionTableSeeder extends Seeder
     public function run()
     {
         $company = \App\Division::create([
-            'name' => 'Evolet', 
+            'name' => 'Evolet',
 
             'children' => [
                 [
                     'name' => 'Департамент Информационных Технологий',
-                    'abbreviation'=>'ДИТ',
+                    'abbreviation' => 'ДИТ',
 
                     'children' => [
                         [
@@ -27,23 +27,23 @@ class DivisionTableSeeder extends Seeder
                             'children' => [
                                 [
                                     'name' => 'Отдел Информационных Технологии в Европе',
-                                    'abbreviation' => 'ОИТЕ'
+                                    'abbreviation' => 'ОИТЕ',
                                 ],
                                 [
                                     'name' => 'Отдел Информационных Технологии в Индии',
-                                    'abbreviation' => 'ОИТИ'
+                                    'abbreviation' => 'ОИТИ',
                                 ],
                                 [
                                     'name' => 'Отдел Информационных Технологии в Странах Регистрации',
-                                    'abbreviation' => 'ОИТСР'
+                                    'abbreviation' => 'ОИТСР',
                                 ],
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'name' => 'Департамент Маркетинга',
-                    'abbreviation'=>'ДМ',
+                    'abbreviation' => 'ДМ',
 
                     'children' => [
                         [
@@ -51,21 +51,21 @@ class DivisionTableSeeder extends Seeder
                             'abbreviation' => 'НАП',
 
                             'children' => [
-                                [    
+                                [
                                     'name' => 'Научный Отдел',
-                                    'abbreviation' => 'НО'
+                                    'abbreviation' => 'НО',
                                 ],
                                 [
                                     'name' => 'Отдел Мониторинг Анализ Рынка',
-                                    'abbreviation' => 'ОМАР'
+                                    'abbreviation' => 'ОМАР',
                                 ],
                                 [
                                     'name' => 'Отдел Мониторинга Обновление Портфеля',
-                                    'abbreviation' => 'ОМОП'
+                                    'abbreviation' => 'ОМОП',
                                 ],
                                 [
                                     'name' => 'Отдел Торговых Знаков',
-                                    'abbreviation' => 'ОТЗ'
+                                    'abbreviation' => 'ОТЗ',
                                 ],
                             ],
                         ],
@@ -76,32 +76,55 @@ class DivisionTableSeeder extends Seeder
                             'children' => [
                                 [
                                     'name' => 'Отдел Аудита Маркетинга',
-                                    'abbreviation' => 'ОАМ'
+                                    'abbreviation' => 'ОАМ',
                                 ],
                                 [
                                     'name' => 'Отдел Проектного Управления',
-                                    'abbreviation' => 'ОПУ'
+                                    'abbreviation' => 'ОПУ',
                                 ],
                                 [
                                     'name' => 'Отдел Цифрового Маркетинга',
-                                    'abbreviation' => 'ОЦМ'
+                                    'abbreviation' => 'ОЦМ',
                                 ],
                                 [
                                     'name' => 'Промо Компания',
-                                    'abbreviation' => 'ПК'
+                                    'abbreviation' => 'ПК',
+
+                                    'children' => [
+                                        [
+                                            'name' => 'Vegapharm',
+                                            'abbreviation' => 'V',
+                                        ],
+                                        [
+                                            'name' => 'Belinda',
+                                            'abbreviation' => 'B',
+                                        ],
+                                        [
+                                            'name' => 'Spey',
+                                            'abbreviation' => 'S',
+                                        ],
+                                        [
+                                            'name' => 'Neo Universe',
+                                            'abbreviation' => 'N',
+                                        ],
+                                        [
+                                            'name' => 'Lady Healthcare',
+                                            'abbreviation' => 'L',
+                                        ],
+                                    ],
                                 ],
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'name' => 'Департамент Производства',
-                    'abbreviation'=>'ДП',
+                    'abbreviation' => 'ДП',
 
                     'children' => [
                         [
                             'name' => 'Подразделение по Производству в Европе',
-                            'abbreviation' => 'ППЕ'
+                            'abbreviation' => 'ППЕ',
                         ],
                         [
                             'name' => 'Подразделение по Производству в Индии',
@@ -110,25 +133,25 @@ class DivisionTableSeeder extends Seeder
                             'children' => [
                                 [
                                     'name' => 'Отдел Информационных Технологии',
-                                    'abbreviation' => 'ОИТ'
+                                    'abbreviation' => 'ОИТ',
                                 ],
                                 [
                                     'name' => 'Отдел Управление Проектами',
-                                    'abbreviation' => 'ОУП'
+                                    'abbreviation' => 'ОУП',
                                 ],
                                 [
                                     'name' => 'Отдел Финансов',
-                                    'abbreviation' => 'ОФ'
+                                    'abbreviation' => 'ОФ',
                                 ],
                                 [
                                     'name' => 'Отдел Экспорта',
-                                    'abbreviation' => 'ОЭ'
+                                    'abbreviation' => 'ОЭ',
                                 ],
                                 [
                                     'name' => 'Отдел Юристов',
-                                    'abbreviation' => 'ОЮ'
+                                    'abbreviation' => 'ОЮ',
                                 ],
-                            ]
+                            ],
                         ],
                         [
                             'name' => 'Подразделение по Производству при ГО',
@@ -137,35 +160,35 @@ class DivisionTableSeeder extends Seeder
                             'children' => [
                                 [
                                     'name' => 'Отдел Дизайна',
-                                    'abbreviation' => 'ОД'
+                                    'abbreviation' => 'ОД',
                                 ],
                                 [
                                     'name' => 'Отдел Закупов',
-                                    'abbreviation' => 'ОЗ'
+                                    'abbreviation' => 'ОЗ',
                                 ],
                                 [
                                     'name' => 'Отдел Логистики',
-                                    'abbreviation' => 'ОЛ'
+                                    'abbreviation' => 'ОЛ',
                                 ],
                                 [
                                     'name' => 'Отдел по Мониторингу и Анализу Рынка',
-                                    'abbreviation' => 'ОМАР'
+                                    'abbreviation' => 'ОМАР',
                                 ],
                                 [
                                     'name' => 'Отдел Регистрации',
-                                    'abbreviation' => 'ОР'
+                                    'abbreviation' => 'ОР',
                                 ],
                                 [
                                     'name' => 'Отдел Технического и Химического контроля',
-                                    'abbreviation' => 'ОТХ'
+                                    'abbreviation' => 'ОТХ',
                                 ],
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'name' => 'Департамент Финансов',
-                    'abbreviation'=>'ДФ',
+                    'abbreviation' => 'ДФ',
 
                     'children' => [
                         [
@@ -175,28 +198,28 @@ class DivisionTableSeeder extends Seeder
                             'children' => [
                                 [
                                     'name' => 'Отдел Финансов в Европе',
-                                    'abbreviation' => 'ОФЕ'
+                                    'abbreviation' => 'ОФЕ',
                                 ],
                                 [
                                     'name' => 'Отдел Финансов в Индии',
-                                    'abbreviation' => 'ОФИ'
+                                    'abbreviation' => 'ОФИ',
                                 ],
                                 [
                                     'name' => 'Отдел Финансов в Странах Регистрации',
-                                    'abbreviation' => 'ОСР'
+                                    'abbreviation' => 'ОСР',
                                 ],
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'name' => 'Департамент Человеческих Ресурсов',
-                    'abbreviation'=>'ДЧР',
+                    'abbreviation' => 'ДЧР',
 
                     'children' => [
                         [
                             'name' => 'Корпоративный Учебный Центр',
-                            'abbreviation' => 'КУЦ',  
+                            'abbreviation' => 'КУЦ',
                         ],
                         [
                             'name' => 'Подразделение Человеческих Ресурсов',
@@ -205,24 +228,24 @@ class DivisionTableSeeder extends Seeder
                             'children' => [
                                 [
                                     'name' => 'Отдел Управление Персоналом в Европе',
-                                    'abbreviation' => 'ОУПЕ'
+                                    'abbreviation' => 'ОУПЕ',
                                 ],
                                 [
                                     'name' => 'Отдел Управление Персоналом в Индии',
-                                    'abbreviation' => 'ОУПИ'
+                                    'abbreviation' => 'ОУПИ',
                                 ],
                                 [
                                     'name' => 'Отдел Управление Персоналом в ПК',
-                                    'abbreviation' => 'ОУПП'
+                                    'abbreviation' => 'ОУПП',
                                 ],
-                            ]
-                        ]
-                    ]
-                ], 
+                            ],
+                        ],
+                    ],
+                ],
                 [
                     'name' => 'Департамент Юридических Аспектов',
-                    'abbreviation'=>'ДЮА',
-                    
+                    'abbreviation' => 'ДЮА',
+
                     'children' => [
                         [
                             'name' => 'Подразделение по Юридическим аспектам при ГО',
@@ -231,19 +254,19 @@ class DivisionTableSeeder extends Seeder
                             'children' => [
                                 [
                                     'name' => 'Отдел по Юридическим аспектам в Европе',
-                                    'abbreviation' => 'ОЮЕ'
+                                    'abbreviation' => 'ОЮЕ',
                                 ],
                                 [
                                     'name' => 'Отдел по Юридическим аспектам в Индии',
-                                    'abbreviation' => 'ОЮИ'
+                                    'abbreviation' => 'ОЮИ',
                                 ],
                                 [
                                     'name' => 'Отдел по Юридическим аспектам в Странах Регистрации',
-                                    'abbreviation' => 'ОЮСР'
+                                    'abbreviation' => 'ОЮСР',
                                 ],
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ]);
