@@ -18,7 +18,8 @@ class EmployeeTableSeeder extends Seeder
             'password'=>Hash::make('admin')
         ]);
         $akbar->employee()->create([
-            'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id
+            'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id,
+            'position_id' => App\Position::where('name','Специалист')->first()->id
         ]);
 
         $abdulaziz = App\User::create([
@@ -28,7 +29,8 @@ class EmployeeTableSeeder extends Seeder
             'password'=>Hash::make('admin')
         ]);
         $abdulaziz->employee()->create([
-            'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id
+            'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id,
+            'position_id' => App\Position::where('name', 'Специалист')->first()->id
         ]);
     }
 }

@@ -17,4 +17,9 @@ class Employee extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function position()
+    {
+        return $this->belongsTo('App\Position');
+    }
 }
