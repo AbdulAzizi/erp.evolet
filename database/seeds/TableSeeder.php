@@ -13,6 +13,7 @@ class TableSeeder extends Seeder
     {
         $admin = App\User::create([
             'name' => 'admin',
+            'surname' => 'admin',
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('admin'),
