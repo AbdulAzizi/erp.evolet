@@ -7,6 +7,7 @@
 		clipped-left
 		fixed
 		dark
+		dense
 		>
 			<!-- <v-toolbar-side-icon @blur="toggleDrawer"></v-toolbar-side-icon> -->
 			
@@ -14,7 +15,7 @@
 				<a href="/">
 					<v-img
 					:src="`${assetPath}img/white-logo.png`"
-					width="200"
+					width="150"
 					></v-img>
 				</a>
 			</v-toolbar-title>

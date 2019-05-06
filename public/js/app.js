@@ -2257,6 +2257,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -21391,7 +21392,8 @@ var render = function() {
         "clipped-right": "",
         "clipped-left": "",
         fixed: "",
-        dark: ""
+        dark: "",
+        dense: ""
       }
     },
     [
@@ -21401,7 +21403,7 @@ var render = function() {
           { attrs: { href: "/" } },
           [
             _c("v-img", {
-              attrs: { src: _vm.assetPath + "img/white-logo.png", width: "200" }
+              attrs: { src: _vm.assetPath + "img/white-logo.png", width: "150" }
             })
           ],
           1
