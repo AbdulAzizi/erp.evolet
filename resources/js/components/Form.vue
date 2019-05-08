@@ -5,6 +5,7 @@
         color="primary"
         class="secondary--text"
         dark
+        dense
         >
             <v-toolbar-title>Новое лекарственное средство</v-toolbar-title>
         </v-toolbar>
