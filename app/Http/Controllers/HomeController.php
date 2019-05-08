@@ -25,4 +25,11 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function company()
+    {
+        $company = \App\Division::get()->toTree();
+        
+        return view('company',compact('company'));
+    }
 }

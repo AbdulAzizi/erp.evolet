@@ -13,6 +13,7 @@ class DivisionTableSeeder extends Seeder
     {
         $company = \App\Division::create([
             'name' => 'Evolet',
+            'abbreviation' => 'Evolet',
 
             'children' => [
                 [

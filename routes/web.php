@@ -20,4 +20,5 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('/', function () {
         return view('home');
     });
+    Route::get('/company/structure', 'HomeController@company')->name('company');
 });
