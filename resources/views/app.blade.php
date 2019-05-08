@@ -15,19 +15,19 @@
 <body>
     
     <div id="app">
-        <v-app>
-            {{-- <notification></notification> --}}
+        {{-- <notification></notification> --}}
 
-            <main class="py-4">
-                @yield('layout')
-            </main>
+        <v-app>
+            @yield('layout')
         </v-app>
+            
     </div>
     
     <script>
 		window.Laravel = {!! json_encode([
         	'csrf_token' => csrf_token(),
-        	'asset_path' => asset('')
+            'asset_path' => asset(''),
+            'auth'       => Auth::user()
     	]); !!}
 	</script>
 

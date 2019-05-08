@@ -2054,6 +2054,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2258,30 +2259,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       rightDrawer: false,
-      items: [{
-        title: 'CV',
-        link: '/cv/create'
-      }],
+      items: [// { title: "CV", link: "/cv/create" }
+      ],
       csrf: window.Laravel.csrf_token,
       user: window.Laravel.auth,
       assetPath: window.Laravel.asset_path
     };
   },
   created: function created() {// this.items.unshift({title: this.user.name+' '+this.user.surname, link:'/users/'+this.user.id});
+    // console.log(this.user);
   },
   methods: {
     toggleDrawer: function toggleDrawer() {
-      Event.fire('toggleDrawer');
+      Event.fire("toggleDrawer");
     },
     toggleRightDrawer: function toggleRightDrawer() {
-      Event.fire('toggleRightDrawer');
+      Event.fire("toggleRightDrawer");
       this.rightDrawer = !this.rightDrawer;
-    },
-    logout: function logout() {}
+    }
   }
 });
 
@@ -20703,7 +20719,7 @@ var render = function() {
         "v-toolbar",
         {
           staticClass: "secondary--text",
-          attrs: { card: "", color: "primary", dark: "" }
+          attrs: { card: "", color: "primary", dark: "", dense: "" }
         },
         [_c("v-toolbar-title", [_vm._v("Новое лекарственное средство")])],
         1
@@ -21397,7 +21413,7 @@ var render = function() {
       }
     },
     [
-      _c("v-toolbar-title", { staticClass: "mr-5 align-center" }, [
+      _c("v-toolbar-title", { staticClass: "mr-3 align-center" }, [
         _c(
           "a",
           { attrs: { href: "/" } },
@@ -21410,7 +21426,99 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("v-spacer")
+      _c("v-spacer"),
+      _vm._v(" "),
+      _c(
+        "v-toolbar-items",
+        { staticClass: "mr-2" },
+        [
+          _c("v-btn", { attrs: { flat: "" } }, [
+            _vm.user.employee
+              ? _c("span", { staticClass: "title" }, [
+                  _vm._v(_vm._s(_vm.user.employee.division.abbreviation))
+                ])
+              : _vm._e()
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-menu",
+        { attrs: { "offset-y": "", left: "" } },
+        [
+          _c(
+            "v-avatar",
+            {
+              attrs: { slot: "activator", color: "grey lighten", size: "40" },
+              slot: "activator"
+            },
+            [
+              _c("img", {
+                attrs: { src: "../img/" + _vm.user.img + ".jpg", alt: "avatar" }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            [
+              _c(
+                "v-list",
+                { attrs: { light: "", dense: "" } },
+                [
+                  _vm._l(_vm.items, function(item, index) {
+                    return _c(
+                      "v-list-tile",
+                      { key: index, attrs: { href: item.link } },
+                      [_c("v-list-tile-title", [_vm._v(_vm._s(item.title))])],
+                      1
+                    )
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-tile",
+                    {
+                      key: "logoutButton",
+                      on: {
+                        click: function($event) {
+                          return _vm.$refs.logoutform.submit()
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "v-list-tile-content",
+                        [_c("v-list-tile-title", [_vm._v("Выйти")])],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      ref: "logoutform",
+                      staticStyle: { display: "none" },
+                      attrs: { action: "/logout", method: "POST" }
+                    },
+                    [
+                      _c("input", {
+                        attrs: { type: "hidden", name: "_token" },
+                        domProps: { value: _vm.csrf }
+                      })
+                    ]
+                  )
+                ],
+                2
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )

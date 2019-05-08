@@ -37,6 +37,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $with = ['employee.division'];
+
     public function employee()
     {
         return $this->hasOne('App\Employee');

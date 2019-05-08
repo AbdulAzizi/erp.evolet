@@ -11,13 +11,6 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
-        $admin = App\User::create([
-            'name' => 'admin',
-            'surname' => 'admin',
-            'email' => 'admin@admin.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('admin'),
-            'remember_token' => Str::random(10),
-        ]);
+        
     }
 }
