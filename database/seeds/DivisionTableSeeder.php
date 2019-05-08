@@ -35,7 +35,7 @@ class DivisionTableSeeder extends Seeder
                                     'abbreviation' => 'ОИТИ',
                                 ],
                                 [
-                                    'name' => 'Отдел Информационных Технологии в Странах Регистрации',
+                                    'name' => 'Отдел Информационных Технологии в ПК/Странах Регистрации',
                                     'abbreviation' => 'ОИТСР',
                                 ],
                             ],
@@ -206,7 +206,7 @@ class DivisionTableSeeder extends Seeder
                                     'abbreviation' => 'ОФИ',
                                 ],
                                 [
-                                    'name' => 'Отдел Финансов в Странах Регистрации',
+                                    'name' => 'Отдел Финансов в ПК/Странах Регистрации',
                                     'abbreviation' => 'ОСР',
                                 ],
                             ],
@@ -236,7 +236,7 @@ class DivisionTableSeeder extends Seeder
                                     'abbreviation' => 'ОУПИ',
                                 ],
                                 [
-                                    'name' => 'Отдел Управление Персоналом в ПК',
+                                    'name' => 'Отдел Управление Персоналом в ПК/Странах Регистрации',
                                     'abbreviation' => 'ОУПП',
                                 ],
                             ],
@@ -262,7 +262,7 @@ class DivisionTableSeeder extends Seeder
                                     'abbreviation' => 'ОЮИ',
                                 ],
                                 [
-                                    'name' => 'Отдел по Юридическим аспектам в Странах Регистрации',
+                                    'name' => 'Отдел по Юридическим аспектам в ПК/Странах Регистрации',
                                     'abbreviation' => 'ОЮСР',
                                 ],
                             ],
