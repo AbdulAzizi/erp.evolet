@@ -21,7 +21,25 @@
         <img :src="'../img/'+user.img+'.jpg'" alt="avatar">
       </v-avatar>
       <div>
-        <v-list light dense>
+        <v-container grid-list-md text-xs-center class="pa-3 white">
+          <v-layout row wrap>
+            <v-flex>
+              <v-avatar slot="activator" color="grey lighten" size="70">
+                <img :src="'../img/'+user.img+'.jpg'" alt="avatar">
+              </v-avatar>
+            </v-flex>
+            <v-flex>
+				<v-list dense two-line>
+					<h2 class="title font-weight-regular text-left">{{user.name}} {{user.surname}}</h2>
+					<h4 class="subtheader font-weight-regular grey--text text-left">Founder of Vuetify.js</h4>
+				</v-list>
+            </v-flex>
+          </v-layout>
+        </v-container>
+
+        <v-list dense>
+          <v-divider></v-divider>
+
           <v-list-tile v-for="(item, index) in items" :href="item.link" :key="index">
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile>

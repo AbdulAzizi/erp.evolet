@@ -2276,6 +2276,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -21464,9 +21482,90 @@ var render = function() {
             "div",
             [
               _c(
-                "v-list",
-                { attrs: { light: "", dense: "" } },
+                "v-container",
+                {
+                  staticClass: "pa-3 white",
+                  attrs: { "grid-list-md": "", "text-xs-center": "" }
+                },
                 [
+                  _c(
+                    "v-layout",
+                    { attrs: { row: "", wrap: "" } },
+                    [
+                      _c(
+                        "v-flex",
+                        [
+                          _c(
+                            "v-avatar",
+                            {
+                              attrs: {
+                                slot: "activator",
+                                color: "grey lighten",
+                                size: "70"
+                              },
+                              slot: "activator"
+                            },
+                            [
+                              _c("img", {
+                                attrs: {
+                                  src: "../img/" + _vm.user.img + ".jpg",
+                                  alt: "avatar"
+                                }
+                              })
+                            ]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-flex",
+                        [
+                          _c(
+                            "v-list",
+                            { attrs: { dense: "", "two-line": "" } },
+                            [
+                              _c(
+                                "h2",
+                                {
+                                  staticClass:
+                                    "title font-weight-regular text-left"
+                                },
+                                [
+                                  _vm._v(
+                                    _vm._s(_vm.user.name) +
+                                      " " +
+                                      _vm._s(_vm.user.surname)
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "h4",
+                                {
+                                  staticClass:
+                                    "subtheader font-weight-regular grey--text text-left"
+                                },
+                                [_vm._v("Founder of Vuetify.js")]
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list",
+                { attrs: { dense: "" } },
+                [
+                  _c("v-divider"),
+                  _vm._v(" "),
                   _vm._l(_vm.items, function(item, index) {
                     return _c(
                       "v-list-tile",
