@@ -17,7 +17,7 @@
     <div id="app">
         {{-- <notification></notification> --}}
 
-        <v-app>
+        <v-app class="backgroundColor">
             @yield('layout')
         </v-app>
             

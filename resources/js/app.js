@@ -12,6 +12,7 @@ window.Vue = require("vue");
 import Vuetify from "vuetify";
 Vue.use(Vuetify, {
     theme: {
+        backgroundColor: "#e9ebee",
         primary: "#b8cf41",
         secondary: "#333435"
         // accent: "#689F38",

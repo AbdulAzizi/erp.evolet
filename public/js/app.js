@@ -59708,6 +59708,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 Vue.use(vuetify__WEBPACK_IMPORTED_MODULE_0___default.a, {
   theme: {
+    backgroundColor: "#e9ebee",
     primary: "#b8cf41",
     secondary: "#333435" // accent: "#689F38",
     // success: "#4caf50",
