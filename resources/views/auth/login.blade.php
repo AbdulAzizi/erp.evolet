@@ -15,7 +15,7 @@
                     @csrf
                     <v-toolbar dark flat color="primary">
 
-                        <v-toolbar-title class="secondary--text">Авторизация</v-toolbar-title>
+                        <v-toolbar-title>Авторизация</v-toolbar-title>
 
                         <v-spacer></v-spacer>
                         {{-- <v-tooltip bottom>
