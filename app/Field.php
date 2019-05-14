@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Field extends Model
 {
     public $timestamps = false;
+
+    public function forms()
+    {
+        return $this->belongsToMany('App\Form');
+    }
 }

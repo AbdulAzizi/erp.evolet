@@ -28,5 +28,29 @@ class TableSeeder extends Seeder
         $prirost_mst = App\Field::create(['name' => 'Прир Мст', 'slug' => 'prirost_mst']);
         $nkpn = App\Field::create(['name' => 'НКПН', 'slug' => 'nkpn']);
         $nkpf = App\Field::create(['name' => 'НКПФ', 'slug' => 'nkpf']);
+
+        $forma1_go = App\Form::create(['name'=>'Форма ГО']);
+
+        $forma1_go->fields()->attach([
+            $mnn->id,
+            $form->id,
+            $doza->id,
+            $opu->id,
+            $thchp->id,
+            $perviy_god->id,
+            $summa_prodazh_za_perviy_god->id,
+            $prodazhi_upakovok_za_perviy_god->id,
+            $vtoroi_god->id,
+            $summa_prodazh_za_vtoroi_god->id,
+            $prodazhi_upakovok_za_vtoroi_god->id,
+            $kppr->id,
+            $dolya_bg->id,
+            $dolya_mst->id,
+            $prirost_mst->id,
+            $nkpn->id,
+            $nkpf->id,
+        ]);
+
+
     }
 }
