@@ -12,4 +12,15 @@ class Process extends Model
     {
         return $this->morphMany('App\Task', 'from');
     }
+
+    public function fromTether()
+    {
+        return $this->hasOne('App\Tether', 'from_process_id');
+    }
+
+    public function toTether()
+    {
+        return $this->hasOne('App\Tether', 'to_process_id');
+    }
+
 }
