@@ -16,8 +16,8 @@ class CreateFieldsTable extends Migration
         Schema::create('fields', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('type');
-            $table->string('slag');
+            $table->string('type')->default('text');
+            $table->string('slug');
         });
     }
 
