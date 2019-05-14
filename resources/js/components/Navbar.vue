@@ -11,28 +11,46 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mr-2">
-      <v-btn flat>
-        <span class="title" v-if="user.employee">{{user.employee.division.abbreviation}}</span>
+      <v-btn flat v-if="user.employee">
+        <span class="title" >{{user.employee.division.abbreviation}}</span>
       </v-btn>
     </v-toolbar-items>
 
     <v-menu offset-y left>
       <v-avatar slot="activator" color="grey lighten" size="40">
-        <img :src="'../img/'+user.img+'.jpg'" alt="avatar">
+        <img v-if="user.img" :src="'../img/'+user.img+'.jpg'" alt="avatar">
+        <img
+          v-else
+          :src="'../img/green-solo-logo.svg'"
+          style="border-radius:0;"
+          alt="avatar"
+          class="pa-1 pt-2"
+        >
       </v-avatar>
       <div>
         <v-container grid-list-md text-xs-center class="pa-3 white">
           <v-layout row wrap>
             <v-flex>
               <v-avatar slot="activator" color="grey lighten" size="70">
-                <img :src="'../img/'+user.img+'.jpg'" alt="avatar">
+                <img v-if="user.img" :src="'../img/'+user.img+'.jpg'" alt="avatar">
+                <img
+				v-else
+				:src="'../img/green-solo-logo.svg'"
+				style="border-radius:0;"
+				alt="avatar"
+				size="40"
+				class="pa-2 pt-3"
+				>
               </v-avatar>
             </v-flex>
             <v-flex>
-				<v-list dense two-line>
-					<h2 class="title font-weight-regular text-left">{{user.name}} {{user.surname}}</h2>
-					<h4 class="subtheader font-weight-regular grey--text text-left">Founder of Vuetify.js</h4>
-				</v-list>
+              <v-list dense two-line>
+                <h2 class="title font-weight-regular text-sm-left">{{user.name}}</h2>
+                <h4
+                  v-if="user.employee"
+                  class="subtheader font-weight-regular grey--text text-sm-left"
+                >{{user.employee.responsibility.name}}</h4>
+              </v-list>
             </v-flex>
           </v-layout>
         </v-container>
