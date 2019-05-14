@@ -27,4 +27,9 @@ class Employee extends Model
     {
         return $this->belongsTo('App\Responsibility');
     }
+
+    public function tasks()
+    {
+        return $this->morphMany('App\Task', 'from');
+    }
 }
