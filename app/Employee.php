@@ -22,4 +22,9 @@ class Employee extends Model
     {
         return $this->belongsTo('App\Position');
     }
+
+    public function responsibility()
+    {
+        return $this->belongsTo('App\Responsibility');
+    }
 }

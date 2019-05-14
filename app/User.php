@@ -37,7 +37,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $with = ['employee.division'];
+    protected $with = ['employee.division','employee.responsibility'];
 
     public function employee()
     {

@@ -30,7 +30,8 @@ class EmployeeTableSeeder extends Seeder
         ]);
         $akbar->employee()->create([
             'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id,
-            'position_id' => App\Position::where('name','Специалист')->first()->id
+            'position_id' => App\Position::where('name','Специалист')->first()->id,
+            'responsibility_id' => App\Responsibility::where('name','Программист')->first()->id,
         ]);
         
 
@@ -43,7 +44,8 @@ class EmployeeTableSeeder extends Seeder
         ]);
         $abdulaziz->employee()->create([
             'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id,
-            'position_id' => App\Position::where('name', 'Специалист')->first()->id
+            'position_id' => App\Position::where('name', 'Специалист')->first()->id,
+            'responsibility_id' => App\Responsibility::where('name', 'Программист')->first()->id,
         ]);
     }
 }
