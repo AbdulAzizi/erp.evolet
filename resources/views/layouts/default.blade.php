@@ -4,12 +4,14 @@
 
 	{{-- <right-drawer></right-drawer> --}}
 	
-	<navbar></navbar>
+	<left-drawer></left-drawer>
+	
+	<navbar :user="{{ Auth::user()->load(['employee.division','employee.responsibility']) }}"></navbar>
 
 	<v-content>
 		@yield('content')
 	</v-content>
 	
-	{{-- <left-drawer></left-drawer> --}}
+	
 	
 @endsection

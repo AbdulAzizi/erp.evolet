@@ -1,23 +1,32 @@
 <template>
-  <v-toolbar color="secondary" app flat clipped-right clipped-left fixed dark dense>
-    <!-- <v-toolbar-side-icon @blur="toggleDrawer"></v-toolbar-side-icon> -->
+  <v-toolbar color="white" app clipped-right clipped-left fixed dense light>
+    <v-toolbar-side-icon @blur="toggleDrawer"></v-toolbar-side-icon>
 
     <v-toolbar-title class="mr-3 align-center">
       <a href="/">
-        <v-img :src="`${assetPath}img/white-logo.png`" width="150"></v-img>
+        <v-img :src="`${assetPath}img/dark-logo.png`" width="160"></v-img>
       </a>
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mr-2">
-      <v-btn flat v-if="user.employee">
-        <span class="title" >{{user.employee.division.abbreviation}}</span>
+      <v-btn color="grey darken-1" flat v-if="user.employee">
+        {{user.employee.division.abbreviation}}
       </v-btn>
     </v-toolbar-items>
 
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on">
+            <v-icon color="grey darken-1">notifications</v-icon>
+        </v-btn>
+      </template>
+      <span>Notifications</span>
+    </v-tooltip>
+
     <v-menu offset-y left>
-      <v-avatar slot="activator" color="grey lighten" size="40">
+      <v-avatar slot="activator"  size="40" class="ml-2">
         <img v-if="user.img" :src="'../img/'+user.img+'.jpg'" alt="avatar">
         <img
           v-else
@@ -34,13 +43,13 @@
               <v-avatar slot="activator" color="grey lighten" size="70">
                 <img v-if="user.img" :src="'../img/'+user.img+'.jpg'" alt="avatar">
                 <img
-				v-else
-				:src="'../img/green-solo-logo.svg'"
-				style="border-radius:0;"
-				alt="avatar"
-				size="40"
-				class="pa-2 pt-3"
-				>
+                  v-else
+                  :src="'../img/green-solo-logo.svg'"
+                  style="border-radius:0;"
+                  alt="avatar"
+                  size="40"
+                  class="pa-2 pt-3"
+                >
               </v-avatar>
             </v-flex>
             <v-flex>
@@ -116,13 +125,13 @@
 
 <script>
 export default {
+  props: ['user'],
   data: () => ({
     rightDrawer: false,
     items: [
       // { title: "CV", link: "/cv/create" }
     ],
     csrf: window.Laravel.csrf_token,
-    user: window.Laravel.auth,
     assetPath: window.Laravel.asset_path
   }),
   created() {
@@ -140,3 +149,9 @@ export default {
   }
 };
 </script>
+
+<style>
+  .v-toolbar__items .v-btn{
+    border-radius: 0;
+  }
+</style>
