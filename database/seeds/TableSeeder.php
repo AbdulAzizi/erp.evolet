@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class TableSeeder extends Seeder
 {
@@ -29,7 +30,7 @@ class TableSeeder extends Seeder
         $nkpn = App\Field::create(['name' => 'НКПН', 'slug' => 'nkpn']);
         $nkpf = App\Field::create(['name' => 'НКПФ', 'slug' => 'nkpf']);
 
-        $forma1_go = App\Form::create(['name'=>'Форма ГО']);
+        $forma1_go = App\Form::create(['name' => 'Форма ГО']);
 
         $forma1_go->fields()->attach([
             $mnn->id,
@@ -51,6 +52,44 @@ class TableSeeder extends Seeder
             $nkpf->id,
         ]);
 
+        App\Process::create([
+            'name' => 'Подтверждение'
+        ]);
 
+        App\Task::create([
+            'title'=>'Включить комп',
+            'description'=>'Не забудь про разетку',
+            'responsible_id' => 2,
+            'status' => false,
+            'spent_time' => '053000',
+            'planned_time' => '083000',
+            'deadline' => date('Y-m-d H:i:s'),
+            'from_id' => 1,
+            'from_type' => 'App\Process'
+        ]);
+
+        App\Task::create([
+            'title' => 'Сделать презентатцию',
+            'description' => 'Хорошую',
+            'responsible_id' => 2,
+            'status' => false,
+            'spent_time' => '042000',
+            'planned_time' => '045000',
+            'deadline' => date('Y-m-d H:i:s'),
+            'from_id' => 1,
+            'from_type' => 'App\Employee'
+        ]);
+
+        App\Task::create([
+            'title' => 'Сделать презентатцию',
+            'description' => 'Хорошую',
+            'responsible_id' => 1,
+            'status' => false,
+            'spent_time' => '024000',
+            'planned_time' => '034000',
+            'deadline' => date('Y-m-d H:i:s'),
+            'from_id' => 2,
+            'from_type' => 'App\Employee'
+        ]);
     }
 }

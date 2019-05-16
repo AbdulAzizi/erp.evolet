@@ -18,7 +18,8 @@ Auth::routes();
 Route::group(['middleware'=>['auth']],function(){
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/', function () {
-        return view('home');
+        return redirect('/tasks');
     });
     Route::get('/company/structure', 'HomeController@company')->name('company');
+    Route::get('/tasks', 'TaskController@index')->name('tasks');
 });
