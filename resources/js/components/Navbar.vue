@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar color="white" app clipped-right clipped-left fixed dense light>
+  <v-toolbar color="white" app clipped-right clipped-left fixed dense light class="elevation-3">
     <v-toolbar-side-icon @blur="toggleDrawer"></v-toolbar-side-icon>
 
     <v-toolbar-title class="mr-3 align-center">

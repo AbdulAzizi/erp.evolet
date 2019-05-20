@@ -18,6 +18,7 @@ class CreateTasksTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->boolean('status');
+            $table->boolean('high_priority');
             $table->time('spent_time');
             $table->time('planned_time');
             $table->timestamp('deadline');
