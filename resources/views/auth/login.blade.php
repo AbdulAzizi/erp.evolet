@@ -2,11 +2,14 @@
 
 @section('content')
 
-
-    
 <v-container fluid fill-height>
     <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
+            <v-layout justify-center class="mb-5">
+                <v-flex xs8>
+                    <v-img :src="'/img/dark-logo.png'" />
+                </v-flex>
+            </v-layout>
             <v-card>
                 <v-form
                 action="{{ route('login') }}"
@@ -30,16 +33,16 @@
                     </v-toolbar>
                     <v-card-text>
                         
-
                             <input 
                             type="hidden" 
                             name="remember" 
                             value="1" />
-
+                        
                             <v-text-field
                             name="email"
                             label="Email"
                             prepend-icon="person"
+                            :error-messages="{{ json_encode($errors->get('email')) }}"
                             ></v-text-field>
                     
                             <v-text-field
@@ -47,6 +50,7 @@
                             type="password"
                             label="Пароль"
                             prepend-icon="lock"
+                            :error-messages="{{ json_encode($errors->get('password')) }}"
                             ></v-text-field>
                         
                     </v-card-text>
