@@ -11,22 +11,20 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mr-2">
-      <v-btn color="grey darken-1" flat v-if="user.employee">
-        {{user.employee.division.abbreviation}}
-      </v-btn>
+      <v-btn color="grey darken-1" flat v-if="user.employee">{{user.employee.division.abbreviation}}</v-btn>
     </v-toolbar-items>
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
-            <v-icon color="grey darken-1">notifications</v-icon>
+          <v-icon color="grey darken-1">notifications</v-icon>
         </v-btn>
       </template>
       <span>Notifications</span>
     </v-tooltip>
 
     <v-menu offset-y left>
-      <v-avatar slot="activator"  size="40" class="ml-2">
+      <v-avatar slot="activator" size="40" class="ml-2">
         <img v-if="user.img" :src="'../img/'+user.img+'.jpg'" alt="avatar">
         <img
           v-else
@@ -54,7 +52,9 @@
             </v-flex>
             <v-flex>
               <v-list dense two-line>
-                <h2 class="title font-weight-regular text-sm-left">{{user.name}}</h2>
+                <a href="/profile" class="black--text">
+                  <h2 class="title font-weight-regular text-sm-left">{{user.name}}</h2>
+                </a>
                 <h4
                   v-if="user.employee"
                   class="subtheader font-weight-regular grey--text text-sm-left"
@@ -125,7 +125,7 @@
 
 <script>
 export default {
-  props: ['user'],
+  props: ["user"],
   data: () => ({
     rightDrawer: false,
     items: [
@@ -151,7 +151,10 @@ export default {
 </script>
 
 <style>
-  .v-toolbar__items .v-btn{
-    border-radius: 0;
-  }
+a {
+  text-decoration: none;
+}
+.v-toolbar__items .v-btn {
+  border-radius: 0;
+}
 </style>
