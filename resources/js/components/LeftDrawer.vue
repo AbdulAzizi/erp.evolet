@@ -3,12 +3,13 @@
 		v-model="drawer"
 		fixed
 		clipped
-        floating
+		floating
 		app
 		disable-resize-watcher
 		:mini-variant="mini"
 		mobile-break-point="960"
 		width="240"
+		class="elevation-3"
 		>
 			<v-list dense>
 
