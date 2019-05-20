@@ -22,4 +22,5 @@ Route::group(['middleware'=>['auth']],function(){
     });
     Route::get('/company/structure', 'HomeController@company')->name('company');
     Route::get('/tasks', 'TaskController@index')->name('tasks');
+    Route::get('/profile', 'EmployeeController@show')->name('profile');
 });
