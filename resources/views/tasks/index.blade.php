@@ -1,11 +1,11 @@
 @extends('layouts.default')
 
 @section('content')
-    <v-container >
+    {{-- <v-container >
         <v-layout justify-center>
-            <v-flex sm8>
+            <v-flex sm8> --}}
                 <tasks :alltasks="{{ $allTasks }}"></tasks>
-            </v-flex>
+            {{-- </v-flex>
         </v-layout>
-    </v-container>
+    </v-container> --}}
 @endsection

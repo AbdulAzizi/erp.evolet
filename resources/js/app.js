@@ -56,8 +56,10 @@ Vue.component(
 );
 Vue.component("navbar", require("./components/Navbar.vue").default);
 Vue.component("myform", require("./components/Form.vue").default);
-Vue.component("tasks", require("./components/Tasks.vue").default);
 Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
+
+Vue.component("tasks", require("./components/Tasks.vue").default);
+Vue.component("task", require("./components/Task.vue").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
