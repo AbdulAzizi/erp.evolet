@@ -15,7 +15,7 @@ Auth::routes();
 
 
 
-Route::group(['middleware'=>['auth']],function(){
+Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/', function () {
         return redirect('/tasks');
