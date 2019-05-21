@@ -24,7 +24,7 @@ class EmployeeTableSeeder extends Seeder
         $akbar = App\User::create([
             'name'=>'Akbar',
             'surname'=>'Ergashev',
-            'img'=>'akbar',
+            'img'=>'daler',
             'email'=>'ergashev.akb@gmail.com',
             'password'=>Hash::make('admin')
         ]);
