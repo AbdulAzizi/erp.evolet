@@ -8,9 +8,14 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $auth_user = \Auth::user();
-        $allTasks = $auth_user->employee->allTasks(); // FIXME  unemployed users doesnt have employee relationship
-        // return $allTasks;
-        return view('tasks.index',compact('allTasks'));
+        $authUser = \Auth::user();
+        // $allTasks = $authUser->employee->allTasks(); // FIXME  unemployed users doesnt have employee relationship
+        $tasks = \App\Task::where('from_id',$authUser->employee->id)
+                            ->with('from')
+                            ->get();
+        // return $tasks;
+        $employees = \App\Employee::with(['division','responsibility'])->get();
+        // return $employees;
+        return view('tasks.index',compact('tasks', 'employees'));
     }
 }

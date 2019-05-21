@@ -6,7 +6,7 @@
 	
 	<left-drawer></left-drawer>
 	
-	<navbar :user="{{ Auth::user()->load(['employee.division','employee.responsibility']) }}"></navbar>
+	<navbar :user="{{$authUser}}"></navbar>
 
 	<v-content>
 		@yield('content')
