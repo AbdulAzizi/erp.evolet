@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    protected $with = ['user'];
 
     public $timestamps = false;
 
