@@ -60,6 +60,13 @@ Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 
 Vue.component("tasks", require("./components/Tasks.vue").default);
 Vue.component("task", require("./components/Task.vue").default);
+Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
+Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
+
+Vue.component(
+    "user-selector",
+    require("./components/UserSelector.vue").default
+);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
