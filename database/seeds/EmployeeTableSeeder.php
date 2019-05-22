@@ -28,12 +28,12 @@ class EmployeeTableSeeder extends Seeder
             'email'=>'ergashev.akb@gmail.com',
             'password'=>Hash::make('admin')
         ]);
+
         $akbar->employee()->create([
             'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id,
             'position_id' => App\Position::where('name','Специалист')->first()->id,
             'responsibility_id' => App\Responsibility::where('name','Программист')->first()->id,
         ]);
-        
 
         $abdulaziz = App\User::create([
             'name'=>'AbdulAziz',
@@ -42,10 +42,13 @@ class EmployeeTableSeeder extends Seeder
             'email'=>'nurovaziz@gmail.com',
             'password'=>Hash::make('admin')
         ]);
+
         $abdulaziz->employee()->create([
             'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id,
             'position_id' => App\Position::where('name', 'Специалист')->first()->id,
             'responsibility_id' => App\Responsibility::where('name', 'Программист')->first()->id,
         ]);
+
+        factory(App\Employee::class, 40)->create();
     }
 }
