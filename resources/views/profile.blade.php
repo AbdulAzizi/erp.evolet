@@ -1,6 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
+{{-- {{dd($authUser->toArray())}} --}}
 <v-container grid-list-md>
     <v-layout justify-center>
         <v-flex>
