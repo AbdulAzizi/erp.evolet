@@ -1,7 +1,6 @@
 @extends('layouts.default')
 
 @section('content')
-{{-- {{dd($authUser->toArray())}} --}}
 <v-container grid-list-md>
     <v-layout justify-center>
         <v-flex>
@@ -9,12 +8,9 @@
                 <v-card-text>
                     <v-container>
                         <v-layout align-center>
-                            <v-flex xs2 lg2 xl1 class="mr-3" >
-                                <v-img 
-                                    :src="'../img/{{ $authUser->img }}.jpg'" 
-                                    style="border-radius: 100%" 
-                                    class="elevation-3"
-                                />
+                            <v-flex xs2 lg2 xl1 class="mr-3">
+                                <v-img :src="'../img/{{ $authUser->img }}.jpg'" style="border-radius: 100%"
+                                    class="elevation-3" />
                             </v-flex>
                             <v-flex>
                                 <h6 class="headline">{{$authUser->name}} {{$authUser->surname}}</h6>
@@ -24,10 +20,7 @@
                             </v-flex>
                         </v-layout>
                     </v-container>
-                    <v-tabs 
-                        grow
-                        slider-color="primary"
-                    >
+                    <v-tabs grow slider-color="primary">
                         <v-tab>
                             Some
                         </v-tab>
