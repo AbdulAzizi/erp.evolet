@@ -52,6 +52,15 @@ class EmployeeTableSeeder extends Seeder
                 'position' => 'Руководитель',
                 'responsibility' => 'Программист',
             ],
+            [
+                'name' => 'Сайёра',
+                'surname' => 'Мирзоева',
+                'email' => 'sayora@gmail.com',
+                'password' => 'admin',
+                'division' => 'Evolet',
+                'position' => 'Руководитель',
+                'responsibility' => 'Директор',
+            ],
         ]);
 
         factory(App\Employee::class, 40)->create();
@@ -72,19 +81,10 @@ class EmployeeTableSeeder extends Seeder
 
             $user = App\User::create($userData);
             
-            $position = App\Position::where('name', $credential['position'])->first();
-            $responsibility = App\Responsibility::where('name', $credential['responsibility'])->first();
-            
-            if(!$position)
-                $position = App\Position::create([ 'name' => $credential['position']]);
-            
-            if(!$responsibility)
-                $responsibility = App\Responsibility::create([ 'name' => $credential['responsibility']]);
-
             $user->employee()->create([
                 'division_id' => App\Division::where('abbreviation', $credential['division'])->first()->id,
-                'position_id' => $position->id,
-                'responsibility_id' => $responsibility->id,
+                'position_id' => App\Position::firstOrCreate(['name' => $credential['position']])->id,
+                'responsibility_id' => App\Responsibility::firstOrCreate(['name' => $credential['responsibility']])->id,
             ]);
         }
     }
