@@ -1,22 +1,51 @@
 @extends('layouts.default')
 
 @section('content')
-
-<v-container>
+<v-container grid-list-md>
     <v-layout justify-center>
-        <v-flex class="">
+        <v-flex>
             <v-card>
                 <v-card-text>
-                    <v-layout align-center>
-                        <v-flex xs1>
-                            <v-avatar size="130">
-                                <v-img :src="'../img/{{ $employee->user->img }}.jpg'" />
-                            </v-avatar>
-                        </v-flex>
-                        <v-flex >
-                            <h6 class="title">{{$employee->user->name}} {{$employee->user->surname}}</h6>
-                        </v-flex>
-                    </v-layout>
+                    <v-container>
+                        <v-layout align-center>
+                            <v-flex xs2 lg2 xl1 class="mr-3" >
+                                <v-img 
+                                    :src="'../img/{{ $authUser->img }}.jpg'" 
+                                    style="border-radius: 100%" 
+                                    class="elevation-3"
+                                />
+                            </v-flex>
+                            <v-flex>
+                                <h6 class="headline">{{$authUser->name}} {{$authUser->surname}}</h6>
+                                <h6 class="subheading">{{$authUser->employee->position->name}} -
+                                    {{$authUser->employee->responsibility->name}}</h6>
+                                <h6 class="subheading">{{$authUser->employee->division->name}}</h6>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                    <v-tabs 
+                        grow
+                        slider-color="primary"
+                    >
+                        <v-tab>
+                            Some
+                        </v-tab>
+                        <v-tab>
+                            Some
+                        </v-tab>
+                        <v-tab>
+                            Some
+                        </v-tab>
+                        <v-tab>
+                            Some
+                        </v-tab>
+                        <v-tab>
+                            Some
+                        </v-tab>
+                        <v-tab>
+                            Some
+                        </v-tab>
+                    </v-tabs>
                 </v-card-text>
             </v-card>
         </v-flex>
