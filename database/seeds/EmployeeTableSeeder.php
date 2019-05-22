@@ -60,13 +60,17 @@ class EmployeeTableSeeder extends Seeder
     private function seedEmployees($credentials)
     {
         foreach ($credentials as $credential) {
-            $user = App\User::create([
+            $userData = [
                 'name' => $credential['name'],
                 'surname' => $credential['surname'],
-                'img' => $credential['img'],
                 'email' => $credential['email'],
                 'password' => Hash::make($credential['password']),
-            ]);
+            ];
+            
+            if(array_key_exists('img', $credential))
+                $userData['img'] = $credential['img'];
+
+            $user = App\User::create($userData);
             
             $position = App\Position::where('name', $credential['position'])->first();
             $responsibility = App\Responsibility::where('name', $credential['responsibility'])->first();
