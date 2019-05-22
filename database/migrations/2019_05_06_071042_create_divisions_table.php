@@ -16,6 +16,7 @@ class CreateDivisionsTable extends Migration
         Schema::create('divisions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->unsignedInteger('head_id')->nullable();
             $table->string('abbreviation')->nullable();
             $table->nestedSet();
         });
