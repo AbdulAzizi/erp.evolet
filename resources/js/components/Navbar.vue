@@ -11,7 +11,7 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mr-2">
-      <v-btn color="grey darken-1" flat v-if="user.employee">{{user.employee.division.abbreviation}}</v-btn>
+      <v-btn color="grey darken-1" flat v-if="user.employee" href="/division">{{user.employee.division.abbreviation}}</v-btn>
     </v-toolbar-items>
 
     <v-tooltip bottom>
