@@ -10,13 +10,13 @@
                         <v-layout align-center>
                             <v-flex xs2 lg2 xl1 class="mr-3">
                                 <v-img :src="'../img/{{ $authUser->img }}.jpg'" style="border-radius: 100%"
-                                    class="elevation-3" />
+                                    class="elevation-3 " />
                             </v-flex>
                             <v-flex>
-                                <h6 class="headline">{{$authUser->name}} {{$authUser->surname}}</h6>
-                                <h6 class="subheading">{{$authUser->employee->position->name}} -
+                                <h6 class="headline ">{{$authUser->name}} {{$authUser->surname}}</h6>
+                                <h6 class="subheading grey--text text--darken-2">{{$authUser->employee->position->name}} -
                                     {{$authUser->employee->responsibility->name}}</h6>
-                                <h6 class="subheading">{{$authUser->employee->division->name}}</h6>
+                                <h6 class="subheading grey--text text--darken-2">{{$authUser->employee->division->name}}</h6>
                             </v-flex>
                         </v-layout>
                     </v-container>
