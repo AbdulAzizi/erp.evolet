@@ -8,6 +8,11 @@ class EmployeeController extends Controller
 {
     public function show()
     {
-        return view('profile');
+        $employee = Employee::where('user_id',auth()->id())->first();
+        
+        if($employee){
+            return view('profile');
+        }
+        return redirect('home');
     }
 }
