@@ -44,12 +44,20 @@ class Employee extends Model
         return collect([
             [
                 'name' => 'Мои Задачи',
-                'data' => $this->tasks->load(['responsible.user', 'from'])
+                'data' => $this->tasks->load(['responsible.user', 'from']),
             ],
             [
                 'name' => 'Порученные',
                 'data' => $this->givenTasks->load(['responsible.user', 'from']),
             ],
         ]);
+    }
+    public static function byUserId($id, $withUser = false)
+    {
+        if ($withUser) {
+            return self::where('user_id', $id)->first()->load('user');
+        }
+
+        return self::where('user_id', $id)->first();
     }
 }
