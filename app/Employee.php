@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
+    public $with = ['user', 'position', 'responsibility'];
 
     public $timestamps = false;
 
@@ -63,7 +64,7 @@ class Employee extends Model
         if ($withUser) {
             return self::where('user_id', $id)->first()->load('user');
         }
-
+        
         return self::where('user_id', $id)->first();
     }
 }
