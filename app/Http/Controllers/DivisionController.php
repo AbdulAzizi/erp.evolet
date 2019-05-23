@@ -10,8 +10,8 @@ class DivisionController extends Controller
 {
     public function index()
     {
-        $employee = Employee::where('user_id', auth()->id())->first();
-        dd($employee);
+        $coleguesFromDivision = Employee::byUserId(auth()->id())->division->load('employees.user');
+        dd($coleguesFromDivision->toArray());
         return view('division');
     }
 }
