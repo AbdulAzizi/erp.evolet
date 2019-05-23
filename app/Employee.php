@@ -38,7 +38,7 @@ class Employee extends Model
     {
         return $this->hasMany('App\Task', 'responsible_id');
     }
-
+    
     public function allTasks()
     {
         return collect([
@@ -52,6 +52,12 @@ class Employee extends Model
             ],
         ]);
     }
+
+    /**
+     * @param integer $id User's id
+     * @param boolean $withUser  If true, loads user
+     * @return Employee
+     */
     public static function byUserId($id, $withUser = false)
     {
         if ($withUser) {
