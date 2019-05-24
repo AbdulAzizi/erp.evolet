@@ -11,6 +11,8 @@ class Division extends Model
     use NodeTrait;
 
     public $timestamps = false;
+
+    protected $fillable = ['name', 'abbreviation', 'head_id'];
     
     public function head()
     {
