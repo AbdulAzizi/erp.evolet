@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
@@ -39,7 +40,7 @@ class Employee extends Model
     {
         return $this->hasMany('App\Task', 'responsible_id');
     }
-    
+
     public function allTasks()
     {
         return collect([
@@ -56,15 +57,33 @@ class Employee extends Model
 
     /**
      * @param integer $id User's id
-     * @param boolean $withUser  If true, loads user
+     * @return Builder
+     */
+    public static function whereUser($id)
+    {
+        return self::filterByUser($id);
+    }
+
+    /**
+     * @param integer $id User's id
      * @return Employee
      */
-    public static function byUserId($id, $withUser = false)
+    public static function byUser($id)
     {
-        if ($withUser) {
-            return self::where('user_id', $id)->first()->load('user');
+        return self::filterByUser($id, true);
+    }
+
+    /**
+     * @param integer $id User's id
+     * @param boolean $withEmployee  If true, loads employee, otherwise returns query
+     * @return Builder|Employee
+     */
+    private static function filterByUser($id, $withEmployee = false)
+    {
+        if ($withEmployee) {
+            return self::where('user_id', $id)->first();
         }
-        
-        return self::where('user_id', $id)->first();
+
+        return self::where('user_id', $id);
     }
 }
