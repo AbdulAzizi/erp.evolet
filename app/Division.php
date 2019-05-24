@@ -12,5 +12,13 @@ class Division extends Model
 
     public $timestamps = false;
     
-    //
+    public function head()
+    {
+        return $this->belongsTo('App\Employee');
+    }
+
+    public function employees()
+    {
+        return $this->hasMany('App\Employee');
+    }
 }

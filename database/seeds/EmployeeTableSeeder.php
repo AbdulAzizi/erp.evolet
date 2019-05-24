@@ -21,31 +21,71 @@ class EmployeeTableSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        $akbar = App\User::create([
-            'name'=>'Akbar',
-            'surname'=>'Ergashev',
-            'img'=>'daler',
-            'email'=>'ergashev.akb@gmail.com',
-            'password'=>Hash::make('admin')
+        $this->seedEmployees([
+            [
+                'name' => 'Akbar',
+                'surname' => 'Ergashev',
+                'img' => 'daler',
+                'email' => 'ergashev.akb@gmail.com',
+                'password' => 'admin',
+                'division' => 'ОЦМ',
+                'position' => 'Специалист',
+                'responsibility' => 'Программист',
+            ],
+            [
+                'name' => 'AbdulAziz',
+                'surname' => 'Nurov',
+                'img' => 'abdulaziz',
+                'email' => 'nurovaziz@gmail.com',
+                'password' => 'admin',
+                'division' => 'ОЦМ',
+                'position' => 'Специалист',
+                'responsibility' => 'Программист',
+            ],
+            [
+                'name' => 'Анвар',
+                'surname' => 'Джабаров',
+                'img' => 'anvar',
+                'email' => 'anvar@gmail.com',
+                'password' => 'admin',
+                'division' => 'ОЦМ',
+                'position' => 'Руководитель',
+                'responsibility' => 'Программист',
+            ],
+            [
+                'name' => 'Сайёра',
+                'surname' => 'Мирзоева',
+                'email' => 'sayora@gmail.com',
+                'password' => 'admin',
+                'division' => 'Evolet',
+                'position' => 'Руководитель',
+                'responsibility' => 'Директор',
+            ],
         ]);
-        $akbar->employee()->create([
-            'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id,
-            'position_id' => App\Position::where('name','Специалист')->first()->id,
-            'responsibility_id' => App\Responsibility::where('name','Программист')->first()->id,
-        ]);
-        
 
-        $abdulaziz = App\User::create([
-            'name'=>'AbdulAziz',
-            'surname'=>'Nurov',
-            'img' => 'abdulaziz',
-            'email'=>'nurovaziz@gmail.com',
-            'password'=>Hash::make('admin')
-        ]);
-        $abdulaziz->employee()->create([
-            'division_id' => App\Division::where('abbreviation','ОЦМ')->first()->id,
-            'position_id' => App\Position::where('name', 'Специалист')->first()->id,
-            'responsibility_id' => App\Responsibility::where('name', 'Программист')->first()->id,
-        ]);
+        factory(App\Employee::class, 40)->create();
+    }
+
+    private function seedEmployees($credentials)
+    {
+        foreach ($credentials as $credential) {
+            $userData = [
+                'name' => $credential['name'],
+                'surname' => $credential['surname'],
+                'email' => $credential['email'],
+                'password' => Hash::make($credential['password']),
+            ];
+            
+            if(array_key_exists('img', $credential))
+                $userData['img'] = $credential['img'];
+
+            $user = App\User::create($userData);
+            
+            $user->employee()->create([
+                'division_id' => App\Division::where('abbreviation', $credential['division'])->first()->id,
+                'position_id' => App\Position::firstOrCreate(['name' => $credential['position']])->id,
+                'responsibility_id' => App\Responsibility::firstOrCreate(['name' => $credential['responsibility']])->id,
+            ]);
+        }
     }
 }
