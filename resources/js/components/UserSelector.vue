@@ -1,16 +1,18 @@
 <template>
 	<v-autocomplete
-	v-model="selectedUser"
+	v-model="selectedUsers"
 	:items="employees"
     :search-input.sync="searchText"
     item-text="user.name"
-    item-value="user.name"
+    item-value="user"
     no-data-text="Данные отсутствуют"
     hide-selected
 	chips
     multiple
 	color="primary"
-	label="Ответственный"
+	:label="label"
+	:prepend-icon="icon"
+	:name="name"
 	>
 		<template
 		slot="selection"
@@ -21,7 +23,7 @@
 			color="primary"
 			textColor="white"
 			close
-			@input="remove(data.item)"
+			@input="remove(data.item.user)"
 			>
 				<v-avatar>
 					<img :src="'../img/'+data.item.user.img+'.jpg'">
@@ -48,23 +50,27 @@
 </template>
 <script>
 	export default {
-		props:['employees','label'],
+		props:['employees','label','icon','name'],
 		data:()=>({
-            selectedUser:[],
+            selectedUsers:[],
             searchText:null
 		}),
 		methods: {
 			remove (item) {
-				this.selectedUser=null;
+				for( var i = 0; i < this.selectedUsers.length; i++){ 
+					if ( this.selectedUsers[i] === item) {
+						this.selectedUsers.splice(i, 1); 
+					}
+				}
 			}
         },
         created(){
             // console.log(this.employees);
         },
 		watch:{
-			selectedUser(user){
+			selectedUsers(selectedUsers){
 				// console.log(this.label);
-				Event.fire(this.label, user);
+				Event.fire(this.name, selectedUsers);
 			}
 		}
     }

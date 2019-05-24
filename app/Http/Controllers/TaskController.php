@@ -14,7 +14,9 @@ class TaskController extends Controller
                             ->with('from')
                             ->get();
         // return $tasks;
+
         $employees = \App\Employee::with(['division','responsibility'])->get();
+        
         // return $employees;
         return view('tasks.index',compact('tasks', 'employees'));
     }
