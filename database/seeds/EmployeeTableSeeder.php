@@ -28,7 +28,6 @@ class EmployeeTableSeeder extends Seeder
             [
                 'name' => 'Akbar',
                 'surname' => 'Ergashev',
-                'img' => 'daler',
                 'email' => 'ergashev.akb@gmail.com',
                 'password' => 'admin',
                 'division' => 'ОЦМ',
@@ -69,7 +68,7 @@ class EmployeeTableSeeder extends Seeder
         $this->employeeAsDivisionHead('Мирзоева');
         $this->employeeAsDivisionHead('Джабаров');
 
-        factory(Employee::class, 40)->create();
+        factory(Employee::class, 400)->create();
     }
 
     private function employeeAsDivisionHead($surname)
