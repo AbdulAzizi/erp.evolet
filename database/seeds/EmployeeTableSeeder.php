@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Division;
+use App\User;
+use App\Employee;
 
 class EmployeeTableSeeder extends Seeder
 {
@@ -63,7 +66,17 @@ class EmployeeTableSeeder extends Seeder
             ],
         ]);
 
-        factory(App\Employee::class, 40)->create();
+        $this->employeeAsDivisionHead('Мирзоева');
+        $this->employeeAsDivisionHead('Джабаров');
+
+        factory(Employee::class, 40)->create();
+    }
+
+    private function employeeAsDivisionHead($surname)
+    {
+        $employee = User::where('surname', $surname)->first()->employee;
+        
+        Division::find($employee->division_id)->update(['head_id' => $employee->id]);
     }
 
     private function seedEmployees($credentials)
