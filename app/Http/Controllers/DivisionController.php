@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Employee;
 use Illuminate\Support\Facades\Auth;
+use App\Division;
 
 class DivisionController extends Controller
 {
     public function show()
     {
-        $division = Employee::byUserId(auth()->id())->division->load(['head','employees']);
-        // dd($division->toArray());
+        $division = Division::with('head','employees', 'descendants.employees')->find(Employee::byUser(auth()->id())->division_id);
+        
         return view('division', compact('division'));
     }
 }
