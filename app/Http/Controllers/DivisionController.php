@@ -10,7 +10,9 @@ class DivisionController extends Controller
 {
     public function show()
     {
-        $division = Division::with('head','employees', 'descendants.employees')->find(Employee::byUser(auth()->id())->division_id);
+        $employeeDivisionId = Employee::byUser(auth()->id())->division_id;
+
+        $division = Division::with('head','employees')->descendantsAndSelf($employeeDivisionId)->toTree();
         
         return view('division', compact('division'));
     }
