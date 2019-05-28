@@ -10,7 +10,7 @@
         <v-container grid-list-lg>
 
           <v-layout row wrap>
-            <v-flex d-flex xs2 v-for="employee in division.employees" :key="employee.id">
+            <v-flex d-flex xs12 md6 lg3 xl2 v-for="employee in division.employees" :key="employee.id">
               <employee-card :employee="employee"/>
             </v-flex>
           </v-layout>
