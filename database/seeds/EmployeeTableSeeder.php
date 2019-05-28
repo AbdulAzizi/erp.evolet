@@ -57,16 +57,26 @@ class EmployeeTableSeeder extends Seeder
             [
                 'name' => 'Сайёра',
                 'surname' => 'Мирзоева',
-                'email' => 'sayora@gmail.com',
+                'email' => 'mirzoeva@gmail.com',
                 'password' => 'admin',
                 'division' => 'Evolet',
                 'position' => 'Руководитель',
                 'responsibility' => 'Директор',
             ],
+            [
+                'name' => 'Нозим',
+                'surname' => 'Хакимов',
+                'email' => 'hakimov@gmail.com',
+                'password' => 'admin',
+                'division' => 'НАП',
+                'position' => 'Руководитель',
+                'responsibility' => 'Аналитик',
+            ],
         ]);
 
         $this->employeeAsDivisionHead('Мирзоева');
         $this->employeeAsDivisionHead('Джабаров');
+        $this->employeeAsDivisionHead('Хакимов');
 
         factory(Employee::class, 400)->create();
     }
