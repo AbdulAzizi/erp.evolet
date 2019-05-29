@@ -14,7 +14,7 @@ $factory->define(Employee::class, function (Faker $faker) {
             return factory(App\User::class)->create()->id;
         },
         'position_id' => getRandomId(Position::class, [1]),
-        'responsibility_id' => getRandomId(Responsibility::class),
+        'responsibility_id' => getRandomId(Responsibility::class, [4]),
         'division_id' => getRandomId(Division::class, Division::withDepth()->having('depth','!=', 3)->pluck('id')->toArray())
     ];
 });

@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Division;
+use App\User;
+use App\Employee;
 
 class EmployeeTableSeeder extends Seeder
 {
@@ -25,7 +28,6 @@ class EmployeeTableSeeder extends Seeder
             [
                 'name' => 'Akbar',
                 'surname' => 'Ergashev',
-                'img' => 'daler',
                 'email' => 'ergashev.akb@gmail.com',
                 'password' => 'admin',
                 'division' => 'ОЦМ',
@@ -55,15 +57,35 @@ class EmployeeTableSeeder extends Seeder
             [
                 'name' => 'Сайёра',
                 'surname' => 'Мирзоева',
-                'email' => 'sayora@gmail.com',
+                'email' => 'mirzoeva@gmail.com',
                 'password' => 'admin',
                 'division' => 'Evolet',
                 'position' => 'Руководитель',
                 'responsibility' => 'Директор',
             ],
+            [
+                'name' => 'Нозим',
+                'surname' => 'Хакимов',
+                'email' => 'hakimov@gmail.com',
+                'password' => 'admin',
+                'division' => 'НАП',
+                'position' => 'Руководитель',
+                'responsibility' => 'Аналитик',
+            ],
         ]);
 
-        factory(App\Employee::class, 40)->create();
+        $this->employeeAsDivisionHead('Мирзоева');
+        $this->employeeAsDivisionHead('Джабаров');
+        $this->employeeAsDivisionHead('Хакимов');
+
+        factory(Employee::class, 400)->create();
+    }
+
+    private function employeeAsDivisionHead($surname)
+    {
+        $employee = User::where('surname', $surname)->first()->employee;
+        
+        Division::find($employee->division_id)->update(['head_id' => $employee->id]);
     }
 
     private function seedEmployees($credentials)

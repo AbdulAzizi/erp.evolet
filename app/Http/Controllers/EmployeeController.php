@@ -8,9 +8,9 @@ class EmployeeController extends Controller
 {
     public function show()
     {
-        $employee = Employee::where('user_id',auth()->id())->first();
+        $isUserEmployee = Employee::whereUser(auth()->id())->exists();
         
-        if($employee){
+        if($isUserEmployee){
             return view('profile');
         }
         return redirect('home');
