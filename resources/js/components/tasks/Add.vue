@@ -320,6 +320,9 @@
                                 <template v-slot:activator="{ on:tooltip }">
                                     <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
                                         <v-icon :color="selectedTags.length ? 'primary' : '' ">local_offer</v-icon>
+                                        <span>
+                                            <span v-for="(selectedTag, key) in selectedTags" :key="'selectedTag-'+key"> {{ selectedTag }} </span>
+                                        </span>
                                     </v-btn>
                                 </template>
                                 <span>Таги</span>
@@ -370,10 +373,15 @@
                             <v-tooltip top>
                                 <template v-slot:activator="{ on:tooltip }">
                                     <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                        <v-icon>timelapse</v-icon>
+                                        <v-icon :color="(estimateDays || estimateHours || estimateMinutes) ? 'primary' : '' ">timelapse</v-icon>
+                                        <span class="text-lowercase">
+                                            <span v-if="estimateDays">{{ estimateDays }}д</span>
+                                            <span v-if="estimateHours"> {{ estimateHours }}ч</span>
+                                            <span v-if="estimateMinutes"> {{ estimateMinutes }}м</span>
+                                        </span>
                                     </v-btn>
                                 </template>
-                                <span>Таги</span>
+                                <span>Время на задачу</span>
                             </v-tooltip>
                         </template>
 
@@ -383,17 +391,26 @@
                                     <v-layout row wrap>
                                         <v-flex xs12 md4>
                                             <v-text-field
+                                                type="number"
+                                                v-model="estimateDays"
                                                 label="Дни"
+                                                min="1"
                                             ></v-text-field>
                                         </v-flex>
                                         <v-flex xs12 md4>
                                             <v-text-field
+                                                type="number"
+                                                v-model="estimateHours"
                                                 label="Часы"
+                                                min="1"
                                             ></v-text-field>
                                         </v-flex>
                                         <v-flex xs12 md4>
                                             <v-text-field
+                                                type="number"
+                                                v-model="estimateMinutes"
                                                 label="Минуты"
+                                                min="1"
                                             ></v-text-field>
                                         </v-flex>
                                     </v-layout>
@@ -402,12 +419,173 @@
                         </v-card>
                     </v-dialog>
 
-                    <v-btn flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                        <v-icon>event_available</v-icon>
-                    </v-btn>
-                    <v-btn flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                        <v-icon>repeat</v-icon>
-                    </v-btn>
+                    <v-dialog
+                    v-model="deadlineDialog"
+                    width="290px"
+                    lazy
+                    >
+                        <template v-slot:activator="{ on:dialog }">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on:tooltip }">
+                                    <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
+                                        <v-icon :color="deadline ? 'primary' : '' ">event</v-icon>
+                                        {{ deadline }}
+                                    </v-btn>
+                                </template>
+                                <span>Дедлайн</span>
+                            </v-tooltip>
+                        </template>
+
+                        <v-date-picker v-model="deadline" scrollable color="primary">
+                            <v-spacer></v-spacer>
+                            <v-btn flat color="primary" @click="modal = false">Отмена</v-btn>
+                            <v-btn flat color="primary" @click="$refs.dialog.save(date)">Выбрать</v-btn>
+                        </v-date-picker>
+                        
+                    </v-dialog>
+
+                    <v-dialog
+                    v-model="reapeatTaskDialog"
+                    width="600"
+                    lazy
+                    >
+                        <template v-slot:activator="{ on:dialog }">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on:tooltip }">
+                                    <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
+                                        <v-icon>repeat</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Повторение</span>
+                            </v-tooltip>
+                        </template>
+
+                        <v-card class="grey lighten-3">
+                            <v-container grid-list-md>
+                                <v-layout row  >
+                                    <v-flex xs3>
+                                        <v-subheader class="justify-end">каждый</v-subheader>
+                                    </v-flex>
+                                    <v-flex xs2>
+                                        <v-text-field
+                                        type="number"
+                                        v-model="intervalNumber"
+                                        min="1"
+                                        single-line
+                                        solo
+                                        class="text-xs-center"
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs7>
+                                        <v-select
+                                        v-model="selectedInterval"
+                                        :items="timeIntervals[ selectedIntervals ]"
+                                        item-value="index"
+                                        item-text="name"
+                                        return-object
+                                        solo
+                                        ></v-select>
+                                    </v-flex>
+                                </v-layout>
+                                <v-layout row>
+                                    <v-flex xs3>
+                                        <v-subheader class="justify-end">в</v-subheader>
+                                    </v-flex>
+                                    <v-flex xs9>
+                                        <v-dialog
+                                        ref="dialog"
+                                        v-model="reapeatTaskTimeDialog"
+                                        :return-value.sync="time"
+                                        persistent
+                                        lazy
+                                        full-width
+                                        width="290px"
+                                        >
+                                            <template v-slot:activator="{ on }">
+                                                <v-text-field
+                                                v-model="time"
+                                                label="Выберите время"
+                                                readonly
+                                                single-line
+                                                prepend-inner-icon="access_time"
+                                                solo
+                                                v-on="on"
+                                                ></v-text-field>
+                                            </template>
+                                            <v-time-picker
+                                                v-if="reapeatTaskTimeDialog"
+                                                v-model="time"
+                                                color="primary"
+                                                full-width
+                                            >
+                                                <v-spacer></v-spacer>
+                                                <v-btn flat color="primary" @click="reapeatTaskTimeDialog = false">Cancel</v-btn>
+                                                <v-btn flat color="primary" @click="$refs.dialog.save(time)">OK</v-btn>
+                                            </v-time-picker>
+                                        </v-dialog>
+                                    </v-flex>
+                                </v-layout>
+                                <v-layout row>
+                                    <v-flex xs3>
+                                        <v-subheader class="justify-end">заканчивается</v-subheader>
+                                    </v-flex>
+                                    <v-flex v-bind="endTimeMenuSizes[endTime.index]">
+                                        <v-select
+                                        v-model="endTime"
+                                        :items="endTimeMenu"
+                                        item-value="index"
+                                        item-text="label"
+                                        return-object
+                                        solo
+                                        ></v-select>
+                                    </v-flex>
+
+                                    <v-flex v-if="endTime.index == 1" xs3>
+                                        <v-text-field
+                                        type="number"
+                                        v-model="endsAfterTimes"
+                                        min="1"
+                                        single-line
+                                        solo
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex v-if="endTime.index == 1" xs3>
+                                        <v-subheader>раза</v-subheader>
+                                    </v-flex>
+
+                                    <v-flex v-if="endTime.index == 2" xs5>
+                                        <v-dialog
+                                        ref="dialog"
+                                        v-model="endsOnDateDialog"
+                                        :return-value.sync="endsOnDate"
+                                        persistent
+                                        lazy
+                                        full-width
+                                        width="290px"
+                                        >
+                                            <template v-slot:activator="{ on }">
+                                                <v-text-field
+                                                    v-model="endsOnDate"
+                                                    label="Выберите день"
+                                                    prepend-inner-icon="event"
+                                                    readonly
+                                                    solo
+                                                    v-on="on"
+                                                ></v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="endsOnDate" scrollable>
+                                                <v-spacer></v-spacer>
+                                                <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
+                                                <v-btn flat color="primary" @click="$refs.dialog.save(endsOnDate)">OK</v-btn>
+                                            </v-date-picker>
+                                        </v-dialog>
+                                    </v-flex>
+
+                                </v-layout>
+                            </v-container>
+                        </v-card>
+
+                    </v-dialog>
                 </v-flex>
 
                 <v-spacer></v-spacer>
@@ -439,11 +617,12 @@ export default {
             reapeatSwitch:false,
 
             estimateTaskDialog:false,
+            estimateDays:null,
+            estimateHours:null,
+            estimateMinutes:null,
 
-            deadlineMenu:false,
-            deadline:null,
-            deadlineSwitch:false,
             deadlineDialog:false,
+            deadline:null,
 
             tagsDialog:false,
             tags:['Таг1','Таг2','Таг3'],
@@ -462,7 +641,52 @@ export default {
 				{ id:0, label:"Низкий", color:"light-blue lighten-4" },
 				{ id:1, label:"Средний", color:"amber lighten-1" },
 				{ id:2, label:"Высокий", color:"red" }
-			]
+            ],
+
+            reapeatTaskDialog:false,
+            reapeatTaskTimeDialog:false,
+            
+            intervalNumber:1,
+
+            selectedInterval: { index:0, name: 'день' },
+            selectedIntervals: 0,
+            
+            time:null,
+            timeIntervals:[
+                [ 
+                    { index:0, name: 'день' }, 
+                    { index:1, name: 'неделю' }, 
+                    { index:2, name: 'месяц'},
+                    { index:3, name: 'год'} 
+                ],
+                [ 
+                    { index:0, name: 'дня' }, 
+                    { index:1, name: 'недели' }, 
+                    { index:2, name: 'месяца'},
+                    { index:3, name: 'года'} 
+                ] ,
+                [ 
+                    { index:0, name: 'дней' }, 
+                    { index:1, name: 'недель' }, 
+                    { index:2, name: 'месяцев'},
+                    { index:3, name: 'лет'} 
+                ]
+            ],
+            endTime:{ index:0, label:"никогда" },
+            endTimeMenu:[
+                { index:0, label:"никогда" },
+                { index:1, label:"после" },
+                { index:2, label:"в день" },
+            ],
+            endTimeMenuSizes:[
+                { xs9:true },
+                { xs3:true },
+                { xs4:true },
+            ],
+            endsAfterTimes:1,
+
+            endsOnDateDialog:false,
+            endsOnDate:null
         }
     },
     created(){
@@ -473,12 +697,28 @@ export default {
         Event.listen('watchers',(data)=>{
             this.watchers = data;
         });
+
+        this.selectedIntervals = 0;
     },
-    // watch:{
-    //     selectedPriority(value){
-    //         console.log(value);
-    //     }
-    // }
+    watch:{
+        intervalNumber(value){
+            let reminder = (value < 20) ? value : ((value-10) % 10);
+            // console.log(reminder);
+            if( reminder == 1 ){
+                this.selectedIntervals = 0;
+            }
+            else if( reminder >= 2 && reminder <= 4 ){
+                this.selectedIntervals = 1;
+            }
+            else{
+                this.selectedIntervals = 2;
+            }
+            // console.log( this.selectedInterval.name );
+        },
+        endTime(value){
+            console.log(value);
+        }
+    }
 }
 </script>
 
