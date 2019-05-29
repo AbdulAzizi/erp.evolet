@@ -58,6 +58,9 @@ Vue.component("navbar", require("./components/Navbar.vue").default);
 Vue.component("myform", require("./components/Form.vue").default);
 Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 
+
+Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
+
 Vue.component("tasks", require("./components/Tasks.vue").default);
 Vue.component("task", require("./components/Task.vue").default);
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);

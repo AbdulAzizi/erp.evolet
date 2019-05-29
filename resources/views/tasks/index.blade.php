@@ -5,7 +5,7 @@
         <v-layout justify-center>
             <v-flex sm8> --}}
                 {{-- <tasks :alltasks="{{ $tasks }}" :employees="{{ $employees }}"></tasks> --}}
-                <tasks-table :tasks="{{ $tasks }}" :employees="{{ $employees }}"></tasks-table>
+                <tasks-view :tasks="{{ $tasks }}" :employees="{{ $employees }}"></tasks-view>
             {{-- </v-flex>
         </v-layout>
     </v-container> --}}
