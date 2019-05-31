@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "material-design-icons-iconfont": "^4.0.5",
+        "moment": "^2.24.0",
         "vuetify": "^1.5.14"
     }
 }
