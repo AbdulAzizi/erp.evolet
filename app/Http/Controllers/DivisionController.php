@@ -12,7 +12,7 @@ class DivisionController extends Controller
     {
         $employeeDivisionId = Employee::byUser(auth()->id())->division_id;
 
-        $division = Division::with('head','employees')->descendantsAndSelf($employeeDivisionId)->toTree();
+        $division = Division::with('head','employees')->withDepth()->descendantsAndSelf($employeeDivisionId)->toTree();
         
         return view('division', compact('division'));
     }
