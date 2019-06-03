@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container fluid>
         <tasks-table :tasks="tasks" :employees="employees"></tasks-table>
     </v-container>
 </template>
