@@ -23,24 +23,30 @@
         </template>
 
         <v-card>
-            <v-toolbar flat color="primary" dark>
-                <v-toolbar-title class="font-weight-regular">Новая задача</v-toolbar-title>
-            </v-toolbar>
+            <v-form action="/tasks" method="post">
 
-            <v-form action="" method="post">
+                <input type="hidden" name="_token" :value="csrf_token">
+
+                <v-toolbar flat color="primary" dark>
+                    <v-toolbar-title class="font-weight-regular">Новая задача</v-toolbar-title>
+                </v-toolbar>
+
+            
                 <v-container>
                     <v-layout row wrap>
                         <v-flex xs12>
                             <v-text-field
                                 prepend-icon="content_paste"
                                 label="Название"
+                                name="title"
                             ></v-text-field>
                         </v-flex>
                         <v-flex xs12>
                             <v-textarea
                                 prepend-icon="description"
                                 rows="3"
-                                label="Описание"
+                                label="Описание (необязательное)"
+                                name="description"
                             ></v-textarea>
                         </v-flex>
 
@@ -219,385 +225,409 @@
                         </v-flex> -->
                     </v-layout>
                 </v-container>
-            </v-form>
+            
 
-            <v-card-actions>
-                <v-flex>
-                    <v-dialog
-                    v-model="assigneeDialog"
-                    width="500"
-                    >
-                        <template v-slot:activator="{ on:dialog }">
-                            <v-tooltip top>
-                                <template v-slot:activator="{ on:tooltip }">
-                                    <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                        <v-icon :color="assignees.length ? 'primary' : '' " >person</v-icon>
+                <v-card-actions>
+                    <v-flex>
+                        <v-dialog
+                        v-model="assigneeDialog"
+                        width="500"
+                        >
+                            <template v-slot:activator="{ on:dialog }">
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on:tooltip }">
+                                        
+                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
+                                            <v-icon :color="assignees.length ? 'primary' : '' " >person</v-icon>
 
-                                        <v-avatar size="30" v-for="(assignee, key) in assignees" :key="'assignee-'+key">
-                                            <img :src="'../img/'+assignee.img+'.jpg'">
-                                        </v-avatar>
-                                    </v-btn>
-                                </template>
-                                <span>Исполнители</span>
-                            </v-tooltip>
-                        </template>
-                        <v-card>
-                            <v-card-text>
-                                <user-selector :employees="employees" name="assignees" label="Исполнители" icon="person"></user-selector>
-                            </v-card-text>
-                        </v-card>
-                    </v-dialog>
+                                            <v-avatar size="30" v-for="(assignee, key) in assignees" :key="'assignee-'+key">
+                                                <img :src="'../img/'+assignee.user.img+'.jpg'">
+                                            </v-avatar>
+                                        </v-btn>
 
-                    <v-dialog
-                    v-model="watchersDialog"
-                    width="500"
-                    >
-                        <template v-slot:activator="{ on:dialog }">
-                            <v-tooltip top>
-                                <template v-slot:activator="{ on:tooltip }">
-                                    <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                        <v-icon :color="watchers.length ? 'primary' : '' " >remove_red_eye</v-icon>
-
-                                        <v-avatar size="30" v-for="(watcher, key) in watchers" :key="'watcher-'+key">
-                                            <img :src="'../img/'+watcher.img+'.jpg'">
-                                        </v-avatar>
-                                    </v-btn>
-                                </template>
-                                <span>Наблюдатели</span>
-                            </v-tooltip>
-                        </template>
-                        <v-card>
-                            <v-card-text>
-                                <user-selector :employees="employees" name="watchers" label="Наблюдатели" icon="remove_red_eye"></user-selector>
-                            </v-card-text>
-                        </v-card>
-                    </v-dialog>
-
-                    <v-dialog
-                    v-model="prioritiesDialog"
-                    width="500"
-                    >
-                        <template v-slot:activator="{ on:dialog }">
-                            <v-tooltip top>
-                                <template v-slot:activator="{ on:tooltip }">
-                                    <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                        <v-icon :color="selectedPriority === null ? '' : priorities[selectedPriority].color ">flag</v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>Приоритет</span>
-                            </v-tooltip>
-                        </template>
-                        <v-card>
-                            <v-card-text>
-                                <v-select
-                                v-model="selectedPriority"
-                                :items="priorities"
-                                item-text="label"
-                                item-value="id"
-                                label="Приоритет"
-                                >
-                                    <template v-slot:item="{ item, index }">
-                                        <v-icon :color="item.color" class="mr-2">flag</v-icon>
-                                        <span>{{ item.label }}</span>
+                                        <input type="hidden" name="assignees" :value="JSON.stringify(pluck(assignees, 'id'))">
+                                    
                                     </template>
+                                    <span>Исполнители</span>
+                                </v-tooltip>
+                            </template>
+                            <v-card>
+                                <v-card-text>
+                                    <user-selector 
+                                    :employees="employees"
+                                    name="assignees" 
+                                    label="Исполнители" 
+                                    icon="person"
+                                    hint="У каждого исполнителя будет своя отдельная задача"
+                                    ></user-selector>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
 
-                                    <template v-slot:selection="{ item, index }">
-                                        <v-icon class="mr-2" :color="item.color">flag</v-icon>
-                                        <span>{{ item.label }}</span>
+                        <v-dialog
+                        v-model="watchersDialog"
+                        width="500"
+                        >
+                            <template v-slot:activator="{ on:dialog }">
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on:tooltip }">
+                                        
+                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
+                                            <v-icon :color="watchers.length ? 'primary' : '' " >remove_red_eye</v-icon>
+
+                                            <v-avatar size="30" v-for="(watcher, key) in watchers" :key="'watcher-'+key">
+                                                <img :src="'../img/'+watcher.user.img+'.jpg'">
+                                            </v-avatar>
+                                        </v-btn>
+
+                                        <input type="hidden" name="watchers" :value="JSON.stringify(pluck(watchers, 'id'))">
+
                                     </template>
-                                
-                                </v-select>
-                            </v-card-text>
-                        </v-card>
-                    </v-dialog>
+                                    <span>Наблюдатели</span>
+                                </v-tooltip>
+                            </template>
+                            <v-card>
+                                <v-card-text>
+                                    <user-selector :employees="employees" name="watchers" label="Наблюдатели" icon="remove_red_eye"></user-selector>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
 
-                    <v-dialog
-                    v-model="tagsDialog"
-                    width="500"
-                    >
-                        <template v-slot:activator="{ on:dialog }">
-                            <v-tooltip top>
-                                <template v-slot:activator="{ on:tooltip }">
-                                    <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                        <v-icon :color="selectedTags.length ? 'primary' : '' ">local_offer</v-icon>
-                                        <span>
-                                            <span v-for="(selectedTag, key) in selectedTags" :key="'selectedTag-'+key"> {{ selectedTag }} </span>
-                                        </span>
-                                    </v-btn>
-                                </template>
-                                <span>Таги</span>
-                            </v-tooltip>
-                        </template>
-                        <v-card>
-                            <v-card-text>
-                                <v-combobox
-                                prepend-icon="local_offer"
-                                v-model="selectedTags"
+                        <v-dialog
+                        v-model="prioritiesDialog"
+                        width="500"
+                        >
+                            <template v-slot:activator="{ on:dialog }">
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on:tooltip }">
+                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
+                                            <v-icon :color="selectedPriority === null ? '' : priorities[selectedPriority].color ">flag</v-icon>
+                                        </v-btn>
+                                        <input type="hidden" name="priority" :value="selectedPriority">
+                                    </template>
+                                    <span>Приоритет</span>
+                                </v-tooltip>
+                            </template>
+                            <v-card>
+                                <v-card-text>
+                                    <v-select
+                                    v-model="selectedPriority"
+                                    :items="priorities"
+                                    item-text="label"
+                                    item-value="id"
+                                    label="Приоритет"
+                                    >
+                                        <template v-slot:item="{ item, index }">
+                                            <v-icon :color="item.color" class="mr-2">flag</v-icon>
+                                            <span>{{ item.label }}</span>
+                                        </template>
 
-                                :hide-no-data="!tagsSearch"
-                                :items="tags"
-                                :search-input.sync="tagsSearch"
-                                hide-selected
-                                label="Таги"
-                                multiple
-                                small-chips
-                                >
-                                    <template v-slot:selection="{ item, parent, selected }">
-                                        <v-chip
-                                        color="primary"
-                                        :selected="selected"
-                                        dark
-                                        small
-                                        >
-                                            <span class="pr-1">
-                                                {{ item }}
+                                        <template v-slot:selection="{ item, index }">
+                                            <v-icon class="mr-2" :color="item.color">flag</v-icon>
+                                            <span>{{ item.label }}</span>
+                                        </template>
+                                    
+                                    </v-select>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
+
+                        <v-dialog
+                        v-model="tagsDialog"
+                        width="500"
+                        >
+                            <template v-slot:activator="{ on:dialog }">
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on:tooltip }">
+                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
+                                            <v-icon :color="selectedTags.length ? 'primary' : '' ">local_offer</v-icon>
+                                            <span>
+                                                <span v-for="(selectedTag, key) in selectedTags" :key="'selectedTag-'+key"> {{ selectedTag }} </span>
                                             </span>
-                                            <v-icon
-                                            small
-                                            @click="parent.selectItem(item)"
-                                            >
-                                                close
-                                            </v-icon>
-                                        </v-chip>
+                                        </v-btn>
+
+                                        <input type="hidden" name="tags" :value="JSON.stringify(selectedTags)">
                                     </template>
-                                </v-combobox>
-                            </v-card-text>
-                        </v-card>
-                    </v-dialog>
+                                    <span>Таги</span>
+                                </v-tooltip>
+                            </template>
+                            <v-card>
+                                <v-card-text>
+                                    <v-combobox
+                                    prepend-icon="local_offer"
+                                    v-model="selectedTags"
 
-                    <v-dialog
-                    v-model="estimateTaskDialog"
-                    width="300"
-                    >
-                        <template v-slot:activator="{ on:dialog }">
-                            <v-tooltip top>
-                                <template v-slot:activator="{ on:tooltip }">
-                                    <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                        <v-icon :color="(estimateDays || estimateHours || estimateMinutes) ? 'primary' : '' ">timelapse</v-icon>
-                                        <span class="text-lowercase">
-                                            <span v-if="estimateDays">{{ estimateDays }}д</span>
-                                            <span v-if="estimateHours"> {{ estimateHours }}ч</span>
-                                            <span v-if="estimateMinutes"> {{ estimateMinutes }}м</span>
-                                        </span>
-                                    </v-btn>
-                                </template>
-                                <span>Время на задачу</span>
-                            </v-tooltip>
-                        </template>
+                                    :hide-no-data="!tagsSearch"
+                                    :items="tags"
+                                    :search-input.sync="tagsSearch"
+                                    hide-selected
+                                    label="Таги"
+                                    multiple
+                                    small-chips
+                                    >
+                                        <template v-slot:selection="{ item, parent, selected }">
+                                            <v-chip
+                                            color="primary"
+                                            :selected="selected"
+                                            dark
+                                            small
+                                            >
+                                                <span class="pr-1">
+                                                    {{ item }}
+                                                </span>
+                                                <v-icon
+                                                small
+                                                @click="parent.selectItem(item)"
+                                                >
+                                                    close
+                                                </v-icon>
+                                            </v-chip>
+                                        </template>
+                                    </v-combobox>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
 
-                        <v-card>
-                            <v-card-text>
-                                <v-container grid-list-xl class="pa-0">
-                                    <v-layout row wrap>
-                                        <v-flex xs12 md4>
+                        <v-dialog
+                        v-model="estimateTaskDialog"
+                        width="300"
+                        >
+                            <template v-slot:activator="{ on:dialog }">
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on:tooltip }">
+                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
+                                            <v-icon :color="(estimateDays || estimateHours || estimateMinutes) ? 'primary' : '' ">timelapse</v-icon>
+                                            <span class="text-lowercase">
+                                                <span v-if="estimateDays">{{ estimateDays }}д</span>
+                                                <span v-if="estimateHours"> {{ estimateHours }}ч</span>
+                                                <span v-if="estimateMinutes"> {{ estimateMinutes }}м</span>
+                                            </span>
+                                        </v-btn>
+
+                                        <input type="hidden" name="estimatedTaskTime" :value="estimateTime">
+                                    </template>
+                                    <span>Время на задачу</span>
+                                </v-tooltip>
+                            </template>
+
+                            <v-card>
+                                <v-card-text>
+                                    <v-container grid-list-xl class="pa-0">
+                                        <v-layout row wrap>
+                                            <v-flex xs12 md4>
+                                                <v-text-field
+                                                    type="number"
+                                                    v-model="estimateDays"
+                                                    label="Дни"
+                                                    min="1"
+                                                ></v-text-field>
+                                            </v-flex>
+                                            <v-flex xs12 md4>
+                                                <v-text-field
+                                                    type="number"
+                                                    v-model="estimateHours"
+                                                    label="Часы"
+                                                    min="1"
+                                                ></v-text-field>
+                                            </v-flex>
+                                            <v-flex xs12 md4>
+                                                <v-text-field
+                                                    type="number"
+                                                    v-model="estimateMinutes"
+                                                    label="Минуты"
+                                                    min="1"
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
+
+                        <v-dialog
+                        v-model="deadlineDialog"
+                        ref="deadlineDialog"
+                        width="290px"
+                        lazy
+                        >
+                            <template v-slot:activator="{ on:dialog }">
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on:tooltip }">
+                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
+                                            <v-icon :color="deadline ? 'primary' : '' ">event</v-icon>
+                                            {{ deadline }}
+                                        </v-btn>
+
+                                        <input type="hidden" name="deadline" v-model="deadline">
+
+                                    </template>
+                                    <span>Дедлайн</span>
+                                </v-tooltip>
+                            </template>
+
+                            <v-date-picker v-model="deadline" scrollable color="primary">
+                                <v-spacer></v-spacer>
+                                <v-btn flat color="primary" @click="deadlineDialog = false">Отмена</v-btn>
+                                <v-btn flat color="primary" @click="$refs.deadlineDialog.save(deadline)">Выбрать</v-btn>
+                            </v-date-picker>
+                            
+                        </v-dialog>
+
+                        <v-dialog
+                        v-model="reapeatTaskDialog"
+                        width="600"
+                        lazy
+                        >
+                            <template v-slot:activator="{ on:dialog }">
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on:tooltip }">
+                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
+                                            <v-icon>repeat</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Повторение</span>
+                                </v-tooltip>
+                            </template>
+
+                            <v-card class="grey lighten-3">
+                                <v-container grid-list-md>
+                                    <v-layout row  >
+                                        <v-flex xs3>
+                                            <v-subheader class="justify-end">каждый</v-subheader>
+                                        </v-flex>
+                                        <v-flex xs2>
                                             <v-text-field
-                                                type="number"
-                                                v-model="estimateDays"
-                                                label="Дни"
-                                                min="1"
+                                            type="number"
+                                            v-model="intervalNumber"
+                                            min="1"
+                                            single-line
+                                            solo
+                                            class="text-xs-center"
                                             ></v-text-field>
                                         </v-flex>
-                                        <v-flex xs12 md4>
-                                            <v-text-field
-                                                type="number"
-                                                v-model="estimateHours"
-                                                label="Часы"
-                                                min="1"
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex xs12 md4>
-                                            <v-text-field
-                                                type="number"
-                                                v-model="estimateMinutes"
-                                                label="Минуты"
-                                                min="1"
-                                            ></v-text-field>
+                                        <v-flex xs7>
+                                            <v-select
+                                            v-model="selectedInterval"
+                                            :items="timeIntervals[ selectedIntervals ]"
+                                            item-value="index"
+                                            item-text="name"
+                                            return-object
+                                            solo
+                                            ></v-select>
                                         </v-flex>
                                     </v-layout>
-                                </v-container>
-                            </v-card-text>
-                        </v-card>
-                    </v-dialog>
-
-                    <v-dialog
-                    v-model="deadlineDialog"
-                    width="290px"
-                    lazy
-                    >
-                        <template v-slot:activator="{ on:dialog }">
-                            <v-tooltip top>
-                                <template v-slot:activator="{ on:tooltip }">
-                                    <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                        <v-icon :color="deadline ? 'primary' : '' ">event</v-icon>
-                                        {{ deadline }}
-                                    </v-btn>
-                                </template>
-                                <span>Дедлайн</span>
-                            </v-tooltip>
-                        </template>
-
-                        <v-date-picker v-model="deadline" scrollable color="primary">
-                            <v-spacer></v-spacer>
-                            <v-btn flat color="primary" @click="modal = false">Отмена</v-btn>
-                            <v-btn flat color="primary" @click="$refs.dialog.save(date)">Выбрать</v-btn>
-                        </v-date-picker>
-                        
-                    </v-dialog>
-
-                    <v-dialog
-                    v-model="reapeatTaskDialog"
-                    width="600"
-                    lazy
-                    >
-                        <template v-slot:activator="{ on:dialog }">
-                            <v-tooltip top>
-                                <template v-slot:activator="{ on:tooltip }">
-                                    <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                        <v-icon>repeat</v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>Повторение</span>
-                            </v-tooltip>
-                        </template>
-
-                        <v-card class="grey lighten-3">
-                            <v-container grid-list-md>
-                                <v-layout row  >
-                                    <v-flex xs3>
-                                        <v-subheader class="justify-end">каждый</v-subheader>
-                                    </v-flex>
-                                    <v-flex xs2>
-                                        <v-text-field
-                                        type="number"
-                                        v-model="intervalNumber"
-                                        min="1"
-                                        single-line
-                                        solo
-                                        class="text-xs-center"
-                                        ></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs7>
-                                        <v-select
-                                        v-model="selectedInterval"
-                                        :items="timeIntervals[ selectedIntervals ]"
-                                        item-value="index"
-                                        item-text="name"
-                                        return-object
-                                        solo
-                                        ></v-select>
-                                    </v-flex>
-                                </v-layout>
-                                <v-layout row>
-                                    <v-flex xs3>
-                                        <v-subheader class="justify-end">в</v-subheader>
-                                    </v-flex>
-                                    <v-flex xs9>
-                                        <v-dialog
-                                        ref="dialog"
-                                        v-model="reapeatTaskTimeDialog"
-                                        :return-value.sync="time"
-                                        persistent
-                                        lazy
-                                        full-width
-                                        width="290px"
-                                        >
-                                            <template v-slot:activator="{ on }">
-                                                <v-text-field
-                                                v-model="time"
-                                                label="Выберите время"
-                                                readonly
-                                                single-line
-                                                prepend-inner-icon="access_time"
-                                                solo
-                                                v-on="on"
-                                                ></v-text-field>
-                                            </template>
-                                            <v-time-picker
-                                                v-if="reapeatTaskTimeDialog"
-                                                v-model="time"
-                                                color="primary"
-                                                full-width
+                                    <v-layout row>
+                                        <v-flex xs3>
+                                            <v-subheader class="justify-end">в</v-subheader>
+                                        </v-flex>
+                                        <v-flex xs9>
+                                            <v-dialog
+                                            ref="dialog"
+                                            v-model="reapeatTaskTimeDialog"
+                                            :return-value.sync="time"
+                                            persistent
+                                            lazy
+                                            full-width
+                                            width="290px"
                                             >
-                                                <v-spacer></v-spacer>
-                                                <v-btn flat color="primary" @click="reapeatTaskTimeDialog = false">Cancel</v-btn>
-                                                <v-btn flat color="primary" @click="$refs.dialog.save(time)">OK</v-btn>
-                                            </v-time-picker>
-                                        </v-dialog>
-                                    </v-flex>
-                                </v-layout>
-                                <v-layout row>
-                                    <v-flex xs3>
-                                        <v-subheader class="justify-end">заканчивается</v-subheader>
-                                    </v-flex>
-                                    <v-flex v-bind="endTimeMenuSizes[endTime.index]">
-                                        <v-select
-                                        v-model="endTime"
-                                        :items="endTimeMenu"
-                                        item-value="index"
-                                        item-text="label"
-                                        return-object
-                                        solo
-                                        ></v-select>
-                                    </v-flex>
-
-                                    <v-flex v-if="endTime.index == 1" xs3>
-                                        <v-text-field
-                                        type="number"
-                                        v-model="endsAfterTimes"
-                                        min="1"
-                                        single-line
-                                        solo
-                                        ></v-text-field>
-                                    </v-flex>
-                                    <v-flex v-if="endTime.index == 1" xs3>
-                                        <v-subheader>раза</v-subheader>
-                                    </v-flex>
-
-                                    <v-flex v-if="endTime.index == 2" xs5>
-                                        <v-dialog
-                                        ref="dialog"
-                                        v-model="endsOnDateDialog"
-                                        :return-value.sync="endsOnDate"
-                                        persistent
-                                        lazy
-                                        full-width
-                                        width="290px"
-                                        >
-                                            <template v-slot:activator="{ on }">
-                                                <v-text-field
-                                                    v-model="endsOnDate"
-                                                    label="Выберите день"
-                                                    prepend-inner-icon="event"
+                                                <template v-slot:activator="{ on }">
+                                                    <v-text-field
+                                                    v-model="time"
+                                                    label="Выберите время"
                                                     readonly
+                                                    single-line
+                                                    prepend-inner-icon="access_time"
                                                     solo
                                                     v-on="on"
-                                                ></v-text-field>
-                                            </template>
-                                            <v-date-picker v-model="endsOnDate" scrollable>
-                                                <v-spacer></v-spacer>
-                                                <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
-                                                <v-btn flat color="primary" @click="$refs.dialog.save(endsOnDate)">OK</v-btn>
-                                            </v-date-picker>
-                                        </v-dialog>
-                                    </v-flex>
+                                                    ></v-text-field>
+                                                </template>
+                                                <v-time-picker
+                                                    v-if="reapeatTaskTimeDialog"
+                                                    v-model="time"
+                                                    color="primary"
+                                                    full-width
+                                                >
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn flat color="primary" @click="reapeatTaskTimeDialog = false">Cancel</v-btn>
+                                                    <v-btn flat color="primary" @click="$refs.dialog.save(time)">OK</v-btn>
+                                                </v-time-picker>
+                                            </v-dialog>
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout row>
+                                        <v-flex xs3>
+                                            <v-subheader class="justify-end">заканчивается</v-subheader>
+                                        </v-flex>
+                                        <v-flex v-bind="endTimeMenuSizes[endTime.index]">
+                                            <v-select
+                                            v-model="endTime"
+                                            :items="endTimeMenu"
+                                            item-value="index"
+                                            item-text="label"
+                                            return-object
+                                            solo
+                                            ></v-select>
+                                        </v-flex>
 
-                                </v-layout>
-                            </v-container>
-                        </v-card>
+                                        <v-flex v-if="endTime.index == 1" xs3>
+                                            <v-text-field
+                                            type="number"
+                                            v-model="endsAfterTimes"
+                                            min="1"
+                                            single-line
+                                            solo
+                                            ></v-text-field>
+                                        </v-flex>
+                                        <v-flex v-if="endTime.index == 1" xs3>
+                                            <v-subheader>раза</v-subheader>
+                                        </v-flex>
 
-                    </v-dialog>
-                </v-flex>
+                                        <v-flex v-if="endTime.index == 2" xs5>
+                                            <v-dialog
+                                            ref="dialog"
+                                            v-model="endsOnDateDialog"
+                                            :return-value.sync="endsOnDate"
+                                            persistent
+                                            lazy
+                                            full-width
+                                            width="290px"
+                                            >
+                                                <template v-slot:activator="{ on }">
+                                                    <v-text-field
+                                                        v-model="endsOnDate"
+                                                        label="Выберите день"
+                                                        prepend-inner-icon="event"
+                                                        readonly
+                                                        solo
+                                                        v-on="on"
+                                                    ></v-text-field>
+                                                </template>
+                                                <v-date-picker v-model="endsOnDate" scrollable>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
+                                                    <v-btn flat color="primary" @click="$refs.dialog.save(endsOnDate)">OK</v-btn>
+                                                </v-date-picker>
+                                            </v-dialog>
+                                        </v-flex>
 
-                <v-spacer></v-spacer>
-                
-                <v-btn
-                color="primary"
-                flat
-                @click="dialog = false"
-                >
-                    Добавить
-                </v-btn>
-            </v-card-actions>
+                                    </v-layout>
+                                </v-container>
+                            </v-card>
+
+                        </v-dialog>
+                    </v-flex>
+
+                    <v-spacer></v-spacer>
+                    
+                    <v-btn
+                    color="primary"
+                    flat
+                    type="submit"
+                    >
+                        Добавить
+                    </v-btn>
+                </v-card-actions>
+            </v-form>
         </v-card>
     </v-dialog>
     
@@ -608,6 +638,8 @@ export default {
     props:['employees'],
     data(){
         return {
+            csrf_token: window.Laravel.csrf_token,
+
             watchersDialog:false,
             watchers:[],
 
@@ -620,6 +652,7 @@ export default {
             estimateDays:null,
             estimateHours:null,
             estimateMinutes:null,
+            estimateTime:null,
 
             deadlineDialog:false,
             deadline:null,
@@ -717,6 +750,34 @@ export default {
         },
         endTime(value){
             console.log(value);
+        },
+        estimateDays(value){
+            this.estimateTime = this.toMilliseconds(value, this.estimateHours, this.estimateMinutes)
+        },
+        estimateHours(value){
+            this.estimateTime = this.toMilliseconds(this.estimateDays, value, this.estimateMinutes)
+        },
+        estimateMinutes(value){
+            this.estimateTime = this.toMilliseconds(this.estimateDays, this.estimateHours, value)
+        }
+    },
+    methods: {
+        pluck: function (array, key) {
+            return array.map(item => item[key]);
+        },
+        toMilliseconds(days, hours, minutes){
+            console.log( (days*86400000)+(hours*3600000)+(minutes*60000));
+            
+            return (days*86400000)+(hours*3600000)+(minutes*60000)
+        }
+    },
+    computed:{
+        estimatedTaskTime(){
+            return {
+                days:this.estimateDays,
+                hours:this.estimateHours,
+                minutes:this.estimateMinutes
+            }
         }
     }
 }

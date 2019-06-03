@@ -117,9 +117,14 @@
             <template v-slot:items="props">
                 <tr @click="displayTask(props.item)">
                     <td>{{ props.item.title }}</td>
-                    <td>{{ props.item.description }}</td>
                     <td v-text="props.item.status ? 'Сделанно' : 'Не сделанно' "></td>
-                    <td v-text="props.item.high_priority ? 'Высокий' : 'Обычный' "></td>
+                    <td><priority :id="props.item.priority"></priority></td>
+                    <td>
+                        <!-- {{ moment(moment(props.item.planned_time).diff(zero)).format('DDDд kч mм') }} -->
+                        <span v-if="moment.duration(moment(parseInt(props.item.planned_time)).valueOf()).days()">{{ moment.duration(moment(parseInt(props.item.planned_time)).valueOf()).days() }}д</span>
+                        <span v-if="moment.duration(moment(parseInt(props.item.planned_time)).valueOf()).hours()">{{ moment.duration(moment(parseInt(props.item.planned_time)).valueOf()).hours() }}ч</span>
+                        <span v-if="moment.duration(moment(parseInt(props.item.planned_time)).valueOf()).minutes()">{{ moment.duration(moment(parseInt(props.item.planned_time)).valueOf()).minutes() }}м</span>
+                    </td>
                     <td>{{props.item.deadline}}</td>
                     <td v-text="props.item.from.user ? `${props.item.from.user.name} ${props.item.from.user.surname}` : 'Система' "></td>
                 </tr>
@@ -132,15 +137,18 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
     props:['tasks','employees'],
     data(){
         return {
+            moment:moment,
             headers: [
                 { text: 'Задача', value: 'title' },
-                { text: 'Описание', value: 'description' },
                 { text: 'Статус', value: 'status' },
-                { text: 'Приоритет', value: 'high_priority' },
+                { text: 'Приоритет', value: 'priority' },
+                { text: 'Время на задачу', value: 'planned_time' },
                 { text: 'Дедлайн', value: 'deadline' },
                 { text: 'От', value: 'from', sort: false},
             ],
@@ -162,14 +170,18 @@ export default {
                     }
                 },
             },
-            activeTab:null
+            activeTab:null,
+            zero:moment('1970-01-01 00:00:00'),
         }
     },
     methods:{
         displayTask( task ){
             this.selectedTask = task;
             this.taskDialog = true;
-        }
+        },
+        // moment(date){
+        //     return moment(date);
+        // }
     }
 }
 </script>
