@@ -50,6 +50,14 @@ window.Event = new (class {
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.mixin({
+    methods: {
+        pluck: function (array, key) {
+            return array.map(item => item[key]);
+        },
+    }
+  })
+
 Vue.component(
     "example-component",
     require("./components/ExampleComponent.vue").default
@@ -66,6 +74,7 @@ Vue.component("tasks", require("./components/Tasks.vue").default);
 Vue.component("task", require("./components/Task.vue").default);
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
 Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
+Vue.component("tasks-assignee", require("./components/tasks/Assignee.vue").default);
 
 Vue.component("employee-card", require("./components/EmployeeCard.vue").default);
 Vue.component("division", require("./components/Division.vue").default);
