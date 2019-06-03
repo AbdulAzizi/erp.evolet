@@ -4,7 +4,7 @@
 	:items="employees"
     :search-input.sync="searchText"
     item-text="user.name"
-    item-value="user"
+	return-object
     no-data-text="Данные отсутствуют"
     hide-selected
 	chips
@@ -12,7 +12,8 @@
 	color="primary"
 	:label="label"
 	:prepend-icon="icon"
-	:name="name"
+	:hint="hint"
+	persistent-hint
 	>
 		<template
 		slot="selection"
@@ -50,7 +51,7 @@
 </template>
 <script>
 	export default {
-		props:['employees','label','icon','name'],
+		props:['employees','label','icon','name','hint'],
 		data:()=>({
             selectedUsers:[],
             searchText:null
@@ -65,6 +66,7 @@
 			}
         },
         created(){
+            // console.log("this.employees");
             // console.log(this.employees);
         },
 		watch:{
