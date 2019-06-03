@@ -59,19 +59,16 @@
 		methods: {
 			remove (item) {
 				for( var i = 0; i < this.selectedUsers.length; i++){ 
-					if ( this.selectedUsers[i] === item) {
+					if ( this.selectedUsers[i].user === item) {
 						this.selectedUsers.splice(i, 1); 
 					}
 				}
 			}
         },
         created(){
-            // console.log("this.employees");
-            // console.log(this.employees);
         },
 		watch:{
 			selectedUsers(selectedUsers){
-				// console.log(this.label);
 				Event.fire(this.name, selectedUsers);
 			}
 		}
