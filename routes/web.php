@@ -23,6 +23,8 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/company/structure', 'HomeController@company')->name('company');
     Route::get('/tasks', 'TaskController@index')->name('tasks');
     Route::get('/profile', 'EmployeeController@show')->name('profile');
-    Route::get('/division', 'DivisionController@show')->name('division');
+    Route::get('/division', 'DivisionController@show')->name('division'); //FIXME Maybe convert to /divisions
+    
+    Route::post('/employees', 'EmployeeController@store')->name('employees.store');
 
 });
