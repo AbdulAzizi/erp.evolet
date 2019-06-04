@@ -28,21 +28,6 @@
             required
             :error-messages="localErrors.email"
           />
-          <v-text-field
-            v-model="password"
-            name="password"
-            type="password"
-            label="Пароль"
-            required
-            :error-messages="localErrors.password"
-          />
-          <v-text-field
-            v-model="password_confirmation"
-            type="password"
-            name="password_confirmation"
-            label="Подтвердите пароль"
-            required
-          />
           <v-select
             v-model="positionId"
             :items="positions"
@@ -68,7 +53,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" flat="flat" @click="show = false">Отмена</v-btn>
-          <v-btn color="primary" flat="flat" type="submit">Добавить</v-btn>
+          <v-btn color="primary" type="submit">Добавить</v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
@@ -90,8 +75,6 @@ export default {
       name: "",
       surname: "",
       email: "",
-      password: "",
-      password_confirmation: "",
       positionId: "",
       responsibilityId: "",
       divisionId: ''
@@ -104,8 +87,6 @@ export default {
     this.name = name;
     this.surname = surname;
     this.email = email;
-    this.password = ""; //TODO Discus about this fiel
-    this.password_confirmation = "";
     this.positionId = parseInt(positionId);
     this.responsibilityId = parseInt(responsibilityId);
     this.divisionId = divisionId;
@@ -118,8 +99,6 @@ export default {
       this.name = "";
       this.surname = "";
       this.email = "";
-      this.password = "";
-      this.password_confirmation = "";
       this.positionId = null;
       this.responsibilityId = null;
 

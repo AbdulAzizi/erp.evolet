@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Employee;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Validator;
+use Illuminate\Support\Facades\Password;
 
 class EmployeeController extends Controller
 {
@@ -25,25 +27,32 @@ class EmployeeController extends Controller
             'name' => 'required',
             'surname' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed',
             'positionId' => 'required',
-            'responsibilityId' => 'required'
+            'responsibilityId' => 'required',
         ]);
-        
-        if($validator->fails()){
+
+        if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // dd()
-        $newUser = User::create($request->only(['name', 'surname', 'email', 'password']));
+        $randomPassword = Str::random(10);
+
+        $newUser = User::create([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'password' => $randomPassword,
+        ]);
 
         Employee::create([
             'user_id' => $newUser->id,
             'position_id' => $request->positionId,
             'responsibility_id' => $request->responsibilityId,
-            'division_id' => $request->divisionId
+            'division_id' => $request->divisionId,
         ]);
-        
+
+        Password::broker()->sendResetLink(['email' => $newUser->email]);
+
         return redirect()->back();
     }
 }
