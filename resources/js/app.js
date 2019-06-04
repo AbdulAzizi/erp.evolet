@@ -68,6 +68,7 @@ Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
 
 Vue.component("employee-card", require("./components/EmployeeCard.vue").default);
 Vue.component("division", require("./components/Division.vue").default);
+Vue.component("add-employee-dialog", require("./components/AddEmployeeDialog.vue").default);
 
 Vue.component(
     "user-selector",
