@@ -103,11 +103,11 @@
 
 <body style="background-color: #e9ecef;">
 
-    <table border="0" cellpadding="0" cellspacing="0" width="100%"  style="margin: 100px 0px;">
-
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 100px 0px;">
         <tr>
             <td align="center" bgcolor="#e9ecef">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin-top: 100px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                    style="max-width: 600px; margin: 100px 0px;">
                     <tr>
                         <td align="left" bgcolor="#ffffff"
                             style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf; ">
@@ -116,12 +116,6 @@
                                 Установите пароль</h1>
                         </td>
                     </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td align="center" bgcolor="#e9ecef">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin-bottom: 100px;">
                     <tr>
                         <td align="left" bgcolor="#ffffff"
                             style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
@@ -139,7 +133,7 @@
                                             <tr>
                                                 <td align="center" bgcolor="#1a82e2"
                                                     style="border-radius: 6px;  background: #a8cf45;">
-                                                    <a href="{{$setupLink}}"
+                                                    <a href=""
                                                         style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">
                                                         Установить пароль
                                                     </a>
@@ -155,7 +149,7 @@
                         <td align="left" bgcolor="#ffffff"
                             style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                             <p style="margin: 0;">Если не сработало, скопируйте и перейдите по ссылке в ручную</p>
-                            <p style="margin: 0;"><a href="{{$setupLink}}" target="_blank">{{$setupLink}}</a></p>
+                            <p style="margin: 0;"><a href="" target="_blank"></a></p>
                         </td>
                     </tr>
 
