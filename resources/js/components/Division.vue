@@ -7,9 +7,17 @@
         </template>
 
         <v-container grid-list-lg fluid px-0 pl-5>
-          <v-layout row wrap v-if="division.head">
-            <v-flex d-flex xs12 md6 lg4 xl3>
+          <v-layout row wrap>
+            <v-flex d-flex xs12 md6 lg4 xl3 v-if="division.head">
               <employee-card :employee="division.head"/>
+            </v-flex>
+            <v-flex d-flex xs12 md6 lg4 xl3>
+              <v-card flat>
+                <v-card-text>
+                  <h2 class="subheading">Кол-во сотрудников:</h2>
+                  <h2 class="headline">{{ employeeCount }}</h2> 
+                </v-card-text>
+              </v-card>
             </v-flex>
           </v-layout>
 
@@ -25,7 +33,6 @@
             >
               <employee-card :employee="employee"/>
             </v-flex>
-
             {{dump}}
             <v-flex d-flex xs12 md6 lg4 xl3 v-if="isEmployeeHead && division.depth === 3">
               <v-card flat @click="addEmployee()" hover>
@@ -49,11 +56,19 @@
 </template>
 
 <script>
+const divisionRecursiveCount = function(division) {
+  let count = division.employees.length;
+  division.children.map(subdivision => {
+    count += divisionRecursiveCount(subdivision);
+  });
+  return count;
+};
+
 export default {
   props: ["division", "isEmployeeHead"],
   methods: {
     addEmployee: function() {
-      Event.fire("addEmployee", {divisionId: this.division.id});
+      Event.fire("addEmployee", { divisionId: this.division.id });
     }
   },
   computed: {
@@ -64,6 +79,9 @@ export default {
           employee => employee.id !== this.division.head.id
         );
       return this.division.employees;
+    },
+    employeeCount: function() {
+      return divisionRecursiveCount(this.division);
     }
   }
 };
