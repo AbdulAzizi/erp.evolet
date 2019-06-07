@@ -9,6 +9,8 @@ class Employee extends Model
 {
     public $with = ['user', 'position', 'responsibility'];
 
+    protected $fillable = [ 'user_id', 'position_id', 'responsibility_id', 'division_id' ];
+
     public $timestamps = false;
 
     public function division()
