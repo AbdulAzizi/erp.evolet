@@ -23,7 +23,7 @@
         </template>
 
         <v-card>
-            <v-form action="/tasks" method="post">
+            <form action="/tasks" method="post" ref="form">
 
                 <input type="hidden" name="_token" :value="csrf_token">
 
@@ -34,195 +34,162 @@
             
                 <v-container>
                     <v-layout row wrap>
+                        <v-flex xs12 v-if="!Array.isArray(errors)">
+                            <h1 class="subheading red--text text--darken-1 ml-1">Форма заполнена не верно</h1>
+                        </v-flex>
                         <v-flex xs12>
                             <v-text-field
                                 prepend-icon="content_paste"
                                 label="Название"
                                 name="title"
+                                ref="title"
+                                v-model="title"
+                                :rules="[rules.required]"
+                                required
                             ></v-text-field>
                         </v-flex>
                         <v-flex xs12>
                             <v-textarea
                                 prepend-icon="description"
                                 rows="3"
-                                label="Описание (необязательное)"
+                                label="Описание"
                                 name="description"
                             ></v-textarea>
                         </v-flex>
+                        <v-flex xs12>
+                            <input type="hidden" name="assignees" :value="JSON.stringify(pluck(assignees, 'id'))">
 
-                        <!-- <v-flex xs12 md6>
-                            <user-selector :employees="employees" label="Ответственный" icon="person"></user-selector>
-                        </v-flex> -->
-                        <!-- <v-flex xs12 md6>
-                            <user-selector :employees="employees" label="Наблюдатели"  icon="remove_red_eye"></user-selector>
-                        </v-flex> -->
-                        <!-- <v-flex xs12 md6>    
-                            <v-subheader class="px-0 caption">Приоритет</v-subheader>
-                            
-                            <v-toolbar dense flat color="white" class="priority">
-                                <v-btn-toggle 
-                                v-model="task.priority" 
-                                class="grey lighten-3"
-                                >
-                                    <v-btn 
-                                    v-for="(priority,key) in priorities"
-                                    :key="'priority'+key"  
-                                    :value="key"
-                                    flat
-                                    >
-                                        {{priority.label}}
-                                    </v-btn>
-                                </v-btn-toggle>
-                            </v-toolbar>
-                        </v-flex> -->
-                        <!-- <v-flex xs12 md6>
-                            <v-select
-                            prepend-icon="flag"
-                            :items="priorities"
-                            item-text="label"
-                            item-value="label"
-                            label="Приоритет"
-                            >
-                                <template v-slot:item="{ item, index }">
-                                    <v-icon class="mr-2" :color="item.color">flag</v-icon>
-                                    <span>{{ item.label }}</span>
-                                </template>
-
-                                <template v-slot:selection="{ item, index }">
-                                    <v-icon class="mr-2" :color="item.color">flag</v-icon>
-                                    <span>{{ item.label }}</span>
-                                </template>
-                            
-                            </v-select>
-                        </v-flex>
-                        <v-flex xs12 md6>
-                            <v-combobox
-                            prepend-icon="local_offer"
-                            v-model="selectedTags"
-
-                            :hide-no-data="!tagsSearch"
-                            :items="tags"
-                            :search-input.sync="tagsSearch"
+                            <v-autocomplete
+                            v-model="assignees"
+                            :items="employees"
+                            :search-input.sync="searchText"
+                            item-text="user.name"
+                            return-object
+                            no-data-text="Данные отсутствуют"
                             hide-selected
-                            label="Таги"
+                            chips
                             multiple
-                            small-chips
+                            color="primary"
+                            label="Исполнители"
+                            prepend-icon="person"
+                            ref="assignees"
+                            :rules="[rules.notEmptyArray]"
+                            required
+                            hint="У каждого исполнителя будет своя отдельная задача"
+                            persistent-hint
                             >
-                                <template v-slot:selection="{ item, parent, selected }">
+                                <template
+                                slot="selection"
+                                slot-scope="data"
+                                >
                                     <v-chip
+                                    :selected="data.selected"
                                     color="primary"
-                                    :selected="selected"
-                                    dark
-                                    small
+                                    textColor="white"
+                                    close
+                                    @input="remove(data.item.user)"
                                     >
-                                        <span class="pr-1">
-                                            {{ item }}
-                                        </span>
-                                        <v-icon
-                                        small
-                                        @click="parent.selectItem(item)"
-                                        >
-                                            close
-                                        </v-icon>
+                                        <v-avatar>
+                                            <img :src="photo(data.item.user.img)">
+                                        </v-avatar>
+                                        {{ data.item.user.name }}
                                     </v-chip>
                                 </template>
-                            </v-combobox>
-                        </v-flex>
-                        <v-flex xs12 md6>
-                            <v-switch
-                                prepend-icon="timelapse"
-                                v-model="estimateTaskSwitch"
-                                color="primary"
-                                label="Время на задачу"
-                            ></v-switch>
-                        </v-flex>
-                        <v-flex xs12 md2>
-                            <v-text-field v-if="estimateTaskSwitch"
-                                label="Дни"
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 md2>
-                            <v-text-field v-if="estimateTaskSwitch"
-                                label="Часы"
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 md2>
-                            <v-text-field v-if="estimateTaskSwitch"
-                                label="Минуты"
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 md6>
-                            <v-switch
-                                prepend-icon="event_available"
-                                v-model="deadlineSwitch"
-                                color="primary"
-                                label="Дедлайн"
-                            ></v-switch>
-                        </v-flex>
-                        <v-flex xs12 md6>
-                            <v-menu
-                            v-if="deadlineSwitch"
-                            v-model="deadlineMenu"
-                            :close-on-content-click="false"
-                            :nudge-right="40"
-                            lazy
-                            transition="scale-transition"
-                            offset-y
-                            full-width
-                            min-width="290px"
-                            >
-                                <template v-slot:activator="{ on }">
-                                    <v-text-field
-                                        v-model="deadline"
-                                        label="Дедлайн"
-                                        prepend-icon="event"
-                                        readonly
-                                        v-on="on"
-                                    ></v-text-field>
+
+                                <template
+                                slot="item"
+                                slot-scope="data"
+                                >
+                                    <template>
+                                        <v-list-tile-avatar>
+                                            <img v-if="data.item.user.img" :src="photo(data.item.user.img)">
+                                        </v-list-tile-avatar>
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>{{data.item.user.name}} {{data.item.user.surname}}</v-list-tile-title>
+                                            <v-list-tile-sub-title>{{data.item.responsibility.name}} - {{data.item.division.abbreviation}}</v-list-tile-sub-title>
+                                        </v-list-tile-content>
+                                    </template>
                                 </template>
-                                <v-date-picker color="primary" v-model="deadline" @input="deadlineMenu = false"></v-date-picker>
-                            </v-menu>
+                            </v-autocomplete>
                         </v-flex>
-                        <v-flex xs12 md6>
-                            <v-switch
-                                prepend-icon="repeat"
-                                v-model="reapeatSwitch"
-                                color="primary"
-                                label="Повторение"
-                            ></v-switch>
-
+                        <v-flex xs-12>
                             <v-dialog
-                            v-model="reapeatSwitch"
-                            width="500"
+                            v-model="deadlineDialog"
+                            ref="deadlineDialog"
+                            width="290px"
+                            lazy
                             >
+                                <template v-slot:activator="{ on:dialog }">
+                                    <v-tooltip top>
+                                        <template v-slot:activator="{ on:tooltip }">
 
-                            <v-card>
-                                <v-card-title
-                                class="headline grey lighten-2"
-                                primary-title
-                                >
-                                Privacy Policy
-                                </v-card-title>
+                                            <v-text-field
+                                                v-on="{ ...dialog }"
+                                                prepend-icon="event"
+                                                label="Дедлайн"
+                                                name="deadline"
+                                                ref="deadline"
+                                                v-model="deadline"
+                                                :rules="[rules.required]"
+                                                required
+                                            ></v-text-field>
 
-                                <v-card-text>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </v-card-text>
+                                        </template>
+                                        <span>Дедлайн</span>
+                                    </v-tooltip>
+                                </template>
 
-                                <v-divider></v-divider>
-
-                                <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    color="primary"
-                                    flat
-                                    @click="dialog = false"
-                                >
-                                    I accept
-                                </v-btn>
-                                </v-card-actions>
-                            </v-card>
+                                <v-date-picker v-model="deadline" scrollable color="primary">
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="deadlineDialog = false">Отмена</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.deadlineDialog.save(deadline)">Выбрать</v-btn>
+                                </v-date-picker>
+                                
                             </v-dialog>
-                        </v-flex> -->
+                        </v-flex>
+                        <v-flex xs-12>
+                                        
+                                        <input type="hidden" name="estimatedTaskTime" :value="estimateTime">
+
+                                        <v-container grid-list-xl class="pa-0">
+                                            <v-layout row wrap>
+                                                <v-flex xs12 class="mb-0 pb-0">
+                                                    <h1 class="subheading grey--text text--darken-1 ml-1">Время на задачу</h1>
+                                                </v-flex>
+                                                <v-flex xs12 md4 class="pt-0">
+                                                    <v-text-field
+                                                        prepend-icon="timelapse"
+                                                        type="number"
+                                                        v-model="estimateDays"
+                                                        ref="estimateDays"
+                                                        label="Дни"
+                                                        :rules="[rules.taskTimeRule]"
+                                                        min="1"
+                                                    ></v-text-field>
+                                                </v-flex>
+                                                <v-flex xs12 md4 class="pt-0">
+                                                    <v-text-field
+                                                        type="number"
+                                                        v-model="estimateHours"
+                                                        ref="estimateHours"
+                                                        :rules="[rules.taskTimeRule]"
+                                                        label="Часы"
+                                                        min="1"
+                                                    ></v-text-field>
+                                                </v-flex>
+                                                <v-flex xs12 md4 class="pt-0">
+                                                    <v-text-field
+                                                        type="number"
+                                                        v-model="estimateMinutes"
+                                                        ref="estimateMinutes"
+                                                        :rules="[rules.taskTimeRule]"
+                                                        label="Минуты"
+                                                        min="1"
+                                                    ></v-text-field>
+                                                </v-flex>
+                                            </v-layout>
+                                        </v-container>
+                        </v-flex>
                     </v-layout>
                 </v-container>
             
@@ -230,37 +197,8 @@
                 <v-card-actions>
                     <v-flex>
 
-                        <tasks-assignee :employees="employees"></tasks-assignee>
-
-                        <v-dialog
-                        v-model="watchersDialog"
-                        width="500"
-                        >
-                            <template v-slot:activator="{ on:dialog }">
-                                <v-tooltip top>
-                                    <template v-slot:activator="{ on:tooltip }">
-                                        
-                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                            <v-icon :color="watchers.length ? 'primary' : '' " >remove_red_eye</v-icon>
-
-                                            <v-avatar size="30" v-for="(watcher, key) in watchers" :key="'watcher-'+key">
-                                                <img :src="'../img/'+watcher.user.img+'.jpg'">
-                                            </v-avatar>
-                                        </v-btn>
-
-                                        <input type="hidden" name="watchers" :value="JSON.stringify(pluck(watchers, 'id'))">
-
-                                    </template>
-                                    <span>Наблюдатели</span>
-                                </v-tooltip>
-                            </template>
-                            <v-card>
-                                <v-card-text>
-                                    <user-selector :employees="employees" name="watchers" label="Наблюдатели" icon="remove_red_eye"></user-selector>
-                                </v-card-text>
-                            </v-card>
-                        </v-dialog>
-
+                        <tasks-watchers :employees="employees"></tasks-watchers>
+                        
                         <v-dialog
                         v-model="prioritiesDialog"
                         width="500"
@@ -354,91 +292,6 @@
                                     </v-combobox>
                                 </v-card-text>
                             </v-card>
-                        </v-dialog>
-
-                        <v-dialog
-                        v-model="estimateTaskDialog"
-                        width="300"
-                        >
-                            <template v-slot:activator="{ on:dialog }">
-                                <v-tooltip top>
-                                    <template v-slot:activator="{ on:tooltip }">
-                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                            <v-icon :color="(estimateDays || estimateHours || estimateMinutes) ? 'primary' : '' ">timelapse</v-icon>
-                                            <span class="text-lowercase">
-                                                <span v-if="estimateDays">{{ estimateDays }}д</span>
-                                                <span v-if="estimateHours"> {{ estimateHours }}ч</span>
-                                                <span v-if="estimateMinutes"> {{ estimateMinutes }}м</span>
-                                            </span>
-                                        </v-btn>
-
-                                        <input type="hidden" name="estimatedTaskTime" :value="estimateTime">
-                                    </template>
-                                    <span>Время на задачу</span>
-                                </v-tooltip>
-                            </template>
-
-                            <v-card>
-                                <v-card-text>
-                                    <v-container grid-list-xl class="pa-0">
-                                        <v-layout row wrap>
-                                            <v-flex xs12 md4>
-                                                <v-text-field
-                                                    type="number"
-                                                    v-model="estimateDays"
-                                                    label="Дни"
-                                                    min="1"
-                                                ></v-text-field>
-                                            </v-flex>
-                                            <v-flex xs12 md4>
-                                                <v-text-field
-                                                    type="number"
-                                                    v-model="estimateHours"
-                                                    label="Часы"
-                                                    min="1"
-                                                ></v-text-field>
-                                            </v-flex>
-                                            <v-flex xs12 md4>
-                                                <v-text-field
-                                                    type="number"
-                                                    v-model="estimateMinutes"
-                                                    label="Минуты"
-                                                    min="1"
-                                                ></v-text-field>
-                                            </v-flex>
-                                        </v-layout>
-                                    </v-container>
-                                </v-card-text>
-                            </v-card>
-                        </v-dialog>
-
-                        <v-dialog
-                        v-model="deadlineDialog"
-                        ref="deadlineDialog"
-                        width="290px"
-                        lazy
-                        >
-                            <template v-slot:activator="{ on:dialog }">
-                                <v-tooltip top>
-                                    <template v-slot:activator="{ on:tooltip }">
-                                        <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
-                                            <v-icon :color="deadline ? 'primary' : '' ">event</v-icon>
-                                            {{ deadline }}
-                                        </v-btn>
-
-                                        <input type="hidden" name="deadline" v-model="deadline">
-
-                                    </template>
-                                    <span>Дедлайн</span>
-                                </v-tooltip>
-                            </template>
-
-                            <v-date-picker v-model="deadline" scrollable color="primary">
-                                <v-spacer></v-spacer>
-                                <v-btn flat color="primary" @click="deadlineDialog = false">Отмена</v-btn>
-                                <v-btn flat color="primary" @click="$refs.deadlineDialog.save(deadline)">Выбрать</v-btn>
-                            </v-date-picker>
-                            
                         </v-dialog>
 
                         <v-dialog
@@ -589,13 +442,14 @@
                     
                     <v-btn
                     color="primary"
-                    flat
+                    
                     type="submit"
+                    @click.prevent="submit"
                     >
                         Добавить
                     </v-btn>
                 </v-card-actions>
-            </v-form>
+            </form>
         </v-card>
     </v-dialog>
     
@@ -603,13 +457,20 @@
 
 <script>
 export default {
-    props:['employees'],
+    props:['employees','errors'],
     data(){
         return {
+            searchText:null,
+
+            rules:{
+                required: value => !!value || 'Обязательное поле',
+                notEmptyArray: value => value.length != 0 || 'Обязательное поле',
+                taskTimeRule: () => !!this.estimateTime || 'Обязательное поле'
+            },
+            formHasErrors:false,
             csrf_token: window.Laravel.csrf_token,
 
-            watchersDialog:false,
-            watchers:[],
+            assignees:[],
             
             reapeatSwitch:false,
 
@@ -627,11 +488,9 @@ export default {
             selectedTags:[],
             tagsSearch:null,
 
-            task:{
-                title:null,
-                priority:1
-            },
-            dialog:false,
+            title:null,
+
+            dialog: Array.isArray(this.errors) ? false : true,
 
             selectedPriority:null,
             prioritiesDialog:false,
@@ -688,11 +547,9 @@ export default {
         }
     },
     created(){
-        Event.listen('watchers',(data)=>{
-            this.watchers = data;
-        });
-
         this.selectedIntervals = 0;
+        
+
     },
     watch:{
         intervalNumber(value){
@@ -709,8 +566,12 @@ export default {
             }
             // console.log( this.selectedInterval.name );
         },
-        endTime(value){
-            console.log(value);
+        estimateTime(value){
+            console.log( !!this.estimateTime);
+            
+            this.$refs['estimateDays'].validate(true);
+            this.$refs['estimateHours'].validate(true);
+            this.$refs['estimateMinutes'].validate(true);
         },
         estimateDays(value){
             this.estimateTime = this.toMilliseconds(value, this.estimateHours, this.estimateMinutes)
@@ -728,6 +589,41 @@ export default {
             console.log( (days*86400000)+(hours*3600000)+(minutes*60000));
             
             return (days*86400000)+(hours*3600000)+(minutes*60000)
+        },
+        submit () {
+            this.formHasErrors = false
+            console.log("formHasErrors = false");
+
+            Object.keys(this.form).forEach(f => {
+
+                if(Array.isArray(this.form[f])){
+                    if ( this.form[f].length == 0 ){
+                        this.formHasErrors = true
+                        console.log("formHasErrors = true");
+                    }
+                }
+                else if ( !this.form[f] ){
+                    this.formHasErrors = true
+                    console.log("formHasErrors = true");
+                }
+                
+                this.$refs[f].validate(true)
+            })
+
+            if( this.form['estimateDays'] || this.form['estimateHours'] || this.form['estimateMinutes'])
+                this.formHasErrors = false
+            
+
+            if(!this.formHasErrors)
+                this.$refs['form'].submit()
+        },
+
+        remove (item) {
+            for( var i = 0; i < this.assignees.length; i++){ 
+                if ( this.assignees[i].user === item) {
+                    this.assignees.splice(i, 1); 
+                }
+            }
         }
     },
     computed:{
@@ -736,6 +632,16 @@ export default {
                 days:this.estimateDays,
                 hours:this.estimateHours,
                 minutes:this.estimateMinutes
+            }
+        },
+        form(){
+            return {
+                title:this.title,
+                assignees:this.assignees,
+                deadline:this.deadline,
+                estimateDays:this.estimateDays,
+                estimateHours:this.estimateHours,
+                estimateMinutes:this.estimateMinutes,
             }
         }
     }

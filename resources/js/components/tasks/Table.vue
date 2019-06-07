@@ -126,13 +126,29 @@
                         <span v-if="moment.duration(moment(parseInt(props.item.planned_time)).valueOf()).minutes()">{{ moment.duration(moment(parseInt(props.item.planned_time)).valueOf()).minutes() }}м</span>
                     </td>
                     <td>{{props.item.deadline}}</td>
-                    <td v-text="props.item.from.user ? `${props.item.from.user.name} ${props.item.from.user.surname}` : 'Система' "></td>
+                    <td>
+                        <v-avatar size="40">
+                            <v-tooltip top v-if="props.item.from.user">
+                                <template v-slot:activator="{ on:tooltip }">
+                                    <img v-on="{ ...tooltip }"  :src="photo(props.item.from.user.img) " alt="avatar">
+                                </template>
+                                <span>{{ props.item.from.user.name }} {{ props.item.from.user.surname }}</span>
+                            </v-tooltip>
+
+                            <v-tooltip top v-else>
+                                <template v-slot:activator="{ on:tooltip }">
+                                    <img v-on="{ ...tooltip }" :src="photo('green-solo-logo.svg') " alt="avatar">
+                                </template>
+                                <span>Систеема</span>
+                            </v-tooltip>
+                        </v-avatar>
+                    </td>
                 </tr>
             </template>
 
         </v-data-table>
 
-    <tasks-add :employees="employees"></tasks-add>
+    
 </div>
 </template>
 
@@ -140,7 +156,7 @@
 import moment from 'moment';
 
 export default {
-    props:['tasks','employees'],
+    props:['tasks'],
     data(){
         return {
             moment:moment,
@@ -178,10 +194,7 @@ export default {
         displayTask( task ){
             this.selectedTask = task;
             this.taskDialog = true;
-        },
-        // moment(date){
-        //     return moment(date);
-        // }
+        }
     }
 }
 </script>
