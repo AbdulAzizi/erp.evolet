@@ -55,6 +55,9 @@ Vue.mixin({
         pluck: function (array, key) {
             return array.map(item => item[key]);
         },
+        photo: function (name) {
+            return window.Laravel.asset_path + 'img/' + name;
+        },
     }
   })
 
@@ -74,7 +77,7 @@ Vue.component("tasks", require("./components/Tasks.vue").default);
 Vue.component("task", require("./components/Task.vue").default);
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
 Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
-Vue.component("tasks-assignee", require("./components/tasks/Assignee.vue").default);
+Vue.component("tasks-watchers", require("./components/tasks/Watchers.vue").default);
 
 Vue.component("employee-card", require("./components/EmployeeCard.vue").default);
 Vue.component("division", require("./components/Division.vue").default);
