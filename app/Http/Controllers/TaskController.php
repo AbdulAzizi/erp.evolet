@@ -28,20 +28,18 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
+
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'assignees' => 'required',
+            'deadline' => 'required',
+            'estimatedTaskTime' => 'required',
+        ]);
+
+        // return $request;
+        
         $assignees = json_decode($request->assignees);
         $watchers = json_decode($request->watchers);
-        // $estimatedTaskTime = json_decode($request->estimatedTaskTime);
-        
-        // $planned_time = Carbon::now()->timestamp(000000000);
-        // return  $estimatedTaskTime;
-        // if($estimatedTaskTime->days)
-        //     $planned_time->addDays($estimatedTaskTime->days);
-        // if($estimatedTaskTime->hours)
-        //     $planned_time->addHours($estimatedTaskTime->hours);
-        // if($estimatedTaskTime->minutes)
-        //     $planned_time->addMinutes($estimatedTaskTime->minutes);
-                
-        //   return      $planned_time->diffInMinutes(); 
 
         $data = [];
 
@@ -50,7 +48,7 @@ class TaskController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'status' => 0,
-                'priority' => $request->priority,
+                'priority' => $request->priority ? $request->priority : 1,
                 'planned_time' => $request->estimatedTaskTime,
                 'deadline' => $request->deadline,
                 'responsible_id' => $assigneeID,

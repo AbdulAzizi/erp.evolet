@@ -27,7 +27,7 @@
 			@input="remove(data.item.user)"
 			>
 				<v-avatar>
-					<img :src="'../img/'+data.item.user.img+'.jpg'">
+					<img :src="photo(data.item.user.img)">
 				</v-avatar>
 				{{ data.item.user.name }}
 			</v-chip>
@@ -39,7 +39,7 @@
 		>
 			<template>
 				<v-list-tile-avatar>
-					<img v-if="data.item.user.img" :src="'../img/'+data.item.user.img+'.jpg'">
+					<img v-if="data.item.user.img" :src="photo(data.item.user.img)">
 				</v-list-tile-avatar>
 				<v-list-tile-content>
 					<v-list-tile-title>{{data.item.user.name}} {{data.item.user.surname}}</v-list-tile-title>
@@ -59,19 +59,16 @@
 		methods: {
 			remove (item) {
 				for( var i = 0; i < this.selectedUsers.length; i++){ 
-					if ( this.selectedUsers[i] === item) {
+					if ( this.selectedUsers[i].user === item) {
 						this.selectedUsers.splice(i, 1); 
 					}
 				}
 			}
         },
         created(){
-            // console.log("this.employees");
-            // console.log(this.employees);
         },
 		watch:{
 			selectedUsers(selectedUsers){
-				// console.log(this.label);
 				Event.fire(this.name, selectedUsers);
 			}
 		}
