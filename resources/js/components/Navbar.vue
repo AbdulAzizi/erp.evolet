@@ -25,10 +25,10 @@
 
     <v-menu offset-y left>
       <v-avatar slot="activator" size="40" class="ml-2">
-        <img v-if="user.img" :src="'../img/'+user.img+'.jpg'" alt="avatar">
+        <img v-if="user.img" :src="photo(user.img)" alt="avatar">
         <img
           v-else
-          :src="'../img/green-solo-logo.svg'"
+          :src="photo('green-solo-logo.svg')"
           style="border-radius:0;"
           alt="avatar"
           class="pa-1 pt-2"
@@ -39,7 +39,7 @@
           <v-layout row wrap>
             <v-flex>
               <v-avatar slot="activator" color="grey lighten" size="70">
-                <img v-if="user.img" :src="'../img/'+user.img+'.jpg'" alt="avatar">
+                <img v-if="user.img" :src="photo(user.img)" alt="avatar">
                 <img
                   v-else
                   :src="'../img/green-solo-logo.svg'"

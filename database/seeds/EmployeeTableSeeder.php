@@ -37,7 +37,7 @@ class EmployeeTableSeeder extends Seeder
             [
                 'name' => 'AbdulAziz',
                 'surname' => 'Nurov',
-                'img' => 'abdulaziz',
+                'img' => 'abdulaziz.jpg',
                 'email' => 'nurovaziz@gmail.com',
                 'password' => 'admin',
                 'division' => 'ОЦМ',
@@ -47,7 +47,7 @@ class EmployeeTableSeeder extends Seeder
             [
                 'name' => 'Анвар',
                 'surname' => 'Джабаров',
-                'img' => 'anvar',
+                'img' => 'anvar.jpg',
                 'email' => 'anvar@gmail.com',
                 'password' => 'admin',
                 'division' => 'ОЦМ',

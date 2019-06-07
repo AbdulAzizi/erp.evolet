@@ -2,7 +2,7 @@
   <v-list three-line>
     <v-list-tile avatar>
       <v-list-tile-avatar>
-        <img :src="`../img/${employee.user.img}.jpg`">
+        <img :src="photo(employee.user.img)">
       </v-list-tile-avatar>
 
       <v-list-tile-content>
