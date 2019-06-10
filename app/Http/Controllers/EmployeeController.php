@@ -11,12 +11,14 @@ use Illuminate\Support\Facades\Password;
 
 class EmployeeController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
+        $employee = Employee::find($request->id);
+
         $isUserEmployee = Employee::whereUser(auth()->id())->exists();
 
         if ($isUserEmployee) {
-            return view('profile');
+            return view('profile', compact('employee'));
         }
         return redirect('home');
     }
