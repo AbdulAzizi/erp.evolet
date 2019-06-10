@@ -173,7 +173,10 @@ class DivisionTableSeeder extends Seeder
                                     'name' => 'Отдел Экспорта',
                                     'abbreviation' => 'ОЭкс',
                                 ],
-                                
+                                [
+                                    'name' => 'Отдел Дизайна',
+                                    'abbreviation' => 'ОД',
+                                ],
                             ],
                         ],
                         [
@@ -239,7 +242,7 @@ class DivisionTableSeeder extends Seeder
                                     'abbreviation' => 'ОУПЕ',
                                 ],
                                 [
-                                    'name' => 'Отдел Управление Персоналом в Странах/ПК Регистрации',
+                                    'name' => 'Отдел Управление Персоналом в Странах/ПК',
                                     'abbreviation' => 'ОУПС',
                                 ],
                             ],
@@ -265,7 +268,7 @@ class DivisionTableSeeder extends Seeder
                                     'abbreviation' => 'ОФИ',
                                 ],
                                 [
-                                    'name' => 'Отдел Финансов в Странах/ПК Регистрации',
+                                    'name' => 'Отдел Финансов в Странах/ПК',
                                     'abbreviation' => 'ОФС',
                                 ],
                             ],
@@ -291,7 +294,7 @@ class DivisionTableSeeder extends Seeder
                                     'abbreviation' => 'ОЮИ',
                                 ],
                                 [
-                                    'name' => 'Отдел по Юридическим аспектам в Странах/ПК Регистрации',
+                                    'name' => 'Отдел по Юридическим аспектам в Странах/ПК',
                                     'abbreviation' => 'ОЮС',
                                 ],
                             ],
@@ -317,7 +320,7 @@ class DivisionTableSeeder extends Seeder
                                     'abbreviation' => 'ОИИ',
                                 ],
                                 [
-                                    'name' => 'Отдел Информационных Технологии в Странах/ПК Регистрации',
+                                    'name' => 'Отдел Информационных Технологии в Странах/ПК',
                                     'abbreviation' => 'ОИС',
                                 ],
                             ],
