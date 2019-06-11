@@ -1,4 +1,5 @@
 <template>
+  <v-card hover :href="'/profile/' + employee.id">
   <v-list three-line>
     <v-list-tile avatar>
       <v-list-tile-avatar>
@@ -11,6 +12,7 @@
       </v-list-tile-content>
     </v-list-tile>
   </v-list>
+  </v-card>
 </template>
 
 <script>

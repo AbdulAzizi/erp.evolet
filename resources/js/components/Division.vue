@@ -12,7 +12,7 @@
               <employee-card :employee="division.head"/>
             </v-flex>
             <v-flex d-flex xs12 md6 lg4 xl3>
-              <v-card flat>
+              <v-card>
                 <v-card-text>
                   <h2 class="subheading">Кол-во сотрудников:</h2>
                   <h2 class="headline">{{ employeeCount }}</h2> 
@@ -33,9 +33,8 @@
             >
               <employee-card :employee="employee"/>
             </v-flex>
-            {{dump}}
             <v-flex d-flex xs12 md6 lg4 xl3 v-if="isEmployeeHead && division.depth === 3">
-              <v-card flat @click="addEmployee()" hover>
+              <v-card @click="addEmployee()" hover>
                 <div class="display-4 text-xs-center align-center">+</div>
               </v-card>
             </v-flex>
