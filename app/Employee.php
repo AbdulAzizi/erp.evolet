@@ -57,6 +57,11 @@ class Employee extends Model
         ]);
     }
 
+    public function tasksWatching()
+    {
+        return $this->belongsToMany('App\Tasks', 'task_watchers');
+    }
+
     /**
      * @param integer $id User's id
      * @return Builder
