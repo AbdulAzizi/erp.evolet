@@ -12,7 +12,7 @@ class DivisionController extends Controller
 {
     public function show()
     {
-        $employeeDivisionId = Employee::byUser(auth()->id())->division_id;
+        $employeeDivisionId = Employee::whereUser(auth()->id())->without(['user', 'position', 'responsibility'])->first()->division_id;
 
         $division = Division::with('head','employees')->withDepth()->descendantsAndSelf($employeeDivisionId)->toTree();
 
