@@ -16,7 +16,7 @@ class TaskController extends Controller
         $authUser = \Auth::user();
         // $allTasks = $authUser->employee->allTasks(); // FIXME  unemployed users doesnt have employee relationship
         $tasks = Task::where('responsible_id',$authUser->employee->id)
-                            ->with('from')
+                            ->with('from','responsible','watchers','status')
                             ->get();
         // return $tasks;
 
@@ -36,28 +36,36 @@ class TaskController extends Controller
             'estimatedTaskTime' => 'required',
         ]);
 
-        // return $request;
-        
         $assignees = json_decode($request->assignees);
         $watchers = json_decode($request->watchers);
 
         $data = [];
 
+        $newStatus = \App\Status::where('name','Новый')->first();
+
         foreach ($assignees as $key => $assigneeID) {
             $data[] = [
                 'title' => $request->title,
                 'description' => $request->description,
-                'status' => 0,
+                'status_id' => $newStatus->id,
                 'priority' => $request->priority ? $request->priority : 1,
                 'planned_time' => $request->estimatedTaskTime,
                 'deadline' => $request->deadline,
                 'responsible_id' => $assigneeID,
                 'from_id' => Employee::byUser(auth()->id())->id,
-                'from_type' => Employee::class
+                'from_type' => Employee::class,
+                'created_at' => Carbon::now()
             ];
         }
 
         Task::insert($data);
+        
+        $tasks = Task::where('title',$request->title)->get();
+        
+        foreach ($tasks as $task) {
+            $task->watchers()->attach($watchers);
+        }
+        
 
         return redirect()->route('tasks.index');
 
