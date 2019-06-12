@@ -58,6 +58,11 @@ Vue.mixin({
         photo: function (name) {
             return window.Laravel.asset_path + 'img/' + name;
         },
+    },
+    computed: {
+        appPath(){
+            return window.Laravel.asset_path;
+        }
     }
   })
 
