@@ -17,7 +17,7 @@ class CreateTasksTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('description')->nullable();
-            $table->boolean('status');
+            $table->unsignedInteger('status_id');
             $table->unsignedInteger('priority');
             $table->string('spent_time')->nullable();
             $table->string('planned_time')->nullable();

@@ -15,7 +15,7 @@ class TaskController extends Controller
         $authUser = \Auth::user();
 
         $tasks = Task::where('responsible_id',$authUser->id)
-                            ->with('from')
+                            ->with('from','responsible','watchers','status')
                             ->get();
 
         $users = User::with(['division'])->get();
@@ -33,28 +33,36 @@ class TaskController extends Controller
             'estimatedTaskTime' => 'required',
         ]);
 
-        // return $request;
-        
         $assignees = json_decode($request->assignees);
         $watchers = json_decode($request->watchers);
 
         $data = [];
 
+        $newStatus = \App\Status::where('name','Новый')->first();
+
         foreach ($assignees as $key => $assigneeID) {
             $data[] = [
                 'title' => $request->title,
                 'description' => $request->description,
-                'status' => 0,
+                'status_id' => $newStatus->id,
                 'priority' => $request->priority ? $request->priority : 1,
                 'planned_time' => $request->estimatedTaskTime,
                 'deadline' => $request->deadline,
                 'responsible_id' => $assigneeID,
                 'from_id' => auth()->id(),
-                'from_type' => User::class
+                'from_type' => User::class,
+                'created_at' => Carbon::now()
             ];
         }
 
         Task::insert($data);
+        
+        $tasks = Task::where('title',$request->title)->get();
+        
+        foreach ($tasks as $task) {
+            $task->watchers()->attach($watchers);
+        }
+        
 
         return redirect()->route('tasks.index');
 

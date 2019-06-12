@@ -87,6 +87,7 @@ Vue.component("tasks-watchers", require("./components/tasks/Watchers.vue").defau
 Vue.component("user-card", require("./components/UserCard.vue").default);
 Vue.component("division", require("./components/Division.vue").default);
 Vue.component("add-user-dialog", require("./components/AddUserDialog.vue").default);
+Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
 
 Vue.component(
     "user-selector",

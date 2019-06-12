@@ -17,4 +17,19 @@ class Task extends Model
     {
         return $this->belongsTo('App\User', 'responsible_id');
     }
+
+    public function watchers()
+    {
+        return $this->belongsToMany('App\User', 'task_watchers');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo('App\Status');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
 }
