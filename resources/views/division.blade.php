@@ -16,7 +16,7 @@
 <v-container fluid ma-0 grid-list-lg>
     <v-layout>
         <v-flex xs10>
-            <division :division="{{$division[0]}}" :is-employee-head="{{$isEmployeeHead}}" />
+            <division :division="{{$division[0]}}" :is-employee-head="{{$isEmployeeHead}}" :is-root="true"/>
 </v-flex>
 </v-layout>
 </v-container>
