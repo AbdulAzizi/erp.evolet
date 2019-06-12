@@ -10,7 +10,8 @@ class Responsibility extends Model
 
     public $timestamps = false;
 
-    public function empolyees(){
-        return $this->hasMany('App\Employee');
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
     }
 }
