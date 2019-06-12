@@ -4,6 +4,9 @@
 use App\User;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
+use App\Position;
+use App\Responsibility;
+use App\Division;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +24,17 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->firstName,
         'surname' => $surname,
+        'position_id' => getRandomId(Position::class, [1]),
+        'responsibility_id' => getRandomId(Responsibility::class, [4]),
+        'division_id' => getRandomId(Division::class, Division::withDepth()->having('depth','!=', 3)->pluck('id')->toArray()),
         'email' =>  $surname . '@admin.com',
         'email_verified_at' => now(),
         'password' => bcrypt('admin'),
         'remember_token' => Str::random(10),
     ];
 });
+
+function getRandomId($class, $exceptions = [])
+{
+    return $class::all()->except($exceptions)->random()->id;
+}

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Employee;
 use App\Task;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -14,16 +13,14 @@ class TaskController extends Controller
     public function index()
     {
         $authUser = \Auth::user();
-        // $allTasks = $authUser->employee->allTasks(); // FIXME  unemployed users doesnt have employee relationship
-        $tasks = Task::where('responsible_id',$authUser->employee->id)
+
+        $tasks = Task::where('responsible_id',$authUser->id)
                             ->with('from')
                             ->get();
-        // return $tasks;
 
-        $employees = Employee::with(['division','responsibility'])->get();
+        $users = User::with(['division'])->get();
         
-        // return $employees;
-        return view('tasks.index',compact('tasks', 'employees'));
+        return view('tasks.index',compact('tasks', 'users'));
     }
 
     public function store(Request $request)
@@ -52,8 +49,8 @@ class TaskController extends Controller
                 'planned_time' => $request->estimatedTaskTime,
                 'deadline' => $request->deadline,
                 'responsible_id' => $assigneeID,
-                'from_id' => Employee::byUser(auth()->id())->id,
-                'from_type' => Employee::class
+                'from_id' => auth()->id(),
+                'from_type' => User::class
             ];
         }
 

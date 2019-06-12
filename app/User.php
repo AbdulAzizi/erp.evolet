@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'password',
+        'name', 'surname', 'email', 'password', 'position_id', 'responsibility_id', 'division_id'
     ];
 
     /**
@@ -37,6 +37,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public $with = ['position', 'responsibility'];
+
     /**
      * Send the password reset notification.
      *
@@ -48,11 +50,43 @@ class User extends Authenticatable
         $this->notify(new SetupPassword($token));
     }
 
-    // protected $with = ['employee.division','employee.responsibility'];
-
-    public function employee()
+    public function division()
     {
-        return $this->hasOne('App\Employee');
+        return $this->belongsTo('App\Division');
+    }
+
+    public function position()
+    {
+        return $this->belongsTo('App\Position');
+    }
+
+    public function responsibility()
+    {
+        return $this->belongsTo('App\Responsibility');
+    }
+
+    public function givenTasks()
+    {
+        return $this->morphMany('App\Task', 'from');
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany('App\Task', 'responsible_id');
+    }
+
+    public function allTasks()
+    {
+        return collect([
+            [
+                'name' => 'Мои Задачи',
+                'data' => $this->tasks->load(['responsible', 'from']),
+            ],
+            [
+                'name' => 'Порученные',
+                'data' => $this->givenTasks->load(['responsible', 'from']),
+            ],
+        ]);
     }
 
 }

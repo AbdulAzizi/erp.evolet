@@ -2,25 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Employee;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Validator;
 use Illuminate\Support\Facades\Password;
 
-class EmployeeController extends Controller
+class UserController extends Controller
 {
     public function show(Request $request)
     {
-        $employee = Employee::find($request->id);
+        $user = User::find($request->id);
 
-        $isUserEmployee = Employee::whereUser(auth()->id())->exists();
-
-        if ($isUserEmployee) {
-            return view('profile', compact('employee'));
-        }
-        return redirect('home');
+        return view('profile', compact('user'));
     }
 
     public function store(Request $request)
@@ -44,10 +38,6 @@ class EmployeeController extends Controller
             'surname' => $request->surname,
             'email' => $request->email,
             'password' => $randomPassword,
-        ]);
-
-        Employee::create([
-            'user_id' => $newUser->id,
             'position_id' => $request->positionId,
             'responsibility_id' => $request->responsibilityId,
             'division_id' => $request->divisionId,

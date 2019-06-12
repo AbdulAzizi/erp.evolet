@@ -11,7 +11,7 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mr-2">
-      <v-btn color="grey darken-1" flat v-if="user.employee" href="/division">{{user.employee.division.abbreviation}}</v-btn>
+      <v-btn color="grey darken-1" flat href="/division">{{user.division.abbreviation}}</v-btn>
     </v-toolbar-items>
 
     <v-tooltip bottom>
@@ -56,9 +56,8 @@
                   <h2 class="title font-weight-regular text-sm-left">{{user.name}}</h2>
                 </a>
                 <h4
-                  v-if="user.employee"
                   class="subtheader font-weight-regular grey--text text-sm-left"
-                >{{user.employee.responsibility.name}}</h4>
+                >{{user.responsibility.name}}</h4>
               </v-list>
             </v-flex>
           </v-layout>
@@ -135,8 +134,8 @@ export default {
     assetPath: window.Laravel.asset_path
   }),
   created() {
-    // this.items.unshift({title: this.user.name+' '+this.user.surname, link:'/users/'+this.user.id});
-    // console.log(this.user);
+    // this.items.unshift({title: this.name+' '+this.surname, link:'/users/'+this.id});
+    // console.log(this);
   },
   methods: {
     toggleDrawer() {

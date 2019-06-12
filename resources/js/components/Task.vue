@@ -35,7 +35,7 @@
                     <template v-slot:activator="{ on }">
 
                         <v-avatar v-on="on" slot="activator" class="">
-                            <img :src="'../img/'+task.responsible.user.img+'.jpg'" alt="avatar">
+                            <img :src="photo(task.responsible.img)" alt="avatar">
                         </v-avatar>
 
                     </template>

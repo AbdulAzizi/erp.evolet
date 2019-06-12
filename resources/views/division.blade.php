@@ -4,24 +4,24 @@
 
 @php
     // dd($division->toArray());
-    $isEmployeeHead = false;
+    $isUserHead = false;
 
     if($division[0]->head){
-        $isEmployeeHead = $division[0]->head->id === $authUser->employee->id;
+        $isUserHead = $division[0]->head->id === $authUser->id;
     }
-    $isEmployeeHead = json_encode($isEmployeeHead);
+    $isUserHead = json_encode($isUserHead);
     
 @endphp
 
 <v-container fluid ma-0 grid-list-lg>
     <v-layout>
         <v-flex xs10>
-            <division :division="{{$division[0]}}" :is-employee-head="{{$isEmployeeHead}}" :is-root="true"/>
+            <division :division="{{$division[0]}}" :is-user-head="{{$isUserHead}}" :is-root="true"/>
 </v-flex>
 </v-layout>
 </v-container>
 
-<add-employee-dialog :responsibilities="{{$responsibilities}}" :positions="{{$positions}}" :errors="{{$errors}}"
+<add-user-dialog :responsibilities="{{$responsibilities}}" :positions="{{$positions}}" :errors="{{$errors}}"
     :oldinputs="{{json_encode(Session::getOldInput())}}" />
 
 @endsection

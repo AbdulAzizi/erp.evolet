@@ -15,6 +15,6 @@ class Task extends Model
 
     public function responsible()
     {
-        return $this->belongsTo('App\Employee', 'responsible_id');
+        return $this->belongsTo('App\User', 'responsible_id');
     }
 }

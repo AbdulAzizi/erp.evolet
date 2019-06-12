@@ -24,9 +24,9 @@
                                 <v-list-tile-avatar>
                                     
                                     <v-img
-                                    v-if="selectedTask.from.user && selectedTask.from.user.img"
+                                    v-if="selectedTask.from && selectedTask.from.img"
                                     class="elevation-3"
-                                    :src="'../img/'+selectedTask.from.user.img+'.jpg'" alt="avatar"
+                                    :src="photo(selectedTask.from.img)" alt="avatar"
                                     ></v-img>
 
                                     <v-img
@@ -46,7 +46,7 @@
 
                                 </v-list-tile-avatar>
                                 <v-list-tile-content>
-                                    <v-list-tile-title v-if="selectedTask.from.user">{{selectedTask.from.user.name}} {{selectedTask.from.user.surname}}</v-list-tile-title>
+                                    <v-list-tile-title v-if="selectedTask.from">{{selectedTask.from.name}} {{selectedTask.from.surname}}</v-list-tile-title>
                                     <v-list-tile-title v-else>Система</v-list-tile-title>
                                     <v-list-tile-sub-title>Постановщик</v-list-tile-sub-title>
                                 </v-list-tile-content>
@@ -128,18 +128,18 @@
                     <td>{{props.item.deadline}}</td>
                     <td>
                         <v-avatar size="40">
-                            <v-tooltip top v-if="props.item.from.user">
+                            <v-tooltip top v-if="props.item.from_type === 'App\\User'">
                                 <template v-slot:activator="{ on:tooltip }">
-                                    <img v-on="{ ...tooltip }"  :src="photo(props.item.from.user.img) " alt="avatar">
+                                    <img v-on="{ ...tooltip }"  :src="photo(props.item.from.img) " alt="avatar">
                                 </template>
-                                <span>{{ props.item.from.user.name }} {{ props.item.from.user.surname }}</span>
+                                <span>{{ props.item.from.name }} {{ props.item.from.surname }}</span>
                             </v-tooltip>
 
                             <v-tooltip top v-else>
                                 <template v-slot:activator="{ on:tooltip }">
                                     <img v-on="{ ...tooltip }" :src="photo('green-solo-logo.svg') " alt="avatar">
                                 </template>
-                                <span>Систеема</span>
+                                <span>Система</span>
                             </v-tooltip>
                         </v-avatar>
                     </td>

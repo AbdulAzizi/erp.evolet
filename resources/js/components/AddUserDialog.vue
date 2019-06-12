@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="show" max-width="600">
-    <v-form action="employees" method="POST">
+    <v-form action="users" method="POST">
       <input type="hidden" name="_token" :value="csrf">
       <v-card>
         <v-toolbar flat color="primary" dark>
@@ -91,7 +91,7 @@ export default {
     this.responsibilityId = parseInt(responsibilityId);
     this.divisionId = divisionId;
 
-    Event.listen("addEmployee", data => {
+    Event.listen("addUser", data => {
       this.localErrors = [];
       this.localOldInputs = null;
 

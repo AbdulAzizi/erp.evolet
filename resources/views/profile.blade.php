@@ -2,11 +2,6 @@
 
 @section('content')
 
-@php
-    $userAttributes = $employee ? $employee->user : $authUser;
-    $employeeAttributes = $employee ? $employee : $authUser->employee;
-@endphp
-
 <v-container grid-list-md>
     <v-layout justify-center>
         <v-flex>
@@ -15,14 +10,14 @@
                     <v-container>
                         <v-layout align-center>
                             <v-flex xs2 lg2 xl1 class="mr-3">
-                                <v-img :src="photo('{{ $userAttributes->img }}')" style="border-radius: 100%"
+                                <v-img :src="photo('{{ $authUser->img }}')" style="border-radius: 100%"
                                     class="elevation-3 " />
                             </v-flex>
                             <v-flex>
-                                <h6 class="headline ">{{$userAttributes->name}} {{$userAttributes->surname}}</h6>
-                                <h6 class="subheading grey--text text--darken-2">{{$employeeAttributes->position->name}} -
-                                    {{$employeeAttributes->responsibility->name}}</h6>
-                                <h6 class="subheading grey--text text--darken-2">{{$employeeAttributes->division->name}}</h6>
+                                <h6 class="headline ">{{$authUser->name}} {{$authUser->surname}}</h6>
+                                <h6 class="subheading grey--text text--darken-2">{{$authUser->position->name}} -
+                                    {{$authUser->responsibility->name}}</h6>
+                                <h6 class="subheading grey--text text--darken-2">{{$authUser->division->name}}</h6>
                             </v-flex>
                         </v-layout>
                     </v-container>
