@@ -1,5 +1,5 @@
 <template>
-  <v-card hover :href="'/profile/' + employee.id">
+  <v-card hover :href="appPath + 'employees/' + employee.id">
   <v-list three-line>
     <v-list-tile avatar>
       <v-list-tile-avatar>
@@ -17,6 +17,6 @@
 
 <script>
 export default {
-  props: ["employee"]
+  props: ["employee"],
 };
 </script>
