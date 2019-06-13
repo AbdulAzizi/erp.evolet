@@ -11,7 +11,7 @@
                         <v-icon :color="watchers.length ? 'primary' : '' " >remove_red_eye</v-icon>
 
                         <v-avatar size="30" v-for="(watcher, key) in watchers" :key="'watcher-'+key">
-                            <img :src="photo(watcher.user.img)">
+                            <img :src="photo(watcher.img)">
                         </v-avatar>
                     </v-btn>
 
@@ -23,7 +23,7 @@
         </template>
         <v-card>
             <v-card-text>
-                <user-selector :employees="employees" name="watchers" label="Наблюдатели" icon="remove_red_eye"></user-selector>
+                <user-selector :users="users" name="watchers" label="Наблюдатели" icon="remove_red_eye"></user-selector>
             </v-card-text>
         </v-card>
     </v-dialog>
@@ -32,7 +32,7 @@
 
 <script>
 export default {
-    props:['employees'],
+    props:['users'],
     data(){
         return{
             watchersDialog:false,

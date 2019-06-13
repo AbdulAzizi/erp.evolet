@@ -79,7 +79,7 @@ class TableSeeder extends Seeder
             'planned_time' => '9999999999',
             'deadline' => date('Y-m-d H:i:s'),
             'from_id' => 1,
-            'from_type' => 'App\Employee'
+            'from_type' => 'App\User'
         ]);
 
         App\Task::create([
@@ -92,7 +92,7 @@ class TableSeeder extends Seeder
             'planned_time' => '9999999999',
             'deadline' => date('Y-m-d H:i:s'),
             'from_id' => 2,
-            'from_type' => 'App\Employee'
+            'from_type' => 'App\User'
         ]);
     }
 }

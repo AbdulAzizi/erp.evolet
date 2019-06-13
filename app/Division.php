@@ -16,11 +16,11 @@ class Division extends Model
     
     public function head()
     {
-        return $this->belongsTo('App\Employee');
+        return $this->belongsTo('App\User');
     }
 
-    public function employees()
+    public function users()
     {
-        return $this->hasMany('App\Employee');
+        return $this->hasMany('App\User');
     }
 }

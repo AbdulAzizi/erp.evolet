@@ -6,18 +6,18 @@
         :key="'avatar-'+index"
         >
             <template v-slot:activator="{ on }">
-                <a v-on="on" :href="appPath+'employees/'+item.id" class="avatar-item" >
+                <a v-on="on" :href="appPath + 'users/' + item.id" class="avatar-item" >
                     <v-avatar
                     color="grey lighten-4"
                     size="40"
                     class="elevation-2 "
                     :style=" {'z-index': (items.length - index)} "
                     >
-                        <img :src="photo(item.user.img)"  alt="avatar">
+                        <img :src="photo(item.img)"  alt="avatar">
                     </v-avatar>
                 </a>
             </template>
-            <span>{{item.user.name}} {{item.user.surname}} ({{item.label}})</span>
+            <span>{{item.name}} {{item.surname}} ({{item.label}})</span>
         </v-tooltip>
     </div>
 </template>

@@ -16,7 +16,7 @@ class CreateTaskWatchersTable extends Migration
         Schema::create('task_watchers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('task_id');
-            $table->unsignedInteger('employee_id');
+            $table->unsignedInteger('user_id');
         });
     }
 

@@ -61,9 +61,9 @@
 
                             <v-autocomplete
                             v-model="assignees"
-                            :items="employees"
+                            :items="users"
                             :search-input.sync="searchText"
-                            item-text="user.name"
+                            item-text="name"
                             return-object
                             no-data-text="Данные отсутствуют"
                             hide-selected
@@ -87,12 +87,12 @@
                                     color="primary"
                                     textColor="white"
                                     close
-                                    @input="remove(data.item.user)"
+                                    @input="remove(data.item)"
                                     >
                                         <v-avatar>
-                                            <img :src="photo(data.item.user.img)">
+                                            <img :src="photo(data.item.img)">
                                         </v-avatar>
-                                        {{ data.item.user.name }}
+                                        {{ data.item.name }}
                                     </v-chip>
                                 </template>
 
@@ -102,10 +102,10 @@
                                 >
                                     <template>
                                         <v-list-tile-avatar>
-                                            <img v-if="data.item.user.img" :src="photo(data.item.user.img)">
+                                            <img v-if="data.item.img" :src="photo(data.item.img)">
                                         </v-list-tile-avatar>
                                         <v-list-tile-content>
-                                            <v-list-tile-title>{{data.item.user.name}} {{data.item.user.surname}}</v-list-tile-title>
+                                            <v-list-tile-title>{{data.item.name}} {{data.item.surname}}</v-list-tile-title>
                                             <v-list-tile-sub-title>{{data.item.responsibility.name}} - {{data.item.division.abbreviation}}</v-list-tile-sub-title>
                                         </v-list-tile-content>
                                     </template>
@@ -197,7 +197,7 @@
                 <v-card-actions>
                     <v-flex>
 
-                        <tasks-watchers :employees="employees"></tasks-watchers>
+                        <tasks-watchers :users="users"></tasks-watchers>
                         
                         <v-dialog
                         v-model="prioritiesDialog"
@@ -461,7 +461,7 @@
 
 <script>
 export default {
-    props:['employees','errors','tags'],
+    props:['users','errors','tags'],
     data(){
         return {
             searchText:null,
@@ -640,7 +640,7 @@ export default {
 
         remove (item) {
             for( var i = 0; i < this.assignees.length; i++){ 
-                if ( this.assignees[i].user === item) {
+                if ( this.assignees[i].id === item.id) {
                     this.assignees.splice(i, 1); 
                 }
             }

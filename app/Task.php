@@ -15,12 +15,12 @@ class Task extends Model
 
     public function responsible()
     {
-        return $this->belongsTo('App\Employee', 'responsible_id');
+        return $this->belongsTo('App\User', 'responsible_id');
     }
 
     public function watchers()
     {
-        return $this->belongsToMany('App\Employee', 'task_watchers');
+        return $this->belongsToMany('App\User', 'task_watchers');
     }
 
     public function status()
@@ -32,4 +32,5 @@ class Task extends Model
     {
         return $this->belongsToMany('App\Tag');
     }
+
 }

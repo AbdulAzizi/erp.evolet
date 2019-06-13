@@ -10,8 +10,8 @@ class Position extends Model
 
     public $timestamps = false;
 
-    public function employees()
+    public function users()
     {
-        return $this->hasMany('App\Employee');
+        return $this->hasMany('App\User');
     }
 }

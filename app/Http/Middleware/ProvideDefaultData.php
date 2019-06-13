@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
 class ProvideDefaultData
@@ -17,7 +16,7 @@ class ProvideDefaultData
      */
     public function handle($request, Closure $next)
     {
-        $authUser = Auth::user()->load(['employee.division', 'employee.responsibility', 'employee.position']);
+        $authUser = auth()->user()->load(['division']);
         View::share('authUser', $authUser);
 
         return $next($request);

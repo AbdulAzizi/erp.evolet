@@ -3,9 +3,10 @@
 use Illuminate\Database\Seeder;
 use App\Division;
 use App\User;
-use App\Employee;
+use App\Position;
+use App\Responsibility;
 
-class EmployeeTableSeeder extends Seeder
+class UserTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,17 +15,7 @@ class EmployeeTableSeeder extends Seeder
      */
     public function run()
     {
-        $admin = App\User::create([
-            'name' => 'admin',
-            'surname' => 'admin',
-            'img' => '',
-            'email' => 'admin@admin.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('admin'),
-            'remember_token' => Str::random(10),
-        ]);
-
-        $this->seedEmployees([
+        $this->seedUsers([
             [
                 'name' => 'Akbar',
                 'surname' => 'Ergashev',
@@ -74,26 +65,29 @@ class EmployeeTableSeeder extends Seeder
             ],
         ]);
 
-        $this->employeeAsDivisionHead('Мирзоева');
-        $this->employeeAsDivisionHead('Джабаров');
-        $this->employeeAsDivisionHead('Хакимов');
+        $this->userAsDivisionHead('Мирзоева');
+        $this->userAsDivisionHead('Джабаров');
+        $this->userAsDivisionHead('Хакимов');
 
-        factory(Employee::class, 400)->create();
+        factory(User::class, 400)->create();
     }
 
-    private function employeeAsDivisionHead($surname)
+    private function userAsDivisionHead($surname)
     {
-        $employee = User::where('surname', $surname)->first()->employee;
+        $user = User::where('surname', $surname)->first();
         
-        Division::find($employee->division_id)->update(['head_id' => $employee->id]);
+        Division::find($user->division_id)->update(['head_id' => $user->id]);
     }
 
-    private function seedEmployees($credentials)
+    private function seedUsers($credentials)
     {
         foreach ($credentials as $credential) {
             $userData = [
                 'name' => $credential['name'],
                 'surname' => $credential['surname'],
+                'division_id' => Division::where('abbreviation', $credential['division'])->first()->id,
+                'position_id' => Position::firstOrCreate(['name' => $credential['position']])->id,
+                'responsibility_id' =>  Responsibility::firstOrCreate(['name' => $credential['responsibility']])->id,
                 'email' => $credential['email'],
                 'password' => Hash::make($credential['password']),
             ];
@@ -101,13 +95,8 @@ class EmployeeTableSeeder extends Seeder
             if(array_key_exists('img', $credential))
                 $userData['img'] = $credential['img'];
 
-            $user = App\User::create($userData);
+            $user = User::create($userData);
             
-            $user->employee()->create([
-                'division_id' => App\Division::where('abbreviation', $credential['division'])->first()->id,
-                'position_id' => App\Position::firstOrCreate(['name' => $credential['position']])->id,
-                'responsibility_id' => App\Responsibility::firstOrCreate(['name' => $credential['responsibility']])->id,
-            ]);
         }
     }
 }

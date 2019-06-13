@@ -120,18 +120,18 @@
                     <td>{{props.item.deadline}}</td>
                     <td>
                         <v-avatar size="40">
-                            <v-tooltip top v-if="props.item.from.user">
+                            <v-tooltip top v-if="props.item.from_type === 'App\\User'">
                                 <template v-slot:activator="{ on:tooltip }">
-                                    <img v-on="{ ...tooltip }"  :src="photo(props.item.from.user.img) " alt="avatar">
+                                    <img v-on="{ ...tooltip }"  :src="photo(props.item.from.img) " alt="avatar">
                                 </template>
-                                <span>{{ props.item.from.user.name }} {{ props.item.from.user.surname }}</span>
+                                <span>{{ props.item.from.name }} {{ props.item.from.surname }}</span>
                             </v-tooltip>
 
                             <v-tooltip top v-else>
                                 <template v-slot:activator="{ on:tooltip }">
                                     <img v-on="{ ...tooltip }" :src="photo('green-solo-logo.svg') " alt="avatar">
                                 </template>
-                                <span>Систеема</span>
+                                <span>Система</span>
                             </v-tooltip>
                         </v-avatar>
                     </td>
