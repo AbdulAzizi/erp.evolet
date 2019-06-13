@@ -2,14 +2,19 @@
     <v-container fluid>
 
         <tasks-table :tasks="tasks"></tasks-table>
-        <tasks-add :users="users" :errors="errors"></tasks-add>
+
+        <tasks-add 
+        :users="users" 
+        :errors="errors"
+        :tags="tags"
+        />
 
     </v-container>
 </template>
 
 <script>
 export default {
-    props:['tasks','users','errors']
+    props:['tasks','users','errors','tags']
 }
 </script>
 

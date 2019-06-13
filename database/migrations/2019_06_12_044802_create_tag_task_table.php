@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTaskTagTable extends Migration
+class CreateTagTaskTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTaskTagTable extends Migration
      */
     public function up()
     {
-        Schema::create('task_tag', function (Blueprint $table) {
+        Schema::create('tag_task', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('task_id');
             $table->unsignedInteger('tag_id');
@@ -27,6 +27,6 @@ class CreateTaskTagTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task_tag');
+        Schema::dropIfExists('tag_task');
     }
 }

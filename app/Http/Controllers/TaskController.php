@@ -7,6 +7,7 @@ use App\Task;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Tag;
 
 class TaskController extends Controller
 {
@@ -15,12 +16,13 @@ class TaskController extends Controller
         $authUser = \Auth::user();
         
         $tasks = Task::where('responsible_id',$authUser->id)
-                            ->with('from','responsible','watchers','status')
+                            ->with('from','responsible','watchers','status','tags')
                             ->get();
 
+        $tags = Tag::all();
         $users = User::with(['division'])->get();
         
-        return view('tasks.index',compact('tasks', 'users'));
+        return view('tasks.index',compact('tasks', 'users','tags'));
     }
 
     public function store(Request $request)
@@ -35,6 +37,10 @@ class TaskController extends Controller
 
         $assignees = json_decode($request->assignees);
         $watchers = json_decode($request->watchers);
+        $newTags = json_decode($request->newTags);
+        $existingTags = json_decode($request->existingTags);
+
+        // return $request;
 
         $data = [];
 
@@ -45,7 +51,7 @@ class TaskController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'status_id' => $newStatus->id,
-                'priority' => $request->priority ? $request->priority : 1,
+                'priority' => $request->priority === null ? 1 : $request->priority,
                 'planned_time' => $request->estimatedTaskTime,
                 'deadline' => $request->deadline,
                 'responsible_id' => $assigneeID,
@@ -57,12 +63,16 @@ class TaskController extends Controller
 
         Task::insert($data);
         
-        $tasks = Task::where('title',$request->title)->get();
-        
+        $tasks = Task::where('title', $request->title)->get();
+
+        foreach ($newTags as $newTag) {
+            $existingTags[] =  Tag::create(['name' => $newTag])->id;
+        }
+
         foreach ($tasks as $task) {
             $task->watchers()->attach($watchers);
+            $task->tags()->attach($existingTags);
         }
-        
 
         return redirect()->route('tasks.index');
 
