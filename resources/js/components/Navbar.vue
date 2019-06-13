@@ -16,11 +16,20 @@
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on" :href="appPath + 'tasks'">
+          <v-icon color="grey darken-1">event_note</v-icon>
+        </v-btn>
+      </template>
+      <span>Задачи</span>
+    </v-tooltip>
+
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
           <v-icon color="grey darken-1">notifications</v-icon>
         </v-btn>
       </template>
-      <span>Notifications</span>
+      <span>Уведомления</span>
     </v-tooltip>
 
     <v-menu offset-y left>
