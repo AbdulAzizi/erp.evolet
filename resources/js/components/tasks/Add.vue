@@ -248,11 +248,15 @@
                                         <v-btn v-on="{ ...tooltip, ...dialog }" flat round min-width="0" style="min-width:0" class="ma-0 grey--text px-2 text--darken-1">
                                             <v-icon :color="selectedTags.length ? 'primary' : '' ">local_offer</v-icon>
                                             <span>
-                                                <span v-for="(selectedTag, key) in selectedTags" :key="'selectedTag-'+key"> {{ selectedTag }} </span>
+                                                <span v-for="(selectedTag, key) in selectedTags" :key="'selectedTag-'+key">
+                                                    <span class="primary--text title">#</span>{{ selectedTag.name }}
+                                                </span>
                                             </span>
                                         </v-btn>
 
-                                        <input type="hidden" name="tags" :value="JSON.stringify(selectedTags)">
+                                        <input type="hidden" name="newTags" :value="JSON.stringify(newTags)">
+                                        <input type="hidden" name="existingTags" :value="JSON.stringify(existingTags)">
+
                                     </template>
                                     <span>Таги</span>
                                 </v-tooltip>
@@ -262,9 +266,9 @@
                                     <v-combobox
                                     prepend-icon="local_offer"
                                     v-model="selectedTags"
-
                                     :hide-no-data="!tagsSearch"
                                     :items="tags"
+                                    item-text="name"
                                     :search-input.sync="tagsSearch"
                                     hide-selected
                                     label="Таги"
@@ -279,7 +283,7 @@
                                             small
                                             >
                                                 <span class="pr-1">
-                                                    {{ item }}
+                                                    {{ item.name }}
                                                 </span>
                                                 <v-icon
                                                 small
@@ -457,7 +461,7 @@
 
 <script>
 export default {
-    props:['employees','errors'],
+    props:['employees','errors','tags'],
     data(){
         return {
             searchText:null,
@@ -484,7 +488,6 @@ export default {
             deadline:null,
 
             tagsDialog:false,
-            tags:['Таг1','Таг2','Таг3'],
             selectedTags:[],
             tagsSearch:null,
 
@@ -581,6 +584,23 @@ export default {
         },
         estimateMinutes(value){
             this.estimateTime = this.toMilliseconds(this.estimateDays, this.estimateHours, value)
+        },
+        selectedTags(newValue, oldValue){
+            // exit infinite loop 
+            if(newValue.length === oldValue.length) return;
+            // map selectedTags
+            this.selectedTags = newValue.map(tag => {
+                if(typeof tag === 'string'){
+                    // adapt new tag
+                    return {
+                        // fake id for new tags
+                        id:-1,
+                        name:tag
+                    }
+                }
+                return tag
+            });
+            
         }
     },
     methods: {
@@ -643,7 +663,16 @@ export default {
                 estimateHours:this.estimateHours,
                 estimateMinutes:this.estimateMinutes,
             }
+        },
+        newTags(){
+            const filteredNewTags = this.selectedTags.filter(tag => tag.id === -1);
+            return this.pluck(filteredNewTags, 'name');
+        },
+        existingTags(){
+            const filteredExistingTags = this.selectedTags.filter(tag => tag.id !== -1);
+            return this.pluck(filteredExistingTags, 'id');
         }
+        
     }
 }
 </script>

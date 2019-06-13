@@ -78,6 +78,20 @@
 
                             <priority :id="selectedTask.priority" classes=" lighten-3"></priority>
                             
+                            <v-subheader v-if="selectedTask.tags.length">Теги</v-subheader>
+
+                            <v-chip 
+                            color="grey lighten-4" 
+                            text-color="grey darken-1"
+                            v-for="(tag, index) in selectedTask.tags" 
+                            :key="'tag-'+index"
+                            small
+                            >
+                                <v-avatar style="margin-left:-8px" class="mr-0">
+                                    <v-icon class="subheading">local_offer</v-icon>
+                                </v-avatar>
+                                {{ tag.name }}
+                            </v-chip>
 
                         </v-list>
                     </v-flex>
@@ -158,6 +172,7 @@ export default {
                 spent_time:null,
                 planned_time:null,
                 deadline:null,
+                tags:[],
                 responsible_id:null,
                 responsible:{
                     user:{
