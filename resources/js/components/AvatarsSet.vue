@@ -8,7 +8,7 @@
             <template v-slot:activator="{ on }">
                 <a v-on="on" :href="appPath + 'users/' + item.id" class="avatar-item" >
                     <v-avatar
-                    color="grey lighten-4"
+                    color="white"
                     size="40"
                     class="elevation-2 "
                     :style=" {'z-index': (items.length - index)} "
@@ -17,7 +17,11 @@
                     </v-avatar>
                 </a>
             </template>
-            <span>{{item.name}} {{item.surname}} ({{item.label}})</span>
+            <span>
+                <span v-if="item.img">{{item.name}} {{item.surname}}</span>
+                <span v-else>Система</span>
+                ({{item.label}})
+            </span>
         </v-tooltip>
     </div>
 </template>
@@ -25,11 +29,6 @@
 <script>
 export default {
     props:['watchers','assignee','from', 'label'],
-    data(){
-        return{
-            appPath:window.Laravel.asset_path
-        }
-    },
     computed:{
         items(){
             let items = this.watchers.map( function(item){

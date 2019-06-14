@@ -152,7 +152,6 @@ export default {
     data(){
         return {
             moment:moment,
-            auth:window.Laravel.auth,
             headers: [
                 { text: 'Задача', value: 'title' },
                 // { text: 'Статус', value: 'status' },
