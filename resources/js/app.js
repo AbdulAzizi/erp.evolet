@@ -56,12 +56,18 @@ Vue.mixin({
             return array.map(item => item[key]);
         },
         photo: function (name) {
-            return window.Laravel.asset_path + 'img/' + name;
+            if(name)
+                return window.Laravel.asset_path + 'img/' + name;
+            else
+                return window.Laravel.asset_path + 'img/green-solo-logo.svg';
         },
     },
     computed: {
         appPath(){
             return window.Laravel.asset_path;
+        },
+        auth(){
+            return window.Laravel.auth;
         }
     }
   })
