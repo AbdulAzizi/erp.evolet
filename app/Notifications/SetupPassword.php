@@ -41,7 +41,7 @@ class SetupPassword extends Notification
      */
     public function toMail($notifiable)
     {
-        $setupLink = url('/password/reset/'. $this->token); //TODO Change link
+        $setupLink = url('/password/reset/'. $this->token);
 
         return (new MailMessage)
                     ->view('email.passwordSetup', compact('setupLink'))

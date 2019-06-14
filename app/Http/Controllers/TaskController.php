@@ -14,7 +14,7 @@ class TaskController extends Controller
     public function index()
     {
         $authUser = \Auth::user();
-        // $allTasks = $authUser->employee->allTasks(); // FIXME  unemployed users doesnt have employee relationship
+        
         $tasks = Task::where('responsible_id',$authUser->id)
                             ->with('from','responsible','watchers','status','tags')
                             ->get();
