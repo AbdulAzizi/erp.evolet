@@ -2,9 +2,9 @@
 
 namespace App;
 
+use App\Notifications\SetupPassword;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Notifications\SetupPassword;
 
 class User extends Authenticatable
 {
@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'password', 'position_id', 'responsibility_id', 'division_id'
+        'name', 'surname', 'email', 'password', 'position_id', 'responsibility_id', 'division_id',
     ];
 
     /**
@@ -87,6 +87,26 @@ class User extends Authenticatable
                 'data' => $this->givenTasks->load(['responsible', 'from']),
             ],
         ]);
+    }
+
+    /**
+     * Removes all relation dependencies from User model
+     *
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    
+    public static function alone()
+    {
+        return self::without(['position', 'responsibility']);
+    }
+    /**
+     * Concatinates name and surname
+     *
+     * @return string
+     */
+    public function fullname()
+    {
+        return "$this->name $this->surname";
     }
 
 }
