@@ -24,6 +24,7 @@ Vue.use(Vuetify, {
 });
 import "vuetify/dist/vuetify.min.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
+import moment from 'moment-timezone';
 
 window.Event = new (class {
     constructor() {
@@ -51,6 +52,14 @@ window.Event = new (class {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.mixin({
+    data(){
+        const appMoment = moment;
+        appMoment.tz.setDefault("UTC");
+        
+        return{
+            moment:appMoment,
+        }
+    },
     methods: {
         pluck: function (array, key) {
             return array.map(item => item[key]);
@@ -69,7 +78,7 @@ Vue.mixin({
         auth(){
             return window.Laravel.auth;
         }
-    }
+    },
   })
 
 Vue.component(
@@ -80,6 +89,7 @@ Vue.component("navbar", require("./components/Navbar.vue").default);
 Vue.component("myform", require("./components/Form.vue").default);
 Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 Vue.component("priority", require("./components/Priority.vue").default);
+Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
 
 
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
