@@ -69,7 +69,7 @@ class UserTableSeeder extends Seeder
         $this->userAsDivisionHead('Джабаров');
         $this->userAsDivisionHead('Хакимов');
 
-        factory(User::class, 400)->create();
+        factory(User::class, 40)->create();
     }
 
     private function userAsDivisionHead($surname)

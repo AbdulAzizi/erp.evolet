@@ -16,7 +16,10 @@ class ProvideDefaultData
      */
     public function handle($request, Closure $next)
     {
-        $authUser = auth()->user()->load(['division']);
+        $authUser = auth()->user()->load([
+            'division',
+            'notifications',
+        ]);
         View::share('authUser', $authUser);
 
         return $next($request);
