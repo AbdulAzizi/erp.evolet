@@ -52,12 +52,13 @@ window.Event = new (class {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.mixin({
-    data(){
+    data() {
         const appMoment = moment;
         appMoment.tz.setDefault("UTC");
-        
-        return{
-            moment:appMoment,
+        appMoment.locale('ru');
+
+        return {
+            moment: appMoment,
         }
     },
     methods: {
@@ -65,51 +66,55 @@ Vue.mixin({
             return array.map(item => item[key]);
         },
         photo: function (name) {
-            if(name)
+            if (name)
                 return window.Laravel.asset_path + 'img/' + name;
             else
                 return window.Laravel.asset_path + 'img/green-solo-logo.svg';
         },
     },
     computed: {
-        appPath(){
+        appPath() {
             return window.Laravel.asset_path;
         },
-        auth(){
+        auth() {
             return window.Laravel.auth;
         }
     },
-  })
+})
 
 Vue.component(
     "example-component",
     require("./components/ExampleComponent.vue").default
 );
+/****************************COMPONENTS********************************/
 Vue.component("navbar", require("./components/Navbar.vue").default);
 Vue.component("myform", require("./components/Form.vue").default);
 Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 Vue.component("priority", require("./components/Priority.vue").default);
-Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
-
-
-Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
-
-Vue.component("tasks", require("./components/Tasks.vue").default);
-Vue.component("task", require("./components/Task.vue").default);
-Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
-Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
-Vue.component("tasks-watchers", require("./components/tasks/Watchers.vue").default);
-
+Vue.component("card", require("./components/Card.vue").default);
 Vue.component("user-card", require("./components/UserCard.vue").default);
 Vue.component("division", require("./components/Division.vue").default);
 Vue.component("add-user-dialog", require("./components/AddUserDialog.vue").default);
 Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
-
+Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
 Vue.component(
     "user-selector",
     require("./components/UserSelector.vue").default
 );
 
+/****************************VIEWS********************************/
+Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
+Vue.component("profile-view", require("./components/views/Profile.vue").default);
+
+/****************************TASKS********************************/
+Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
+Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
+Vue.component("tasks-watchers", require("./components/tasks/Watchers.vue").default);
+Vue.component("tasks", require("./components/Tasks.vue").default);
+Vue.component("task", require("./components/Task.vue").default);
+
+/****************************HELPERS********************************/
+Vue.component("helpers-offset", require("./components/helpers/Offset.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
