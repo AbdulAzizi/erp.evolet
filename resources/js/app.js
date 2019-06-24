@@ -89,10 +89,11 @@ Vue.component("division", require("./components/Division.vue").default);
 Vue.component("add-user-dialog", require("./components/AddUserDialog.vue").default);
 Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
 
-Vue.component(
-    "user-selector",
-    require("./components/UserSelector.vue").default
-);
+Vue.component("form-field", require("./components/form/FormField.vue").default);
+Vue.component("user-selector", require("./components/form/UserSelector.vue").default);
+Vue.component("picker", require("./components/form/Picker.vue").default);
+
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
