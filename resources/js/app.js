@@ -82,10 +82,6 @@ Vue.mixin({
     },
 })
 
-Vue.component(
-    "example-component",
-    require("./components/ExampleComponent.vue").default
-);
 /****************************COMPONENTS********************************/
 Vue.component("navbar", require("./components/Navbar.vue").default);
 Vue.component("myform", require("./components/Form.vue").default);
