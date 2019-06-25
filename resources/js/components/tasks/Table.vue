@@ -145,14 +145,11 @@
 </template>
 
 <script>
-import moment from 'moment';
 
 export default {
     props:['tasks'],
     data(){
         return {
-            moment:moment,
-            auth:window.Laravel.auth,
             headers: [
                 { text: 'Задача', value: 'title' },
                 // { text: 'Статус', value: 'status' },
@@ -189,8 +186,7 @@ export default {
                     }
                 },
             },
-            activeTab:null,
-            zero:moment('1970-01-01 00:00:00')
+            activeTab:null
         }
     },
     methods:{
