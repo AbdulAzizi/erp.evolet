@@ -6,9 +6,13 @@
                     <v-toolbar-title class="font-weight-regular">Новый сотрудник</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
-
-                    <form-field v-for="(field, i) in formFields" :key="i" :field="field" :errors="errors" :old-inputs="oldinputs"/>
-
+                    <form-field
+                        v-for="(field, i) in formFields"
+                        :key="i"
+                        :field="field"
+                        :errors="errors"
+                        :old-inputs="oldinputs"
+                    />
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -26,7 +30,6 @@ export default {
     props: ["positions", "responsibilities", "errors", "oldinputs"],
     data() {
         return {
-        
             show: Array.isArray(this.errors) ? false : true,
             csrf: window.Laravel.csrf_token,
 
@@ -34,7 +37,6 @@ export default {
         };
     },
     created() {
-
         Event.listen("addUser", data => {
             this.show = true;
             this.divisionId = data.divisionId;
@@ -48,30 +50,31 @@ export default {
                 {
                     type: "string",
                     name: "name",
-                    label: "Имя",
+                    label: "Имя"
                 },
                 {
                     type: "string",
                     name: "surname",
-                    label: "Фамилия",
+                    label: "Фамилия"
                 },
                 {
                     type: "string",
                     name: "email",
-                    label: "Email",
+                    label: "Email"
                 },
                 {
                     type: "select",
                     name: "positionId",
                     label: "Должность",
-                    items: this.positions
+                    items: this.positions,
                 },
                 {
                     type: "autocomplete",
                     name: "responsibilityId",
                     label: "Полномочия",
                     items: this.responsibilities,
-                }
+                    multiple: true
+                },
             ];
         }
     }
