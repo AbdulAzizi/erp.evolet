@@ -94,7 +94,7 @@ const getAutoCompleteField = field => {
     const baseSelectField = getSelectField(field);
 
     //Default props for autocomplete field
-    baseSelectField.component = "v-autocomplete";
+    baseSelectField.component = "autocomplete";
     baseSelectField.props = {
         ...baseSelectField.props,
 
@@ -103,13 +103,19 @@ const getAutoCompleteField = field => {
         hint: field.hint,
         "persistent-hint": true,
         "no-data-text": "Данные отсутствуют",
-        "hide-selected": true,
-
-        chips: true,
-        "deletable-chips": true
+        'hide-selected': true,
     };
 
     return baseSelectField;
+};
+
+const getComboboxField = field => {
+    const baseAutoComplete = getAutoCompleteField(field);
+
+    //Default props for userselector
+    baseAutoComplete.component = "combobox";
+
+    return baseAutoComplete;
 };
 
 const getUsersField = field => {
@@ -162,8 +168,6 @@ export default {
         }
     },
     mounted() {
-        if (this.field.type === "select")
-            console.log(this);
     },
     computed: {
         formField() {
@@ -187,6 +191,9 @@ export default {
                     break;
                 case "autocomplete":
                     fieldData = getAutoCompleteField(this.field);
+                    break;
+                case "combobox":
+                    fieldData = getComboboxField(this.field);
                     break;
                 case "users":
                     fieldData = getUsersField(this.field);
