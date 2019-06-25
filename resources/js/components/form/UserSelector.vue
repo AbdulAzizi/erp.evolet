@@ -2,8 +2,8 @@
     <div>
         <v-autocomplete
             v-model="selectedUsers"
-            :items="users"
-            item-text="name"
+            :items="preparedUsers"
+            item-text="fullname"
             item-value="id"
             no-data-text="Данные отсутствуют"
             hide-selected
@@ -66,6 +66,14 @@ export default {
     watch: {
         selectedUsers(selectedUsersId) {
             this.$emit('input', selectedUsersId);
+        }
+    },
+    computed:{
+        preparedUsers(){
+            return this.users.map(user => {
+                user['fullname'] = user.name + " " + user.surname;
+                return user;
+            });
         }
     }
 };
