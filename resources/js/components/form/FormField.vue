@@ -58,7 +58,7 @@ const getNumberField = field => {
 
     //Default props for number field
     baseField.props["type"] = "number";
-    baseField.props["min"] = field.min ? field.min : 1;
+    baseField.props["min"] = field.min || 1;
 
     return baseField;
 };
@@ -115,6 +115,7 @@ const getComboboxField = field => {
     //Default props for userselector
     baseAutoComplete.component = "combobox";
 
+    baseAutoComplete["hasSeparateInput"] = false;
     return baseAutoComplete;
 };
 
