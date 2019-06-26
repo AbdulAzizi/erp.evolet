@@ -1,3 +1,3 @@
 # Links
 
-- [Dynamic form fields](https://#)
+- [Dynamic form fields](/resources/js/components/form)
