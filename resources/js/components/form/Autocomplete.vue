@@ -4,7 +4,6 @@
         :items="items"
         :item-text="itemText"
         :item-value="itemValue"
-        hide-selected
         :label="label"
         v-bind="$attrs"
     >
