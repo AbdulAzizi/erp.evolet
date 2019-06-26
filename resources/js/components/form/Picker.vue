@@ -58,7 +58,17 @@ const timePicker = {
 };
 
 export default {
-    props: ["pickerType", "name", "label", "prependIcon", "rules", "width"],
+    props: {
+        pickerType: {
+            type: String,
+            required: true
+        },
+        name: String,
+        label: String,
+        prependIcon: String,
+        rules: Array,
+        width: String
+    },
     data() {
         return {
             pickerData: "",
