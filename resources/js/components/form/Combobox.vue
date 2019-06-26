@@ -4,7 +4,6 @@
             v-model="selectedItems"
             :items="items"
             :item-text="itemText"
-            hide-selected
             :label="label"
             v-bind="$attrs"
         >
