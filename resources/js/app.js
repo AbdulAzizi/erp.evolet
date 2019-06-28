@@ -123,10 +123,6 @@ Vue.component("division", require("./components/Division.vue").default);
 Vue.component("add-user-dialog", require("./components/AddUserDialog.vue").default);
 Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
 Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
-Vue.component(
-    "user-selector",
-    require("./components/UserSelector.vue").default
-);
 Vue.component("stats-card", require("./components/StatsCard.vue").default);
 
 /****************************VIEWS********************************/
