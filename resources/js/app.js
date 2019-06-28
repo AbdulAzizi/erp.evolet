@@ -140,6 +140,14 @@ Vue.component("tasks-watchers", require("./components/tasks/Watchers.vue").defau
 Vue.component("tasks", require("./components/Tasks.vue").default);
 Vue.component("task", require("./components/Task.vue").default);
 
+Vue.component("form-field", require("./components/form/FormField.vue").default);
+Vue.component("user-selector", require("./components/form/UserSelector.vue").default);
+Vue.component("picker", require("./components/form/Picker.vue").default);
+Vue.component("autocomplete", require("./components/form/Autocomplete.vue").default);
+Vue.component("combobox", require("./components/form/Combobox.vue").default);
+
+
+
 /****************************HELPERS********************************/
 Vue.component("helpers-offset", require("./components/helpers/Offset.vue").default);
 /**
