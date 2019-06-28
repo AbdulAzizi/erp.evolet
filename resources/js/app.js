@@ -51,6 +51,8 @@ window.Event = new (class {
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+import colors from "vuetify/es5/util/colors";
+
 Vue.mixin({
     data() {
         const appMoment = moment;
@@ -71,6 +73,34 @@ Vue.mixin({
             else
                 return window.Laravel.asset_path + 'img/green-solo-logo.svg';
         },
+        isCssColor(color) {
+            return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/);
+        },
+        getCSSColor(color) {
+            if (this.isCssColor(color)) {
+                return color;
+            }
+
+            const splittedColors = this.color.trim().split(" ", 2);
+            let preparedColor = splittedColors[0];
+            let modifier = splittedColors[1];
+
+            if(this.$vuetify.theme[preparedColor])
+                return this.$vuetify.theme[preparedColor];
+
+            if(modifier){
+                modifier = modifier.replace("-", "");
+                return colors[preparedColor][modifier];
+            }
+
+            return colors[preparedColor]['base'];
+        },
+        colorfulShadow(color) {
+            return {
+                '-webkit-box-shadow': `0 12px 20px -10px ${this.getCSSColor(color)} !important`,
+                boxShadow: `0 12px 20px -10px ${this.getCSSColor(color)} !important`
+            };
+        }
     },
     computed: {
         appPath() {
@@ -78,7 +108,7 @@ Vue.mixin({
         },
         auth() {
             return window.Laravel.auth;
-        }
+        },
     },
 })
 
@@ -97,6 +127,7 @@ Vue.component(
     "user-selector",
     require("./components/UserSelector.vue").default
 );
+Vue.component("stats-card", require("./components/StatsCard.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);

@@ -1,11 +1,11 @@
 <template>
-    <v-card v-bind="$attrs" :style="styles" v-on="$listeners">
-        <helper-offset v-if="hasOffset" :inline="inline" :full-width="fullWidth" :offset="offset">
+    <v-card v-bind="$attrs" :style="styles" v-on="$listeners" class="material--card">
+        <helpers-offset v-if="hasOffset" :inline="inline" :full-width="fullWidth" :offset="offset">
             <v-card
                 v-if="!$slots.offset"
                 :color="color"
-                :class="`elevation-${elevation}`"
                 class="v-card--material__header"
+                :style="colorfulShadow(color)"
                 dark
             >
                 <slot v-if="!title && !text" name="header"/>
@@ -15,7 +15,7 @@
                 </span>
             </v-card>
             <slot v-else name="offset"/>
-        </helper-offset>
+        </helpers-offset>
 
         <v-card-text>
             <slot/>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+
 export default {
     inheritAttrs: false,
 
@@ -80,11 +81,45 @@ export default {
                 marginBottom: `${this.offset}px`,
                 marginTop: `${this.offset * 2}px`
             };
-        }
+        },
+        
+    },
+    methods: {
+        //
+    },
+    mounted() {    
     }
 };
 </script>
 
 <style>
-
+.v-card .v-offset .v-card--material__header.v-card {
+    padding: 15px;
+}
+.v-card--material__header.v-card {
+    border-radius: 4px;
+}
+.material--card.v-card .v-offset .category {
+    color: hsla(0, 0%, 100%, 0.62);
+}
+.v-card .category {
+    margin: 0;
+}
+.v-card .v-card__actions {
+    margin: 0 16px 0;
+    padding: 10px 0 10px;
+    line-height: 22px;
+}
+.v-card .title {
+    margin-top: 0;
+    line-height: 1.5em!important;
+    letter-spacing: 0!important;
+    font-size: 1.125rem!important;
+    margin-bottom: 5px!important;
+}
+.material--card.v-card .category {
+    margin: 0!important;
+    line-height: 22px;
+    color: #999;
+}
 </style>
