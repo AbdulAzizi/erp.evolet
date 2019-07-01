@@ -51,13 +51,16 @@ window.Event = new (class {
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+import colors from "vuetify/es5/util/colors";
+
 Vue.mixin({
-    data(){
+    data() {
         const appMoment = moment;
         appMoment.tz.setDefault("UTC");
-        
-        return{
-            moment:appMoment,
+        appMoment.locale('ru');
+
+        return {
+            moment: appMoment,
         }
     },
     methods: {
@@ -65,45 +68,72 @@ Vue.mixin({
             return array.map(item => item[key]);
         },
         photo: function (name) {
-            if(name)
+            if (name)
                 return window.Laravel.asset_path + 'img/' + name;
             else
                 return window.Laravel.asset_path + 'img/green-solo-logo.svg';
         },
-    },
-    computed: {
-        appPath(){
-            return window.Laravel.asset_path;
+        isCssColor(color) {
+            return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/);
         },
-        auth(){
-            return window.Laravel.auth;
+        getCSSColor(color) {
+            if (this.isCssColor(color)) {
+                return color;
+            }
+
+            const splittedColors = this.color.trim().split(" ", 2);
+            let preparedColor = splittedColors[0];
+            let modifier = splittedColors[1];
+
+            if(this.$vuetify.theme[preparedColor])
+                return this.$vuetify.theme[preparedColor];
+
+            if(modifier){
+                modifier = modifier.replace("-", "");
+                return colors[preparedColor][modifier];
+            }
+
+            return colors[preparedColor]['base'];
+        },
+        colorfulShadow(color) {
+            return {
+                '-webkit-box-shadow': `0 12px 20px -10px ${this.getCSSColor(color)} !important`,
+                boxShadow: `0 12px 20px -10px ${this.getCSSColor(color)} !important`
+            };
         }
     },
-  })
+    computed: {
+        appPath() {
+            return window.Laravel.asset_path;
+        },
+        auth() {
+            return window.Laravel.auth;
+        },
+    },
+})
 
-Vue.component(
-    "example-component",
-    require("./components/ExampleComponent.vue").default
-);
+/****************************COMPONENTS********************************/
 Vue.component("navbar", require("./components/Navbar.vue").default);
 Vue.component("myform", require("./components/Form.vue").default);
 Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 Vue.component("priority", require("./components/Priority.vue").default);
+Vue.component("card", require("./components/Card.vue").default);
+Vue.component("user-card", require("./components/UserCard.vue").default);
+Vue.component("division", require("./components/Division.vue").default);
+Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
 Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
+Vue.component("stats-card", require("./components/StatsCard.vue").default);
 
-
+/****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
+Vue.component("profile-view", require("./components/views/Profile.vue").default);
 
-Vue.component("tasks", require("./components/Tasks.vue").default);
-Vue.component("task", require("./components/Task.vue").default);
+/****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
 Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
 Vue.component("tasks-watchers", require("./components/tasks/Watchers.vue").default);
-
-Vue.component("user-card", require("./components/UserCard.vue").default);
-Vue.component("division", require("./components/Division.vue").default);
-Vue.component("add-user-dialog", require("./components/AddUserDialog.vue").default);
-Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
+Vue.component("tasks", require("./components/Tasks.vue").default);
+Vue.component("task", require("./components/Task.vue").default);
 
 Vue.component("form-field", require("./components/form/FormField.vue").default);
 Vue.component("user-selector", require("./components/form/UserSelector.vue").default);
@@ -114,6 +144,8 @@ Vue.component("dynamic-form", require("./components/form/Form.vue").default);
 
 
 
+/****************************HELPERS********************************/
+Vue.component("helpers-offset", require("./components/helpers/Offset.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
