@@ -128,6 +128,7 @@ Vue.component("stats-card", require("./components/StatsCard.vue").default);
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
 Vue.component("profile-view", require("./components/views/Profile.vue").default);
+Vue.component("products-view", require("./components/views/Products.vue").default);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);

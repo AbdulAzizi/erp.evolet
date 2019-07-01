@@ -64,8 +64,10 @@
                                     <h2 class="title font-weight-regular text-sm-left">{{user.name}}</h2>
                                 </a>
                                 <h4
+                                    v-for="(responsibility,index) in user.responsibilities"
+                                    :key="'responsibility-'+index"
                                     class="subtheader font-weight-regular grey--text text-sm-left"
-                                >{{user.responsibility.name}}</h4>
+                                >{{responsibility.name}}</h4>
                             </v-list>
                         </v-flex>
                     </v-layout>
