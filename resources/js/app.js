@@ -110,6 +110,7 @@ Vue.component("user-selector", require("./components/form/UserSelector.vue").def
 Vue.component("picker", require("./components/form/Picker.vue").default);
 Vue.component("autocomplete", require("./components/form/Autocomplete.vue").default);
 Vue.component("combobox", require("./components/form/Combobox.vue").default);
+Vue.component("dynamic-form", require("./components/form/Form.vue").default);
 
 
 
