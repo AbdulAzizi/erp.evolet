@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'password', 'position_id', 'responsibility_id', 'division_id',
+        'name', 'surname', 'email', 'password', 'position_id', 'division_id',
     ];
 
     /**
@@ -37,7 +37,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public $with = ['position', 'responsibility'];
+    public $with = ['position', 'responsibilities'];
 
     /**
      * Send the password reset notification.
@@ -60,11 +60,11 @@ class User extends Authenticatable
         return $this->belongsTo('App\Position');
     }
 
-    public function responsibility()
+    public function responsibilities()
     {
-        return $this->belongsTo('App\Responsibility');
+        return $this->belongsToMany('App\Responsibility');
     }
-
+    
     public function givenTasks()
     {
         return $this->morphMany('App\Task', 'from');
@@ -97,7 +97,7 @@ class User extends Authenticatable
     
     public static function alone()
     {
-        return self::without(['position', 'responsibility']);
+        return self::without(['position', 'responsibilities']);
     }
     /**
      * Concatinates name and surname

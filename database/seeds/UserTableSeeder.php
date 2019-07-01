@@ -15,6 +15,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
+        // TODO fix many to many responsibility seed code
         $this->seedUsers([
             [
                 'name' => 'Akbar',
@@ -69,7 +70,12 @@ class UserTableSeeder extends Seeder
         $this->userAsDivisionHead('Джабаров');
         $this->userAsDivisionHead('Хакимов');
 
-        factory(User::class, 40)->create();
+        factory(User::class, 40)->create()->each(function ($user){
+            for($i = 1; $i <= random_int(1,4); $i++){
+                $user->responsibilities()->attach(Responsibility::inRandomOrder()->first()->id);
+            }
+        });
+        
     }
 
     private function userAsDivisionHead($surname)
@@ -87,15 +93,17 @@ class UserTableSeeder extends Seeder
                 'surname' => $credential['surname'],
                 'division_id' => Division::where('abbreviation', $credential['division'])->first()->id,
                 'position_id' => Position::firstOrCreate(['name' => $credential['position']])->id,
-                'responsibility_id' =>  Responsibility::firstOrCreate(['name' => $credential['responsibility']])->id,
                 'email' => $credential['email'],
                 'password' => Hash::make($credential['password']),
             ];
+
+            
             
             if(array_key_exists('img', $credential))
-                $userData['img'] = $credential['img'];
-
+            $userData['img'] = $credential['img'];
+            
             $user = User::create($userData);
+            $user->responsibilities()->attach( Responsibility::firstOrCreate(['name' => $credential['responsibility']])->id );
             
         }
     }

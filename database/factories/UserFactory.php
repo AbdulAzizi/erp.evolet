@@ -25,7 +25,6 @@ $factory->define(User::class, function (Faker $faker) {
         'name' => $faker->firstName,
         'surname' => $surname,
         'position_id' => getRandomId(Position::class, [1]),
-        'responsibility_id' => getRandomId(Responsibility::class, [4]),
         'division_id' => getRandomId(Division::class, Division::withDepth()->having('depth','!=', 3)->pluck('id')->toArray()),
         'email' =>  $surname . '@admin.com',
         'email_verified_at' => now(),
