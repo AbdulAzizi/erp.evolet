@@ -34,7 +34,7 @@ const getBaseInput = field => ({
 const getBaseField = field => {
     const baseInput = getBaseInput(field);
 
-    delete baseInput.props.value; //Remove value because there is model to fieldVar
+    delete baseInput.props.value; //Remove value because there is model fieldVar, and I will assign value to that model
     delete baseInput.props.type; //Remove type because other fields shoudn't be hidden
 
     //Default props for number field
@@ -157,18 +157,16 @@ export default {
 
     data() {
         return {
-            fieldVar: null
+            fieldVar: this.field.hasOwnProperty('value') ? this.field.value : null
         };
     },
     created() {
         const fieldHasOldInputs =
             this.oldInputs && this.oldInputs[this.formField.props.name];
-
+        
         if (fieldHasOldInputs) {
             this.fieldVar = this.oldInputs[this.formField.props.name];
         }
-    },
-    mounted() {
     },
     computed: {
         formField() {
@@ -230,7 +228,7 @@ export default {
     methods: {
         validate(value) {
             this.$refs.field.validate(value);
-        }
+        },
     }
 };
 </script>

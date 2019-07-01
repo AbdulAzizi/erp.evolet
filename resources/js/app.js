@@ -120,7 +120,6 @@ Vue.component("priority", require("./components/Priority.vue").default);
 Vue.component("card", require("./components/Card.vue").default);
 Vue.component("user-card", require("./components/UserCard.vue").default);
 Vue.component("division", require("./components/Division.vue").default);
-Vue.component("add-user-dialog", require("./components/AddUserDialog.vue").default);
 Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
 Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
 Vue.component("stats-card", require("./components/StatsCard.vue").default);
@@ -142,6 +141,7 @@ Vue.component("user-selector", require("./components/form/UserSelector.vue").def
 Vue.component("picker", require("./components/form/Picker.vue").default);
 Vue.component("autocomplete", require("./components/form/Autocomplete.vue").default);
 Vue.component("combobox", require("./components/form/Combobox.vue").default);
+Vue.component("dynamic-form", require("./components/form/Form.vue").default);
 
 
 

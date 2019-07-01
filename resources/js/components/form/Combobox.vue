@@ -21,11 +21,16 @@
 
 <script>
 export default {
-    props: ["name", "label", "items", "itemText", 'itemValue'],
+    props: ["name", "label", "items", "value", "itemText", 'itemValue'],
     data() {
         return {
-            selectedItems: [],
+            selectedItems: this.initSelectedItems(),
         };
+    },
+    methods: {
+        initSelectedItems(){
+            return Array.isArray(this.value) ? this.items.filter(item => this.value.includes(item.id)) : []
+        }
     },
     watch: {
         selectedItems(newValue, oldValue) {

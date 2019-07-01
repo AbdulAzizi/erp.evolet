@@ -18,10 +18,10 @@
 
 <script>
 export default {
-    props: ["name", "label", "items", "itemText", "itemValue"], //All other props goes from form-field
+    props: ["name", "label", "items", "value", "itemText", "itemValue"], //All other props goes from form-field
     data() {
         return {
-            selectedItems: []
+            selectedItems: Array.isArray(this.value) ? this.value : []
         };
     },
     watch: {

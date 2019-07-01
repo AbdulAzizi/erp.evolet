@@ -26,8 +26,9 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::post('/tasks', 'TaskController@store')->name('tasks.store');
     Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/users/{id}', 'UserController@show')->name('user.show');
-    Route::get('/division', 'DivisionController@show')->name('division'); //FIXME Maybe convert to /divisions
-    
+    Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
+    Route::post('/divisions', 'DivisionController@store')->name('division.store');
+
     Route::post('/users', 'UserController@store')->name('user.store');
 
     Route::get('/products','ProductController@index')->name('products.index');
