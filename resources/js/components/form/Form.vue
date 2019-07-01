@@ -18,7 +18,7 @@
                     <v-spacer></v-spacer>
                     <!--//TODO Add dynamic actions -->
                     <v-btn color="primary" flat="flat" @click="show = false">Отмена</v-btn>
-                    <v-btn color="primary" type="submit">Добавить</v-btn>
+                    <v-btn color="primary" type="submit" @click="submit">Добавить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>
@@ -48,10 +48,13 @@ export default {
             show: this.formHasErrors() ? true : false,
 
             localFields: [
-                { type: "input", name: "_token", value: window.Laravel.csrf_token },
+                {
+                    type: "input",
+                    name: "_token",
+                    value: window.Laravel.csrf_token
+                },
                 ...this.fields
-            ],
-
+            ]
         };
     },
     created() {
@@ -60,14 +63,16 @@ export default {
         this.processLaravelOldInputs();
     },
     methods: {
-        formHasErrors(){
+        formHasErrors() {
             const hasErrorsInProps = this.errors && !Array.isArray(this.errors);
 
-            if(!hasErrorsInProps) return false;
+            if (!hasErrorsInProps) return false;
 
-            const fieldsWithErrors = this.fields.filter(field => this.errors[field.name]);
+            const fieldsWithErrors = this.fields.filter(
+                field => this.errors[field.name]
+            );
 
-            if(fieldsWithErrors.length === 0) return false;
+            if (fieldsWithErrors.length === 0) return false;
 
             return true;
         },
@@ -92,19 +97,36 @@ export default {
             this.localFields = [...this.localFields, ...fields];
         },
         processLaravelOldInputs() {
-            if(!this.oldInputs) return;
+            if (!this.oldInputs) return;
 
             for (const inputName in this.oldInputs) {
                 if (this.oldInputs.hasOwnProperty(inputName)) {
                     const inputValue = this.oldInputs[inputName];
-                    
-                    const field = this.localFields.filter(field => field.name === inputName);
 
-                    if(field.length === 0){
-                        this.addNewFields( [{ type:'input', name: inputName, value: inputValue}] );
+                    const field = this.localFields.filter(
+                        field => field.name === inputName
+                    );
+
+                    if (field.length === 0) {
+                        this.addNewFields([
+                            {
+                                type: "input",
+                                name: inputName,
+                                value: inputValue
+                            }
+                        ]);
                     }
                 }
             }
+        },
+
+        submit(e) {
+            this.formHasErrors = false;
+            this.formHasErrors = !this.$refs.form.validate();
+
+            if (!this.formHasErrors) return;
+
+            e.preventDefault();
         }
     }
 };
