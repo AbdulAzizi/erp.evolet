@@ -16,6 +16,7 @@ Auth::routes();
 
 
 Route::group(['middleware'=>['auth', 'data.default']],function(){
+
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/', function () {
         return redirect('/tasks');
@@ -29,5 +30,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::post('/divisions', 'DivisionController@store')->name('division.store');
 
     Route::post('/users', 'UserController@store')->name('user.store');
+
+    Route::get('/products','ProductController@index')->name('products.index');
 
 });
