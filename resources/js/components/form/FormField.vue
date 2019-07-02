@@ -6,10 +6,10 @@
             v-model="fieldVar"
             ref="field"
         >
-            <slot v-for="slot in Object.keys($slots)" :name="slot" :slot="slot"/>
+            <slot v-for="slot in Object.keys($slots)" :name="slot" :slot="slot" />
 
             <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
-                <slot :name="slot" v-bind="scope"/>
+                <slot :name="slot" v-bind="scope" />
             </template>
         </component>
         <input
@@ -17,11 +17,33 @@
             v-if="formField.hasSeparateInput"
             :name="formField.props.name"
             :value="JSON.stringify(fieldVar)"
-        >
+        />
     </div>
 </template>
 
 <script>
+import predefinedRules from "./predefinedRules";
+
+const getRuleFunctions = rules => {
+    if(!rules) return;
+    if (!Array.isArray(rules)) return;
+
+    let ruleFunctions = [];
+
+    for (const rule of rules) {
+        if (typeof rule !== "string") {
+            ruleFunctions.push(rule);
+            continue;
+        }
+        const predefinedFunctions = predefinedRules.map(pRule =>
+            pRule.name === rule ? pRule.func : true
+        );
+        ruleFunctions = [...ruleFunctions, ...predefinedFunctions];
+    }
+    return ruleFunctions;
+};
+
+
 const getBaseInput = field => ({
     component: "input",
     props: {
@@ -43,7 +65,7 @@ const getBaseField = field => {
         ...baseInput.props,
 
         label: field.label,
-        rules: field.rules,
+        rules: getRuleFunctions(field.rules),
         "prepend-icon": field.icon,
         hint: field.hint
     };
@@ -103,7 +125,7 @@ const getAutoCompleteField = field => {
         hint: field.hint,
         "persistent-hint": true,
         "no-data-text": "Данные отсутствуют",
-        'hide-selected': true,
+        "hide-selected": true
     };
 
     return baseSelectField;
@@ -148,6 +170,7 @@ const getPicker = field => {
     return baseField;
 };
 
+
 export default {
     props: {
         field: Object,
@@ -157,15 +180,17 @@ export default {
 
     data() {
         return {
-            fieldVar: this.field.hasOwnProperty('value') ? this.field.value : null
+            fieldVar: this.field.hasOwnProperty("value")
+                ? this.field.value
+                : null
         };
     },
     created() {
         const fieldHasOldInputs =
             this.oldInputs && this.oldInputs[this.formField.props.name];
-        
+
         if (fieldHasOldInputs) {
-            this.fieldVar = this.oldInputs[this.formField.props.name];
+            this.fieldVar = this.oldInputs[this.formField.props.name]; //FIXME Fix old inputs for multiple fields
         }
     },
     computed: {
@@ -228,7 +253,7 @@ export default {
     methods: {
         validate(value) {
             this.$refs.field.validate(value);
-        },
+        }
     }
 };
 </script>
