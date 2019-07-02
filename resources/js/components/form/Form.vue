@@ -18,7 +18,7 @@
                     <v-spacer></v-spacer>
                     <!--//TODO Add dynamic actions -->
                     <v-btn color="primary" flat="flat" @click="show = false">Отмена</v-btn>
-                    <v-btn color="primary" type="submit">Добавить</v-btn>
+                    <v-btn color="primary" type="submit" @click="submit">Добавить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>
@@ -105,6 +105,14 @@ export default {
                     }
                 }
             }
+        },
+        submit(e){
+            this.formHasErrors = false;
+            this.formHasErrors = !this.$refs.form.validate();
+
+            if (!this.formHasErrors) return;
+
+            e.preventDefault();
         }
     }
 };
