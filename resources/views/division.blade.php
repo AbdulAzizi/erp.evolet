@@ -39,23 +39,27 @@ $jsonResponsibilities = json_encode($responsibilities);
         {
             type: 'string',
             name: 'name',
-            label: 'Имя'
+            label: 'Имя',
+            rules: ['required']
         },
         {
             type: 'string',
             name: 'surname',
-            label: 'Фамилия'
+            label: 'Фамилия',
+            rules: ['required']
         },
         {
             type: 'string',
             name: 'email',
             label: 'Email',
+            rules: ['required']
         },
         {
             type: 'select',
             name: 'positionId',
             label: 'Должность',
             items: {{$jsonPositions}},
+            rules: ['required']
         },
         {
             type: 'autocomplete',
@@ -63,6 +67,7 @@ $jsonResponsibilities = json_encode($responsibilities);
             label: 'Полномочия',
             items: {{$jsonResponsibilities}},
             multiple: true,
+            rules: ['required']
         },
     ]"
 ></dynamic-form>
@@ -79,6 +84,7 @@ $jsonResponsibilities = json_encode($responsibilities);
             type: 'string',
             name: 'name',
             label: 'Название',
+            rules: ['required']
         },
         {
             type: 'string',
