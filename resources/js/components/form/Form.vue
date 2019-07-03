@@ -119,8 +119,7 @@ export default {
                 }
             }
         },
-
-        submit(e) {
+        submit(e){
             this.formHasErrors = false;
             this.formHasErrors = !this.$refs.form.validate();
 

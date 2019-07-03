@@ -30,7 +30,7 @@
                                 name: 'title',
                                 label: 'Название',
                                 icon: 'content_paste',
-                                rules: [rules.required],
+                                rules: ['required'],
                             }"
                             />
                         </v-flex>
@@ -53,7 +53,7 @@
                                 label: 'Исполнители',
                                 icon: 'person',
                                 hint: 'У каждого исполнителя будет своя отдельная задача',
-                                rules: [rules.notEmptyArray]
+                                rules: ['required']
                             }"
                             />
                         </v-flex>
@@ -64,7 +64,7 @@
                                 name: 'deadline',
                                 label: 'Дедлайн',
                                 icon: 'event',
-                                rules: [rules.required]
+                                rules: ['required']
                             }"
                             />
                         </v-flex>
