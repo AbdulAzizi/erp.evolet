@@ -14,14 +14,24 @@
                                 />
                             </v-flex>
                             <v-flex xs8>
-                                <v-list dense two-line class="transparent">
+                                <div class="text-sm-left">
                                     <h2
-                                        class="primary--text display-1 font-weight-regular text-sm-left"
+                                        class="primary--text display-1 font-weight-regular "
                                     >{{user.name}} {{user.surname}}</h2>
-                                    <h4
+                                    <span
+                                        v-for="(responsibility,key) in user.responsibilities"
+                                        :key="'responsibility-'+key"
                                         class="headline font-weight-regular text-sm-left"
-                                    >{{user.responsibility.name}}</h4>
-                                </v-list>
+                                    >
+                                        {{responsibility.name}}
+                                        <template
+                                            v-if="key != user.responsibilities.length-1"
+                                        >|</template>
+                                    </span>
+                                    <!-- <h4
+                                        class="headline font-weight-regular text-sm-left"
+                                    >{{user.responsibility.name}}</h4>-->
+                                </div>
                             </v-flex>
                         </v-layout>
                     </v-flex>
@@ -102,12 +112,7 @@
                                 ></stats-card>
                             </v-flex>
                             <v-flex xs6 md3>
-                                <stats-card
-                                    color="green"
-                                    icon="done"
-                                    title="Завершенно"
-                                    value="30"
-                                ></stats-card>
+                                <stats-card color="green" icon="done" title="Завершенно" value="30"></stats-card>
                             </v-flex>
                             <v-flex xs6 md3>
                                 <stats-card
@@ -149,7 +154,6 @@
                                     value="7д 12ч 34м"
                                 ></stats-card>
                             </v-flex>
-                            
                         </v-layout>
                         <v-layout row wrap>
                             <v-flex xs3>

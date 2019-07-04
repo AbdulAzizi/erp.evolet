@@ -38,12 +38,23 @@
                     </v-list-tile-avatar>
                     <v-list-tile-content>
                         <v-list-tile-title>{{data.item.name}} {{data.item.surname}}</v-list-tile-title>
-                        <v-list-tile-sub-title>{{data.item.responsibility.name}} - {{data.item.division.abbreviation}}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title>
+                            <span
+                                v-for="(responsibility,key) in data.item.responsibilities"
+                                :key="'responsibility-'+key"
+                            >
+                                {{responsibility.name}}
+                                <span
+                                    v-if="key != data.item.responsibilities.length-1"
+                                >|</span>
+                            </span>
+                            - {{data.item.division.abbreviation}}
+                        </v-list-tile-sub-title>
                     </v-list-tile-content>
                 </template>
             </template>
         </v-autocomplete>
-		<input type="hidden" :name="name" :value="JSON.stringify(selectedUsers)"/>
+        <input type="hidden" :name="name" :value="JSON.stringify(selectedUsers)">
     </div>
 </template>
 
@@ -61,17 +72,16 @@ export default {
             );
         }
     },
-    created() {
-    },
+    created() {},
     watch: {
         selectedUsers(selectedUsersId) {
-            this.$emit('input', selectedUsersId);
+            this.$emit("input", selectedUsersId);
         }
     },
-    computed:{
-        preparedUsers(){
+    computed: {
+        preparedUsers() {
             return this.users.map(user => {
-                user['fullname'] = user.name + " " + user.surname;
+                user["fullname"] = user.name + " " + user.surname;
                 return user;
             });
         }
