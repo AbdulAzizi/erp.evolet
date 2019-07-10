@@ -19,6 +19,13 @@
             </template>
 
             <v-list three-lines dense class="dropdown-btn-list">
+
+                <v-list-tile v-if="items.length == 0">
+                    <v-list-tile-content>
+                        <v-list-tile-title> {{ tooltip }} отсутствуют </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
                 <template v-for="(item, key) in items">
                     <v-list-tile :key="'item-'+key" avatar href="#">
                         <v-list-tile-avatar class="mt-2">
