@@ -1,5 +1,9 @@
 @extends('layouts.default')
 
 @section('content')
-    <products-view :form="{{$form}}"></products-view>
+    @php
+        $jsonForm = isset($form) ? $form : json_encode(null) ;
+    @endphp
+        <products-view :form="{{$jsonForm}}" :products="{{$products}}"></products-view>
+
 @endsection

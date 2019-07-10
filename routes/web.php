@@ -32,5 +32,6 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::post('/users', 'UserController@store')->name('user.store');
 
     Route::get('/products','ProductController@index')->name('products.index');
+    Route::post('/products','ProductController@store')->name('products.store');
 
 });

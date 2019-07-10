@@ -4,8 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tethers extends Model
+class Tether extends Model
 {
+    public $timestamps = false;
+    
     public function fromProcess()
     {
         return $this->belongsTo('App\Process', 'from_process_id');

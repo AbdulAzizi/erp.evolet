@@ -75,6 +75,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Task', 'responsible_id');
     }
 
+    public function pcs()
+    {
+        return $this->belongsToMany('App\Division','managers','manager_id','pc_id')->as('manager')->withPivot('pc_id','country_id')->using('App\Manager');
+    }
+
     public function allTasks()
     {
         return collect([

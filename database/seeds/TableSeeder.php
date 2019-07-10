@@ -12,50 +12,100 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
+        $strana = App\Field::create(['label' => 'Страна', 'name' => 'strana']);
+        $pc = App\Field::create(['label' => 'ПК', 'name' => 'pc']);
+
+        /***************** First Form *********************/
+        
+        $form1 = App\Form::create(['name' => 'АФДОТ']);
+        
         $mnn = App\Field::create(['label' => 'МНН', 'name' => 'mnn']);
         $form = App\Field::create(['label' => 'Форма', 'name' => 'form']);
         $doza = App\Field::create(['label' => 'Доза', 'name' => 'doza']);
         $opu = App\Field::create(['label' => 'ОПУ', 'name' => 'opu']);
         $thchp = App\Field::create(['label' => 'ТХЧП', 'name' => 'thchp']);
-        $perviy_god = App\Field::create(['label' => 'Первый год', 'name' => 'perviy_god']);
-        $summa_prodazh_za_perviy_god = App\Field::create(['label' => 'Сумма продаж за первый год', 'name' => 'summa_prodazh_za_perviy_god']);
-        $prodazhi_upakovok_za_perviy_god = App\Field::create(['label' => 'Продажы упаковок за первый год', 'name' => 'prodazhi_upakovok_za_perviy_god']);
-        $vtoroi_god = App\Field::create(['label' => 'Второй год', 'name' => 'vtoroi_god']);
-        $summa_prodazh_za_vtoroi_god = App\Field::create(['label' => 'Сумма продаж за второй год', 'name' => 'summa_prodazh_za_vtoroi_god']);
-        $prodazhi_upakovok_za_vtoroi_god = App\Field::create(['label' => 'Продажы упаковок за второй год', 'name' => 'prodazhi_upakovok_za_vtoroi_god']);
-        $kppr = App\Field::create(['label' => 'КППР', 'name' => 'kppr']);
-        $dolya_bg = App\Field::create(['label' => 'Доля БГ', 'name' => 'dolya_bg']);
-        $dolya_mst = App\Field::create(['label' => 'Доля Мст', 'name' => 'dolya_mst']);
-        $prirost_mst = App\Field::create(['label' => 'Прир Мст', 'name' => 'prirost_mst']);
-        $nkpn = App\Field::create(['label' => 'НКПН', 'name' => 'nkpn']);
-        $nkpf = App\Field::create(['label' => 'НКПФ', 'name' => 'nkpf']);
-
-        $forma1_go = App\Form::create(['name' => 'Форма ГО']);
-
-        $forma1_go->fields()->attach([
-            $mnn->id,
-            $form->id,
-            $doza->id,
-            $opu->id,
-            $thchp->id,
-            $perviy_god->id,
-            $summa_prodazh_za_perviy_god->id,
-            $prodazhi_upakovok_za_perviy_god->id,
-            $vtoroi_god->id,
-            $summa_prodazh_za_vtoroi_god->id,
-            $prodazhi_upakovok_za_vtoroi_god->id,
-            $kppr->id,
-            $dolya_bg->id,
-            $dolya_mst->id,
-            $prirost_mst->id,
-            $nkpn->id,
-            $nkpf->id,
+        
+        $form1->fields()->attach([
+            $mnn->id => ['required'=>true],
+            $form->id => ['required'=>true],
+            $doza->id => ['required'=>true],
+            $opu->id => ['required'=>true],
+            $thchp->id => ['required'=>true],
+        ]);
+            
+        /*********************  BP1 *************************/
+        
+        $bp1 = App\Process::create(['name' => 'Новое Лекарственное Средство']);
+        
+        $form2 = App\Form::create(['name' => 'ПНК']);
+        
+        $klass_pd = App\Field::create(['label' => 'Класс Пд', 'name' => 'klass_pd']);
+        $rx_otc = App\Field::create(['label' => 'Rx/OTC', 'name' => 'rx_otc']);
+        $atx = App\Field::create(['label' => 'АТХ', 'name' => 'atx']);
+        $fg = App\Field::create(['label' => 'ФГ', 'name' => 'fg']);
+        $nozologiya = App\Field::create(['label' => 'Нозология', 'name' => 'nozologiya']);
+        $vozrast_pol = App\Field::create(['label' => 'Возраст/Пол', 'name' => 'vozrast_pol']);
+        $pnk_1 = App\Field::create(['label' => 'ПНК 1', 'name' => 'pnk_1']);
+        $spv = App\Field::create(['label' => 'СПВ', 'name' => 'spv']);
+        
+        $form2->fields()->attach([
+            $klass_pd->id => ['required'=>true],
+            $rx_otc->id => ['required'=>true],
+            $atx->id => ['required'=>true],
+            $fg->id => ['required'=>true],
+            $nozologiya->id => ['required'=>true],
+            $vozrast_pol->id => ['required'=>true],
+            $pnk_1->id => ['required'=>true],
+            $spv->id => ['required'=>true],
+        ]);
+            
+        $bp2 = App\Process::create(['name' => 'Заполнение данных НО']);
+            
+        $tether1 = App\Tether::create([
+            'from_process_id' => $bp1->id,
+            'to_process_id' => $bp2->id,
+            'form_id' => $form2->id,
+            'action_text' => 'Отправить дальше'
         ]);
 
-        App\Process::create([
-            'name' => 'Подтверждение'
+        App\ProcessTask::create([
+            'process_id' => $bp1->id,
+            'title' => 'Заполните следуйщие поля',
+            'planned_time' => '180120000',
+            'deadline' => date('Y-m-d H:i:s'),
+            'responsibility_id' => App\Responsibility::where('name','НО')->first()->id
         ]);
-
+                
+        // $perviy_god = App\Field::create(['label' => 'Первый год', 'name' => 'perviy_god']);
+        // $summa_prodazh_za_perviy_god = App\Field::create(['label' => 'Сумма продаж за первый год', 'name' => 'summa_prodazh_za_perviy_god']);
+        // $prodazhi_upakovok_za_perviy_god = App\Field::create(['label' => 'Продажы упаковок за первый год', 'name' => 'prodazhi_upakovok_za_perviy_god']);
+        // $vtoroi_god = App\Field::create(['label' => 'Второй год', 'name' => 'vtoroi_god']);
+        // $summa_prodazh_za_vtoroi_god = App\Field::create(['label' => 'Сумма продаж за второй год', 'name' => 'summa_prodazh_za_vtoroi_god']);
+        // $prodazhi_upakovok_za_vtoroi_god = App\Field::create(['label' => 'Продажы упаковок за второй год', 'name' => 'prodazhi_upakovok_za_vtoroi_god']);
+        // $kppr = App\Field::create(['label' => 'КППР', 'name' => 'kppr']);
+        // $dolya_bg = App\Field::create(['label' => 'Доля БГ', 'name' => 'dolya_bg']);
+        // $dolya_mst = App\Field::create(['label' => 'Доля Мст', 'name' => 'dolya_mst']);
+        // $prirost_mst = App\Field::create(['label' => 'Прир Мст', 'name' => 'prirost_mst']);
+        // $nkpn = App\Field::create(['label' => 'НКПН', 'name' => 'nkpn']);
+        // $nkpf = App\Field::create(['label' => 'НКПФ', 'name' => 'nkpf']);
+                
+                
+        // $form_afdot->fields()->attach([
+            //     $perviy_god->id => ['required'=>true],
+            //     $summa_prodazh_za_perviy_god->id => ['required'=>true],
+            //     $prodazhi_upakovok_za_perviy_god->id => ['required'=>true],
+            //     $vtoroi_god->id => ['required'=>true],
+            //     $summa_prodazh_za_vtoroi_god->id => ['required'=>true],
+            //     $prodazhi_upakovok_za_vtoroi_god->id => ['required'=>true],
+            //     $kppr->id => ['required'=>true],
+            //     $dolya_bg->id => ['required'=>true],
+            //     $dolya_mst->id => ['required'=>true],
+            //     $prirost_mst->id => ['required'=>true],
+            //     $nkpn->id => ['required'=>true],
+            //     $nkpf->id => ['required'=>true],
+        // ]);
+        
+        
         App\Task::create([
             'title'=>'Включить комп',
             'description'=>'Не забудь про разетку',

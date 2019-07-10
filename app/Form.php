@@ -10,6 +10,6 @@ class Form extends Model
 
     public function fields()
     {
-        return $this->belongsToMany('App\Field');
+        return $this->belongsToMany('App\Field')->withPivot('required');
     }
 }

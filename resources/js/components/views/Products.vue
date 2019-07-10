@@ -1,35 +1,17 @@
 <template>
-    <div>
-        <v-dialog v-model="dialog" max-width="700" lazy v-if="form">
-            <template v-slot:activator="{ on }">
-                <v-fab-transition>
-                    <v-btn v-on="on" dark fab fixed bottom right small color="primary">
-                        <v-icon>add</v-icon>
-                    </v-btn>
-                </v-fab-transition>
-            </template>
-            <v-card>
-                <v-form action="/tasks" method="post" ref="form">
-                    <v-toolbar flat color="primary" dark>
-                        <v-toolbar-title class="font-weight-regular">{{form.name}}</v-toolbar-title>
-                    </v-toolbar>
-
-                    <v-container>
-                        <v-layout row wrap>
-                            <v-flex xs12 v-for="(field,index) in form.fields" :key="'field-'+index">
-                                <form-field
-                                    :field="{
-                                        type: field.type,
-                                        name: field.name,
-                                        label: field.label
-                                    }"
-                                />
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </v-form>
-            </v-card>
-        </v-dialog>hELLO
+    <div v-if="form">
+        <v-fab-transition>
+            <v-btn @click="addProduct" dark fab fixed bottom right small color="primary">
+                <v-icon>add</v-icon>
+            </v-btn>
+        </v-fab-transition>
+        <dynamic-form 
+        :fields="form.fields" 
+        :title="form.name" 
+        activatorEventName="addProduct"
+        actionUrl="/products"
+        method="post"
+        ></dynamic-form>
     </div>
 </template>
 
@@ -41,11 +23,26 @@ export default {
         }
     },
     data() {
-        console.log(this.form);
-
         return {
             dialog: false
         };
+    },
+    methods: {
+        addProduct() {
+            Event.fire("addProduct");
+        }
+    },
+    created() {},
+    computed: {
+        preparedFields() {
+            if (this.form)
+                return this.form.fields.map(field => {
+                    field["rules"] = field.pivot.required
+                        ? ["required"]
+                        : [true];
+                    return field;
+                });
+        }
     }
 };
 </script>

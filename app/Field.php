@@ -12,4 +12,9 @@ class Field extends Model
     {
         return $this->belongsToMany('App\Form');
     }
+
+    public function fields()
+    {
+        return $this->belongsToMany('App\Product','product_values');
+    }
 }

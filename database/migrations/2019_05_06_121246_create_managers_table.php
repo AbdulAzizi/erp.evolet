@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePcCountryTable extends Migration
+class CreateManagersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreatePcCountryTable extends Migration
      */
     public function up()
     {
-        Schema::create('pc_country', function (Blueprint $table) {
+        Schema::create('managers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('pc_id');
             $table->unsignedInteger('country_id');
-            $table->unsignedInteger('analitik_id');
-            $table->unsignedInteger('no_id');
-            $table->unsignedInteger('pc_representive_id');
+            $table->unsignedInteger('manager_id');
 
         });
     }
@@ -31,6 +29,6 @@ class CreatePcCountryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pc_country');
+        Schema::dropIfExists('managers');
     }
 }
