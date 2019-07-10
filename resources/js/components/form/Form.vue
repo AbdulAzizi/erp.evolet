@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="show" :max-width="width || '600'">
-        <v-form :action="actionUrl" :method="method" ref="form">
+        <v-form :action="actionUrl" method="POST" ref="form">
             <v-card>
                 <v-toolbar flat color="primary" dark>
                     <v-toolbar-title class="font-weight-regular">{{title}}</v-toolbar-title>
@@ -48,11 +48,8 @@ export default {
             show: this.formHasErrors() ? true : false,
 
             localFields: [
-                {
-                    type: "input",
-                    name: "_token",
-                    value: window.Laravel.csrf_token
-                },
+                { type: "input", name: "_token", value: window.Laravel.csrf_token },
+                { type: "input", name: "_method", value: this.method },
                 ...this.fields
             ]
         };

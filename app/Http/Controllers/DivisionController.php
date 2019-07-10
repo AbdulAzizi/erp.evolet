@@ -24,14 +24,20 @@ class DivisionController extends Controller
 
     public function store(Request $request)
     {
-
+        dd($request->all()); 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'parentDivisionId' => 'required'
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        dd($request->all());
+
+        $parentDivision = Division::find($request->input('parentDivisionId'));
+
+        Division::create($request->only(['name', 'abbreviation']), $parentDivision);
+
+        return redirect()->back();
     }
 }

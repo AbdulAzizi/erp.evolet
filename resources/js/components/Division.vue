@@ -95,7 +95,7 @@ export default {
         },
         addDivision: function() {
             Event.fire("addDivision", [
-                { type: "input", name: "divisionId", value: this.division.id } //<form-field />
+                { type: "input", name: "parentDivisionId", value: this.division.id } //<form-field />
             ]);
         }
     },
