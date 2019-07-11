@@ -123,11 +123,13 @@ Vue.component("division", require("./components/Division.vue").default);
 Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
 Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
 Vue.component("stats-card", require("./components/StatsCard.vue").default);
+Vue.component("avatar", require("./components/Avatar.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
 Vue.component("profile-view", require("./components/views/Profile.vue").default);
 Vue.component("products-view", require("./components/views/Products.vue").default);
+
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
