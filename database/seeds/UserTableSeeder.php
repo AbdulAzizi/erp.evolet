@@ -15,7 +15,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        // TODO fix many to many responsibility seed code
+        // TODO fix many to many responsibilities seed code
         $this->seedUsers([
             [
                 'name' => 'Akbar',
@@ -24,7 +24,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОЦМ',
                 'position' => 'Специалист',
-                'responsibility' => 'ПК',
+                'responsibilities' => ['ПК'],
             ],
             [
                 'name' => 'AbdulAziz',
@@ -34,7 +34,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОЦМ',
                 'position' => 'Специалист',
-                'responsibility' => 'Куратор ПК',
+                'responsibilities' => ['Куратор ПК'],
             ],
             [
                 'name' => 'Анвар',
@@ -44,7 +44,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОЦМ',
                 'position' => 'Руководитель',
-                'responsibility' => 'Программист',
+                'responsibilities' => ['Программист'],
             ],
             [
                 'name' => 'Сайёра',
@@ -53,7 +53,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'Evolet',
                 'position' => 'Руководитель',
-                'responsibility' => 'Директор',
+                'responsibilities' => ['Директор'],
             ],
             [
                 'name' => 'Нозим',
@@ -62,7 +62,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'НАП',
                 'position' => 'Руководитель',
-                'responsibility' => 'Аналитик',
+                'responsibilities' => ['Аналитик'],
             ],
         ]);
 
@@ -103,7 +103,9 @@ class UserTableSeeder extends Seeder
             $userData['img'] = $credential['img'];
             
             $user = User::create($userData);
-            $user->responsibilities()->attach( Responsibility::firstOrCreate(['name' => $credential['responsibility']])->id );
+            foreach ($credential['responsibilities'] as $responsibility) {
+                $user->responsibilities()->attach( Responsibility::firstOrCreate(['name' => $responsibility ])->id );
+            }
             
         }
     }
