@@ -18,6 +18,8 @@ class CreateManagersTable extends Migration
             $table->unsignedInteger('pc_id');
             $table->unsignedInteger('country_id');
             $table->unsignedInteger('manager_id');
+            $table->unsignedInteger('no_id');
+            $table->unsignedInteger('pc_representative_id');
 
         });
     }

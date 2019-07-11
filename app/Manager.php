@@ -20,4 +20,12 @@ class Manager extends Pivot
     {
         return $this->belongsTo('App\User', 'manager_id');
     }
+    public function no()
+    {
+        return $this->belongsTo('App\User', 'no_id');
+    }
+    public function pcRepresentative()
+    {
+        return $this->belongsTo('App\User', 'pc_representative_id');
+    }
 }

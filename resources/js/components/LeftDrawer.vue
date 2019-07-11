@@ -89,7 +89,7 @@ export default {
             items: this.links,
             responsibilityLinks: {
                 "Куратор ПК": [
-                    { icon: "business_center", text: "Продукты", url: "/products" }
+                    { icon: "style", text: "Проекты", url: "/projects" }
 				],
 				"НО":[
 					{ icon: "people", text: "Продукты", url: "/link" }
