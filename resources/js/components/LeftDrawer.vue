@@ -96,18 +96,21 @@ export default {
 				],
 				"ПК":[
 					{ icon: "home", text: "Продукты", url: "/link2" }
+				],
+				"Программист":[
+					{ icon: "home", text: "Линк Програмиста", url: "/#" }
 				]
             }
         };
     },
     methods: {
         getLinks(responsibilities) {
-			this.items = [];
+			this.items = [ ];
 			
             for (let key = 0; key < responsibilities.length; key++) {
 
 				let sidebarItem = this.responsibilityLinks[ responsibilities[key].name];
-				this.items = [ ...this.items, ...sidebarItem];
+				this.items = [ ...this.items, ...sidebarItem ];
 			}
 			
         }
