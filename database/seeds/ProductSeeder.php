@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
     public function run()
     {
         $pcs =  Division::withDepth()->having('depth','=', 4)->get();
-        $fields = factory(App\Field::class, 40)->create();
+        $fields = Field::all();
 
         foreach ($pcs as $pc) {
             for ($i=0; $i < 50; $i++) { 

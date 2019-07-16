@@ -12,9 +12,6 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
-        $strana = App\Field::create(['label' => 'Страна', 'name' => 'strana']);
-        $pc = App\Field::create(['label' => 'ПК', 'name' => 'pc']);
-
         /***************** First Form *********************/
         
         $form1 = App\Form::create(['name' => 'АФДОТ']);
@@ -76,18 +73,18 @@ class TableSeeder extends Seeder
             'responsibility_id' => App\Responsibility::where('name','НО')->first()->id
         ]);
                 
-        // $perviy_god = App\Field::create(['label' => 'Первый год', 'name' => 'perviy_god']);
-        // $summa_prodazh_za_perviy_god = App\Field::create(['label' => 'Сумма продаж за первый год', 'name' => 'summa_prodazh_za_perviy_god']);
-        // $prodazhi_upakovok_za_perviy_god = App\Field::create(['label' => 'Продажы упаковок за первый год', 'name' => 'prodazhi_upakovok_za_perviy_god']);
-        // $vtoroi_god = App\Field::create(['label' => 'Второй год', 'name' => 'vtoroi_god']);
-        // $summa_prodazh_za_vtoroi_god = App\Field::create(['label' => 'Сумма продаж за второй год', 'name' => 'summa_prodazh_za_vtoroi_god']);
-        // $prodazhi_upakovok_za_vtoroi_god = App\Field::create(['label' => 'Продажы упаковок за второй год', 'name' => 'prodazhi_upakovok_za_vtoroi_god']);
-        // $kppr = App\Field::create(['label' => 'КППР', 'name' => 'kppr']);
-        // $dolya_bg = App\Field::create(['label' => 'Доля БГ', 'name' => 'dolya_bg']);
-        // $dolya_mst = App\Field::create(['label' => 'Доля Мст', 'name' => 'dolya_mst']);
-        // $prirost_mst = App\Field::create(['label' => 'Прир Мст', 'name' => 'prirost_mst']);
-        // $nkpn = App\Field::create(['label' => 'НКПН', 'name' => 'nkpn']);
-        // $nkpf = App\Field::create(['label' => 'НКПФ', 'name' => 'nkpf']);
+        $perviy_god = App\Field::create(['label' => 'Первый год', 'name' => 'perviy_god']);
+        $summa_prodazh_za_perviy_god = App\Field::create(['label' => 'Сумма продаж за первый год', 'name' => 'summa_prodazh_za_perviy_god']);
+        $prodazhi_upakovok_za_perviy_god = App\Field::create(['label' => 'Продажы упаковок за первый год', 'name' => 'prodazhi_upakovok_za_perviy_god']);
+        $vtoroi_god = App\Field::create(['label' => 'Второй год', 'name' => 'vtoroi_god']);
+        $summa_prodazh_za_vtoroi_god = App\Field::create(['label' => 'Сумма продаж за второй год', 'name' => 'summa_prodazh_za_vtoroi_god']);
+        $prodazhi_upakovok_za_vtoroi_god = App\Field::create(['label' => 'Продажы упаковок за второй год', 'name' => 'prodazhi_upakovok_za_vtoroi_god']);
+        $kppr = App\Field::create(['label' => 'КППР', 'name' => 'kppr']);
+        $dolya_bg = App\Field::create(['label' => 'Доля БГ', 'name' => 'dolya_bg']);
+        $dolya_mst = App\Field::create(['label' => 'Доля Мст', 'name' => 'dolya_mst']);
+        $prirost_mst = App\Field::create(['label' => 'Прир Мст', 'name' => 'prirost_mst']);
+        $nkpn = App\Field::create(['label' => 'НКПН', 'name' => 'nkpn']);
+        $nkpf = App\Field::create(['label' => 'НКПФ', 'name' => 'nkpf']);
                 
                 
         // $form_afdot->fields()->attach([
