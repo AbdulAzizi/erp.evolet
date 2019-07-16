@@ -7,7 +7,7 @@
         hide-actions
     >
         <template v-slot:items="props">
-            <tr>
+            <tr @click="goTo(props.item)">
                 <td>{{ props.item.pc.name }}</td>
                 <td>{{ props.item.country.name }}</td>
                 <td>
@@ -38,8 +38,14 @@ export default {
             ]
         };
     },
+    methods:{
+        goTo(item){
+            console.log(item);
+            window.location.href = '/products?pc_id='+item.pc.id+'&country_id='+item.country.id;
+        }
+    },
     created() {
-        console.log(this.projects);
+        // console.log(this.projects);
     }
 };
 </script>

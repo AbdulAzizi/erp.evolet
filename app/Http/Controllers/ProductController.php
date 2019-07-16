@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Form;
-use App\Product;
-use App\Field;
-use App\Process;
 use App\Task;
-use App\ProcessTask;
+use App\Form;
+use App\Field;
+use App\Product;
+use App\Process;
 use Carbon\Carbon;
+use App\ProcessTask;
+use App\Filters\ProductFilters;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Division;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request, ProductFilters $filters)
     {
         // Get auth User
         $authUser = \Auth::user();
@@ -50,9 +53,11 @@ class ProductController extends Controller
             }
         }
         // Fetch all products and pass it to data
-        $data['products'] = Product::all();
+        $data['products'] = Product::filter($filters)->with(['country','pc','fields'])->get();
         // Return to view
         return view('products.index')->with($data);
+
+        
     }
 
     public function store(Request $request)

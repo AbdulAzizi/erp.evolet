@@ -1,17 +1,37 @@
 <template>
-    <div v-if="form">
-        <v-fab-transition>
-            <v-btn @click="addProduct" dark fab fixed bottom right small color="primary">
-                <v-icon>add</v-icon>
-            </v-btn>
-        </v-fab-transition>
-        <dynamic-form 
-        :fields="form.fields" 
-        :title="form.name" 
-        activatorEventName="addProduct"
-        actionUrl="/products"
-        method="post"
-        ></dynamic-form>
+    <div>
+        <div v-if="form">
+            <v-fab-transition>
+                <v-btn @click="addProduct" dark fab fixed bottom right small color="primary">
+                    <v-icon>add</v-icon>
+                </v-btn>
+            </v-fab-transition>
+            <dynamic-form 
+            :fields="form.fields" 
+            :title="form.name" 
+            activatorEventName="addProduct"
+            actionUrl="/products"
+            method="post"
+            ></dynamic-form>
+        </div>
+
+        <v-data-table
+        :headers="headers"
+        :items="items"
+        class="elevation-1"
+        item-key="id"
+        hide-actions
+        >
+            <template v-slot:items="props">
+                <tr @click="goTo(props.item)">
+                    <td>{{ props.item.pc.name }}</td>
+                    <td>{{ props.item.country.name }}</td>
+                    <td v-for="(field, index) in props.item.fields" :key="'field-'+index">
+                        {{ field.pivot.value }}
+                    </td>
+                </tr>
+            </template>
+        </v-data-table>
     </div>
 </template>
 
@@ -20,11 +40,18 @@ export default {
     props: {
         form: {
             required: false
+        },
+        items:{
+            required: true
         }
     },
     data() {
         return {
-            dialog: false
+            dialog: false,
+            headers: [
+                { text: "Промо Компания", value: "pc.name" },
+                { text: "Страна", value: "country.name" }
+            ]
         };
     },
     methods: {
@@ -32,7 +59,19 @@ export default {
             Event.fire("addProduct");
         }
     },
-    created() {},
+    created() {
+        
+        let fieldsHeaders = this.items[0].fields.map( function( field ){
+            return { text : field.label , value: field.pivot.value }    
+        });
+            
+        
+        console.log(fieldsHeaders);
+        
+
+        this.headers = [ ...this.headers, ...fieldsHeaders ];
+
+    },
     computed: {
         preparedFields() {
             if (this.form)
