@@ -2,6 +2,10 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use App\Field;
+use App\Process;
+use App\Form;
+use App\FieldType;
 
 class TableSeeder extends Seeder
 {
@@ -12,15 +16,29 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
+        $strana = Field::create(['label' => 'Страна', 'name' => 'strana']);
+        $pc = Field::create(['label' => 'ПК', 'name' => 'pc']);
+
         /***************** First Form *********************/
         
-        $form1 = App\Form::create(['name' => 'АФДОТ']);
+        $form1 = Form::create(['name' => 'АФДОТ']);
+
+        $manyToManyListFieldTypeID = FieldType::where('name', 'many-to-many-list')->first()->id;
+
+        $mnn = Field::create(['label' => 'МНН', 'name' => 'mnn', 'type_id' => $manyToManyListFieldTypeID]);
+        $form = Field::create(['label' => 'Форма', 'name' => 'form', 'type_id' => $manyToManyListFieldTypeID]);
+
+        $mnnListId = DB::table('list_fields')->insertGetId(['field_id' => $mnn->id, 'list_type' => 'mnns']);
+        $formListId = DB::table('list_fields')->insertGetId(['field_id' => $form->id, 'list_type' => 'drug_forms']);
+
+        DB::table('many_to_many_list_fields')->insert([
+            'list_field_id' => $mnnListId,
+            'foreign_list_field_id' => $formListId
+        ]);
         
-        $mnn = App\Field::create(['label' => 'МНН', 'name' => 'mnn']);
-        $form = App\Field::create(['label' => 'Форма', 'name' => 'form']);
-        $doza = App\Field::create(['label' => 'Доза', 'name' => 'doza']);
-        $opu = App\Field::create(['label' => 'ОПУ', 'name' => 'opu']);
-        $thchp = App\Field::create(['label' => 'ТХЧП', 'name' => 'thchp']);
+        $doza = Field::create(['label' => 'Доза', 'name' => 'doza']);
+        $opu = Field::create(['label' => 'ОПУ', 'name' => 'opu']);
+        $thchp = Field::create(['label' => 'ТХЧП', 'name' => 'thchp']);
         
         $form1->fields()->attach([
             $mnn->id => ['required'=>true],
@@ -32,18 +50,18 @@ class TableSeeder extends Seeder
             
         /*********************  BP1 *************************/
         
-        $bp1 = App\Process::create(['name' => 'Новое Лекарственное Средство']);
+        $bp1 = Process::create(['name' => 'Новое Лекарственное Средство']);
         
-        $form2 = App\Form::create(['name' => 'ПНК']);
+        $form2 = Form::create(['name' => 'ПНК']);
         
-        $klass_pd = App\Field::create(['label' => 'Класс Пд', 'name' => 'klass_pd']);
-        $rx_otc = App\Field::create(['label' => 'Rx/OTC', 'name' => 'rx_otc']);
-        $atx = App\Field::create(['label' => 'АТХ', 'name' => 'atx']);
-        $fg = App\Field::create(['label' => 'ФГ', 'name' => 'fg']);
-        $nozologiya = App\Field::create(['label' => 'Нозология', 'name' => 'nozologiya']);
-        $vozrast_pol = App\Field::create(['label' => 'Возраст/Пол', 'name' => 'vozrast_pol']);
-        $pnk_1 = App\Field::create(['label' => 'ПНК 1', 'name' => 'pnk_1']);
-        $spv = App\Field::create(['label' => 'СПВ', 'name' => 'spv']);
+        $klass_pd = Field::create(['label' => 'Класс Пд', 'name' => 'klass_pd']);
+        $rx_otc = Field::create(['label' => 'Rx/OTC', 'name' => 'rx_otc']);
+        $atx = Field::create(['label' => 'АТХ', 'name' => 'atx']);
+        $fg = Field::create(['label' => 'ФГ', 'name' => 'fg']);
+        $nozologiya = Field::create(['label' => 'Нозология', 'name' => 'nozologiya']);
+        $vozrast_pol = Field::create(['label' => 'Возраст/Пол', 'name' => 'vozrast_pol']);
+        $pnk_1 = Field::create(['label' => 'ПНК 1', 'name' => 'pnk_1']);
+        $spv = Field::create(['label' => 'СПВ', 'name' => 'spv']);
         
         $form2->fields()->attach([
             $klass_pd->id => ['required'=>true],
@@ -73,18 +91,18 @@ class TableSeeder extends Seeder
             'responsibility_id' => App\Responsibility::where('name','НО')->first()->id
         ]);
                 
-        $perviy_god = App\Field::create(['label' => 'Первый год', 'name' => 'perviy_god']);
-        $summa_prodazh_za_perviy_god = App\Field::create(['label' => 'Сумма продаж за первый год', 'name' => 'summa_prodazh_za_perviy_god']);
-        $prodazhi_upakovok_za_perviy_god = App\Field::create(['label' => 'Продажы упаковок за первый год', 'name' => 'prodazhi_upakovok_za_perviy_god']);
-        $vtoroi_god = App\Field::create(['label' => 'Второй год', 'name' => 'vtoroi_god']);
-        $summa_prodazh_za_vtoroi_god = App\Field::create(['label' => 'Сумма продаж за второй год', 'name' => 'summa_prodazh_za_vtoroi_god']);
-        $prodazhi_upakovok_za_vtoroi_god = App\Field::create(['label' => 'Продажы упаковок за второй год', 'name' => 'prodazhi_upakovok_za_vtoroi_god']);
-        $kppr = App\Field::create(['label' => 'КППР', 'name' => 'kppr']);
-        $dolya_bg = App\Field::create(['label' => 'Доля БГ', 'name' => 'dolya_bg']);
-        $dolya_mst = App\Field::create(['label' => 'Доля Мст', 'name' => 'dolya_mst']);
-        $prirost_mst = App\Field::create(['label' => 'Прир Мст', 'name' => 'prirost_mst']);
-        $nkpn = App\Field::create(['label' => 'НКПН', 'name' => 'nkpn']);
-        $nkpf = App\Field::create(['label' => 'НКПФ', 'name' => 'nkpf']);
+        // $perviy_god = Field::create(['label' => 'Первый год', 'name' => 'perviy_god']);
+        // $summa_prodazh_za_perviy_god = Field::create(['label' => 'Сумма продаж за первый год', 'name' => 'summa_prodazh_za_perviy_god']);
+        // $prodazhi_upakovok_za_perviy_god = Field::create(['label' => 'Продажы упаковок за первый год', 'name' => 'prodazhi_upakovok_za_perviy_god']);
+        // $vtoroi_god = Field::create(['label' => 'Второй год', 'name' => 'vtoroi_god']);
+        // $summa_prodazh_za_vtoroi_god = Field::create(['label' => 'Сумма продаж за второй год', 'name' => 'summa_prodazh_za_vtoroi_god']);
+        // $prodazhi_upakovok_za_vtoroi_god = Field::create(['label' => 'Продажы упаковок за второй год', 'name' => 'prodazhi_upakovok_za_vtoroi_god']);
+        // $kppr = Field::create(['label' => 'КППР', 'name' => 'kppr']);
+        // $dolya_bg = Field::create(['label' => 'Доля БГ', 'name' => 'dolya_bg']);
+        // $dolya_mst = Field::create(['label' => 'Доля Мст', 'name' => 'dolya_mst']);
+        // $prirost_mst = Field::create(['label' => 'Прир Мст', 'name' => 'prirost_mst']);
+        // $nkpn = Field::create(['label' => 'НКПН', 'name' => 'nkpn']);
+        // $nkpf = Field::create(['label' => 'НКПФ', 'name' => 'nkpf']);
                 
                 
         // $form_afdot->fields()->attach([
