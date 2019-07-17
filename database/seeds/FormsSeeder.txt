@@ -13,7 +13,7 @@ class FormsSeeder extends Seeder
     public function run()
     {
         DB::select(
-            "INSERT INTO forms (name)  
+            "INSERT INTO drug_forms (name)  
             VALUES('TAB FC'),
             ('I-INF'),
             ('I-VIAL'),

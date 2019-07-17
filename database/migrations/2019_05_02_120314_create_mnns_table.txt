@@ -13,10 +13,10 @@ class CreateMnnsTable extends Migration
      */
     public function up()
     {
-        // Schema::create('mnns', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->longText('name');
-        // });
+        Schema::create('mnns', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->longText('name');
+        });
     }
 
     /**
@@ -26,6 +26,6 @@ class CreateMnnsTable extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('mnns');
+        Schema::dropIfExists('mnns');
     }
 }
