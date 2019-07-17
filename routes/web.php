@@ -33,7 +33,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
 
     Route::get('/products','ProductController@index')->name('products.index');
     Route::post('/products','ProductController@store')->name('products.store');
-    
-    Route::get('/projects','ProjectController@index')->name('projects.index');
 
+    Route::get('/projects','ProjectController@index')->name('projects.index');
+    Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');
 });
