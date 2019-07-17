@@ -4,6 +4,6 @@
     @php
         $jsonForm = isset($form) ? $form : json_encode(null) ;
     @endphp
-        <products-view :form="{{$jsonForm}}" :items="{{$products}}"></products-view>
+        <products-view :form="{{$jsonForm}}" :products="{{$products}}"></products-view>
 
 @endsection
