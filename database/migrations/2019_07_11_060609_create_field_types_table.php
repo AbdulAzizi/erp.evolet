@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFieldsTable extends Migration
+class CreateFieldTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateFieldsTable extends Migration
      */
     public function up()
     {
-        $stringFieldTypeID = 1;
-
-        Schema::create('fields', function (Blueprint $table) use($stringFieldTypeID) {
+        Schema::create('field_types', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('label');
-            $table->integer('type_id')->default($stringFieldTypeID);
-            $table->string('name');
+            $table->string("name");
         });
     }
 
@@ -30,6 +26,6 @@ class CreateFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fields');
+        Schema::dropIfExists('field_types');
     }
 }
