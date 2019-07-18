@@ -6,29 +6,30 @@
                     <v-icon>add</v-icon>
                 </v-btn>
             </v-fab-transition>
-            <dynamic-form 
-            :fields="preparedFields" 
-            :title="form.name" 
-            activatorEventName="addProduct"
-            actionUrl="/products"
-            method="post"
+            <dynamic-form
+                :fields="preparedFields"
+                :title="form.name"
+                activatorEventName="addProduct"
+                actionUrl="/products"
+                method="post"
             ></dynamic-form>
         </div>
 
         <v-data-table
-        :headers="headers"
-        :items="items"
-        class="elevation-1"
-        item-key="id"
-        hide-actions
+            :headers="headers"
+            :items="items"
+            class="elevation-1"
+            item-key="id"
+            hide-actions
         >
             <template v-slot:items="props">
                 <tr @click="goTo(props.item)">
                     <td>{{ props.item.pc.name }}</td>
                     <td>{{ props.item.country.name }}</td>
-                    <td v-for="(field, index) in props.item.fields" :key="'field-'+index">
-                        {{ field.pivot.value }}
-                    </td>
+                    <td
+                        v-for="(field, index) in props.item.fields"
+                        :key="'field-'+index"
+                    >{{ field.pivot.value }}</td>
                 </tr>
             </template>
         </v-data-table>
@@ -41,7 +42,7 @@ export default {
         form: {
             required: false
         },
-        items:{
+        items: {
             required: true
         }
     },
@@ -71,26 +72,23 @@ export default {
         }
     },
     created() {
-        
-        let fieldsHeaders = this.items[0].fields.map( function( field ){
-            return { text : field.label , value: field.pivot.value }    
+        let fieldsHeaders = this.items[0].fields.map(function(field) {
+            return { text: field.label, value: field.pivot.value };
         });
-            
-        
+
         console.log(fieldsHeaders);
-        
 
-        this.headers = [ ...this.headers, ...fieldsHeaders ];
-
+        this.headers = [...this.headers, ...fieldsHeaders];
     },
     computed: {
         preparedFields() {
             if (this.form)
                 return this.form.fields.map(field => {
-                    field["rules"] = field.pivot && field.pivot.required
-                        ? ["required"]
-                        : [true];
-                    
+                    field["rules"] =
+                        field.pivot && field.pivot.required
+                            ? ["required"]
+                            : [true];
+
                     field["type"] = this.getDynamicFieldsType(field.type.name);
 
                     return field;
