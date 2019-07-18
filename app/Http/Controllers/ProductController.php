@@ -39,14 +39,14 @@ class ProductController extends Controller
                 // Make new field select PC
                 $data['form']['fields'][] = [
                     'label' => 'ПК',
-                    'type' => 'select',
+                    'type' => ['name' =>'select'],
                     'name' => 'pc',
                     'items' => $pcs->pluck('pc.name')
                 ];
                 // Make new field select country of PC
                 $data['form']['fields'][] = [
                     'label' => 'Страна',
-                    'type' => 'select',
+                    'type' => ['name' =>'select'],
                     'name' => 'strana',
                     'items' => $pcs->pluck('country.name')
                 ];
@@ -56,8 +56,6 @@ class ProductController extends Controller
         $data['products'] = Product::filter($filters)->with(['country','pc','fields'])->get();
         // Return to view
         return view('products.index')->with($data);
-
-        
     }
 
     public function store(Request $request)
