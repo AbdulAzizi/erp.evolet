@@ -1,6 +1,5 @@
 <template>
-    <v-app-bar color="white" app clipped-right clipped-left dense fixed light class="elevation-3">
-        <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
+    <v-app-bar color="white" app clipped-right dense fixed light class="elevation-3">
 
         <v-toolbar-title class="mr-3 align-center">
             <a href="/">
@@ -149,9 +148,6 @@ export default {
         // this.items.unshift({title: this.name+' '+this.surname, link:'/users/'+this.id});
     },
     methods: {
-        toggleDrawer() {
-            Event.fire("toggleDrawer");
-        },
         toggleRightDrawer() {
             Event.fire("toggleRightDrawer");
             this.rightDrawer = !this.rightDrawer;
