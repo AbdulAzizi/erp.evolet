@@ -15,6 +15,8 @@
                 readonly
                 :rules="rules"
                 v-bind="$attrs.textField"
+                rounded
+                filled
             />
         </template>
         <component

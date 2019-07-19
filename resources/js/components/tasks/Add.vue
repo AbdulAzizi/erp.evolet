@@ -10,7 +10,7 @@
 
         <v-card>
             <v-form action="/tasks" method="post" ref="form">
-                <input type="hidden" name="_token" :value="csrf_token">
+                <input type="hidden" name="_token" :value="csrf_token" />
 
                 <v-toolbar flat color="primary" dark>
                     <v-toolbar-title class="font-weight-regular">Новая задача</v-toolbar-title>
@@ -69,7 +69,7 @@
                             />
                         </v-flex>
                         <v-flex xs-12>
-                            <input type="hidden" name="estimatedTaskTime" :value="estimateTime">
+                            <input type="hidden" name="estimatedTaskTime" :value="estimateTime" />
 
                             <v-container grid-list-xl class="pa-0">
                                 <v-layout row wrap>
@@ -142,31 +142,37 @@
                                             type="hidden"
                                             name="priority"
                                             :value="selectedPriority"
-                                        >
+                                        />
                                     </template>
                                     <span>Приоритет</span>
                                 </v-tooltip>
                             </template>
                             <v-card>
                                 <v-card-text>
-                                    <form-field :field="{
+                                    <form-field
+                                        :field="{
                                         type: 'select',
                                         items: priorities,
                                         label: 'Приоритет',
                                         props: {'item-text': 'label'}
-                                    }" 
-                                    v-model="selectedPriority">
-
+                                    }"
+                                        v-model="selectedPriority"
+                                    >
                                         <template v-slot:item="{ item, index }">
-                                            <v-icon :color="item.color" class="mr-2">mdi-flag-variant</v-icon>
+                                            <v-icon
+                                                :color="item.color"
+                                                class="mr-2"
+                                            >mdi-flag-variant</v-icon>
                                             <span>{{ item.label }}</span>
                                         </template>
 
                                         <template v-slot:selection="{ item, index }">
-                                            <v-icon class="mr-2" :color="item.color">mdi-flag-variant</v-icon>
+                                            <v-icon
+                                                class="mr-2"
+                                                :color="item.color"
+                                            >mdi-flag-variant</v-icon>
                                             <span>{{ item.label }}</span>
                                         </template>
-                                        
                                     </form-field>
                                 </v-card-text>
                             </v-card>
@@ -202,19 +208,20 @@
                                             type="hidden"
                                             name="newTags"
                                             :value="JSON.stringify(newTags)"
-                                        >
+                                        />
                                         <input
                                             type="hidden"
                                             name="existingTags"
                                             :value="JSON.stringify(existingTags)"
-                                        >
+                                        />
                                     </template>
                                     <span>Таги</span>
                                 </v-tooltip>
                             </template>
                             <v-card>
                                 <v-card-text>
-                                    <form-field :field="{
+                                    <form-field
+                                        :field="{
                                         type: 'combobox',
                                         name: 'tags',
                                         label: 'Таги',
@@ -222,12 +229,13 @@
                                         icon: 'mdi-tag',
                                         multiple: true
                                     }"
-                                    v-model="selectedTags" />
+                                        v-model="selectedTags"
+                                    />
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
 
-                        <v-dialog v-model="reapeatTaskDialog" width="600">
+                        <v-dialog v-model="reapeatTaskDialog" width="600" v-if="false">
                             <template v-slot:activator="{ on:dialog }">
                                 <v-tooltip top>
                                     <template v-slot:activator="{ on:tooltip }">
@@ -260,6 +268,8 @@
                                                 single-line
                                                 solo
                                                 class="text-xs-center"
+                                                rounded
+                                                filled
                                             ></v-text-field>
                                         </v-flex>
                                         <v-flex xs7>
@@ -270,6 +280,8 @@
                                                 item-text="name"
                                                 return-object
                                                 solo
+                                                rounded
+                                                filled
                                             ></v-select>
                                         </v-flex>
                                     </v-layout>
@@ -278,7 +290,8 @@
                                             <v-subheader class="justify-end">в</v-subheader>
                                         </v-flex>
                                         <v-flex xs9>
-                                            <form-field :field="{
+                                            <form-field
+                                                :field="{
                                                 type: 'time',
                                                 name: 'time',
                                                 label: 'Выберите время',
@@ -291,7 +304,8 @@
                                                         'prepend-inner-icon': 'mdi-clock-outline'
                                                     }
                                                 }
-                                            }"/>
+                                            }"
+                                            />
                                         </v-flex>
                                     </v-layout>
                                     <v-layout row>
@@ -306,6 +320,8 @@
                                                 item-text="label"
                                                 return-object
                                                 solo
+                                                rounded
+                                                filled
                                             ></v-select>
                                         </v-flex>
 
@@ -316,6 +332,8 @@
                                                 min="1"
                                                 single-line
                                                 solo
+                                                rounded
+                                                filled
                                             ></v-text-field>
                                         </v-flex>
                                         <v-flex v-if="endTime.index == 1" xs3>
@@ -323,7 +341,8 @@
                                         </v-flex>
 
                                         <v-flex v-if="endTime.index == 2" xs5>
-                                            <form-field :field="{
+                                            <form-field
+                                                :field="{
                                                 type: 'date',
                                                 name: 'endsOnDate',
                                                 label: 'Выберите день',
@@ -336,7 +355,8 @@
                                                         'prepend-inner-icon': 'event'
                                                     }
                                                 }
-                                            }"/>
+                                            }"
+                                            />
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
@@ -473,7 +493,7 @@ export default {
                 this.estimateHours,
                 value
             );
-        },
+        }
     },
     methods: {
         toMilliseconds(days, hours, minutes) {
@@ -486,7 +506,7 @@ export default {
             if (!this.formHasErrors) return;
 
             e.preventDefault();
-        },
+        }
     },
     computed: {
         estimatedTaskTime() {
