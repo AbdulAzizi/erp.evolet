@@ -1,83 +1,81 @@
 <template>
-    <v-expansion-panels v-model="panels" class="divisions">
-        <v-expansion-panel class="transparent" :value="[isRoot]">
-            
-            <v-expansion-panel-header class="white">
-                <h1 class="title">{{division.name}}</h1>
-                <div class="text-xs-right" v-if="!departmentDepth">
-                    <v-menu offset-y>
-                        <template v-slot:activator="{ on }">
-                            <v-btn
-                                text
-                                icon
-                                v-on="on"
-                                class="ma-0 mr-2"
-                                @click.native.stop
-                                color="rgba(0,0,0,.54)"
-                            >
-                                <v-icon>mdi-dots-horizontal</v-icon>
-                            </v-btn>
-                        </template>
-                        <v-card>
-                            <v-list-item @click="addDivision()">
-                                <v-list-item-title>Добавить</v-list-item-title>
-                            </v-list-item>
-                            <v-list-item @click="addDivision()">
-                                <v-list-item-title>Удалить</v-list-item-title>
-                            </v-list-item>
-                        </v-card>
-
-                    </v-menu>
-                </div>
-            </v-expansion-panel-header>
-
-            <v-expansion-panel-content >
-                <v-container grid-list-lg fluid px-0 pl-5>
-                    <v-layout row wrap>
-                        <v-flex d-flex xs12 md6 lg4 xl3 v-if="division.head">
-                            <user-card :user="division.head" />
-                        </v-flex>
-                        <v-flex d-flex xs12 md6 lg4 xl3>
-                            <v-card>
-                                <v-card-text>
-                                    <h2 class="subheading">Кол-во сотрудников:</h2>
-                                    <h2 class="headline">{{ usersCount }}</h2>
-                                </v-card-text>
-                            </v-card>
-                        </v-flex>
-                    </v-layout>
-
-                    <v-layout row wrap>
-                        <v-flex
-                            d-flex
-                            xs12
-                            md6
-                            lg4
-                            xl3
-                            v-for="user in divisionWithoutHead"
-                            :key="user.id"
+    <v-expansion-panel class="transparent" >
+        <v-expansion-panel-header class="white">
+            <h1 class="title">{{division.name}}</h1>
+            <div class="text-xs-right" v-if="!departmentDepth">
+                <v-menu offset-y>
+                    <template v-slot:activator="{ on }">
+                        <v-btn
+                            text
+                            icon
+                            v-on="on"
+                            class="ma-0 mr-2"
+                            @click.native.stop
+                            color="rgba(0,0,0,.54)"
                         >
-                            <user-card :user="user" />
-                        </v-flex>
-                        <v-flex d-flex xs12 md6 lg4 xl3 v-if="isUserHead && departmentDepth">
-                            <v-card @click="addUser()" hover>
-                                <div class="display-4 text-xs-center align-center">+</div>
-                            </v-card>
-                        </v-flex>
-                    </v-layout>
+                            <v-icon>mdi-dots-horizontal</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-card>
+                        <v-list-item @click="addDivision()">
+                            <v-list-item-title>Добавить</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="addDivision()">
+                            <v-list-item-title>Удалить</v-list-item-title>
+                        </v-list-item>
+                    </v-card>
+                </v-menu>
+            </div>
+        </v-expansion-panel-header>
 
-                    <div class="mt-2">
+        <v-expansion-panel-content>
+            <v-container grid-list-lg fluid px-0 pl-5>
+                <v-layout row wrap>
+                    <v-flex d-flex xs12 md6 lg4 xl3 v-if="division.head">
+                        <user-card :user="division.head" />
+                    </v-flex>
+                    <v-flex d-flex xs12 md6 lg4 xl3>
+                        <v-card>
+                            <v-card-text>
+                                <h2 class="subheading">Кол-во сотрудников:</h2>
+                                <h2 class="headline">{{ usersCount }}</h2>
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+
+                <v-layout row wrap>
+                    <v-flex
+                        d-flex
+                        xs12
+                        md6
+                        lg4
+                        xl3
+                        v-for="user in divisionWithoutHead"
+                        :key="user.id"
+                    >
+                        <user-card :user="user" />
+                    </v-flex>
+                    <v-flex d-flex xs12 md6 lg4 xl3 v-if="isUserHead && departmentDepth">
+                        <v-card @click="addUser()" hover>
+                            <div class="display-4 text-xs-center align-center">+</div>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+
+                <div class="mt-2">
+                    <v-expansion-panels>
                         <division
                             v-for="subDivision in division.children"
                             :key="subDivision.id"
                             :division="subDivision"
                             :is-user-head="isUserHead"
                         />
-                    </div>
-                </v-container>
-            </v-expansion-panel-content>
-        </v-expansion-panel>
-    </v-expansion-panels>
+                    </v-expansion-panels>
+                </div>
+            </v-container>
+        </v-expansion-panel-content>
+    </v-expansion-panel>
 </template>
 
 <script>
