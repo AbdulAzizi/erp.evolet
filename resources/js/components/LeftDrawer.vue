@@ -3,6 +3,7 @@
         v-model="drawer"
         fixed
         floating
+        clipped
         app
         disable-resize-watcher
         mobile-break-point="960"

@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar color="white" app clipped-right dense fixed light class="elevation-3">
+    <v-app-bar color="white" app clipped-left clipped-right dense fixed light class="elevation-3">
 
         <v-toolbar-title class="mr-3 align-center">
             <a href="/">
