@@ -10,7 +10,7 @@
         <template v-slot:selection="{ item, parent, selected }">
             <v-chip color="primary" :input-value="selected" dark small>
                 <span class="pr-1">{{ item[itemText] }}</span>
-                <v-icon small @click="parent.selectItem(item)">mdi-close</v-icon>
+                <v-icon small @click="remove(item)">mdi-close</v-icon>
             </v-chip>
         </template>
     </v-autocomplete>
@@ -26,7 +26,20 @@ export default {
     },
     watch: {
         selectedItems(value) {
+            console.log(value);
+
             this.$emit("input", value);
+        }
+    },
+    methods: {
+        remove(item) {
+            if (Array.isArray(this.selectedItems)) {
+                this.selectedItems = this.selectedItems.filter(
+                    selected => selected !== item.id
+                );
+            } else {
+                this.selectedItems = null;
+            }
         }
     }
 };
