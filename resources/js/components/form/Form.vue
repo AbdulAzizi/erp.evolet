@@ -17,7 +17,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <!--//TODO Add dynamic actions -->
-                    <v-btn color="primary" flat="flat" @click="show = false">Отмена</v-btn>
+                    <v-btn color="primary" text @click="show = false">Отмена</v-btn>
                     <v-btn color="primary" type="submit" @click="submit">Добавить</v-btn>
                 </v-card-actions>
             </v-card>

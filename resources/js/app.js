@@ -10,21 +10,34 @@ window.Vue = require("vue");
 
 // add vuetify
 import Vuetify from "vuetify";
-Vue.use(Vuetify, {
-    theme: {
-        backgroundColor: "#e9ebee",
-        primary: "#b8cf41",
-        secondary: "#21353f"
-        // accent: "#689F38",
-        // success: "#4caf50",
-        // error: "#EF5350",
-        // warning: "#ffeb3b",
-        // info: "#2196f3",
-    }
-});
 import "vuetify/dist/vuetify.min.css";
-import "material-design-icons-iconfont/dist/material-design-icons.css";
+// import "material-design-icons-iconfont/dist/material-design-icons.css";
+import '@mdi/font/css/materialdesignicons.css'
 import moment from 'moment-timezone';
+
+const vuetifyOptions = {
+    theme: {
+        themes:{
+            light:{
+                primary: "#b8cf41",
+                secondary: "#21353f",
+                // accent: "#689F38",
+                // success: "#4caf50",
+                // error: "#EF5350",
+                // warning: "#ffeb3b",
+                // info: "#2196f3",
+            },
+        },
+        
+        
+    },
+    icons: {
+        iconfont: 'mdi', // default - only for display purposes
+      },
+}
+
+Vue.use(Vuetify);
+
 
 window.Event = new (class {
     constructor() {
@@ -85,14 +98,14 @@ Vue.mixin({
             let preparedColor = splittedColors[0];
             let modifier = splittedColors[1];
 
-            if(this.$vuetify.theme[preparedColor])
-                return this.$vuetify.theme[preparedColor];
-
+            if(this.$vuetify.theme.currentTheme[preparedColor])
+                return this.$vuetify.theme.currentTheme[preparedColor];
+                
             if(modifier){
                 modifier = modifier.replace("-", "");
                 return colors[preparedColor][modifier];
             }
-
+            
             return colors[preparedColor]['base'];
         },
         colorfulShadow(color) {
@@ -100,6 +113,9 @@ Vue.mixin({
                 '-webkit-box-shadow': `0 12px 20px -10px ${this.getCSSColor(color)} !important`,
                 boxShadow: `0 12px 20px -10px ${this.getCSSColor(color)} !important`
             };
+        },
+        durObj(milliseconds){
+            return this.moment.duration(moment(parseInt(milliseconds)).valueOf());
         }
     },
     computed: {
@@ -157,5 +173,6 @@ Vue.component("helpers-offset", require("./components/helpers/Offset.vue").defau
  */
 
 const app = new Vue({
-    el: "#app"
+    el: "#app",
+    vuetify: new Vuetify(vuetifyOptions)
 });

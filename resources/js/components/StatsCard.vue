@@ -107,9 +107,8 @@ export default {
     margin: 25px 0 !important;
     margin-bottom: 0 !important;
 }
-.v-sheet {
+.v-card--material-stats .v-sheet {
     display: block;
-    border-radius: 2px;
     position: relative;
     -webkit-transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
     transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);

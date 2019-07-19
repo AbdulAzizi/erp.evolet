@@ -329,8 +329,6 @@ export default {
                  .catch(function (error) {
                     console.log(error);
                 });
-
-            // console.log(val);
         },
         perviy_god(val){
             this.perviy_god_children_disabled = false;
@@ -375,9 +373,6 @@ export default {
                 if(item)
                     this.nkpfSum+=Number(item);
             }
-            console.log(this.nkpfSum);
-            
-            
         },
         validate(){
 

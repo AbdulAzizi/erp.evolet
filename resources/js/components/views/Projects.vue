@@ -3,23 +3,17 @@
         :headers="headers"
         :items="projects"
         class="elevation-1"
-        item-key="id"
-        hide-actions
+        hide-default-footer
+        @click:row="goTo"
     >
-        <template v-slot:items="props">
-            <tr @click="goTo(props.item)">
-                <td>{{ props.item.pc.name }}</td>
-                <td>{{ props.item.country.name }}</td>
-                <td>
-                    <avatar :user="props.item.no"/>
-                </td>
-                <td>
-                    <avatar :user="props.item.pc_representative"/>
-                </td>
-                <td>
-                    <avatar :user="props.item.manager"/>
-                </td>
-            </tr>
+        <template v-slot:item.no="{ item }">
+            <avatar :user="item.no"/>
+        </template>
+        <template v-slot:item.pc_representative="{ item }">
+            <avatar :user="item.pc_representative"/>
+        </template>
+        <template v-slot:item.manager="{ item }">
+            <avatar :user="item.manager"/>
         </template>
     </v-data-table>
 </template>
@@ -30,22 +24,22 @@ export default {
     data() {
         return {
             headers: [
-                { text: "Промо Компания", value: "pc_id" },
-                { text: "Страна", value: "country_id" },
-                { text: "НО", value: "no_id" },
-                { text: "ПК", value: "pc_representative_id" },
-                { text: "Куратор", value: "manager_id" }
+                { text: "Промо Компания", value: "pc.name" },
+                { text: "Страна", value: "country.name" },
+                { text: "НО", value: "no" },
+                { text: "ПК", value: "pc_representative" },
+                { text: "Куратор", value: "manager" }
             ]
         };
     },
-    methods:{
-        goTo(item){
-            console.log(item);
-            window.location.href = '/products?pc_id='+item.pc.id+'&country_id='+item.country.id;
+    methods: {
+        goTo(item) {
+            window.location.href =
+                "/products?pc_id=" +
+                item.pc.id +
+                "&country_id=" +
+                item.country.id;
         }
-    },
-    created() {
-        // console.log(this.projects);
     }
 };
 </script>

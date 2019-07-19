@@ -3,7 +3,6 @@
         v-model="pickerDialog"
         ref="pickerDialog"
         :width="width ? width : '290px'"
-        lazy
         v-bind="$attrs.dialog"
     >
         <template v-slot:activator="{ on:dialog }">
@@ -29,12 +28,12 @@
                         picker-type="time"
                         label="Выберите время"
                         v-model="time"
-                        prepend-icon="access_time"
+                        prepend-icon="mdi-clock-outline"
                     />
                 </v-flex>
                 <v-flex xs12 class="text-xs-right ma-1">
-                    <v-btn flat color="primary" @click="pickerDialog = false">Отмена</v-btn>
-                    <v-btn flat color="primary" @click="saveData()">Выбрать</v-btn>
+                    <v-btn text color="primary" @click="pickerDialog = false">Отмена</v-btn>
+                    <v-btn text color="primary" @click="saveData()">Выбрать</v-btn>
                 </v-flex>
             </v-layout>
         </component>

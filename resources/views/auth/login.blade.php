@@ -41,7 +41,7 @@
                             <v-text-field
                             name="email"
                             label="Email"
-                            prepend-icon="person"
+                            prepend-icon="mdi-account"
                             :error-messages="{{ json_encode($errors->get('email')) }}"
                             ></v-text-field>
                     
@@ -49,13 +49,13 @@
                             name="password"
                             type="password"
                             label="Пароль"
-                            prepend-icon="lock"
+                            prepend-icon="mdi-lock"
                             :error-messages="{{ json_encode($errors->get('password')) }}"
                             ></v-text-field>
                         
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn flat color="primary">Забыл пароль</v-btn>
+                        <v-btn text color="primary">Забыл пароль</v-btn>
                         <v-spacer></v-spacer>
                         <v-btn type="submit" color="primary">Вход</v-btn>
                     </v-card-actions>

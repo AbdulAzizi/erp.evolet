@@ -8,9 +8,9 @@
             v-bind="$attrs"
         >
             <template v-slot:selection="{ item, parent, selected }">
-                <v-chip color="primary" :selected="selected" dark small>
+                <v-chip color="primary" :input-value="selected" dark small>
                     <span class="pr-1">{{ item[itemText] }}</span>
-                    <v-icon small @click="parent.selectItem(item)">close</v-icon>
+                    <v-icon small @click="parent.selectItem(item)">mdi-close</v-icon>
                 </v-chip>
             </template>
         </v-combobox>

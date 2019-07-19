@@ -51,46 +51,46 @@
                 </v-layout>
             </v-container>
 
-            <v-tabs v-model="tabs" centered color="transparent" icons-and-text>
+            <v-tabs v-model="tabs" centered background-color="transparent" icons-and-text>
                 <v-tabs-slider color="primary"></v-tabs-slider>
 
                 <v-tab class href="#mobile-tabs-5-1">
                     Задачи
-                    <v-icon color="primary">ballot</v-icon>
+                    <v-icon color="primary">mdi-phone</v-icon>
                 </v-tab>
 
                 <v-tab class href="#mobile-tabs-5-2">
                     Текст
-                    <v-icon color="primary">phone</v-icon>
+                    <v-icon color="primary">mdi-airballoon</v-icon>
                 </v-tab>
 
                 <v-tab class href="#mobile-tabs-5-3">
                     Текст
-                    <v-icon color="primary">favorite</v-icon>
+                    <v-icon color="primary">mdi-animation</v-icon>
                 </v-tab>
 
                 <v-tab class href="#mobile-tabs-5-4">
                     Текст
-                    <v-icon color="primary">account_box</v-icon>
+                    <v-icon color="primary">mdi-blinds</v-icon>
                 </v-tab>
                 <v-tab class href="#mobile-tabs-5-5">
                     Текст
-                    <v-icon color="primary">phone</v-icon>
+                    <v-icon color="primary">mdi-cake-variant</v-icon>
                 </v-tab>
 
                 <v-tab class href="#mobile-tabs-5-6">
                     Текст
-                    <v-icon color="primary">favorite</v-icon>
+                    <v-icon color="primary">mdi-cards-heart</v-icon>
                 </v-tab>
 
                 <v-tab class href="#mobile-tabs-5-7">
                     Текст
-                    <v-icon color="primary">account_box</v-icon>
+                    <v-icon color="primary">mdi-chess-knight</v-icon>
                 </v-tab>
             </v-tabs>
         </v-card>
 
-        <v-tabs-items v-model="tabs">
+        <v-tabs-items v-model="tabs" class="transparent">
             <v-tab-item value="mobile-tabs-5-1">
                 <div>
                     <v-container grid-list-lg fluid pa-0 pt-3>
@@ -98,7 +98,7 @@
                             <v-flex xs6 md3>
                                 <stats-card
                                     color="blue"
-                                    icon="rate_review"
+                                    icon="mdi-calendar-text"
                                     title="Новые задачи"
                                     value="45"
                                 ></stats-card>
@@ -106,18 +106,18 @@
                             <v-flex xs6 md3>
                                 <stats-card
                                     color="orange"
-                                    icon="update"
+                                    icon="mdi-progress-clock"
                                     title="В процессе"
                                     value="12"
                                 ></stats-card>
                             </v-flex>
                             <v-flex xs6 md3>
-                                <stats-card color="green" icon="done" title="Завершенно" value="30"></stats-card>
+                                <stats-card color="green" icon="mdi-calendar-multiple-check" title="Завершенно" value="30"></stats-card>
                             </v-flex>
                             <v-flex xs6 md3>
                                 <stats-card
                                     color="red"
-                                    icon="priority_high"
+                                    icon="mdi-clock-alert-outline"
                                     title="Просрочено"
                                     value="4"
                                 ></stats-card>
@@ -125,7 +125,7 @@
                             <v-flex xs6 md3>
                                 <stats-card
                                     color="indigo "
-                                    icon="redo"
+                                    icon="mdi-share"
                                     title="Делегировано"
                                     value="11"
                                 ></stats-card>
@@ -133,7 +133,7 @@
                             <v-flex xs6 md3>
                                 <stats-card
                                     color="pink"
-                                    icon="rotate_90_degrees_ccw"
+                                    icon="mdi-debug-step-over"
                                     title="Перенесено"
                                     value="5"
                                 ></stats-card>
@@ -141,7 +141,7 @@
                             <v-flex xs6 md3>
                                 <stats-card
                                     color="purple"
-                                    icon="event_note"
+                                    icon="mdi-calendar-multiple"
                                     title="Всего задач"
                                     value="97"
                                 ></stats-card>
@@ -149,7 +149,7 @@
                             <v-flex xs6 md3>
                                 <stats-card
                                     color="primary"
-                                    icon="watch_later"
+                                    icon="mdi-calendar-clock"
                                     title="Время на задачи"
                                     value="7д 12ч 34м"
                                 ></stats-card>
@@ -160,17 +160,17 @@
                                 <card color="primary" title="Задачи" text="По преоритетам">
                                     <v-list dense>
                                         <template v-for="(priority,key) in priorities">
-                                            <v-list-tile href="#" :key="'list-tile-'+key">
-                                                <v-list-tile-action>
-                                                    <v-icon :color="priority.color">flag</v-icon>
-                                                </v-list-tile-action>
-                                                <v-list-tile-content>
-                                                    <v-list-tile-title>{{priority.title}}</v-list-tile-title>
-                                                </v-list-tile-content>
-                                                <v-list-tile-action>
-                                                    <v-list-tile-action-text>{{priority.count}}</v-list-tile-action-text>
-                                                </v-list-tile-action>
-                                            </v-list-tile>
+                                            <v-list-item href="#" :key="'list-item-'+key">
+                                                <v-list-item-action>
+                                                    <v-icon :color="priority.color">mdi-flag-variant</v-icon>
+                                                </v-list-item-action>
+                                                <v-list-item-content>
+                                                    <v-list-item-title>{{priority.title}}</v-list-item-title>
+                                                </v-list-item-content>
+                                                <v-list-item-action>
+                                                    <v-list-item-action-text>{{priority.count}}</v-list-item-action-text>
+                                                </v-list-item-action>
+                                            </v-list-item>
                                             <v-divider v-if="key < priorities.length-1" :key="key"></v-divider>
                                         </template>
                                     </v-list>

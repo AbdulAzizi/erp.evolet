@@ -40,7 +40,6 @@ export default {
             this.from['label'] = 'Постановщик';
 
             items.push(this.assignee,this.from);
-            console.log(items);
 
             return items;
         }

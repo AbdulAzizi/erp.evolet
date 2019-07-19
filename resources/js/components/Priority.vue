@@ -2,19 +2,19 @@
     <div>
         <v-tooltip top v-if="icon">
             <template v-slot:activator="{ on:tooltip }">
-                <v-icon v-on="{ ...tooltip }" :color="priorities[id].color" :class="classes">flag</v-icon>
+                <v-icon v-on="{ ...tooltip }" :color="priorities[id].color" :class="classes">mdi-flag-variant</v-icon>
             </template>
             <span>{{priorities[id].label}} Приоритет</span>
         </v-tooltip>
-        <v-list-tile avatar v-else>
-            <v-list-tile-avatar>
-                <v-icon :color="priorities[id].color" :class="classes">flag</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-                <v-list-tile-title>{{priorities[id].label}}</v-list-tile-title>
-                <v-list-tile-sub-title>Преоритет</v-list-tile-sub-title>
-            </v-list-tile-content>
-        </v-list-tile>
+        <v-list-item v-else>
+            <v-list-item-avatar>
+                <v-icon :color="priorities[id].color" :class="classes">mdi-flag-variant</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+                <v-list-item-title>{{priorities[id].label}}</v-list-item-title>
+                <v-list-item-subtitle>Преоритет</v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
     </div>
 </template>
 

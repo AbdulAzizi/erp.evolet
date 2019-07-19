@@ -12,11 +12,11 @@
         class="elevation-3"
     >
         <v-list dense>
-            <v-list-tile v-if="mini" @click.stop="mini = !mini">
-                <v-list-tile-action>
-                    <v-icon>chevron_right</v-icon>
-                </v-list-tile-action>
-            </v-list-tile>
+            <v-list-item v-if="mini" @click.stop="mini = !mini">
+                <v-list-item-action>
+                    <v-icon>mdi-chevron-right</v-icon>
+                </v-list-item-action>
+            </v-list-item>
             <div v-for="(item,key) in items" :key="'item'+key">
                 <v-list-group
                     v-if="item.items"
@@ -24,41 +24,41 @@
                     :prepend-icon="item.icon"
                     no-action
                 >
-                    <v-list-tile slot="activator">
-                        <v-list-tile-content>
-                            <v-list-tile-title>{{ item.text }}</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
+                    <v-list-item slot="activator">
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.text }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
 
-                    <v-list-tile
+                    <v-list-item
                         v-for="(subItem,key) in item.items"
                         :key="'sybItem'+key"
                         :href="subItem.url"
                     >
-                        <!-- <v-list-tile-action>
+                        <!-- <v-list-item-action>
 								<v-icon>{{ subItem.icon }}</v-icon>
-                        </v-list-tile-action>-->
+                        </v-list-item-action>-->
 
-                        <v-list-tile-content>
-                            <v-list-tile-title>{{ subItem.text }}</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ subItem.text }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
                 </v-list-group>
 
-                <v-list-tile v-else :href="item.url">
-                    <v-list-tile-action>
+                <v-list-item v-else :href="item.url">
+                    <v-list-item-action>
                         <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-tile-action>
+                    </v-list-item-action>
 
-                    <v-list-tile-content>
-                        <v-list-tile-title>{{ item.text }}</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+                    <v-list-item-content>
+                        <v-list-item-title>{{ item.text }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
             </div>
         </v-list>
 
         <v-btn bottom left icon fixed @click.stop="mini = !mini" v-if="!mini">
-            <v-icon>chevron_left</v-icon>
+            <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
     </v-navigation-drawer>
 </template>
@@ -89,7 +89,7 @@ export default {
             items: this.links,
             responsibilityLinks: {
                 "Куратор ПК": [
-                    { icon: "style", text: "Проекты", url: "/projects" }
+                    { icon: "mdi-projector-screen", text: "Проекты", url: "/projects" }
 				],
 				"НО":[
 					{ icon: "people", text: "Продукты", url: "/link" }
@@ -98,7 +98,10 @@ export default {
 					{ icon: "home", text: "Продукты", url: "/link2" }
 				],
 				"Программист":[
-					{ icon: "home", text: "Линк Програмиста", url: "/#" }
+					{ icon: "mdi-account-key", text: "Линк Програмиста", url: "/#" }
+				],
+				"Директор":[
+					{ icon: "mdi-account-key", text: "Линк Директор", url: "/#" }
 				]
             }
         };
@@ -116,7 +119,6 @@ export default {
         }
     },
     created() {
-		// console.log(this.responsibilityLinks);
 		this.getLinks(this.auth_user.responsibilities);
 
         Event.listen("toggleDrawer", () => (this.drawer = !this.drawer));

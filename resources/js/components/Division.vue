@@ -1,39 +1,41 @@
 <template>
-    <div>
-        <v-expansion-panel expand class="elevation-0" :value="[isRoot]">
-            <v-expansion-panel-content class="transparent">
-                <template v-slot:header>
-                    <h1 class="title">{{division.name}}</h1>
-                    <div class="text-xs-right" v-if="!departmentDepth">
-                        <v-menu offset-y>
-                            <template v-slot:activator="{ on }">
-                                <v-btn
-                                    flat
-                                    icon
-                                    v-on="on"
-                                    class="ma-0 mr-2"
-                                    @click.native.stop
-                                    color="rgba(0,0,0,.54)"
-                                >
-                                    <v-icon>more_horiz</v-icon>
-                                </v-btn>
-                            </template>
-                            <v-list>
-                                <v-list-tile @click="addDivision()">
-                                    <v-list-tile-title>Добавить</v-list-tile-title>
-                                </v-list-tile>
-                                <v-list-tile @click="addDivision()">
-                                    <v-list-tile-title>Удалить</v-list-tile-title>
-                                </v-list-tile>
-                            </v-list>
-                        </v-menu>
-                    </div>
-                </template>
+    <v-expansion-panels v-model="panels" class="divisions">
+        <v-expansion-panel class="transparent" :value="[isRoot]">
+            
+            <v-expansion-panel-header class="white">
+                <h1 class="title">{{division.name}}</h1>
+                <div class="text-xs-right" v-if="!departmentDepth">
+                    <v-menu offset-y>
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                text
+                                icon
+                                v-on="on"
+                                class="ma-0 mr-2"
+                                @click.native.stop
+                                color="rgba(0,0,0,.54)"
+                            >
+                                <v-icon>mdi-dots-horizontal</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-card>
+                            <v-list-item @click="addDivision()">
+                                <v-list-item-title>Добавить</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item @click="addDivision()">
+                                <v-list-item-title>Удалить</v-list-item-title>
+                            </v-list-item>
+                        </v-card>
 
+                    </v-menu>
+                </div>
+            </v-expansion-panel-header>
+
+            <v-expansion-panel-content >
                 <v-container grid-list-lg fluid px-0 pl-5>
                     <v-layout row wrap>
                         <v-flex d-flex xs12 md6 lg4 xl3 v-if="division.head">
-                            <user-card :user="division.head"/>
+                            <user-card :user="division.head" />
                         </v-flex>
                         <v-flex d-flex xs12 md6 lg4 xl3>
                             <v-card>
@@ -55,7 +57,7 @@
                             v-for="user in divisionWithoutHead"
                             :key="user.id"
                         >
-                            <user-card :user="user"/>
+                            <user-card :user="user" />
                         </v-flex>
                         <v-flex d-flex xs12 md6 lg4 xl3 v-if="isUserHead && departmentDepth">
                             <v-card @click="addUser()" hover>
@@ -75,7 +77,7 @@
                 </v-container>
             </v-expansion-panel-content>
         </v-expansion-panel>
-    </div>
+    </v-expansion-panels>
 </template>
 
 <script>
@@ -91,17 +93,23 @@ export default {
     props: ["division", "isUserHead", "isRoot"],
     methods: {
         addUser: function() {
-            Event.fire("addUser", [{ type: 'input', name: 'divisionId', value: this.division.id }]);
+            Event.fire("addUser", [
+                { type: "input", name: "divisionId", value: this.division.id }
+            ]);
         },
         addDivision: function() {
             Event.fire("addDivision", [
-                { type: "input", name: "parentDivisionId", value: this.division.id } //<form-field />
+                {
+                    type: "input",
+                    name: "parentDivisionId",
+                    value: this.division.id
+                } //<form-field />
             ]);
         }
     },
     data() {
         return {
-            some: false
+            panels: []
         };
     },
     computed: {
@@ -124,7 +132,7 @@ export default {
 </script>
 
 <style>
-.v-expansion-panel__header {
-    background: white;
+.divisions .v-expansion-panel:before {
+    box-shadow: none;
 }
 </style>

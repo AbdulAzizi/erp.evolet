@@ -102,15 +102,15 @@ export default {
 .material--card.v-card .v-offset .category {
     color: hsla(0, 0%, 100%, 0.62);
 }
-.v-card .category {
+.material--card .v-card .category {
     margin: 0;
 }
-.v-card .v-card__actions {
+.material--card .v-card .v-card__actions {
     margin: 0 16px 0;
     padding: 10px 0 10px;
     line-height: 22px;
 }
-.v-card .title {
+.material--card .v-card .title {
     margin-top: 0;
     line-height: 1.5em!important;
     letter-spacing: 0!important;

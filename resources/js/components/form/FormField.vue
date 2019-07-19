@@ -67,7 +67,9 @@ const getBaseField = field => {
         label: field.label,
         rules: getRuleFunctions(field.rules),
         "prepend-icon": field.icon,
-        hint: field.hint
+        hint: field.hint,
+        filled: true,
+        rounded: true
     };
 
     return baseInput;

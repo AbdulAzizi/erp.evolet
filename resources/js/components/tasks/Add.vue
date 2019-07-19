@@ -1,9 +1,9 @@
 <template>
-    <v-dialog v-model="dialog" max-width="700" lazy>
+    <v-dialog v-model="dialog" max-width="700">
         <template v-slot:activator="{ on }">
             <v-fab-transition>
-                <v-btn v-on="on" dark fab fixed bottom right small color="primary">
-                    <v-icon>add</v-icon>
+                <v-btn v-on="on" dark fab fixed bottom right large color="primary">
+                    <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </v-fab-transition>
         </template>
@@ -29,7 +29,7 @@
                                 type: 'string',
                                 name: 'title',
                                 label: 'Название',
-                                icon: 'content_paste',
+                                icon: 'mdi-rename-box',
                                 rules: ['required'],
                             }"
                             />
@@ -40,7 +40,7 @@
                                 type: 'text',
                                 name: 'description',
                                 label: 'Описание',
-                                icon: 'description',
+                                icon: 'mdi-text-subject',
                             }"
                             />
                         </v-flex>
@@ -51,7 +51,7 @@
                                 users: users,
                                 name: 'assignees',
                                 label: 'Исполнители',
-                                icon: 'person',
+                                icon: 'mdi-account-tie',
                                 hint: 'У каждого исполнителя будет своя отдельная задача',
                                 rules: ['required']
                             }"
@@ -63,7 +63,7 @@
                                 type: 'date-time',
                                 name: 'deadline',
                                 label: 'Дедлайн',
-                                icon: 'event',
+                                icon: 'mdi-calendar-clock',
                                 rules: ['required']
                             }"
                             />
@@ -75,7 +75,7 @@
                                 <v-layout row wrap>
                                     <v-flex xs12 class="mb-0 pb-0">
                                         <h1
-                                            class="subheading grey--text text--darken-1 ml-1"
+                                            class="subtitle-1 grey--text text--darken-1 ml-1"
                                         >Время на задачу</h1>
                                     </v-flex>
                                     <v-flex xs12 md4 class="pt-0">
@@ -83,7 +83,7 @@
                                             :field="{
                                             type: 'number',
                                             label: 'Дни',
-                                            icon: 'timelapse',
+                                            icon: 'mdi-timelapse',
                                             rules: [rules.taskTimeRule]
                                         }"
                                             v-model="estimateDays"
@@ -128,15 +128,15 @@
                                     <template v-slot:activator="{ on:tooltip }">
                                         <v-btn
                                             v-on="{ ...tooltip, ...dialog }"
-                                            flat
-                                            round
+                                            text
+                                            rounded
                                             min-width="0"
                                             style="min-width:0"
                                             class="ma-0 grey--text px-2 text--darken-1"
                                         >
                                             <v-icon
                                                 :color="selectedPriority === null ? '' : priorities[selectedPriority].color "
-                                            >flag</v-icon>
+                                            >mdi-flag-variant</v-icon>
                                         </v-btn>
                                         <input
                                             type="hidden"
@@ -158,12 +158,12 @@
                                     v-model="selectedPriority">
 
                                         <template v-slot:item="{ item, index }">
-                                            <v-icon :color="item.color" class="mr-2">flag</v-icon>
+                                            <v-icon :color="item.color" class="mr-2">mdi-flag-variant</v-icon>
                                             <span>{{ item.label }}</span>
                                         </template>
 
                                         <template v-slot:selection="{ item, index }">
-                                            <v-icon class="mr-2" :color="item.color">flag</v-icon>
+                                            <v-icon class="mr-2" :color="item.color">mdi-flag-variant</v-icon>
                                             <span>{{ item.label }}</span>
                                         </template>
                                         
@@ -178,15 +178,15 @@
                                     <template v-slot:activator="{ on:tooltip }">
                                         <v-btn
                                             v-on="{ ...tooltip, ...dialog }"
-                                            flat
-                                            round
+                                            text
+                                            rounded
                                             min-width="0"
                                             style="min-width:0"
                                             class="ma-0 grey--text px-2 text--darken-1"
                                         >
                                             <v-icon
                                                 :color="selectedTags.length ? 'primary' : '' "
-                                            >local_offer</v-icon>
+                                            >mdi-tag</v-icon>
                                             <span>
                                                 <span
                                                     v-for="(selectedTag, key) in selectedTags"
@@ -219,7 +219,7 @@
                                         name: 'tags',
                                         label: 'Таги',
                                         items: tags,
-                                        icon: 'local_offer',
+                                        icon: 'mdi-tag',
                                         multiple: true
                                     }"
                                     v-model="selectedTags" />
@@ -227,19 +227,19 @@
                             </v-card>
                         </v-dialog>
 
-                        <v-dialog v-model="reapeatTaskDialog" width="600" lazy>
+                        <v-dialog v-model="reapeatTaskDialog" width="600">
                             <template v-slot:activator="{ on:dialog }">
                                 <v-tooltip top>
                                     <template v-slot:activator="{ on:tooltip }">
                                         <v-btn
                                             v-on="{ ...tooltip, ...dialog }"
-                                            flat
-                                            round
+                                            text
+                                            rounded
                                             min-width="0"
                                             style="min-width:0"
                                             class="ma-0 grey--text px-2 text--darken-1"
                                         >
-                                            <v-icon>repeat</v-icon>
+                                            <v-icon>mdi-repeat</v-icon>
                                         </v-btn>
                                     </template>
                                     <span>Повторение</span>
@@ -288,7 +288,7 @@
                                                         'single-line': true,
                                                         solo: true,
                                                         'single-line': true,
-                                                        'prepend-inner-icon': 'access_time'
+                                                        'prepend-inner-icon': 'mdi-clock-outline'
                                                     }
                                                 }
                                             }"/>
@@ -449,8 +449,6 @@ export default {
             }
         },
         estimateTime(value) {
-            console.log(!!this.estimateTime);
-
             this.$refs["estimateDays"].validate(true);
             this.$refs["estimateHours"].validate(true);
             this.$refs["estimateMinutes"].validate(true);
@@ -479,8 +477,6 @@ export default {
     },
     methods: {
         toMilliseconds(days, hours, minutes) {
-            console.log(days * 86400000 + hours * 3600000 + minutes * 60000);
-
             return days * 86400000 + hours * 3600000 + minutes * 60000;
         },
         submit(e) {

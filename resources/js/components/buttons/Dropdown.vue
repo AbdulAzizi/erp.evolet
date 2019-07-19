@@ -20,24 +20,24 @@
 
             <v-list three-lines dense class="dropdown-btn-list">
 
-                <v-list-tile v-if="items.length == 0">
-                    <v-list-tile-content>
-                        <v-list-tile-title> {{ tooltip }} отсутствуют </v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+                <v-list-item v-if="items.length == 0">
+                    <v-list-item-content>
+                        <v-list-item-title> {{ tooltip }} отсутствуют </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
 
                 <template v-for="(item, key) in items">
-                    <v-list-tile :key="'item-'+key" avatar href="#">
-                        <v-list-tile-avatar class="mt-2">
+                    <v-list-item :key="'item-'+key" href="#">
+                        <v-list-item-avatar class="mt-2">
                             <img :src="item.data.avatar">
-                        </v-list-tile-avatar>
+                        </v-list-item-avatar>
 
-                        <v-list-tile-content>
-                            <!-- <v-list-tile-title>{{ item.data.title }}</v-list-tile-title> -->
-                            <v-list-tile-title v-html="item.data.title"></v-list-tile-title>
-                            <v-list-tile-sub-title>{{ moment(item.created_at).fromNow() }}</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
+                        <v-list-item-content>
+                            <!-- <v-list-item-title>{{ item.data.title }}</v-list-item-title> -->
+                            <v-list-item-title v-html="item.data.title"></v-list-item-title>
+                            <v-list-item-subtitle>{{ moment(item.created_at).fromNow() }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
                     <v-divider
                     :key="'item-divider-'+key"
                     v-if="key !== items.length-1"

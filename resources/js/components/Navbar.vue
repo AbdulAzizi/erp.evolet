@@ -1,6 +1,6 @@
 <template>
-    <v-toolbar color="white" app clipped-right clipped-left dense fixed light class="elevation-3">
-        <v-toolbar-side-icon @blur="toggleDrawer"></v-toolbar-side-icon>
+    <v-app-bar color="white" app clipped-right clipped-left dense fixed light class="elevation-3">
+        <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
 
         <v-toolbar-title class="mr-3 align-center">
             <a href="/">
@@ -11,13 +11,13 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items class="mr-2">
-            <v-btn color="grey darken-1" flat href="/division">{{user.division.abbreviation}}</v-btn>
+            <v-btn color="grey darken-1" text href="/division">{{user.division.abbreviation}}</v-btn>
         </v-toolbar-items>
 
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on" :href="appPath + 'tasks'">
-                    <v-icon color="grey darken-1">event_note</v-icon>
+                    <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
                 </v-btn>
             </template>
             <span>Задачи</span>
@@ -26,22 +26,24 @@
         <dropdown-btn 
         :items="auth.notifications"
         tooltip="Уведомления"
-        icon="notifications"
+        icon="mdi-bell"
         max-width="500"
         ></dropdown-btn>
         <!-- // TODO if there are not notifications display proper text -->
 
         <v-menu offset-y left>
-            <v-avatar slot="activator" size="40" class="ml-2">
-                <img v-if="user.img" :src="photo(user.img)" alt="avatar">
-                <img
-                    v-else
-                    :src="photo('green-solo-logo.svg')"
-                    style="border-radius:0;"
-                    alt="avatar"
-                    class="pa-1 pt-2"
-                >
-            </v-avatar>
+            <template v-slot:activator="{ on }">
+                <v-avatar v-on="on" size="40" class="ml-2">
+                    <img v-if="user.img" :src="photo(user.img)" alt="avatar">
+                    <img
+                        v-else
+                        :src="photo('green-solo-logo.svg')"
+                        style="border-radius:0;"
+                        alt="avatar"
+                        class="pa-1 pt-2"
+                    >
+                </v-avatar>
+            </template>
             <div>
                 <v-container grid-list-md text-xs-center class="pa-3 white">
                     <v-layout row wrap>
@@ -72,19 +74,19 @@
                         </v-flex>
                     </v-layout>
                 </v-container>
+                <v-list dense class="pa-0">
 
-                <v-list dense>
                     <v-divider></v-divider>
 
-                    <v-list-tile v-for="(item, index) in items" :href="item.link" :key="index">
-                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                    </v-list-tile>
+                    <v-list-item v-for="(item, index) in items" :href="item.link" :key="index">
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
 
-                    <v-list-tile key="logoutButton" @click="$refs.logoutform.submit()">
-                        <v-list-tile-content>
-                            <v-list-tile-title>Выйти</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
+                    <v-list-item key="logoutButton" @click="$refs.logoutform.submit()">
+                        <v-list-item-content>
+                            <v-list-item-title>Выйти</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
 
                     <form ref="logoutform" action="/logout" method="POST" style="display: none;">
                         <input type="hidden" name="_token" :value="csrf">
@@ -103,22 +105,22 @@
 	        </v-avatar>
 	        <div>
 		        <v-list light>
-			        <v-list-tile
+			        <v-list-item
 			          v-for="(item, index) in items"
 			          :href="item.link"
 			          :key="index"
 			          @click=""
 			        >
-			          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-			        </v-list-tile>
-			        <v-list-tile
+			          <v-list-item-title>{{ item.title }}</v-list-item-title>
+			        </v-list-item>
+			        <v-list-item
 					key="logoutButton"
 					@click="$refs.logoutform.submit()"
 					>
-						<v-list-tile-content>
-		               		<v-list-tile-title>Выйти</v-list-tile-title>
-			            </v-list-tile-content>
-					</v-list-tile>
+						<v-list-item-content>
+		               		<v-list-item-title>Выйти</v-list-item-title>
+			            </v-list-item-content>
+					</v-list-item>
 				</v-list>
 				<form ref="logoutform"  action="/logout" method="POST" style="display: none;">
 					<input type="hidden" name="_token" :value="csrf">
@@ -129,7 +131,7 @@
         <!-- <v-btn @blur="toggleRightDrawer" icon>
             <v-icon :style="rightDrawer ? '':'-ms-transform: rotate(180deg); -webkit-transform: rotate(180deg);transform: rotate(180deg);'">chevron_left</v-icon>
         </v-btn>-->
-    </v-toolbar>
+    </v-app-bar>
 </template>
 
 <script>
@@ -145,7 +147,6 @@ export default {
     }),
     created() {
         // this.items.unshift({title: this.name+' '+this.surname, link:'/users/'+this.id});
-        console.log(this.auth.notifications);
     },
     methods: {
         toggleDrawer() {
@@ -163,7 +164,7 @@ export default {
 a {
     text-decoration: none;
 }
-.v-toolbar__items .v-btn {
+.v-app-bar__items .v-btn {
     border-radius: 0;
 }
 </style>

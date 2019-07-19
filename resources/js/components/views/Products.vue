@@ -3,7 +3,7 @@
         <div v-if="form">
             <v-fab-transition>
                 <v-btn @click="addProduct" dark fab fixed bottom right small color="primary">
-                    <v-icon>add</v-icon>
+                    <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </v-fab-transition>
             <dynamic-form 
@@ -17,21 +17,15 @@
 
         <v-data-table
         :headers="headers"
-        :items="items"
-        class="elevation-1"
+        :items="preparedItems"
         item-key="id"
-        hide-actions
-        >
-            <template v-slot:items="props">
-                <tr @click="goTo(props.item)">
-                    <td>{{ props.item.pc.name }}</td>
-                    <td>{{ props.item.country.name }}</td>
-                    <td v-for="(field, index) in props.item.fields" :key="'field-'+index">
-                        {{ field.pivot.value }}
-                    </td>
-                </tr>
-            </template>
-        </v-data-table>
+        hide-default-footer
+        :items-per-page="-1"
+        :fixed-header="true"
+        height="92vh"
+        dense
+        />
+
     </div>
 </template>
 
@@ -49,9 +43,10 @@ export default {
         return {
             dialog: false,
             headers: [
-                { text: "Промо Компания", value: "pc.name" },
-                { text: "Страна", value: "country.name" }
-            ]
+                { text: "Промо Компания", value: "pc.name", class:["primary", "table-header"] },
+                { text: "Страна", value: "country.name", class:["primary", "table-header"] }
+            ],
+            preparedItems:[]
         };
     },
     methods: {
@@ -60,25 +55,31 @@ export default {
         }
     },
     created() {
-        
+        // prepare headers
         let fieldsHeaders = this.items[0].fields.map( function( field ){
-            return { text : field.label , value: field.pivot.value }    
+            return { text : field.label , value: field.label, class:["primary", "table-header"] }    
         });
-            
-        
-        console.log(fieldsHeaders);
-        
-
+        // merge headers
         this.headers = [ ...this.headers, ...fieldsHeaders ];
 
+        // change the structure of items
+        this.preparedItems = this.items.map( function( item ){
+
+            let preparedFields = {};
+            
+            for (const field of item.fields) {
+                preparedFields[field.label] = field.pivot.value; 
+            }
+            
+            return { country: item.country, pc: item.pc, ...preparedFields }   
+        });
+        
     },
     computed: {
         preparedFields() {
             if (this.form)
                 return this.form.fields.map(field => {
-                    field["rules"] = field.pivot.required
-                        ? ["required"]
-                        : [true];
+                    field["rules"] = field.pivot.required ? ["required"] : [true];
                     return field;
                 });
         }
@@ -87,4 +88,7 @@ export default {
 </script>
 
 <style>
+.table-header{
+    /* white-space: nowrap; */
+}
 </style>

@@ -12,12 +12,12 @@
     <!-- Scripts -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
 </head>
-<body>
+<body style="margin:0">
     
     <div id="app">
         {{-- <notification></notification> --}}
 
-        <v-app class="backgroundColor">
+        <v-app style="background:#e9ebee;">
             @yield('layout')
         </v-app>
             

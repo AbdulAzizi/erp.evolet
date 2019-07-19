@@ -18,13 +18,14 @@
         >
             <template slot="selection" slot-scope="data">
                 <v-chip
-                    :selected="data.selected"
+                    :input-value="data.selected"
                     color="primary"
                     textColor="white"
+                    pill
                     close
-                    @input="remove(data.item)"
+                    @click:close="remove(data.item)"
                 >
-                    <v-avatar>
+                    <v-avatar left>
                         <img :src="photo(data.item.img)">
                     </v-avatar>
                     {{ data.item.name }}
@@ -33,12 +34,12 @@
 
             <template slot="item" slot-scope="data">
                 <template>
-                    <v-list-tile-avatar>
+                    <v-list-item-avatar>
                         <img v-if="data.item.img" :src="photo(data.item.img)">
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                        <v-list-tile-title>{{data.item.name}} {{data.item.surname}}</v-list-tile-title>
-                        <v-list-tile-sub-title>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                        <v-list-item-title>{{data.item.name}} {{data.item.surname}}</v-list-item-title>
+                        <v-list-item-subtitle>
                             <span
                                 v-for="(responsibility,key) in data.item.responsibilities"
                                 :key="'responsibility-'+key"
@@ -49,8 +50,8 @@
                                 >|</span>
                             </span>
                             - {{data.item.division.abbreviation}}
-                        </v-list-tile-sub-title>
-                    </v-list-tile-content>
+                        </v-list-item-subtitle>
+                    </v-list-item-content>
                 </template>
             </template>
         </v-autocomplete>
@@ -66,7 +67,7 @@ export default {
         searchText: null
     }),
     methods: {
-        remove(user) {
+        remove(user) {            
             this.selectedUsers = this.selectedUsers.filter(
                 userId => userId !== user.id
             );

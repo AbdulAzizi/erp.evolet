@@ -1,11 +1,12 @@
 <template>
-    <a :href="'/users/'+user.id">
-        <v-avatar size="40">
+    <a :href=" user.surname ? '/users/'+user.id : '#' ">
+        <v-avatar size="40px">
             <v-tooltip top>
                 <template v-slot:activator="{ on:tooltip }">
                     <img v-on="{ ...tooltip }" :src="photo(user.img) " alt="avatar">
                 </template>
-                <span>{{ user.name }} {{ user.surname }}</span>
+                <span v-if="user.surname">{{ user.name }} {{ user.surname }}</span>
+                <span v-else>Процесс: {{ user.name }}</span>
             </v-tooltip>
         </v-avatar>
     </a>

@@ -5,13 +5,13 @@
                 <template v-slot:activator="{ on:tooltip }">
                     <v-btn
                         v-on="{ ...tooltip, ...dialog }"
-                        flat
-                        round
+                        text
+                        rounded
                         min-width="0"
                         style="min-width:0"
                         class="ma-0 grey--text px-2 text--darken-1"
                     >
-                        <v-icon :color="watchers.length ? 'primary' : '' ">remove_red_eye</v-icon>
+                        <v-icon :color="watchers.length ? 'primary' : '' ">mdi-eye-plus</v-icon>
 
                         <v-avatar
                             size="30"
@@ -48,7 +48,7 @@ export default {
                 name: "watchers",
                 label: "Наблюдатели",
                 users: this.users,
-                icon: 'remove_red_eye'
+                icon: 'mdi-eye-plus'
             }
         };
     },
