@@ -6,12 +6,12 @@
                     <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </v-fab-transition>
-            <dynamic-form 
-            :fields="form.fields" 
-            :title="form.name" 
-            activatorEventName="addProduct"
-            actionUrl="/products"
-            method="post"
+            <dynamic-form
+                :fields="preparedFields"
+                :title="form.name"
+                activatorEventName="addProduct"
+                actionUrl="/products"
+                method="post"
             ></dynamic-form>
         </div>
 
@@ -35,7 +35,7 @@ export default {
         form: {
             required: false
         },
-        items:{
+        items: {
             required: true
         }
     },
@@ -52,6 +52,17 @@ export default {
     methods: {
         addProduct() {
             Event.fire("addProduct");
+        },
+        getDynamicFieldsType(laravelType) {
+            //TODO Make a normal adapter or refactor to use same types in vue and laravel
+            switch (laravelType) {
+                case "list":
+                    return "autocomplete";
+                    break;
+                default:
+                    return laravelType;
+                    break;
+            }
         }
     },
     created() {
@@ -79,7 +90,13 @@ export default {
         preparedFields() {
             if (this.form)
                 return this.form.fields.map(field => {
-                    field["rules"] = field.pivot.required ? ["required"] : [true];
+                    field["rules"] =
+                        field.pivot && field.pivot.required
+                            ? ["required"]
+                            : [true];
+
+                    field["type"] = this.getDynamicFieldsType(field.type.name);
+
                     return field;
                 });
         }

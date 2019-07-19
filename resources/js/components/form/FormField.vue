@@ -25,7 +25,7 @@
 import predefinedRules from "./predefinedRules";
 
 const getRuleFunctions = rules => {
-    if(!rules) return;
+    if (!rules) return;
     if (!Array.isArray(rules)) return;
 
     let ruleFunctions = [];
@@ -43,15 +43,17 @@ const getRuleFunctions = rules => {
     return ruleFunctions;
 };
 
-
-const getBaseInput = field => ({
-    component: "input",
-    props: {
-        name: field.name,
-        value: field.value,
-        type: "hidden"
-    }
-});
+const getBaseInput = field => {
+    return {
+        ...field,
+        component: "input",
+        props: {
+            name: field.name,
+            value: field.value,
+            type: "hidden"
+        }
+    };
+};
 
 const getBaseField = field => {
     const baseInput = getBaseInput(field);
@@ -127,7 +129,7 @@ const getAutoCompleteField = field => {
         hint: field.hint,
         "persistent-hint": true,
         "no-data-text": "Данные отсутствуют",
-        "hide-selected": true
+        "hide-selected": true,
     };
 
     return baseSelectField;
@@ -136,8 +138,23 @@ const getAutoCompleteField = field => {
 const getComboboxField = field => {
     const baseAutoComplete = getAutoCompleteField(field);
 
-    //Default props for userselector
+    //Default props for combobox
     baseAutoComplete.component = "combobox";
+
+    baseAutoComplete["hasSeparateInput"] = false;
+    return baseAutoComplete;
+};
+
+const getManyToManyField = field => {
+    const baseAutoComplete = getAutoCompleteField(field);
+    
+    //Default props for userselector
+    baseAutoComplete.component = "many-to-many-select";
+    baseAutoComplete.props = {
+        ...baseAutoComplete.props,
+        listName: field.listName,
+        relatedListName: field.relatedListName
+    };
 
     baseAutoComplete["hasSeparateInput"] = false;
     return baseAutoComplete;
@@ -171,7 +188,6 @@ const getPicker = field => {
 
     return baseField;
 };
-
 
 export default {
     props: {
@@ -218,6 +234,9 @@ export default {
                 case "autocomplete":
                     fieldData = getAutoCompleteField(this.field);
                     break;
+                case "many-to-many-list":
+                    fieldData = getManyToManyField(this.field);
+                    break;
                 case "combobox":
                     fieldData = getComboboxField(this.field);
                     break;
@@ -243,7 +262,6 @@ export default {
                     fieldData.props.name
                 ];
             }
-
             return fieldData;
         }
     },

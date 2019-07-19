@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMnnsTable extends Migration
+class CreateFieldTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateMnnsTable extends Migration
      */
     public function up()
     {
-        Schema::create('mnns', function (Blueprint $table) {
+        Schema::create('field_types', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->longText('name');
+            $table->string("name");
         });
     }
 
@@ -26,6 +26,6 @@ class CreateMnnsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mnns');
+        Schema::dropIfExists('field_types');
     }
 }

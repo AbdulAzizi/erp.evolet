@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMnnsTable extends Migration
+class CreateListRelationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateMnnsTable extends Migration
      */
     public function up()
     {
-        Schema::create('mnns', function (Blueprint $table) {
+        Schema::create('list_relations', function (Blueprint $table) { //TODO Make countries, pcs and managers as LISTS
             $table->bigIncrements('id');
-            $table->longText('name');
+            $table->string('list_type');
+            $table->string('foreign_list_type');
+            $table->bigInteger('list_id');
+            $table->bigInteger('foreign_list_id');
         });
     }
 
@@ -26,6 +29,6 @@ class CreateMnnsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mnns');
+        Schema::dropIfExists('list_relations');
     }
 }

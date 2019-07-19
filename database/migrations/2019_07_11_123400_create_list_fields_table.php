@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormsTable extends Migration
+class CreateListFieldsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateFormsTable extends Migration
      */
     public function up()
     {
-        // Schema::create('forms', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->string('name');
-        // });
+        Schema::create('list_fields', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('field_id');
+            $table->string('list_type');
+        });
     }
 
     /**
@@ -26,6 +27,6 @@ class CreateFormsTable extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('forms');
+        Schema::dropIfExists('list_fields');
     }
 }

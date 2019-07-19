@@ -161,7 +161,7 @@ Vue.component("picker", require("./components/form/Picker.vue").default);
 Vue.component("autocomplete", require("./components/form/Autocomplete.vue").default);
 Vue.component("combobox", require("./components/form/Combobox.vue").default);
 Vue.component("dynamic-form", require("./components/form/Form.vue").default);
-
+Vue.component("many-to-many-select", require("./components/form/ManyToManySelect.vue").default);
 
 
 /****************************HELPERS********************************/

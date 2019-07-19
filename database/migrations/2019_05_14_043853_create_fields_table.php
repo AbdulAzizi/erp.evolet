@@ -13,10 +13,12 @@ class CreateFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('fields', function (Blueprint $table) {
+        $stringFieldTypeID = 1;
+
+        Schema::create('fields', function (Blueprint $table) use($stringFieldTypeID) {
             $table->bigIncrements('id');
             $table->string('label');
-            $table->string('type')->default('string');
+            $table->integer('type_id')->default($stringFieldTypeID);
             $table->string('name');
         });
     }

@@ -4,12 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Form extends Model
+class FieldType extends Model
 {
+    protected $table = "field_types";
     public $timestamps = false;
 
     public function fields()
     {
-        return $this->belongsToMany(FormField::class, 'field_form', 'form_id', 'field_id')->withPivot('required');
+        return $this->hasMany(Field::class);
     }
+    
 }
