@@ -6,7 +6,7 @@
         hide-default-footer
         @click:row="goTo"
     >
-        <template v-slot:item.no="{ item }">
+        <!-- <template v-slot:item.no="{ item }">
             <avatar :user="item.no"/>
         </template>
         <template v-slot:item.pc_representative="{ item }">
@@ -14,7 +14,7 @@
         </template>
         <template v-slot:item.manager="{ item }">
             <avatar :user="item.manager"/>
-        </template>
+        </template> -->
     </v-data-table>
 </template>
 
@@ -26,9 +26,9 @@ export default {
             headers: [
                 { text: "Промо Компания", value: "pc.name" },
                 { text: "Страна", value: "country.name" },
-                { text: "НО", value: "no" },
-                { text: "ПК", value: "pc_representative" },
-                { text: "Куратор", value: "manager" }
+                // { text: "НО", value: "no" },
+                // { text: "ПК", value: "pc_representative" },
+                // { text: "Куратор", value: "manager" }
             ]
         };
     },
