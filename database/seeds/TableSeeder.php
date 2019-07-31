@@ -24,12 +24,13 @@ class TableSeeder extends Seeder
         $form1 = Form::create(['name' => 'АФДОТ']);
 
         $manyToManyListFieldTypeID = FieldType::where('name', 'many-to-many-list')->first()->id;
+        $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
 
         $mnn = Field::create(['label' => 'МНН', 'name' => 'mnn', 'type_id' => $manyToManyListFieldTypeID]);
         $form = Field::create(['label' => 'Форма', 'name' => 'form', 'type_id' => $manyToManyListFieldTypeID]);
 
-        $mnnListId = DB::table('list_fields')->insertGetId(['field_id' => $mnn->id, 'list_type' => 'mnns']);
-        $formListId = DB::table('list_fields')->insertGetId(['field_id' => $form->id, 'list_type' => 'drug_forms']);
+        $mnnListId = DB::table('list_fields')->insertGetId(['field_id' => $mnn->id, 'list_type' => 'mnns_list']);
+        $formListId = DB::table('list_fields')->insertGetId(['field_id' => $form->id, 'list_type' => 'drug_forms_list']);
 
         DB::table('many_to_many_list_fields')->insert([
             'list_field_id' => $mnnListId,
@@ -54,18 +55,20 @@ class TableSeeder extends Seeder
         
         $form2 = Form::create(['name' => 'ПНК']);
         
-        $klass_pd = Field::create(['label' => 'Класс Пд', 'name' => 'klass_pd']);
-        $rx_otc = Field::create(['label' => 'Rx/OTC', 'name' => 'rx_otc']);
-        $atx = Field::create(['label' => 'АТХ', 'name' => 'atx']);
+        $klass_pd = Field::create(['label' => 'Класс Пд', 'name' => 'klass_pd', 'type_id' => $listFieldTypeID]);
+        $atx = Field::create(['label' => 'АТХ', 'name' => 'atx', 'type_id' => $listFieldTypeID]);
         $fg = Field::create(['label' => 'ФГ', 'name' => 'fg']);
         $nozologiya = Field::create(['label' => 'Нозология', 'name' => 'nozologiya']);
         $vozrast_pol = Field::create(['label' => 'Возраст/Пол', 'name' => 'vozrast_pol']);
-        $pnk_1 = Field::create(['label' => 'ПНК 1', 'name' => 'pnk_1']);
+        $pnk_1 = Field::create(['label' => 'ПНК 1', 'name' => 'pnk_1', 'type_id' => $listFieldTypeID]);
         $spv = Field::create(['label' => 'СПВ', 'name' => 'spv']);
         
+        DB::table('list_fields')->insert(['field_id' => $klass_pd->id, 'list_type' => 'gp_bu_list']);
+        DB::table('list_fields')->insert(['field_id' => $atx->id, 'list_type' => 'atx_list']);
+        DB::table('list_fields')->insert(['field_id' => $pnk_1->id, 'list_type' => 'pnk1_list']);
+
         $form2->fields()->attach([
             $klass_pd->id => ['required'=>true],
-            $rx_otc->id => ['required'=>true],
             $atx->id => ['required'=>true],
             $fg->id => ['required'=>true],
             $nozologiya->id => ['required'=>true],
