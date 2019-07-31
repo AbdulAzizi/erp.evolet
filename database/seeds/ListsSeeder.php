@@ -1,0 +1,87 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class ListsSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        
+        $listsFromFiles = [
+            // 'mnns_list' => '\lists\mnns.php',
+            // 'drug_forms_list' => '\lists\drug_forms.php',
+            'age_gender_list' => '\lists\age_gender.php',
+            'atx_list' => '\lists\atx.php',
+            'gp_bu_list' => '\lists\gp_bu.php',
+            'gp_stk_pk_list' => '\lists\gp_stk_pk.php',
+            'pmt_list' => '\lists\pmt.php',
+            'pnk1_list' => '\lists\pnk1.php',
+            'pnk2_list' => '\lists\pnk2.php',
+            'pnk4_list' => '\lists\pnk4.php'
+        ];
+
+        foreach ($listsFromFiles as $listName => $listFilePath) {
+            $this->seedListFromFile($listFilePath, $listName);
+        }
+        
+        // $this->seedMnnForms();
+
+    }
+
+    private function seedMnnForms()
+    {
+        $mnnForms = require app_path() . '\lists\form_mnns.php';
+
+        $this->insertToPivotTable($mnnForms, 'mnns_list', 'drug_forms_list');
+    }
+
+    
+    /**
+     * Helpers
+     *
+     */
+    
+    private function seedListFromFile($filePath, $tableName)
+    {
+        $records = require app_path() . $filePath;
+
+        $this->seedPlainList($records, $tableName);
+    }
+
+    private function seedPlainList(array $records, $tableName)
+    {
+        $sqlValues = '';
+
+        foreach ($records as $record) {
+            $sqlValues .= "('$record'),";
+        }
+
+        $sqlValues = trim($sqlValues, ',');
+
+        DB::select("INSERT INTO $tableName (name) VALUES $sqlValues");
+    }
+
+    private function insertToPivotTable(array $records, $firstListName, $secondListName, $firstListFieldName = "name", $secondListFieldName = "name")
+    {
+        foreach ($records as $record) {
+            
+            $firstListID = DB::table($firstListName)->where($firstListFieldName, $record[0])->value("id");
+            $secondListID = DB::table($secondListName)->where($secondListFieldName, $record[1])->value("id");
+
+            DB::table("list_relations")->insert(
+                [
+                    "list_type" => $firstListName,
+                    "foreign_list_type" => $secondListName,
+                    "list_id" => $firstListID,
+                    "foreign_list_id" => $secondListID,
+                ]
+            );
+        }
+    }
+}
