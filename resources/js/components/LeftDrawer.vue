@@ -78,14 +78,14 @@ export default {
             drawer: true,
             items: this.links,
             responsibilityLinks: {
-                "Куратор ПК": [
+                "Куратор Портфель ПК": [
                     { icon: "mdi-projector-screen", text: "Проекты", url: "/projects" }
 				],
 				"НО":[
 					{ icon: "people", text: "Продукты", url: "/link" }
 				],
 				"ПК":[
-					{ icon: "home", text: "Продукты", url: "/link2" }
+					{ icon: "mdi-home", text: "Продукты", url: "/link2" }
 				],
 				"Программист":[
 					{ icon: "mdi-account-key", text: "Линк Програмиста", url: "/#" }
