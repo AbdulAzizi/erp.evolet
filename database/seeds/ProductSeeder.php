@@ -5,6 +5,8 @@ use Illuminate\Database\Seeder;
 use App\Division;
 use App\Country;
 use App\Process;
+use App\Manager;
+use App\Project;
 
 class ProductSeeder extends Seeder
 {
@@ -22,8 +24,7 @@ class ProductSeeder extends Seeder
             for ($i=0; $i < 50; $i++) { 
                 $product = \App\Product::create([
                     'process_id' => $this->getRandomId(Process::class),
-                    'pc_id' => $pc->id,
-                    'country_id' => $this->getRandomId(Country::class),
+                    'project_id' => $this->getRandomId(Project::class),
                 ]);
     
                 $faker = Faker\Factory::create();

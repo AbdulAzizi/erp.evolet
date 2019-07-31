@@ -2,7 +2,7 @@
     <div>
         <div v-if="form">
             <v-fab-transition>
-                <v-btn @click="addProduct" dark fab fixed bottom right small color="primary">
+                <v-btn @click="addProduct" dark fab fixed bottom large right color="primary">
                     <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </v-fab-transition>
@@ -22,7 +22,7 @@
         hide-default-footer
         :items-per-page="-1"
         :fixed-header="true"
-        height="92vh"
+        height="calc(100vh - 48px)"
         dense
         />
 
@@ -43,8 +43,8 @@ export default {
         return {
             dialog: false,
             headers: [
-                { text: "Промо Компания", value: "pc.name", class:["primary", "table-header"] },
-                { text: "Страна", value: "country.name", class:["primary", "table-header"] }
+                { text: "Промо Компания", value: "pc", class:["primary", "table-header"] },
+                { text: "Страна", value: "country", class:["primary", "table-header"] }
             ],
             preparedItems:[]
         };
@@ -82,7 +82,7 @@ export default {
                 preparedFields[field.label] = field.pivot.value; 
             }
             
-            return { country: item.country, pc: item.pc, ...preparedFields }   
+            return { country: item.project.country.name, pc: item.project.pc.name, ...preparedFields }    
         });
         
     },

@@ -24,16 +24,11 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->firstName,
         'surname' => $surname,
-        'position_id' => getRandomId(Position::class, [1]),
-        'division_id' => getRandomId(Division::class, Division::withDepth()->having('depth','!=', 3)->pluck('id')->toArray()),
+        'position_id' => getRandomId(Position::all(), [1]),
+        'division_id' => getRandomId(Division::all(), Division::withDepth()->having('depth','!=', 3)->pluck('id')->toArray()),
         'email' =>  $surname . '@admin.com',
         'email_verified_at' => now(),
         'password' => bcrypt('admin'),
         'remember_token' => Str::random(10),
     ];
 });
-
-function getRandomId($class, $exceptions = [])
-{
-    return $class::all()->except($exceptions)->random()->id;
-}
