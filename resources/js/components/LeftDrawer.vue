@@ -78,7 +78,7 @@ export default {
             drawer: true,
             items: this.links,
             responsibilityLinks: {
-                "Куратор ПК": [
+                "Куратор Портфель ПК": [
                     { icon: "mdi-projector-screen", text: "Проекты", url: "/projects" },
                     { icon: "mdi-sitemap", text: "Бизнес процессы", url: "/bp" }
 				],
