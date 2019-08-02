@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CountryTableSeeder::class);
         $this->call(StatusTableSeeder::class);
         $this->call(ProjectSeeder::class);
+        $this->call(TetherSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(TaskTableSeeder::class);
         $this->call(ListsSeeder::class);

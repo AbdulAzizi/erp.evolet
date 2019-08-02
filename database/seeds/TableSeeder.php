@@ -22,18 +22,20 @@ class TableSeeder extends Seeder
         
         $form2 = Form::create(['name' => 'ПНК', 'label' => 'ПНК']);
         
-        $klass_pd = Field::create(['label' => 'Класс Пд', 'name' => 'klass_pd']);
-        $rx_otc = Field::create(['label' => 'Rx/OTC', 'name' => 'rx_otc']);
-        $atx = Field::create(['label' => 'АТХ', 'name' => 'atx']);
+        $klass_pd = Field::create(['label' => 'Класс Пд', 'name' => 'klass_pd', 'type_id' => $listFieldTypeID]);
+        $atx = Field::create(['label' => 'АТХ', 'name' => 'atx', 'type_id' => $listFieldTypeID]);
         $fg = Field::create(['label' => 'ФГ', 'name' => 'fg']);
         $nozologiya = Field::create(['label' => 'Нозология', 'name' => 'nozologiya']);
         $vozrast_pol = Field::create(['label' => 'Возраст/Пол', 'name' => 'vozrast_pol']);
-        $pnk_1 = Field::create(['label' => 'ПНК 1', 'name' => 'pnk_1']);
+        $pnk_1 = Field::create(['label' => 'ПНК 1', 'name' => 'pnk_1', 'type_id' => $listFieldTypeID]);
         $spv = Field::create(['label' => 'СПВ', 'name' => 'spv']);
         
+        DB::table('list_fields')->insert(['field_id' => $klass_pd->id, 'list_type' => 'gp_bu_list']);
+        DB::table('list_fields')->insert(['field_id' => $atx->id, 'list_type' => 'atx_list']);
+        DB::table('list_fields')->insert(['field_id' => $pnk_1->id, 'list_type' => 'pnk1_list']);
+
         $form2->fields()->attach([
             $klass_pd->id => ['required'=>true],
-            $rx_otc->id => ['required'=>true],
             $atx->id => ['required'=>true],
             $fg->id => ['required'=>true],
             $nozologiya->id => ['required'=>true],
