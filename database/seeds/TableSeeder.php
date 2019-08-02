@@ -16,9 +16,6 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
-        $strana = Field::create(['label' => 'Страна', 'name' => 'strana']);
-        $pc = Field::create(['label' => 'ПК', 'name' => 'pc']);
-
         /***************** First Form *********************/
         
         $form1 = Form::create(['name' => 'АФДОТ']);

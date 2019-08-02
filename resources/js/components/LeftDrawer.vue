@@ -86,7 +86,7 @@ export default {
 					{ icon: "people", text: "Продукты", url: "/link" }
 				],
 				"ПК":[
-					{ icon: "home", text: "Продукты", url: "/link2" }
+					{ icon: "mdi-home", text: "Продукты", url: "/link2" }
 				],
 				"Программист":[
 					{ icon: "mdi-account-key", text: "Линк Програмиста", url: "/#" }

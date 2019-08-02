@@ -25,13 +25,9 @@ class Product extends Model
         return $this->belongsTo('App\Process','process_id');
     }
 
-    public function country()
+    public function project()
     {
-        return $this->belongsTo('App\Country');
+        return $this->belongsTo('App\Project');
     }
 
-    public function pc()
-    {
-        return $this->belongsTo('App\Division');
-    }
 }

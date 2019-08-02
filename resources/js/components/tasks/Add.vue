@@ -215,7 +215,7 @@
                                             :value="JSON.stringify(existingTags)"
                                         />
                                     </template>
-                                    <span>Таги</span>
+                                    <span>Теги</span>
                                 </v-tooltip>
                             </template>
                             <v-card>
@@ -224,7 +224,7 @@
                                         :field="{
                                         type: 'combobox',
                                         name: 'tags',
-                                        label: 'Таги',
+                                        label: 'Теги',
                                         items: tags,
                                         icon: 'mdi-tag',
                                         multiple: true

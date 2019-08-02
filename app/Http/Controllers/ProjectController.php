@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Project;
 
 class ProjectController extends Controller
 {
@@ -10,9 +11,7 @@ class ProjectController extends Controller
     {
         $authUser = \Auth::user();
 
-        $projects =  \App\Manager::where('manager_id', $authUser->id)
-                                    ->with(['manager','country','pc', 'no','pcRepresentative'])
-                                    ->get();
+        $projects = Project::with(['pc','country'])->get();
                                     
         return view('projects.index')->with( ['projects' => $projects] );
     }

@@ -4,6 +4,7 @@ namespace App\Filters;
 
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 use App\Division;
 use App\Country;
 
@@ -24,7 +25,9 @@ class ProductFilters extends QueryFilters{
 
     public function pc_id($term)
     {
-        return $this->builder->where('pc_id', $term);
+        return $this->builder->whereHas('project', function (Builder $query) use ($term) {
+            $query->where('pc_id', $term);
+        });
     }
 
     public function country($term)
@@ -34,6 +37,15 @@ class ProductFilters extends QueryFilters{
 
     public function country_id($term)
     {
-        return $this->builder->where('country_id', $term);
+        return $this->builder->whereHas('project', function (Builder $query) use ($term) {
+            $query->where('country_id', $term);
+        });
+    }
+
+    public function project_id($term)
+    {
+        return $this->builder->whereHas('project', function (Builder $query) use ($term) {
+            $query->where('id', $term);
+        });
     }
 }

@@ -24,9 +24,9 @@ class Division extends Model
         return $this->hasMany('App\User');
     }
 
-    public function managers()
+    public function projects()
     {
-        return $this->belongsToMany('App\User','managers','pc_id','manager_id')->as('manager')->withPivot('pc_id','country_id');
+        return $this->hasMany('App\Project','pc_id');
     }
 
     public function countries()
