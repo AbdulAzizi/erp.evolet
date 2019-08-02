@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusTableSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(ProjectSeeder::class);
+        $this->call(TetherSeeder::class);
         $this->call(ListsSeeder::class);
         // $this->call(MnnSeeder::class);
         // $this->call(FormsSeeder::class);
