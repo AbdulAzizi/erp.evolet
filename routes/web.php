@@ -36,4 +36,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
 
     Route::get('/projects','ProjectController@index')->name('projects.index');
     Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');
+
+    Route::get('/bp', 'ProcessController@index')->name('bp');
+
 });
