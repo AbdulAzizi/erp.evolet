@@ -12,7 +12,8 @@ class Product extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'process_id'
+        'process_id',
+        'project_id'
     ];
 
     public function fields()

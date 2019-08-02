@@ -25,9 +25,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductSeeder::class);
         $this->call(TaskTableSeeder::class);
         $this->call(ListsSeeder::class);
-        // $this->call(MnnSeeder::class);
-        // $this->call(FormsSeeder::class);
-        // $this->call(FormMnnSeeder::class);
-
+        $this->call(FormTableSeeder::class);
+        $this->call(FieldTableSeeder::class);
+        $this->call(ProjectParticipantTableSeeder::class);
     }
 }
