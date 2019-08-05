@@ -94,6 +94,20 @@ class User extends Authenticatable
         ]);
     }
 
+    public function projects()
+    {
+        return $this->belongsToMany('App\Project','project_participants','participant_id','project_id')
+                    ->using('App\ProjectParticipant')
+                    ->withPivot([
+                        'role_id'
+                    ]);
+    }
+
+    public function projectParticipant()
+    {
+        return $this->hasMany('App\ProjectParticipant', 'participant_id', 'id');
+    }
+
     /**
      * Removes all relation dependencies from User model
      *

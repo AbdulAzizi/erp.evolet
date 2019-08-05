@@ -16,41 +16,11 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
-        /***************** First Form *********************/
-        
-        $form1 = Form::create(['name' => 'АФДОТ']);
-
-        $manyToManyListFieldTypeID = FieldType::where('name', 'many-to-many-list')->first()->id;
-        $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
-
-        $mnn = Field::create(['label' => 'МНН', 'name' => 'mnn', 'type_id' => $manyToManyListFieldTypeID]);
-        $form = Field::create(['label' => 'Форма', 'name' => 'form', 'type_id' => $manyToManyListFieldTypeID]);
-
-        $mnnListId = DB::table('list_fields')->insertGetId(['field_id' => $mnn->id, 'list_type' => 'mnns_list']);
-        $formListId = DB::table('list_fields')->insertGetId(['field_id' => $form->id, 'list_type' => 'drug_forms_list']);
-
-        DB::table('many_to_many_list_fields')->insert([
-            'list_field_id' => $mnnListId,
-            'foreign_list_field_id' => $formListId
-        ]);
-        
-        $doza = Field::create(['label' => 'Доза', 'name' => 'doza']);
-        $opu = Field::create(['label' => 'ОПУ', 'name' => 'opu']);
-        $thchp = Field::create(['label' => 'ТХЧП', 'name' => 'thchp']);
-        
-        $form1->fields()->attach([
-            $mnn->id => ['required'=>true],
-            $form->id => ['required'=>true],
-            $doza->id => ['required'=>true],
-            $opu->id => ['required'=>true],
-            $thchp->id => ['required'=>true],
-        ]);
-            
         /*********************  BP1 *************************/
         
         $bp1 = Process::create(['name' => 'Новое Лекарственное Средство']);
         
-        $form2 = Form::create(['name' => 'ПНК']);
+        $form2 = Form::create(['name' => 'ПНК', 'label' => 'ПНК']);
         
         $klass_pd = Field::create(['label' => 'Класс Пд', 'name' => 'klass_pd', 'type_id' => $listFieldTypeID]);
         $atx = Field::create(['label' => 'АТХ', 'name' => 'atx', 'type_id' => $listFieldTypeID]);

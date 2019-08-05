@@ -5,7 +5,7 @@
         class="elevation-1"
         hide-default-footer
         @click:row="goTo"
-        items-per-page="100"
+        :items-per-page="100"
     >
         <!-- <template v-slot:item.no="{ item }">
             <avatar :user="item.no"/>
@@ -37,7 +37,13 @@ export default {
     },
     methods: {
         goTo(item) {
-            window.location.href = "/products?project_id=" + item.id;
+            window.location.href =
+                "/products?pc_id=" +
+                item.pc.id +
+                "&country_id=" +
+                item.country.id +
+                "&project_id=" +
+                item.id;
         }
     }
 };

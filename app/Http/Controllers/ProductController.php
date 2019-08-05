@@ -26,12 +26,21 @@ class ProductController extends Controller
         $responsibilities = $authUser->responsibilities;
         // Empty array to keep data
         $data = [];
+        $formExists = false;
         // loop through each responsibilities
         foreach ($responsibilities as $responsibility) {
             // If Portfolio Manager
             if ($responsibility->name == 'Куратор Портфель ПК' || $responsibility->name == 'ПК') {
                 // Get First BP form
-                $data['form'] = Form::where('name', 'АФДОТ')->first();
+                $data['form'] = Form::where('name', 'Форма ПК Этап 1')->first();
+                $formExists = true;
+            }
+            if ($responsibility->name == 'НО') {
+                // Get First BP form
+                $data['form'] = Form::where('name', 'Форма НО Этап 1')->first();
+                $formExists = true;
+            }
+            if($formExists){
                 // Load fields of that form
                 $data['form']->load('fields');
                 // Make new field select PC
@@ -48,42 +57,45 @@ class ProductController extends Controller
                     'name' => 'strana',
                     'value' => $request->country_id,
                 ];
+                $data['form']['fields'][] = [
+                    'label' => 'Проект',
+                    'type' => ['name' => 'input'],
+                    'name' => 'project',
+                    'value' => $request->project_id,
+                ];
             }
         }
 
-        $products = DB::table('products')
-            ->join('product_values', 'products.id', '=', 'product_values.product_id')
-            ->join('projects', 'products.project_id', '=', 'projects.id')
-            ->join('divisions', 'projects.pc_id', '=', 'divisions.id')
-            ->join('countries', 'projects.country_id', '=', 'countries.id')
-            ->join('fields', 'product_values.field_id', '=', 'fields.id')
+        // $products = DB::table('products')
+        //     ->join('product_values', 'products.id', '=', 'product_values.product_id')
+        //     ->join('projects', 'products.project_id', '=', 'projects.id')
+        //     ->join('divisions', 'projects.pc_id', '=', 'divisions.id')
+        //     ->join('countries', 'projects.country_id', '=', 'countries.id')
+        //     ->join('fields', 'product_values.field_id', '=', 'fields.id')
 
-            ->select(
-                'fields.label',
-                'product_values.value',
-                'product_values.product_id',
-                'countries.name as country',
-                'divisions.name as pc'
-            )
-            ->where('divisions.id', $request->pc_id)
-            ->get()
-            ->groupBy('product_id');
-        // return $products;
-        $data['products'] = $products->map(function ($product)
-        {
-            $temp = $product->pluck('value','label');
-            $temp['pc'] = $product[0]->pc;
-            $temp['country'] = $product[0]->country;
-            return $temp;
-        });
-
-        // return Project::whereHas('country', function (Builder $query) {
-        //     $query->where('name', '=', 'Tajikistan');
-        // })->get();
+        //     ->select(
+        //         'fields.label',
+        //         'product_values.value',
+        //         'product_values.product_id',
+        //         'countries.name as country',
+        //         'divisions.name as pc'
+        //     )
+        //     ->where('divisions.id', $request->pc_id)
+        //     ->get()
+        //     ->groupBy('product_id');
+        
+        // $data['products'] = $products->map(function ($product)
+        // {
+        //     $temp = $product->pluck('value','label');
+        //     $temp['pc'] = $product[0]->pc;
+        //     $temp['country'] = $product[0]->country;
+        //     return $temp;
+        // });
             
         // Fetch all products and pass it to data
         $data['products'] = Product::filter($filters)->with(['project.country','project.pc','fields'])->get();
-        // dd($data) ;
+        $data['participants'] = Project::with('projectParticipant.role','projectParticipant.participant')->find($request->project_id);
+        // return $data;
         
         return view('products.index')->with($data);
     }
@@ -91,25 +103,9 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         // return $request;
-        // Get auth User
-        $authUser = \Auth::user();
-        // Make key Empty Array
-        $keys = [];
-        $pc_id = null;
-        $country_id = null;
-        // Get all field names from request into $keys variable
-        foreach ($request->all() as $key => $field) {
-            if ($key == "strana") {
-                $country_id = $field;
-            } else if ($key == "pc") {
-                $pc_id = $field;
-            } else {
-                $keys[] = $key;
-            }
-
-        }
+        $fieldKeys = array_keys($request->all());
         // Retrive all Fields
-        $fields = Field::whereIn('name', $keys)->get();
+        $fields = Field::whereIn('name', $fieldKeys)->get();
         // Prepare Fields for attachment with their values
         $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
             return [$field->id => ['value' => $request->input($field->name)]];
@@ -117,20 +113,19 @@ class ProductController extends Controller
         // Make new Product
         $product = Product::create([
             'process_id' => 1,
-            'pc_id' => $pc_id,
-            'country_id' => $country_id,
+            'project_id' => $request->project,
         ]);
         // Attach fields to Product with their value
         $product->fields()->attach($preparedFields->toArray());
         // Fetch current Process
         $process = Process::find($product->currentProcess->id);
         // Set tasks to responsible people of the Process
-        $this->setTasks($process, $country_id, $pc_id);
+        $this->setTasks($process, $request->strana, $request->pc);
         // Redirect to Tasks Index page
         // return redirect()->route('products.index');
     }
 
-    private function setTasks(Process $process, $country_id, $pc_id)
+    private function setTasks($process, $country_id, $pc_id)
     {
         // Fetch Process Tasks
         $processTasks = ProcessTask::where('process_id', $process->id)->get();

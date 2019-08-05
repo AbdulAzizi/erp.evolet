@@ -25,8 +25,18 @@ class Project extends Model
 
     public function participants()
     {
-        return $this->belongsToMany('App\User','project_participants','project_id','participant_id');
+        return $this->belongsToMany('App\User','project_participants','project_id','participant_id')
+                        ->using('App\ProjectParticipant')
+                        ->withPivot([
+                            'role_id'
+                        ]);;
     }
+
+    public function projectParticipant()
+    {
+        return $this->hasMany('App\ProjectParticipant', 'project_id', 'id');
+    }
+    
 
     public function products()
     {
