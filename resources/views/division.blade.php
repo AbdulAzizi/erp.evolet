@@ -27,8 +27,6 @@ $jsonResponsibilities = json_encode($responsibilities);
     </v-layout>
 </v-container>
 
-{{-- <add-user-dialog :responsibilities="{{$responsibilities}}" :positions="{{$positions}}" :errors="{{$errors}}"
-:oldinputs="{{$oldInputs}}"></add-user-dialog> --}}
 
 <dynamic-form title="Новый сотрудник" activator-event-name="addUser" action-url="/users" method="POST"
     :errors="{{$errors}}" :old-inputs="{{$oldInputs}}" :fields="[
