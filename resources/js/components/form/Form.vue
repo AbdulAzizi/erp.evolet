@@ -7,12 +7,21 @@
                 </v-toolbar>
                 <v-card-text>
                     <form-field
-                        v-for="(field, i) in localFields"
+                        v-for="(hiddenField, i) in hiddenLocalFields"
                         :key="i"
-                        :field="field"
-                        :errors="errors"
-                        :old-inputs="oldInputs"
+                        :field="hiddenField"
                     />
+                    <v-container grid-list-lg pa-0>
+                        <v-layout wrap>
+                            <v-flex v-bind="colCount()" v-for="(field, i) in localFields" :key="i">
+                                <form-field
+                                    :field="field"
+                                    :errors="errors"
+                                    :old-inputs="oldInputs"
+                                />
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -26,6 +35,29 @@
 </template>
 
 <script>
+function* colCountIterator(colCount) {
+    if (!Array.isArray(colCount)) return;
+    
+    const colCountLen = colCount.length;
+
+    let i = 0;
+    while (i < colCountLen)  {
+        let xsVal = Math.round(12 / colCount[i]);
+        
+        let colPerRow = 0;
+
+        do{
+            yield xsVal;
+            colPerRow += xsVal;
+        }while(colPerRow / 12 !== 1)
+        
+        if(i == colCountLen - 1){
+            i = 0;
+        }else{
+            i++;
+        }
+    } 
+}
 export default {
     props: {
         title: {
@@ -41,23 +73,40 @@ export default {
         width: String,
         activatorEventName: String,
         errors: null,
-        oldInputs: null
+        oldInputs: null,
+        fieldsPerRows: {
+            type: Array,
+            default: () => {
+                return [1];
+            },
+            required:false
+        }
     },
     data() {
         return {
             show: this.formHasErrors() ? true : false,
 
-            localFields: [
-                { type: "input", name: "_token", value: window.Laravel.csrf_token },
+            hiddenLocalFields: [
+                {
+                    type: "input",
+                    name: "_token",
+                    value: window.Laravel.csrf_token
+                },
                 { type: "input", name: "_method", value: this.method },
-                ...this.fields
-            ]
+                ...this.extractFields(this.fields, 'hidden')
+            ],
+            localFields: this.extractFields(this.fields, 'shown'),
+            
+            fieldPerRowIterator: colCountIterator(this.fieldsPerRows)
         };
     },
     created() {
         this.addFormsEventActivator();
 
         this.processLaravelOldInputs();
+    },
+    beforeUpdate() {
+        this.fieldPerRowIterator = colCountIterator(this.fieldsPerRows);
     },
     methods: {
         formHasErrors() {
@@ -91,7 +140,8 @@ export default {
             this.addNewFields(fieldsFromData);
         },
         addNewFields(fields) {
-            this.localFields = [...this.localFields, ...fields];
+            this.hiddenLocalFields = [...this.hiddenLocalFields, ...this.extractFields(fields, 'hidden')]
+            this.localFields = [...this.localFields, ...this.extractFields(fields, 'shown')];
         },
         processLaravelOldInputs() {
             if (!this.oldInputs) return;
@@ -116,14 +166,34 @@ export default {
                 }
             }
         },
-        submit(e){
+        submit(e) {
             this.formHasErrors = false;
             this.formHasErrors = !this.$refs.form.validate();
 
             if (!this.formHasErrors) return;
 
             e.preventDefault();
+        }, 
+        extractFields(arr, type){
+            switch(type){
+                case 'shown':
+                    return arr.filter((item) => item.type !== 'input')
+                case 'hidden':
+                    return arr.filter((item) => item.type === 'input')
+                default:
+                    return arr
+            }
+        },
+        colCount(){
+            let xs = {};
+
+            let nextValue = this.fieldPerRowIterator.next().value;
+           
+            xs['xs' + nextValue] = true;
+
+            return xs;
         }
+       
     }
 };
 </script>

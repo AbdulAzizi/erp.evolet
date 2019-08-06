@@ -21,6 +21,8 @@ class TableSeeder extends Seeder
         $bp1 = Process::create(['name' => 'Новое Лекарственное Средство']);
         
         $form2 = Form::create(['name' => 'ПНК', 'label' => 'ПНК']);
+     
+        $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
         
         $klass_pd = Field::create(['label' => 'Класс Пд', 'name' => 'klass_pd', 'type_id' => $listFieldTypeID]);
         $atx = Field::create(['label' => 'АТХ', 'name' => 'atx', 'type_id' => $listFieldTypeID]);
