@@ -7,6 +7,8 @@
                 </v-btn>
             </v-fab-transition>
             <dynamic-form
+                width="800"
+                :fieldsPerRows="[2]"
                 :fields="preparedFields"
                 :title="form.label"
                 activatorEventName="addProduct"
