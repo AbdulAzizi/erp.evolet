@@ -16,15 +16,21 @@ class ProjectParticipantTableSeeder extends Seeder
     {
         $projects = Project::all();
 
+        $kuratorUsers = User::whereHas('responsibilities',function (Builder $query){
+                        $query->where('name','Куратор Портфель ПК');
+                    })->get();
         $noUsers = User::whereHas('responsibilities',function (Builder $query){
                         $query->where('name','НО');
+                    })->get();
+        $pcUsers = User::whereHas('responsibilities',function (Builder $query){
+                        $query->where('name','ПК');
                     })->get();
 
         foreach ($projects as $project) {
             $project->participants()->attach([
-                getRandomId($noUsers ) => ['role_id'=>4],
+                getRandomId($kuratorUsers ) => ['role_id'=>4],
                 getRandomId($noUsers ) => ['role_id'=>5],
-                getRandomId($noUsers ) => ['role_id'=>6],
+                getRandomId($pcUsers ) => ['role_id'=>6],
             ]);
         }
     }
