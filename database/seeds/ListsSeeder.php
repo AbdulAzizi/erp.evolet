@@ -14,16 +14,16 @@ class ListsSeeder extends Seeder
     {
         
         $listsFromFiles = [
-            // 'mnns_list' => '\lists\mnns.php',
-            // 'drug_forms_list' => '\lists\drug_forms.php',
-            'age_gender_list' => '\lists\age_gender.php',
-            'atx_list' => '\lists\atx.php',
-            'gp_bu_list' => '\lists\gp_bu.php',
-            'gp_stk_pk_list' => '\lists\gp_stk_pk.php',
-            'pmt_list' => '\lists\pmt.php',
-            'pnk1_list' => '\lists\pnk1.php',
-            'pnk2_list' => '\lists\pnk2.php',
-            'pnk4_list' => '\lists\pnk4.php'
+            // 'mnns_list' => '/lists/mnns.php',
+            // 'drug_forms_list' => '/lists/drug_forms.php',
+            'age_gender_list' => '/lists/age_gender.php',
+            'atx_list' => '/lists/atx.php',
+            'gp_bu_list' => '/lists/gp_bu.php',
+            'gp_stk_pk_list' => '/lists/gp_stk_pk.php',
+            'pmt_list' => '/lists/pmt.php',
+            'pnk1_list' => '/lists/pnk1.php',
+            'pnk2_list' => '/lists/pnk2.php',
+            'pnk4_list' => '/lists/pnk4.php'
         ];
 
         foreach ($listsFromFiles as $listName => $listFilePath) {
@@ -36,7 +36,7 @@ class ListsSeeder extends Seeder
 
     private function seedMnnForms()
     {
-        $mnnForms = $this->getListFormFile('\lists\form_mnns.php');
+        $mnnForms = $this->getListFormFile('/lists/form_mnns.php');
 
         $this->insertToPivotTable($mnnForms, 'mnns_list', 'drug_forms_list');
     }
