@@ -93,4 +93,9 @@ class TaskController extends Controller
         // Redirect to Tasks Index page
         return redirect()->route('tasks.index');
     }
+
+    public function show($id)
+    {
+        return "Single task must be returned";
+    }
 }
