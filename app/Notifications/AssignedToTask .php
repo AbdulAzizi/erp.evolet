@@ -56,8 +56,10 @@ class AssignedToTask extends Notification
     public function toArray($notifiable)
     {
         return [
-            'avatar' => asset('img/'.$this->from->img),
-            'title' =>  $this->from->name . ' ' . $this->from->surname . ' поставил(a) вам новую задачу "'. $this->task->title . '"',
+            'avatar' => $this->from->img,
+            'title' =>  '<a href="'.route("users.show", $this->from->id).'">'.$this->from->name.' '.$this->from->surname.'</a>'.
+                        ' поставил(a) вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' . 
+                        $this->task->title . '</a>',
         ];
     }
 }

@@ -22,14 +22,17 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
         return redirect('/tasks');
     });
     Route::get('/company/structure', 'HomeController@company')->name('company');
+
     Route::get('/tasks', 'TaskController@index')->name('tasks.index');
     Route::post('/tasks', 'TaskController@store')->name('tasks.store');
+    Route::get('/tasks/{id}', 'TaskController@show')->name('tasks.show');
+
     Route::get('/profile', 'UserController@show')->name('profile');
-    Route::get('/users/{id}', 'UserController@show')->name('user.show');
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
     Route::post('/divisions', 'DivisionController@store')->name('division.store');
-
-    Route::post('/users', 'UserController@store')->name('user.store');
+    
+    Route::post('/users', 'UserController@store')->name('users.store');
+    Route::get('/users/{id}', 'UserController@show')->name('users.show');
 
     Route::get('/products','ProductController@index')->name('products.index');
     Route::post('/products','ProductController@store')->name('products.store');

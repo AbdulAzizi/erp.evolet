@@ -41,7 +41,7 @@
                 </v-list-group>
 
                 <v-list-item v-else :href="item.url">
-                    <v-list-item-action>
+                    <v-list-item-action v-if="item.icon">
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-item-action>
 
@@ -80,7 +80,9 @@ export default {
             responsibilityLinks: {
                 "Куратор Портфель ПК": [
                     { icon: "mdi-projector-screen", text: "Проекты", url: "/projects" },
-                    { icon: "mdi-sitemap", text: "Бизнес процессы", url: "/bp" }
+                    { icon: "mdi-sitemap", text: "Бизнес процессы", url: "/bp" },
+                    { icon: "mdi-attachment", text: "ЭП", url: "/projects" },
+                    { icon: "mdi-attachment", text: "ЭН", url: "/bp" },
 				],
 				"НО":[
 					{ icon: "people", text: "Продукты", url: "/link" }

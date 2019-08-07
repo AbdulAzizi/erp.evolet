@@ -17,7 +17,7 @@ class TableSeeder extends Seeder
     public function run()
     {
         /*********************  BP1 *************************/
-        
+        $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
         $bp1 = Process::create(['name' => 'Новое Лекарственное Средство']);
         
         $form2 = Form::create(['name' => 'ПНК', 'label' => 'ПНК']);
