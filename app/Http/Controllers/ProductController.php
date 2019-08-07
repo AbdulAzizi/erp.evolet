@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Project;
 use Illuminate\Database\Eloquent\Builder;
+use App\User;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AssignedAsWatcher;
 
 class ProductController extends Controller
 {
@@ -120,12 +123,12 @@ class ProductController extends Controller
         // Fetch current Process
         $process = Process::find($product->currentProcess->id);
         // Set tasks to responsible people of the Process
-        $this->setTasks($process, $request->strana, $request->pc);
+        $this->setTasks($process, $request->project);
         // Redirect to Tasks Index page
-        // return redirect()->route('products.index');
+        return redirect()->route('products.index');
     }
 
-    private function setTasks($process, $country_id, $pc_id)
+    private function setTasks($process, $projectId)
     {
         // Fetch Process Tasks
         $processTasks = ProcessTask::where('process_id', $process->id)->get();
@@ -133,10 +136,13 @@ class ProductController extends Controller
         $data = [];
         // Loop through each task
         foreach ($processTasks as $key => $task) {
-            $responsiblePerson = Manager::where('country_id', $country_id)
-                ->where('pc_id', $pc_id)
-                ->first();
-            dd($responsiblePerson);
+
+            $responsiblePerson = User::whereHas('projectParticipant',function (Builder $query) use ($task, $projectId){
+                $query->where('role_id', $task->responsibility_id)
+                ->where('project_id', $projectId);
+            })->first();
+
+            // dd($responsiblePerson);
             // Push each task to array
             $data[] = [
                 'title' => $task->title,
@@ -144,16 +150,15 @@ class ProductController extends Controller
                 'priority' => 2,
                 'planned_time' => $task->planned_time,
                 'deadline' => Carbon::now()->addMilliseconds($task->planned_time),
-                'responsible_id' => 1,
+                'responsible_id' => $responsiblePerson->id,
                 'from_id' => $process->id,
                 'from_type' => Process::class,
                 'created_at' => Carbon::now(),
             ];
 
-            Notification::send(1, new AssignedAsWatcher($process, 1, $task));
+            Notification::send($responsiblePerson, new AssignedAsWatcher($process, $responsiblePerson, $task));
         }
         // Insert all Tasks at once
         Task::insert($data);
-        dd(Task::all());
     }
 }
