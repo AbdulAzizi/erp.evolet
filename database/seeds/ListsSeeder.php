@@ -85,8 +85,8 @@ class ListsSeeder extends Seeder
         }
     }
 
-    private function getListFormFile($filepath)
+    private function getListFormFile($filePath)
     {
-        return require app_path() . realpath($filePath);    
+        return require realpath(app_path() . $filePath);    
     }
 }
