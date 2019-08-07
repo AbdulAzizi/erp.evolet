@@ -55,9 +55,9 @@ class AssignedAsWatcher extends Notification
      */
     public function toArray($notifiable)
     {
-        $from = $this->from->fullname();
+        $from = $this->from->name;
         $title = $this->task->title;
-        $responsible = $this->responsible->fullname();
+        $responsible = $this->responsible->name;
 
         return [
             'avatar' => asset('img/'.$this->from->img),
