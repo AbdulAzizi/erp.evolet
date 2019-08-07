@@ -36,7 +36,7 @@ class ListsSeeder extends Seeder
 
     private function seedMnnForms()
     {
-        $mnnForms = require app_path() . '\lists\form_mnns.php';
+        $mnnForms = $this->getListFormFile('\lists\form_mnns.php');
 
         $this->insertToPivotTable($mnnForms, 'mnns_list', 'drug_forms_list');
     }
@@ -49,7 +49,7 @@ class ListsSeeder extends Seeder
     
     private function seedListFromFile($filePath, $tableName)
     {
-        $records = require app_path() . $filePath;
+        $records = $this->getListFormFile($filePath);
 
         $this->seedPlainList($records, $tableName);
     }
@@ -83,5 +83,10 @@ class ListsSeeder extends Seeder
                 ]
             );
         }
+    }
+
+    private function getListFormFile($filepath)
+    {
+        return require app_path() . realpath($filePath);    
     }
 }
