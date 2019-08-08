@@ -125,7 +125,8 @@ class ProductController extends Controller
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project);
         // Redirect to Tasks Index page
-        return redirect()->route('products.index');
+        // return redirect()->route('products.index');
+        return back();
     }
 
     private function setTasks($process, $projectId)

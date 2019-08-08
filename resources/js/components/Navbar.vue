@@ -54,9 +54,9 @@
               </v-avatar>
             </v-flex>
             <v-flex>
-              <v-list dense two-line>
+              <v-list dense two-line class="pt-0">
                 <a href="/profile" class="black--text">
-                  <h2 class="title font-weight-regular text-sm-left">{{user.name}}  {{user.surname}}</h2>
+                  <h2 class="title font-weight-regular text-sm-left" style="line-height: 25px;">{{user.name}}  {{user.surname}}</h2>
                 </a>
                 <h4
                   v-for="(responsibility,index) in user.responsibilities"
@@ -158,9 +158,5 @@ a {
 }
 .v-app-bar__items .v-btn {
   border-radius: 0;
-}
-
-.v-list.v-sheet {
-  padding-top: 0;
 }
 </style>
