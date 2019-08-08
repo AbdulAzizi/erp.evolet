@@ -85,7 +85,7 @@ export default {
                     { icon: "mdi-attachment", text: "ЭН", url: "/bp" },
 				],
 				"НО":[
-					{ icon: "people", text: "Продукты", url: "/link" }
+					{ icon: "mdi-home", text: "Продукты", url: "/link" }
 				],
 				"ПК":[
 					{ icon: "mdi-home", text: "Продукты", url: "/link2" }
@@ -95,7 +95,9 @@ export default {
 				],
 				"Директор":[
 					{ icon: "mdi-account-key", text: "Линк Директор", url: "/#" }
-				]
+				],
+				"Контент Менеджер":[],
+				"Веб Мастер":[]
             }
         };
     },
