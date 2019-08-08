@@ -96,6 +96,8 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        return "Single task must be returned";
+        $task = Task::with('watchers','responsible','from','status','tags')->find($id);
+
+        return view('tasks.show',compact('task'));
     }
 }

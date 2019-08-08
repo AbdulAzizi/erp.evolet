@@ -17,7 +17,7 @@ use App\Project;
 use Illuminate\Database\Eloquent\Builder;
 use App\User;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\AssignedAsWatcher;
+use App\Notifications\AssignedToTask;
 
 class ProductController extends Controller
 {
@@ -156,7 +156,7 @@ class ProductController extends Controller
                 'created_at' => Carbon::now(),
             ];
 
-            Notification::send($responsiblePerson, new AssignedAsWatcher($process, $responsiblePerson, $task));
+            Notification::send($responsiblePerson, new AssignedToTask($process, $task));
         }
         // Insert all Tasks at once
         Task::insert($data);
