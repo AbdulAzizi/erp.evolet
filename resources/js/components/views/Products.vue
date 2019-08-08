@@ -154,6 +154,6 @@ export default {
 
 <style>
 .table-header {
-    /* white-space: nowrap; */
+    white-space: nowrap;
 }
 </style>
