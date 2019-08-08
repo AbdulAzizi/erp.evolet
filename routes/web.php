@@ -21,6 +21,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/', function () {
         return redirect('/tasks');
     });
+
     Route::get('/company/structure', 'HomeController@company')->name('company');
 
     Route::get('/tasks', 'TaskController@index')->name('tasks.index');
@@ -36,6 +37,8 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
 
     Route::get('/products','ProductController@index')->name('products.index');
     Route::post('/products','ProductController@store')->name('products.store');
+    
+    Route::post('/processes','ProcessController@show')->name('processes.show');
 
     Route::get('/projects','ProjectController@index')->name('projects.index');
     Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');
