@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
         $this->call(ResponsibilityTableSeeder::class);
         $this->call(FieldsTypesSeeder::class);
         $this->call(TagTableSeeder::class);
