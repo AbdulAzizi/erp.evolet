@@ -55,11 +55,21 @@ class AssignedToTask extends Notification
      */
     public function toArray($notifiable)
     {
-        return [
-            'avatar' => $this->from->img,
-            'title' =>  '<a href="'.route("users.show", $this->from->id).'">'.$this->from->name.' '.$this->from->surname.'</a>'.
-                        ' поставил(a) вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' . 
-                        $this->task->title . '</a>',
-        ];
+        // if user
+        if($this->from->email)
+            return [
+                'avatar' => $this->from->img,
+                'title' =>  '<a href="'.route("users.show", $this->from->id).'">'.$this->from->name.' '.$this->from->surname.'</a>'.
+                            ' поставил(a) вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' . 
+                            $this->task->title . '</a>',
+            ];
+        // if procces
+        else
+            return [
+                'avatar' => null,
+                'title' =>  'Процесс <a href="'.route("processes.show", $this->from->id).'">'.$this->from->name.'</a>'.
+                            ' поставил вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' . 
+                            $this->task->title . '</a>',
+            ];
     }
 }
