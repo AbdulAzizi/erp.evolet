@@ -56,12 +56,15 @@
             <v-flex>
               <v-list dense two-line class="pt-0">
                 <a href="/profile" class="black--text">
-                  <h2 class="title font-weight-regular text-sm-left" style="line-height: 25px;">{{user.name}}  {{user.surname}}</h2>
+                  <h2
+                    class="title font-weight-regular text-sm-left"
+                    style="line-height: 25px;"
+                  >{{user.name}} {{user.surname}}</h2>
                 </a>
                 <h4
                   v-for="(responsibility,index) in user.responsibilities"
                   :key="'responsibility-'+index"
-                  class="subtheader font-weight-regular grey--text text-sm-left"
+                  class="subtheader font-weight-regular grey--text text-sm-left "
                 >{{responsibility.name}}</h4>
               </v-list>
             </v-flex>
@@ -70,8 +73,14 @@
         <v-list dense class="pa-0">
           <v-divider></v-divider>
 
-          <v-list-item v-for="(item, index) in items" :href="item.link" :key="index">
+          <!-- <v-list-item v-for="(item, index) in items" :href="item.link" :key="index">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item> -->
+
+          <v-list-item key="profileButton" href="/profile">
+            <v-list-item-content>
+              <v-list-item-title>Профиль</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
 
           <v-list-item key="logoutButton" @click="$refs.logoutform.submit()">
@@ -130,7 +139,6 @@
 export default {
   props: ["user"],
   data() {
-
     return {
       rightDrawer: false,
       items: [
@@ -159,4 +167,6 @@ a {
 .v-app-bar__items .v-btn {
   border-radius: 0;
 }
+
+
 </style>
