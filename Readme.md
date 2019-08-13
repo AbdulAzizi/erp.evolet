@@ -10,7 +10,7 @@ One big and cool project
 $ git clone (repo name)
 ```
 
-**Step 2**. Install composer:
+**Step 2**. Install composer dependencies:
 
 ```sh
 $ composer install
@@ -50,6 +50,35 @@ class CreateListsMigration extends Migration
         //     'longText' => 'name',
         // ],
 ```
+``database/seeds/ListsSeeder.php``
+
+```
+ public function run()
+    {
+        
+        $listsFromFiles = [
+            // 'mnns_list' => '/lists/mnns.php',
+            // 'drug_forms_list' => '/lists/drug_forms.php',
+            'age_gender_list' => '/lists/age_gender.php',
+            'atx_list' => '/lists/atx.php',
+            'gp_bu_list' => '/lists/gp_bu.php',
+            'gp_stk_pk_list' => '/lists/gp_stk_pk.php',
+            'pmt_list' => '/lists/pmt.php',
+            'pnk1_list' => '/lists/pnk1.php',
+            'pnk2_list' => '/lists/pnk2.php',
+            'pnk4_list' => '/lists/pnk4.php'
+        ];
+
+        foreach ($listsFromFiles as $listName => $listFilePath) {
+            $this->seedListFromFile($listFilePath, $listName);
+        }
+        
+        // $this->seedMnnForms();
+
+    }
+
+```
+
 
 Rename the extension of file: ``database/migrations/2019_07_10_113108_create_list_relations_table.txt`` 
 to:
@@ -62,7 +91,7 @@ $ php artisan migrate:refresh --seed
 ```
 **Step 7**. After seeding, discard all changes that you've made in `step 5`
 
-**Step 8**. Install npm:
+**Step 8**. Install npm dependencies:
 
 ```sh
 $ npm install
