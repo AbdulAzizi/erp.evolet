@@ -10,7 +10,7 @@ One big and cool project
 $ git clone (repo name)
 ```
 
-**Step 2**. Install composer:
+**Step 2**. Install composer dependencies:
 
 ```sh
 $ composer install
@@ -91,7 +91,7 @@ $ php artisan migrate:refresh --seed
 ```
 **Step 7**. After seeding, discard all changes that you've made in `step 5`
 
-**Step 8**. Install npm:
+**Step 8**. Install npm dependencies:
 
 ```sh
 $ npm install
