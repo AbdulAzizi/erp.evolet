@@ -77,13 +77,13 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item> -->
 
-          <v-list-item key="profileButton" href="/profile">
+          <v-list-item href="/profile">
             <v-list-item-content>
               <v-list-item-title>Профиль</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item key="logoutButton" @click="$refs.logoutform.submit()">
+          <v-list-item @click="$refs.logoutform.submit()">
             <v-list-item-content>
               <v-list-item-title>Выйти</v-list-item-title>
             </v-list-item-content>
