@@ -1,16 +1,16 @@
-# Evolet ERP
+# Evolet
 
 One big and cool project
 
 # Installation
 
-**Step 1**. Clone the project from repository
+**Step 1**. Clone the project from repository:
 
 ```sh
 $ git clone (repo name)
 ```
 
-**Step 2**. Install composer 
+**Step 2**. Install composer:
 
 ```sh
 $ composer install
@@ -51,8 +51,8 @@ class CreateListsMigration extends Migration
         // ],
 ```
 
-rename the extension of file ``database/migrations/2019_07_10_113108_create_list_relations_table.txt`` 
-to 
+Rename the extension of file: ``database/migrations/2019_07_10_113108_create_list_relations_table.txt`` 
+to:
 ``database/migrations/2019_07_10_113108_create_list_relations_table.php``
 
 **step 6**. Run the command to make migrations:
@@ -61,6 +61,7 @@ to
 $ php artisan migrate:refresh --seed
 ```
 **Step 7**. After seeding, discard all changes that you've made in `step 5`
+
 **Step 8**. Install npm:
 
 ```sh
@@ -72,7 +73,7 @@ $ npm install
 ```$
 $ php artisan key:generate
 ```
-**Step 10**. run npm
+**Step 10**. run npm in development environment:
 
 ```sh
 $ npm run watch
@@ -84,6 +85,8 @@ $ npm run watch
 $ php artisan serve
 > Laravel development server started: <http://127.0.0.1:8000>
 ```
+
+
 
 # Links
 
