@@ -21,7 +21,18 @@ class TaskController extends Controller
             ->with('from', 'responsible', 'watchers', 'status', 'tags')
             ->get();
 
+            
+        foreach ($tasks as $task ) {
+            // If task is from process
+            if( $task->from_type == "App\Process" ) {
+                // Load Tethers and forms for each tether
+                $task->from->load('frontTethers.form.fields.type','backTethers');
+                // return $task;
+            }
+        }
+        
         $tags = Tag::all();
+        // All Users needed while choosing user assignee
         $users = User::with(['division'])->get();
         // $notifications = $authUser->notifications;
 
@@ -97,7 +108,8 @@ class TaskController extends Controller
     public function show($id)
     {
         $task = Task::with('watchers','responsible','from','status','tags')->find($id);
-
-        return view('tasks.show',compact('task'));
+        $task->from->load('frontTethers.form.fields','backTethers');
+        // return $task;
+        return view('tasks.show', compact('task'));
     }
 }
