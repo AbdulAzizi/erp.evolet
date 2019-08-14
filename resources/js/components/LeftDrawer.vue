@@ -81,7 +81,7 @@ export default {
                 "Куратор Портфель ПК": [
                     { icon: "mdi-projector-screen", text: "Проекты", url: "/projects" },
                     { icon: "mdi-sitemap", text: "Бизнес процессы", url: "/bp" },
-                    { icon: "mdi-attachment", text: "ЭП", url: "/projects" },
+                    { icon: "mdi-attachment", text: "ЭП", url: "/projects?sortBy=country" },
                     { icon: "mdi-attachment", text: "ЭН", url: "/bp" },
 				],
 				"НО":[
@@ -97,7 +97,8 @@ export default {
 					{ icon: "mdi-account-key", text: "Линк Директор", url: "/#" }
 				],
 				"Контент Менеджер":[],
-				"Веб Мастер":[]
+                "Веб Мастер":[],
+                "Аналитик":[]
             }
         };
     },
