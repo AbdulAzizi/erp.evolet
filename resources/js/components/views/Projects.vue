@@ -8,21 +8,38 @@
         :items-per-page="100"
     />-->
 
-    <!-- <v-container fluid>
+    <v-container fluid>
+        <v-flex xs12 sm6 class="pb-3">
+            <span class="mr-3">Сортировать по</span>
+            <v-btn-toggle active-class="primary" rounded v-model="toggle_sort_by">
+                <v-btn text small href="/projects?sortBy=country">
+                    Странам
+                </v-btn>
+                <v-btn text small href="/projects?sortBy=pc">
+                    ПК
+                </v-btn>
+            </v-btn-toggle>
+        </v-flex>
         <v-expansion-panels multiple >
-            <v-expansion-panel v-for="(country,keyCountryName) in projects" :key="keyCountryName"  class="transparent elavation-0" active-class="primary">
+            <v-expansion-panel 
+            v-for="(item,key) in projects" 
+            :key="key"  
+            >
                 <v-expansion-panel-header class="transparent" ripple>
-                    {{keyCountryName}}
+                    {{key}}
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                    <v-template v-for="(item,i) in country" :key="i">
-                        <v-btn class="mr-3 secondary" href="#">{{item.pc.name}}</v-btn>
-                    </v-template>
+                    <template v-for="(subItem,i) in item" >
+                        <v-btn :key="i" class="mr-3 primary" :href="`/products?pc_id=${subItem.pc_id}&country_id=${subItem.country_id}&project_id=${subItem.id}`">
+                            <span v-if="key == subItem.pc.name">{{subItem.country.name}}</span>
+                            <span v-else>{{subItem.pc.name}}</span>
+                        </v-btn>
+                    </template>
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
-    </v-container> -->
-    <v-container grid-list-xl text-center fluid>
+    </v-container>
+    <!-- <v-container grid-list-xl text-center fluid>
         <v-layout wrap>
             <v-flex v-for="(countries, pcName) in projects" :key="pcName">
                 <v-card>
@@ -43,7 +60,7 @@
                 </v-card>
             </v-flex>
         </v-layout>
-    </v-container>
+    </v-container> -->
 </template>
 
 <script>
@@ -56,7 +73,8 @@ export default {
             headers: [
                 { text: "Промо Компания", value: "pc.name" },
                 { text: "Страна", value: "country.name" }
-            ]
+            ],
+            toggle_sort_by:null
         };
     },
     methods: {
@@ -68,6 +86,17 @@ export default {
                 item.country.id +
                 "&project_id=" +
                 item.id;
+        }
+    },
+    created(){
+        var url = new URL(window.location.href);
+        this.toggle_sort_by = url.searchParams.get("sortBy") == "country" ? 0 : 1;
+        
+    },
+    watch:{
+        toggle_sort_by(val){
+            console.log(val);
+            
         }
     }
 };
