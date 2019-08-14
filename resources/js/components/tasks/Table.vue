@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="taskDialog" max-width="700">
+        <v-dialog v-model="taskDialog" max-width="1000">
             <task :item="selectedTask"></task>
         </v-dialog>
 
