@@ -1,43 +1,37 @@
 <template>
-    <!-- <v-dialog v-model="show" :max-width="width || '600'"> -->
-        <component :is="formWrapper.component" v-bind="formWrapper.props" v-model="show">
-            <v-form :action="actionUrl" method="POST" ref="form">
-                <v-card>
-                    <v-toolbar flat color="primary" dark>
-                        <v-toolbar-title class="font-weight-regular">{{title}}</v-toolbar-title>
-                    </v-toolbar>
-                    <v-card-text>
-                        <form-field
-                            v-for="(hiddenField, i) in hiddenLocalFields"
-                            :key="i"
-                            :field="hiddenField"
-                        />
-                        <v-container grid-list-lg pa-0>
-                            <v-layout wrap>
-                                <v-flex
-                                    v-bind="colCount()"
-                                    v-for="(field, i) in localFields"
-                                    :key="i"
-                                >
-                                    <form-field
-                                        :field="field"
-                                        :errors="errors"
-                                        :old-inputs="oldInputs"
-                                    />
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <!--//TODO Add dynamic actions -->
-                        <v-btn color="primary" text @click="show = false">Отмена</v-btn>
-                        <v-btn color="primary" type="submit" @click="submit">Добавить</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-form>
-        </component>
-    <!-- </v-dialog> -->
+    <component :is="formWrapper.component" v-bind="formWrapper.props" v-model="show">
+        <v-form :action="actionUrl" method="POST" ref="form">
+            <v-card>
+                <v-toolbar flat color="primary" dark>
+                    <v-toolbar-title class="font-weight-regular">{{title}}</v-toolbar-title>
+                </v-toolbar>
+                <v-card-text>
+                    <form-field
+                        v-for="(hiddenField, i) in hiddenLocalFields"
+                        :key="i"
+                        :field="hiddenField"
+                    />
+                    <v-container grid-list-lg pa-0>
+                        <v-layout wrap>
+                            <v-flex v-bind="colCount()" v-for="(field, i) in localFields" :key="i">
+                                <form-field
+                                    :field="field"
+                                    :errors="errors"
+                                    :old-inputs="oldInputs"
+                                />
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <!--//TODO Add dynamic actions -->
+                    <v-btn color="primary" text v-if="dialog" @click="show = false">Отмена</v-btn>
+                    <v-btn color="primary" type="submit" @click="submit">Добавить</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-form>
+    </component>
 </template>
 
 <script>
@@ -104,7 +98,7 @@ export default {
             ],
             localFields: this.extractFields(this.fields, "shown"),
 
-            fieldPerRowIterator: colCountIterator(this.fieldsPerRows),
+            fieldPerRowIterator: colCountIterator(this.fieldsPerRows)
         };
     },
     created() {
@@ -208,20 +202,20 @@ export default {
         }
     },
     computed: {
-        formWrapper(){
-            if(!this.dialog){
+        formWrapper() {
+            if (!this.dialog) {
                 return {
-                    component: 'div',
+                    component: "div",
                     props: {}
-                }
+                };
             }
 
             return {
-                component: 'v-dialog',
+                component: "v-dialog",
                 props: {
-                    'max-width': this.width || '600'
+                    "max-width": this.width || "600"
                 }
-            }
+            };
         }
     }
 };
