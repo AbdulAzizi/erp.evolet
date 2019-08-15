@@ -28,7 +28,7 @@ $jsonResponsibilities = json_encode($responsibilities);
 </v-container>
 
 
-<dynamic-form title="Новый сотрудник" activator-event-name="addUser" action-url="/users" method="POST"
+<dynamic-form title="Новый сотрудник" dialog activator-event-name="addUser" action-url="/users" method="POST"
     :errors="{{$errors}}" :old-inputs="{{$oldInputs}}" :fields="[
         {
             type: 'string',
@@ -65,7 +65,7 @@ $jsonResponsibilities = json_encode($responsibilities);
         },
     ]"></dynamic-form>
 
-<dynamic-form title="Добавить в структуру" activator-event-name="addDivision" action-url="/divisions" method="POST"
+<dynamic-form title="Добавить в структуру" dialog activator-event-name="addDivision" action-url="/divisions" method="POST"
     :errors="{{$errors}}" :old-inputs="{{$oldInputs}}" :fields="[
         {
             type: 'string',

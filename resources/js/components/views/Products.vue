@@ -8,6 +8,7 @@
             </v-fab-transition>
             <dynamic-form
                 width="800"
+                dialog
                 :fieldsPerRows="[2]"
                 :fields="fields"
                 :title="form.label"
