@@ -153,7 +153,7 @@ export default {
 </script>
 
 <style>
-.table-header {
+.table-header, tr {
     white-space: nowrap;
 }
 </style>
