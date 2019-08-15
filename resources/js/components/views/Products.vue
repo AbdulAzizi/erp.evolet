@@ -128,7 +128,7 @@ export default {
 </script>
 
 <style>
-.table-header {
-    /* white-space: nowrap; */
+.table-header, tr {
+    white-space: nowrap;
 }
 </style>

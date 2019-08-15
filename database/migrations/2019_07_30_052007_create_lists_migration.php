@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateListsMigration extends Migration
 {
-
+    
     private $lists = [
         // 'mnns_list' => [
         //     'bigIncrements' => 'id',
@@ -57,6 +57,7 @@ class CreateListsMigration extends Migration
      */
     public function up()
     {
+
         foreach ($this->lists as $listName => $listSchema) {
 
             Schema::create($listName, function (Blueprint $table) use ($listSchema) {
