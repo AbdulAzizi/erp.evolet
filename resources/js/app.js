@@ -145,6 +145,7 @@ Vue.component("avatar", require("./components/Avatar.vue").default);
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
 Vue.component("profile-view", require("./components/views/Profile.vue").default);
 Vue.component("products-view", require("./components/views/Products.vue").default);
+Vue.component("products-create-view", require("./components/views/products/Create.vue").default);
 Vue.component("projects-view", require("./components/views/Projects.vue").default);
 Vue.component("bp", require("./components/views/BP.vue").default);
 

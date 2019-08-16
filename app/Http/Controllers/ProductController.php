@@ -145,6 +145,35 @@ class ProductController extends Controller
         return back();
     }
 
+    public function create(Request $request)
+    {
+        $form = Form::where('name', 'Форма ПК Этап 1')->first();
+        // Load fields of that form
+        $form->load('fields');
+        // Make new field select PC
+        $form->fields[] = [
+            'label' => 'ПК',
+            'type' => ['name' => 'input'],
+            'name' => 'pc',
+            'value' => $request->pc_id,
+        ];
+        // Make new field select country of PC
+        $form->fields[] = [
+            'label' => 'Страна',
+            'type' => ['name' => 'input'],
+            'name' => 'strana',
+            'value' => $request->country_id,
+        ];
+        $form->fields[] = [
+            'label' => 'Проект',
+            'type' => ['name' => 'input'],
+            'name' => 'project',
+            'value' => $request->project_id,
+        ];
+
+        return view('products.create',compact('form'));
+    }
+
     private function setTasks($process, $projectId)
     {
         // Fetch Process Tasks

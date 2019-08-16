@@ -20,6 +20,7 @@
         <v-tabs v-model="tab" right background-color="secondary" color="primary" dark>
             <v-tab href="#products">Продукты</v-tab>
             <v-tab href="#participants">Участники</v-tab>
+            <v-btn small class="align-self-center mx-4 primary" :href="appPath + 'products/create'">Новый продукт</v-btn>
         </v-tabs>
         <v-tabs-items v-model="tab" class="transparent">
             <v-tab-item value="products">
