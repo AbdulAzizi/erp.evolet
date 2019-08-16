@@ -22,52 +22,6 @@ class ProductController extends Controller
 {
     public function index(Request $request, ProductFilters $filters)
     {
-        // Get auth User
-        $authUser = \Auth::user();
-        // Get responsibilitilies of that User
-        $responsibilities = $authUser->responsibilities;
-        // Empty array to keep data
-        $data = [];
-        $formExists = false;
-        // loop through each responsibilities
-        foreach ($responsibilities as $responsibility) {
-            // If Portfolio Manager
-            if ($responsibility->name == 'Куратор Портфель ПК' || $responsibility->name == 'ПК') {
-                // Get First BP form
-                $data['form'] = Form::where('name', 'Форма ПК Этап 1')->first();
-                $formExists = true;
-            }
-            if ($responsibility->name == 'НО') {
-                // Get First BP form
-                $data['form'] = Form::where('name', 'Форма НО Этап 1')->first();
-                $formExists = true;
-            }
-            if ($formExists) {
-                // Load fields of that form
-                $data['form']->load('fields');
-                // Make new field select PC
-                $data['form']['fields'][] = [
-                    'label' => 'ПК',
-                    'type' => ['name' => 'input'],
-                    'name' => 'pc',
-                    'value' => $request->pc_id,
-                ];
-                // Make new field select country of PC
-                $data['form']['fields'][] = [
-                    'label' => 'Страна',
-                    'type' => ['name' => 'input'],
-                    'name' => 'strana',
-                    'value' => $request->country_id,
-                ];
-                $data['form']['fields'][] = [
-                    'label' => 'Проект',
-                    'type' => ['name' => 'input'],
-                    'name' => 'project',
-                    'value' => $request->project_id,
-                ];
-            }
-        }
-
         // $products = DB::table('products')
         //     ->join('product_values', 'products.id', '=', 'product_values.product_id')
         //     ->join('projects', 'products.project_id', '=', 'projects.id')
@@ -141,35 +95,59 @@ class ProductController extends Controller
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project);
         // Redirect to Tasks Index page
-        // return redirect()->route('products.index');
-        return back();
+        return redirect()->route('products.index', [ 
+            'pc_id' => $request->pc, 
+            'country_id' => $request->strana, 
+            'project_id' => $request->project
+        ]);
     }
 
     public function create(Request $request)
     {
-        $form = Form::where('name', 'Форма ПК Этап 1')->first();
-        // Load fields of that form
-        $form->load('fields');
-        // Make new field select PC
-        $form->fields[] = [
-            'label' => 'ПК',
-            'type' => ['name' => 'input'],
-            'name' => 'pc',
-            'value' => $request->pc_id,
-        ];
-        // Make new field select country of PC
-        $form->fields[] = [
-            'label' => 'Страна',
-            'type' => ['name' => 'input'],
-            'name' => 'strana',
-            'value' => $request->country_id,
-        ];
-        $form->fields[] = [
-            'label' => 'Проект',
-            'type' => ['name' => 'input'],
-            'name' => 'project',
-            'value' => $request->project_id,
-        ];
+        // Get auth User
+        $authUser = \Auth::user();
+        // Get responsibilitilies of that User
+        $responsibilities = $authUser->responsibilities;
+        
+        $formExists = false;
+        // loop through each responsibilities
+        foreach ($responsibilities as $responsibility) {
+            // If Portfolio Manager
+            if ($responsibility->name == 'Куратор Портфель ПК' || $responsibility->name == 'ПК') {
+                // Get First BP form
+                $form = Form::where('name', 'Форма ПК Этап 1')->first();
+                $formExists = true;
+            }
+            if ($responsibility->name == 'НО') {
+                // Get First BP form
+                $form = Form::where('name', 'Форма НО Этап 1')->first();
+                $formExists = true;
+            }
+            if ($formExists) {
+                // Load fields of that form
+                $form->load('fields');
+                // Make new field select PC
+                $form->fields[] = [
+                    'label' => 'ПК',
+                    'type' => ['name' => 'input'],
+                    'name' => 'pc',
+                    'value' => $request->pc_id,
+                ];
+                // Make new field select country of PC
+                $form->fields[] = [
+                    'label' => 'Страна',
+                    'type' => ['name' => 'input'],
+                    'name' => 'strana',
+                    'value' => $request->country_id,
+                ];
+                $form->fields[] = [
+                    'label' => 'Проект',
+                    'type' => ['name' => 'input'],
+                    'name' => 'project',
+                    'value' => $request->project_id,
+                ];
+            }
+        }
 
         return view('products.create',compact('form'));
     }

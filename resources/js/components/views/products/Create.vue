@@ -8,6 +8,7 @@
             activatorEventName="addProduct"
             actionUrl="/products"
             method="post"
+            :dialog="false"
         ></dynamic-form>
     </v-container>
 </template>
