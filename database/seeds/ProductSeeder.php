@@ -7,6 +7,7 @@ use App\Country;
 use App\Process;
 use App\Manager;
 use App\Project;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -30,6 +31,9 @@ class ProductSeeder extends Seeder
                 $faker = Faker\Factory::create();
     
                 $preparedFields = $fields->mapWithKeys(function ($field) use ($faker) {
+                    if($field->type->name == 'list'){
+                        return [$field->id => ['value' => rand(1, 5)]];
+                    }
                     return [$field->id => ['value' => $faker->word]];
                 });
     

@@ -36,9 +36,10 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/users/{id}', 'UserController@show')->name('users.show');
 
     Route::get('/products','ProductController@index')->name('products.index');
+    Route::get('/products/create','ProductController@create')->name('products.create');
     Route::post('/products','ProductController@store')->name('products.store');
     
-    Route::post('/processes','ProcessController@show')->name('processes.show');
+    Route::get('/processes/{id}','ProcessController@show')->name('processes.show');
 
     Route::get('/projects','ProjectController@index')->name('projects.index');
     Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');

@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="show" :max-width="width || '600'">
+    <component :is="formWrapper.component" v-bind="formWrapper.props" v-model="show">
         <v-form :action="actionUrl" method="POST" ref="form">
             <v-card>
                 <v-toolbar flat color="primary" dark>
@@ -26,37 +26,37 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <!--//TODO Add dynamic actions -->
-                    <v-btn color="primary" text @click="show = false">Отмена</v-btn>
+                    <v-btn color="primary" text v-if="dialog" @click="show = false">Отмена</v-btn>
                     <v-btn color="primary" type="submit" @click="submit">Добавить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>
-    </v-dialog>
+    </component>
 </template>
 
 <script>
 function* colCountIterator(colCount) {
     if (!Array.isArray(colCount)) return;
-    
+
     const colCountLen = colCount.length;
 
     let i = 0;
-    while (i < colCountLen)  {
+    while (i < colCountLen) {
         let xsVal = Math.round(12 / colCount[i]);
-        
+
         let colPerRow = 0;
 
-        do{
+        do {
             yield xsVal;
             colPerRow += xsVal;
-        }while(colPerRow / 12 !== 1)
-        
-        if(i == colCountLen - 1){
+        } while (colPerRow / 12 !== 1);
+
+        if (i == colCountLen - 1) {
             i = 0;
-        }else{
+        } else {
             i++;
         }
-    } 
+    }
 }
 export default {
     props: {
@@ -68,6 +68,7 @@ export default {
             type: Array,
             required: true
         },
+        dialog: Boolean,
         actionUrl: String,
         method: String,
         width: String,
@@ -79,7 +80,7 @@ export default {
             default: () => {
                 return [1];
             },
-            required:false
+            required: false
         }
     },
     data() {
@@ -93,10 +94,10 @@ export default {
                     value: window.Laravel.csrf_token
                 },
                 { type: "input", name: "_method", value: this.method },
-                ...this.extractFields(this.fields, 'hidden')
+                ...this.extractFields(this.fields, "hidden")
             ],
-            localFields: this.extractFields(this.fields, 'shown'),
-            
+            localFields: this.extractFields(this.fields, "shown"),
+
             fieldPerRowIterator: colCountIterator(this.fieldsPerRows)
         };
     },
@@ -140,8 +141,14 @@ export default {
             this.addNewFields(fieldsFromData);
         },
         addNewFields(fields) {
-            this.hiddenLocalFields = [...this.hiddenLocalFields, ...this.extractFields(fields, 'hidden')]
-            this.localFields = [...this.localFields, ...this.extractFields(fields, 'shown')];
+            this.hiddenLocalFields = [
+                ...this.hiddenLocalFields,
+                ...this.extractFields(fields, "hidden")
+            ];
+            this.localFields = [
+                ...this.localFields,
+                ...this.extractFields(fields, "shown")
+            ];
         },
         processLaravelOldInputs() {
             if (!this.oldInputs) return;
@@ -173,27 +180,43 @@ export default {
             if (!this.formHasErrors) return;
 
             e.preventDefault();
-        }, 
-        extractFields(arr, type){
-            switch(type){
-                case 'shown':
-                    return arr.filter((item) => item.type !== 'input')
-                case 'hidden':
-                    return arr.filter((item) => item.type === 'input')
+        },
+        extractFields(arr, type) {
+            switch (type) {
+                case "shown":
+                    return arr.filter(item => item.type !== "input");
+                case "hidden":
+                    return arr.filter(item => item.type === "input");
                 default:
-                    return arr
+                    return arr;
             }
         },
-        colCount(){
+        colCount() {
             let xs = {};
 
             let nextValue = this.fieldPerRowIterator.next().value;
-           
-            xs['xs' + nextValue] = true;
+
+            xs["xs" + nextValue] = true;
 
             return xs;
         }
-       
+    },
+    computed: {
+        formWrapper() {
+            if (!this.dialog) {
+                return {
+                    component: "div",
+                    props: {}
+                };
+            }
+
+            return {
+                component: "v-dialog",
+                props: {
+                    "max-width": this.width || "600"
+                }
+            };
+        }
     }
 };
 </script>

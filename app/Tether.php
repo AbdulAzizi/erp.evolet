@@ -17,4 +17,9 @@ class Tether extends Model
     {
         return $this->belongsTo('App\Process', 'to_process_id');
     }
+
+    public function form()
+    {
+        return $this->belongsTo('App\Form');
+    }
 }

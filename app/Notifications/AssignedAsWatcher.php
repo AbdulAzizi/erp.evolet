@@ -60,7 +60,7 @@ class AssignedAsWatcher extends Notification
         $responsible = $this->responsible->name;
 
         return [
-            'avatar' => asset('img/'.$this->from->img),
+            'avatar' => $this->from->img,
             'title' =>  "$from назначил(а) вас наблюдателем в задаче: $title Исполнитель: $responsible"
         ];
     }

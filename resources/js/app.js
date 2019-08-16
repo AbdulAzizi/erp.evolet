@@ -113,10 +113,38 @@ Vue.mixin({
                 )} !important`
             };
         },
+<<<<<<< HEAD
         durObj(milliseconds) {
             return this.moment.duration(
                 moment(parseInt(milliseconds)).valueOf()
             );
+=======
+        durObj(milliseconds){
+            return this.moment.duration(moment(parseInt(milliseconds)).valueOf());
+        },
+        prepareFields(fields) {
+            let fieldsClone = [...fields];
+
+            return fieldsClone.map(field => {
+                field["rules"] =
+                    field.pivot && field.pivot.required
+                        ? ["required"]
+                        : [true];
+
+                field["type"] = this.getDynamicFieldsType(field.type.name);
+
+                return field;
+            });
+        },
+        getDynamicFieldsType(laravelType) {
+            //TODO Make a normal adapter or refactor to use same types in vue and laravel
+            switch (laravelType) {
+                case "list":
+                    return "autocomplete";
+                default:
+                    return laravelType;
+            }
+>>>>>>> d6f99f429109182078b8d6ddd69f3855edcbc452
         }
     },
     computed: {
@@ -147,18 +175,10 @@ Vue.component("avatar", require("./components/Avatar.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
-Vue.component(
-    "profile-view",
-    require("./components/views/Profile.vue").default
-);
-Vue.component(
-    "products-view",
-    require("./components/views/Products.vue").default
-);
-Vue.component(
-    "projects-view",
-    require("./components/views/Projects.vue").default
-);
+Vue.component("profile-view", require("./components/views/Profile.vue").default);
+Vue.component("products-view", require("./components/views/Products.vue").default);
+Vue.component("products-create-view", require("./components/views/products/Create.vue").default);
+Vue.component("projects-view", require("./components/views/Projects.vue").default);
 Vue.component("bp", require("./components/views/BP.vue").default);
 
 /****************************TASKS********************************/
