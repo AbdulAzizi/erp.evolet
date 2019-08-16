@@ -113,12 +113,6 @@ Vue.mixin({
                 )} !important`
             };
         },
-<<<<<<< HEAD
-        durObj(milliseconds) {
-            return this.moment.duration(
-                moment(parseInt(milliseconds)).valueOf()
-            );
-=======
         durObj(milliseconds){
             return this.moment.duration(moment(parseInt(milliseconds)).valueOf());
         },
@@ -144,7 +138,6 @@ Vue.mixin({
                 default:
                     return laravelType;
             }
->>>>>>> d6f99f429109182078b8d6ddd69f3855edcbc452
         }
     },
     computed: {
