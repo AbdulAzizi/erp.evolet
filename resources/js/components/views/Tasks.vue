@@ -1,14 +1,12 @@
 <template>
-  <v-container fluid class="pa-0">
-    <v-card-text fluid>
-      <v-card-text>
-        <v-row :justify="justify">
-          <!-- <v-col cols="12" sm="6" class="py-2"> -->
-          <v-btn-toggle v-model="text" rounded>
-            <v-btn 
-              text 
-              value="table" 
-              color="primary" 
+    <v-card-text fluid  class="pa-0">
+      <v-card-text class="pt-0 px-0">
+        <v-layout justify-end>
+          <v-btn-toggle v-model="text">
+            <v-btn
+              text
+              value="table"
+              color="primary"
               @click="selectTab(1)"
               ><v-icon>mdi-table-large</v-icon></v-btn>
             <v-btn
@@ -18,8 +16,7 @@
               @click="selectTab(2)"
             ><v-icon>mdi-calendar-month</v-icon></v-btn>
           </v-btn-toggle>
-          <!-- </v-col> -->
-        </v-row>
+        </v-layout>
       </v-card-text>
 
       <tasks-table :tasks="tasks" v-if="currentTab == 1"></tasks-table>
@@ -27,7 +24,7 @@
 
       <tasks-add :users="users" :errors="errors" :tags="tags" />
     </v-card-text>
-  </v-container>
+  <!-- </v-container> -->
 </template>
 
 <script>
