@@ -28,8 +28,8 @@ const vuetifyOptions = {
                 // info: "#2196f3",
             },
         },
-        
-        
+
+
     },
     icons: {
         iconfont: 'mdi', // default - only for display purposes
@@ -100,12 +100,12 @@ Vue.mixin({
 
             if(this.$vuetify.theme.currentTheme[preparedColor])
                 return this.$vuetify.theme.currentTheme[preparedColor];
-                
+
             if(modifier){
                 modifier = modifier.replace("-", "");
                 return colors[preparedColor][modifier];
             }
-            
+
             return colors[preparedColor]['base'];
         },
         colorfulShadow(color) {
@@ -143,10 +143,13 @@ Vue.component("avatar", require("./components/Avatar.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
-Vue.component("profile-view", require("./components/views/Profile.vue").default);
+Vue.component("profile-banner", require("./components/profile/Banner.vue").default);
 Vue.component("products-view", require("./components/views/Products.vue").default);
 Vue.component("projects-view", require("./components/views/Projects.vue").default);
 Vue.component("bp", require("./components/views/BP.vue").default);
+Vue.component("profile-tasks", require("./components/views/ProfileTasks.vue").default);
+Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vue").default);
+Vue.component("profile-resume-create", require('./components/views/ProfileResumeCreate.vue').default);
 
 
 /****************************TASKS********************************/
@@ -155,7 +158,6 @@ Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
 Vue.component("tasks-watchers", require("./components/tasks/Watchers.vue").default);
 Vue.component("tasks", require("./components/Tasks.vue").default);
 Vue.component("task", require("./components/Task.vue").default);
-
 Vue.component("form-field", require("./components/form/FormField.vue").default);
 Vue.component("user-selector", require("./components/form/UserSelector.vue").default);
 Vue.component("picker", require("./components/form/Picker.vue").default);
