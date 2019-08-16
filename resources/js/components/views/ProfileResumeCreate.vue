@@ -12,6 +12,10 @@
         <v-form ref="form" method="POST" :action="appPath+`users/${user.id}/cv`">
             <input type="hidden" name="_token" :value="csrf_token" />
             <input type="hidden" name="degrees" :value="JSON.stringify(degrees)" />
+            <input type="hidden" name="jobs" :value="JSON.stringify(jobs)" />
+            <input type="hidden" name="families" :value="JSON.stringify(families)" />
+            <input type="hidden" name="languages" :value="JSON.stringify(languages)" />
+            <input type="hidden" name="achievments" :value="JSON.stringify(achievments)" />
             <v-card>
                 <v-container>
                     <v-layout row wrap justify-space-between>
