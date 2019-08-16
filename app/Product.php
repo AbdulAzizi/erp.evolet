@@ -18,7 +18,7 @@ class Product extends Model
 
     public function fields()
     {
-        return $this->belongsToMany('App\Field','product_values')->withPivot('value');
+        return $this->belongsToMany('App\Field','product_values')->using('App\ProductValue')->withPivot('value');
     }
 
     public function currentProcess()

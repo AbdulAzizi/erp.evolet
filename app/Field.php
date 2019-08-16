@@ -18,7 +18,7 @@ class Field extends Model
 
     public function fields()
     {
-        return $this->belongsToMany(Product::class, 'product_values');
+        return $this->belongsToMany(Product::class, 'product_values')->using('App\ProductValue');
     }
 
     public function type()
