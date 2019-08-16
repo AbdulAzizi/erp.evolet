@@ -47,6 +47,7 @@
                                 <!-- {{preparedFields({...tether.form})}} -->
                                 <dynamic-form
                                     width="800"
+                                    dialog
                                     :fieldsPerRows="[2]"
                                     :fields="preparedFields(tether.form)"
                                     :title="tether.form.label"

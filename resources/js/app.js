@@ -116,6 +116,29 @@ Vue.mixin({
         },
         durObj(milliseconds){
             return this.moment.duration(moment(parseInt(milliseconds)).valueOf());
+        },
+        prepareFields(fields) {
+            let fieldsClone = [...fields];
+
+            return fieldsClone.map(field => {
+                field["rules"] =
+                    field.pivot && field.pivot.required
+                        ? ["required"]
+                        : [true];
+
+                field["type"] = this.getDynamicFieldsType(field.type.name);
+
+                return field;
+            });
+        },
+        getDynamicFieldsType(laravelType) {
+            //TODO Make a normal adapter or refactor to use same types in vue and laravel
+            switch (laravelType) {
+                case "list":
+                    return "autocomplete";
+                default:
+                    return laravelType;
+            }
         }
     },
     computed: {

@@ -8,8 +8,9 @@
             </v-fab-transition>
             <dynamic-form
                 width="800"
+                dialog
                 :fieldsPerRows="[2]"
-                :fields="preparedFields"
+                :fields="fields"
                 :title="form.label"
                 activatorEventName="addProduct"
                 actionUrl="/products"
@@ -77,6 +78,7 @@ export default {
         return {
             tab: null,
             dialog: false,
+            fields: this.prepareFields(this.form.fields),
             headers: [
                 {
                     text: "Промо Компания",
@@ -95,17 +97,6 @@ export default {
     methods: {
         addProduct() {
             Event.fire("addProduct");
-        },
-        getDynamicFieldsType(laravelType) {
-            //TODO Make a normal adapter or refactor to use same types in vue and laravel
-            switch (laravelType) {
-                case "list":
-                    return "autocomplete";
-                    break;
-                default:
-                    return laravelType;
-                    break;
-            }
         }
     },
     created() {
@@ -134,21 +125,6 @@ export default {
                 ...preparedFields
             };
         });
-    },
-    computed: {
-        preparedFields() {
-            if (this.form)
-                return this.form.fields.map(field => {
-                    field["rules"] =
-                        field.pivot && field.pivot.required
-                            ? ["required"]
-                            : [true];
-
-                    field["type"] = this.getDynamicFieldsType(field.type.name);
-
-                    return field;
-                });
-        }
     }
 };
 </script>
