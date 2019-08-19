@@ -66,61 +66,78 @@
                 <v-list subheader>
                     <v-subheader>Параметры</v-subheader>
 
-                    <v-list-item>
-                        <v-list-item-avatar>
-                            <v-icon>mdi-calendar-clock</v-icon>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                            <v-list-item-title>{{ moment(task.deadline).format('D MMMM Y') }}</v-list-item-title>
-                            <v-list-item-subtitle>Дедлайн</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-icon>mdi-calendar-clock</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ moment(task.deadline).format('D MMMM Y') }}</v-list-item-title>
+              <v-list-item-subtitle>Дедлайн</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
 
-                    <v-list-item>
-                        <v-list-item-avatar>
-                            <v-icon>mdi-calendar-plus</v-icon>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                            <v-list-item-title>{{ moment(task.created_at).format('D MMMM Y') }}</v-list-item-title>
-                            <v-list-item-subtitle>Дата добавления</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-icon>mdi-calendar-plus</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ moment(task.created_at).format('D MMMM Y') }}</v-list-item-title>
+              <v-list-item-subtitle>Дата добавления</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
 
-                    <v-list-item>
-                        <v-list-item-avatar>
-                            <v-icon>mdi-format-list-checks</v-icon>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                            <v-list-item-title>{{ task.status.name }}</v-list-item-title>
-                            <v-list-item-subtitle>Статус</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-icon>mdi-format-list-checks</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ task.status.name }}</v-list-item-title>
+              <v-list-item-subtitle>Статус</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
 
-                    <v-list-item>
-                        <v-list-item-avatar>
-                            <v-icon>mdi-timelapse</v-icon>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                            <v-list-item-title>
-                                <span
-                                    v-if="durObj(task.planned_time).days()"
-                                >{{ durObj(task.planned_time).days() }}д</span>
-                                <span
-                                    v-if="durObj(task.planned_time).hours()"
-                                >{{ durObj(task.planned_time).hours() }}ч</span>
-                                <span
-                                    v-if="durObj(task.planned_time).minutes()"
-                                >{{ durObj(task.planned_time).minutes() }}м</span>
-                            </v-list-item-title>
-                            <v-list-item-subtitle>Время на задачу</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-icon>mdi-timelapse</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>
+                <span
+                  v-if="durObj(task.planned_time).days()"
+                >{{ durObj(task.planned_time).days() }}д</span>
+                <span
+                  v-if="durObj(task.planned_time).hours()"
+                >{{ durObj(task.planned_time).hours() }}ч</span>
+                <span
+                  v-if="durObj(task.planned_time).minutes()"
+                >{{ durObj(task.planned_time).minutes() }}м</span>
+              </v-list-item-title>
+              <v-list-item-subtitle>Время на задачу</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
 
-                    <priority :id="task.priority" classes=" lighten-3"></priority>
-                </v-list>
-            </v-flex>
-        </v-layout>
-    </v-card>
+          <priority :id="task.priority" classes=" lighten-3"></priority>
+
+          <v-subheader v-if="task.tags.length">Теги</v-subheader>
+          <div class="px-3">
+            <v-chip
+              class="mb-2 mr-2"
+              color="grey lighten-4"
+              text-color="grey darken-1"
+              v-for="(tag, index) in task.tags"
+              :key="'tag-'+index"
+              small
+            >
+              <v-avatar style="margin-left:-8px" class="mr-0" left>
+                <v-icon class="body-1">mdi-tag</v-icon>
+              </v-avatar>
+              {{ tag.name }}
+            </v-chip>
+          </div>
+        </v-list>
+      </v-flex>
+    </v-layout>
+  </v-card>
 </template>
 
 <script>
@@ -166,7 +183,7 @@ export default {
         };
     },
     created() {
-        
+
         this.synch();
     },
     watch: {
@@ -190,7 +207,7 @@ export default {
                     rules: field.pivot && field.pivot.required
                             ? ["required"]
                             : [true],
-                    type: this.getDynamicFieldsType(field.type.name) 
+                    type: this.getDynamicFieldsType(field.type.name)
                 };
             });
         },
@@ -205,8 +222,9 @@ export default {
                     break;
             }
         }
-    }
-};
+      }
+    };
+
 </script>
 
 <style>

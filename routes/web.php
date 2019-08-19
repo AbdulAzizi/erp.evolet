@@ -31,19 +31,23 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
     Route::post('/divisions', 'DivisionController@store')->name('division.store');
-    
+
     Route::post('/users', 'UserController@store')->name('users.store');
     Route::get('/users/{id}', 'UserController@show')->name('users.show');
 
     Route::get('/products','ProductController@index')->name('products.index');
     Route::get('/products/create','ProductController@create')->name('products.create');
     Route::post('/products','ProductController@store')->name('products.store');
-    
+
     Route::get('/processes/{id}','ProcessController@show')->name('processes.show');
 
     Route::get('/projects','ProjectController@index')->name('projects.index');
     Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');
 
     Route::get('/bp', 'ProcessController@index')->name('bp');
+    Route::get('/profile/tasks', 'UserController@tasks')->name('profile-tasks');
+    Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume-show');
+    Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume-store');
+
 
 });
