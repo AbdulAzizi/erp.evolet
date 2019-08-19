@@ -25,6 +25,6 @@
         "cytoscape-node-html-label": "^1.1.3",
         "moment": "^2.24.0",
         "moment-timezone": "^0.5.26",
-        "vuetify": "^2.0.5"
+        "vuetify": "2.0.5"
     }
 }
