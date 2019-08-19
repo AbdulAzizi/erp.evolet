@@ -20,7 +20,7 @@ class TableSeeder extends Seeder
         $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
         $bp1 = Process::create(['name' => 'Новое Лекарственное Средство']);
         
-        $form2 = Form::create(['name' => 'ПНК', 'label' => 'ПНК']);
+        $form2 = Form::where('name', 'Форма КП_ПК Этап 2')->first();
      
         $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
         
@@ -60,7 +60,7 @@ class TableSeeder extends Seeder
             'title' => 'Заполните следуйщие поля',
             'planned_time' => '180120000',
             'deadline' => date('Y-m-d H:i:s'),
-            'responsibility_id' => App\Responsibility::where('name','НО')->first()->id
+            'responsibility_id' => App\Responsibility::where('name','Куратор Портфель ПК')->first()->id
         ]);
                 
         $perviy_god = Field::create(['label' => 'Первый год', 'name' => 'perviy_god']);
@@ -91,45 +91,5 @@ class TableSeeder extends Seeder
             //     $nkpn->id => ['required'=>true],
             //     $nkpf->id => ['required'=>true],
         // ]);
-        
-        
-        App\Task::create([
-            'title'=>'Включить комп',
-            'description'=>'Не забудь про разетку',
-            'responsible_id' => 2,
-            'priority' => 0,
-            'status_id' => 1,
-            'spent_time' => '9999999999',
-            'planned_time' => '9999999999',
-            'deadline' => date('Y-m-d H:i:s'),
-            'from_id' => 1,
-            'from_type' => 'App\Process'
-        ]);
-
-        App\Task::create([
-            'title' => 'Сделать презентатцию',
-            'description' => 'Хорошую',
-            'responsible_id' => 2,
-            'priority' => 1,
-            'status_id' => 1,
-            'spent_time' => '9999999999',
-            'planned_time' => '9999999999',
-            'deadline' => date('Y-m-d H:i:s'),
-            'from_id' => 1,
-            'from_type' => 'App\User'
-        ]);
-
-        App\Task::create([
-            'title' => 'Сделать презентатцию',
-            'description' => 'Хорошую',
-            'responsible_id' => 1,
-            'priority' => 2,
-            'status_id' => 1,
-            'spent_time' => '9999999999',
-            'planned_time' => '9999999999',
-            'deadline' => date('Y-m-d H:i:s'),
-            'from_id' => 2,
-            'from_type' => 'App\User'
-        ]);
     }
 }
