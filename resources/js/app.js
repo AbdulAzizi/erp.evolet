@@ -165,6 +165,8 @@ Vue.component(
 );
 Vue.component("stats-card", require("./components/StatsCard.vue").default);
 Vue.component("avatar", require("./components/Avatar.vue").default);
+Vue.component("profile-error", require('./components/profile/ResumeError.vue').default);
+Vue.component("resume-edit", require('./components/profile/ResumeEdit.vue').default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
@@ -212,6 +214,7 @@ Vue.component(
     "helpers-offset",
     require("./components/helpers/Offset.vue").default
 );
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

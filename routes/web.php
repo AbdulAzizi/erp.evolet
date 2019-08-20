@@ -49,5 +49,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume-show');
     Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume-store');
 
+    Route::get('/users/{id}/cv/edit', 'ResumeController@showEdit')->name('resume-show-edit');
+
 
 });
