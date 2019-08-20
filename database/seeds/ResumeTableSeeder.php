@@ -25,7 +25,7 @@ class ResumeTableSeeder extends Seeder
             'birthday' => new Carbon('1996-01-17'),
             'military_status' => 'Не объязан',
             'phone' => '985100888',
-            'user_id' => User::where('name', 'Abdulaziz')->first()->id,
+            'user_id' => User::where('name', 'AbdulAziz')->first()->id,
 
         ]);
 
