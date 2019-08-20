@@ -7,11 +7,12 @@ import { setTimeout } from "timers";
 export default {
     props: {
         listName: String,
-        relatedListName: String
+        relatedListName: String,
+        value: Array
     },
     data() {
         return {
-            selectedItem: null,
+            selectedItem: this.value || null,
             localField: { ...this.$attrs, type: "autocomplete" },
             itemsHasFiltered: false
         };
