@@ -166,9 +166,8 @@ class ProductController extends Controller
                     ->where('project_id', $projectId);
             })->first();
 
-            // dd($responsiblePerson);
-            // Push each task to array
-            $data[] = [
+            // create tasks
+            $createdTask = Task::create([
                 'title' => $task->title,
                 'description' => $task->description,
                 'priority' => 2,
@@ -178,11 +177,9 @@ class ProductController extends Controller
                 'from_id' => $process->id,
                 'from_type' => Process::class,
                 'created_at' => Carbon::now(),
-            ];
+            ]);
 
-            Notification::send($responsiblePerson, new AssignedToTask($process, $task));
+            Notification::send($responsiblePerson, new AssignedToTask($process, $createdTask));
         }
-        // Insert all Tasks at once
-        Task::insert($data);
     }
 }

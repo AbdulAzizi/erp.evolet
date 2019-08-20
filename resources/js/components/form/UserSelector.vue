@@ -61,11 +61,21 @@
 
 <script>
 export default {
-    props: ["users", "label", "icon", "name", "hint"],
-    data: () => ({
-        selectedUsers: [],
-        searchText: null
-    }),
+    props: {
+        users: Array,
+        label: String,
+        icon: String,
+        name: String,
+        hint: String,
+        value: Array
+    },
+    data(){
+        console.log(this.value);
+        return {
+            selectedUsers: this.value || [],
+            searchText: null
+        }
+    },
     methods: {
         remove(user) {            
             this.selectedUsers = this.selectedUsers.filter(

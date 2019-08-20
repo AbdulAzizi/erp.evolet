@@ -68,12 +68,13 @@ export default {
         label: String,
         prependIcon: String,
         rules: Array,
-        width: String
+        width: String,
+        value: String
     },
     data() {
         return {
             pickerData: "",
-            pickerDataField: "",
+            pickerDataField: this.value || "",
             pickerDialog: false,
 
             //Date with time mode

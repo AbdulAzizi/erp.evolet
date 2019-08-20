@@ -1,59 +1,65 @@
 <template>
-    <v-card-text fluid  class="pa-0">
-      <v-card-text class="pt-0 px-0">
-        <v-layout justify-end>
-          <v-btn-toggle v-model="text">
-            <v-btn
-              text
-              value="table"
-              color="primary"
-              @click="selectTab(1)"
-              ><v-icon>mdi-table-large</v-icon></v-btn>
-            <v-btn
-              text
-              value="calendar"
-              color="primary"
-              @click="selectTab(2)"
-            ><v-icon>mdi-calendar-month</v-icon></v-btn>
-          </v-btn-toggle>
-        </v-layout>
-      </v-card-text>
+    <div>
+        <v-row>
+            <v-col class="pt-0">
+                <v-btn-toggle v-model="text" active-class="primary" class="float-right">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-btn small text value="table" @click="isTable = true" dark v-on="on">
+                                <v-icon
+                                    :color="isTable ? 'white': 'grey lighten-0'"
+                                >mdi-table-of-contents</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>таблица</span>
+                    </v-tooltip>
 
-      <tasks-table :tasks="tasks" v-if="currentTab == 1"></tasks-table>
-      <tasks-calendar :tasks="tasks" v-if="currentTab == 2"></tasks-calendar>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                small
+                                text
+                                value="calendar"
+                                @click="isTable = false"
+                                dark
+                                v-on="on"
+                            >
+                                <v-icon
+                                    :color="!isTable ? 'white': 'grey lighten-0'"
+                                >mdi-calendar-month</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>календарь</span>
+                    </v-tooltip>
+                </v-btn-toggle>
+            </v-col>
+        </v-row>
 
-      <tasks-add :users="users" :errors="errors" :tags="tags" />
-    </v-card-text>
-  <!-- </v-container> -->
+        <tasks-table :tasks="tasks" v-if="isTable"></tasks-table>
+        <tasks-calendar :tasks="tasks" v-if="!isTable"></tasks-calendar>
+
+        <tasks-add :users="users" :errors="errors" :tags="tags" />
+    </div>
 </template>
 
 <script>
 export default {
-  props: ["tasks", "users", "errors", "tags"],
-  data() {
-    return {
-      text: "table",
-      icon: "justify",
-      toggle_none: null,
-      toggle_one: 0,
-      toggle_exclusive: 2,
-      toggle_multiple: [0, 1, 2],
-      // firstSwitcher: true,
-      // secondSwitcher: false,
-      currentTab: 1,
-      justify: "end"
-    };
-  },
-  methods: {
-    selectTab(selectedTab){
-      this.currentTab = selectedTab
+    props: ["tasks", "users", "errors", "tags"],
+    data() {
+        return {
+            text: "table",
+            icon: "justify",
+            isTable: true,
+            justify: "end"
+        };
+    },
+    methods: {
+        selectTab(selectedTab) {
+            this.currentTab = selectedTab;
+        }
     }
-  }
 };
 </script>
 
 <style>
-.block_toggle_btn {
-  padding: 0;
-}
 </style>
