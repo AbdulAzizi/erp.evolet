@@ -147,7 +147,7 @@ const getComboboxField = field => {
 
 const getManyToManyField = field => {
     const baseAutoComplete = getAutoCompleteField(field);
-    
+
     //Default props for userselector
     baseAutoComplete.component = "many-to-many-select";
     baseAutoComplete.props = {
@@ -193,7 +193,8 @@ export default {
     props: {
         field: Object,
         errors: Object | Array,
-        oldInputs: Object | Array
+        oldInputs: Object | Array,
+        value: null
     },
 
     data() {
@@ -268,6 +269,9 @@ export default {
     watch: {
         fieldVar(value) {
             this.$emit("input", value);
+        },
+        value(v){
+            this.fieldVar = v;
         }
     },
     methods: {

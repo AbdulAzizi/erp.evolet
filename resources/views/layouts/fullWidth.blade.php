@@ -9,11 +9,7 @@
 	<navbar :user="{{$authUser}}"></navbar>
 
 	<v-content>
-        <v-container fluid>
-            @yield('content')
-        </v-container>
+        @yield('content')
 	</v-content>
-
-
 
 @endsection

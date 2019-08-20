@@ -8,7 +8,7 @@
         :items-per-page="100"
     />-->
 
-    <v-container fluid>
+    <div>
         <v-flex xs12 sm6 class="pb-3">
             <span class="mr-3">Сортировать по</span>
             <v-btn-toggle active-class="primary" rounded v-model="toggle_sort_by">
@@ -38,7 +38,7 @@
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
-    </v-container>
+    </div>
     <!-- <v-container grid-list-xl text-center fluid>
         <v-layout wrap>
             <v-flex v-for="(countries, pcName) in projects" :key="pcName">

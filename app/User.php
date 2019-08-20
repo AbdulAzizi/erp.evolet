@@ -64,7 +64,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Responsibility');
     }
-    
+
     public function givenTasks()
     {
         return $this->morphMany('App\Task', 'from');
@@ -113,7 +113,7 @@ class User extends Authenticatable
      *
      * @return Illuminate\Database\Eloquent\Builder
      */
-    
+
     public static function alone()
     {
         return self::without(['position', 'responsibilities']);
@@ -127,5 +127,11 @@ class User extends Authenticatable
     {
         return "$this->name $this->surname";
     }
+
+    public function resume()
+    {
+        return $this->hasOne('\App\Resume');
+    }
+
 
 }

@@ -1,27 +1,14 @@
 <template>
     <div>
-        <div v-if="form">
-            <v-fab-transition>
-                <v-btn @click="addProduct" dark fab fixed bottom large right color="primary">
-                    <v-icon>mdi-plus</v-icon>
-                </v-btn>
-            </v-fab-transition>
-            <dynamic-form
-                width="800"
-                dialog
-                :fieldsPerRows="[2]"
-                :fields="fields"
-                :title="form.label"
-                activatorEventName="addProduct"
-                actionUrl="/products"
-                method="post"
-            ></dynamic-form>
-        </div>
-
         <v-tabs v-model="tab" right background-color="secondary" color="primary" dark>
             <v-tab href="#products">Продукты</v-tab>
             <v-tab href="#participants">Участники</v-tab>
-            <v-btn small class="align-self-center mx-4 primary" :href="appPath + 'products/create'">Новый продукт</v-btn>
+            <v-btn 
+            small 
+            class="align-self-center mx-4 primary" 
+            :href="appPath + 'products/create?'+
+            getParam(['pc_id','country_id','project_id'])"
+            >Новый продукт</v-btn>
         </v-tabs>
         <v-tabs-items v-model="tab" class="transparent">
             <v-tab-item value="products">
@@ -64,9 +51,6 @@
 <script>
 export default {
     props: {
-        form: {
-            required: false
-        },
         items: {
             required: true
         },
@@ -77,8 +61,6 @@ export default {
     data() {
         return {
             tab: null,
-            dialog: false,
-            fields: this.prepareFields(this.form.fields),
             headers: [
                 {
                     text: "Промо Компания",
@@ -95,36 +77,42 @@ export default {
         };
     },
     methods: {
-        addProduct() {
-            Event.fire("addProduct");
+        getParam(params){
+            let url = new URL(window.location.href);
+            return params.map( function (param) {
+                return param+'='+url.searchParams.get(param) 
+            }).join('&');
         }
     },
     created() {
-        // prepare headers
-        let fieldsHeaders = this.items[0].fields.map(function(field) {
-            return {
-                text: field.label,
-                value: field.label,
-                class: ["primary", "table-header"]
-            };
-        });
-        // merge headers
-        this.headers = [...this.headers, ...fieldsHeaders];
+        
+        if(this.items.length != 0){
+            // prepare headers
+            let fieldsHeaders = this.items[0].fields.map(function(field) {
+                return {
+                    text: field.label,
+                    value: field.label,
+                    class: ["primary", "table-header"]
+                };
+            });
+            // merge headers
+            this.headers = [...this.headers, ...fieldsHeaders];
 
-        // change the structure of items
-        this.preparedItems = this.items.map(function(item) {
-            let preparedFields = {};
+            // change the structure of items
+            this.preparedItems = this.items.map(function(item) {
+                let preparedFields = {};
 
-            for (const field of item.fields) {
-                preparedFields[field.label] = field.pivot.value;
-            }
+                for (const field of item.fields) {
+                    preparedFields[field.label] = field.pivot.value;
+                }
 
-            return {
-                country: item.project.country.name,
-                pc: item.project.pc.name,
-                ...preparedFields
-            };
-        });
+                return {
+                    country: item.project.country.name,
+                    pc: item.project.pc.name,
+                    ...preparedFields
+                };
+            });
+        }
     }
 };
 </script>

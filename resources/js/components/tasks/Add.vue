@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" max-width="700">
         <template v-slot:activator="{ on }">
             <v-fab-transition>
-                <v-btn v-on="on" dark fab fixed bottom right large color="primary">
+                <v-btn v-on="on" dark fab fixed bottom right color="primary">
                     <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </v-fab-transition>
@@ -16,14 +16,14 @@
                     <v-toolbar-title class="font-weight-regular">Новая задача</v-toolbar-title>
                 </v-toolbar>
 
-                <v-container>
-                    <v-layout row wrap>
-                        <v-flex xs12 v-if="!Array.isArray(errors)">
+                <v-container class>
+                    <v-row>
+                        <v-col cols="12" class="py-0" v-if="!Array.isArray(errors)">
                             <h1
                                 class="subheading red--text text--darken-1 ml-1"
                             >Форма заполнена не верно</h1>
-                        </v-flex>
-                        <v-flex xs12>
+                        </v-col>
+                        <v-col cols="12" class="pb-0">
                             <form-field
                                 :field="{
                                 type: 'string',
@@ -33,8 +33,8 @@
                                 rules: ['required'],
                             }"
                             />
-                        </v-flex>
-                        <v-flex xs12>
+                        </v-col>
+                        <v-col cols="12" class="py-0">
                             <form-field
                                 :field="{
                                 type: 'text',
@@ -43,8 +43,8 @@
                                 icon: 'mdi-text-subject',
                             }"
                             />
-                        </v-flex>
-                        <v-flex xs12>
+                        </v-col>
+                        <v-col cols="12" class="py-0">
                             <form-field
                                 :field="{
                                 type: 'users',
@@ -56,8 +56,8 @@
                                 rules: ['required']
                             }"
                             />
-                        </v-flex>
-                        <v-flex xs12>
+                        </v-col>
+                        <v-col cols="12" class="py-0">
                             <form-field
                                 :field="{
                                 type: 'date-time',
@@ -67,18 +67,18 @@
                                 rules: ['required']
                             }"
                             />
-                        </v-flex>
-                        <v-flex xs-12>
+                        </v-col>
+                        <v-col cols="12" class="py-0">
                             <input type="hidden" name="estimatedTaskTime" :value="estimateTime" />
 
-                            <v-container grid-list-xl class="pa-0">
-                                <v-layout row wrap>
-                                    <v-flex xs12 class="mb-0 pb-0">
+                            <v-container class="pa-0">
+                                <v-row>
+                                    <v-col cols="12" class="pt-0">
                                         <h1
                                             class="subtitle-1 grey--text text--darken-1 ml-1"
                                         >Время на задачу</h1>
-                                    </v-flex>
-                                    <v-flex xs12 md4 class="pt-0">
+                                    </v-col>
+                                    <v-col cols="12" md="4" class="py-0">
                                         <form-field
                                             :field="{
                                             type: 'number',
@@ -89,8 +89,8 @@
                                             v-model="estimateDays"
                                             ref="estimateDays"
                                         />
-                                    </v-flex>
-                                    <v-flex xs12 md4 class="pt-0">
+                                    </v-col>
+                                    <v-col cols="12" md="4" class="py-0">
                                         <form-field
                                             :field="{
                                             type: 'number',
@@ -100,8 +100,8 @@
                                             v-model="estimateHours"
                                             ref="estimateHours"
                                         />
-                                    </v-flex>
-                                    <v-flex xs12 md4 class="pt-0">
+                                    </v-col>
+                                    <v-col cols="12" md="4" class="py-0">
                                         <form-field
                                             :field="{
                                             type: 'number',
@@ -111,117 +111,113 @@
                                             v-model="estimateMinutes"
                                             ref="estimateMinutes"
                                         />
-                                    </v-flex>
-                                </v-layout>
+                                    </v-col>
+                                </v-row>
                             </v-container>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
+                        </v-col>
+                        <v-col class="py-0" cols="9">
+                            <tasks-watchers :users="users"></tasks-watchers>
 
-                <v-card-actions>
-                    <v-flex>
-                        <tasks-watchers :users="users"></tasks-watchers>
-
-                        <v-dialog v-model="prioritiesDialog" width="500">
-                            <template v-slot:activator="{ on:dialog }">
-                                <v-tooltip top>
-                                    <template v-slot:activator="{ on:tooltip }">
-                                        <v-btn
-                                            v-on="{ ...tooltip, ...dialog }"
-                                            text
-                                            rounded
-                                            min-width="0"
-                                            style="min-width:0"
-                                            class="ma-0 grey--text px-2 text--darken-1"
-                                        >
-                                            <v-icon
-                                                :color="selectedPriority === null ? '' : priorities[selectedPriority].color "
-                                            >mdi-flag-variant</v-icon>
-                                        </v-btn>
-                                        <input
-                                            type="hidden"
-                                            name="priority"
-                                            :value="selectedPriority"
-                                        />
-                                    </template>
-                                    <span>Приоритет</span>
-                                </v-tooltip>
-                            </template>
-                            <v-card>
-                                <v-card-text>
-                                    <form-field
-                                        :field="{
+                            <v-dialog v-model="prioritiesDialog" width="500">
+                                <template v-slot:activator="{ on:dialog }">
+                                    <v-tooltip top>
+                                        <template v-slot:activator="{ on:tooltip }">
+                                            <v-btn
+                                                v-on="{ ...tooltip, ...dialog }"
+                                                text
+                                                rounded
+                                                min-width="0"
+                                                style="min-width:0"
+                                                class="ma-0 grey--text px-2 text--darken-1"
+                                            >
+                                                <v-icon
+                                                    :color="selectedPriority === null ? '' : priorities[selectedPriority].color "
+                                                >mdi-flag-variant</v-icon>
+                                            </v-btn>
+                                            <input
+                                                type="hidden"
+                                                name="priority"
+                                                :value="selectedPriority"
+                                            />
+                                        </template>
+                                        <span>Приоритет</span>
+                                    </v-tooltip>
+                                </template>
+                                <v-card>
+                                    <v-card-text>
+                                        <form-field
+                                            :field="{
                                         type: 'select',
                                         items: priorities,
                                         label: 'Приоритет',
                                         props: {'item-text': 'label'}
                                     }"
-                                        v-model="selectedPriority"
-                                    >
-                                        <template v-slot:item="{ item, index }">
-                                            <v-icon
-                                                :color="item.color"
-                                                class="mr-2"
-                                            >mdi-flag-variant</v-icon>
-                                            <span>{{ item.label }}</span>
-                                        </template>
-
-                                        <template v-slot:selection="{ item, index }">
-                                            <v-icon
-                                                class="mr-2"
-                                                :color="item.color"
-                                            >mdi-flag-variant</v-icon>
-                                            <span>{{ item.label }}</span>
-                                        </template>
-                                    </form-field>
-                                </v-card-text>
-                            </v-card>
-                        </v-dialog>
-
-                        <v-dialog v-model="tagsDialog" width="500">
-                            <template v-slot:activator="{ on:dialog }">
-                                <v-tooltip top>
-                                    <template v-slot:activator="{ on:tooltip }">
-                                        <v-btn
-                                            v-on="{ ...tooltip, ...dialog }"
-                                            text
-                                            rounded
-                                            min-width="0"
-                                            style="min-width:0"
-                                            class="ma-0 grey--text px-2 text--darken-1"
+                                            v-model="selectedPriority"
                                         >
-                                            <v-icon
-                                                :color="selectedTags.length ? 'primary' : '' "
-                                            >mdi-tag</v-icon>
-                                            <span>
-                                                <span
-                                                    v-for="(selectedTag, key) in selectedTags"
-                                                    :key="'selectedTag-'+key"
-                                                >
-                                                    <span class="primary--text title">#</span>
-                                                    {{ selectedTag.name }}
-                                                </span>
-                                            </span>
-                                        </v-btn>
+                                            <template v-slot:item="{ item, index }">
+                                                <v-icon
+                                                    :color="item.color"
+                                                    class="mr-2"
+                                                >mdi-flag-variant</v-icon>
+                                                <span>{{ item.label }}</span>
+                                            </template>
 
-                                        <input
-                                            type="hidden"
-                                            name="newTags"
-                                            :value="JSON.stringify(newTags)"
-                                        />
-                                        <input
-                                            type="hidden"
-                                            name="existingTags"
-                                            :value="JSON.stringify(existingTags)"
-                                        />
-                                    </template>
-                                    <span>Теги</span>
-                                </v-tooltip>
-                            </template>
-                            <v-card>
-                                <v-card-text>
-                                    <form-field
-                                        :field="{
+                                            <template v-slot:selection="{ item, index }">
+                                                <v-icon
+                                                    class="mr-2"
+                                                    :color="item.color"
+                                                >mdi-flag-variant</v-icon>
+                                                <span>{{ item.label }}</span>
+                                            </template>
+                                        </form-field>
+                                    </v-card-text>
+                                </v-card>
+                            </v-dialog>
+
+                            <v-dialog v-model="tagsDialog" width="500">
+                                <template v-slot:activator="{ on:dialog }">
+                                    <v-tooltip top>
+                                        <template v-slot:activator="{ on:tooltip }">
+                                            <v-btn
+                                                v-on="{ ...tooltip, ...dialog }"
+                                                text
+                                                rounded
+                                                min-width="0"
+                                                style="min-width:0"
+                                                class="ma-0 grey--text px-2 text--darken-1"
+                                            >
+                                                <v-icon
+                                                    :color="selectedTags.length ? 'primary' : '' "
+                                                >mdi-tag</v-icon>
+                                                <span>
+                                                    <span
+                                                        v-for="(selectedTag, key) in selectedTags"
+                                                        :key="'selectedTag-'+key"
+                                                    >
+                                                        <span class="primary--text title">#</span>
+                                                        {{ selectedTag.name }}
+                                                    </span>
+                                                </span>
+                                            </v-btn>
+
+                                            <input
+                                                type="hidden"
+                                                name="newTags"
+                                                :value="JSON.stringify(newTags)"
+                                            />
+                                            <input
+                                                type="hidden"
+                                                name="existingTags"
+                                                :value="JSON.stringify(existingTags)"
+                                            />
+                                        </template>
+                                        <span>Теги</span>
+                                    </v-tooltip>
+                                </template>
+                                <v-card>
+                                    <v-card-text>
+                                        <form-field
+                                            :field="{
                                         type: 'combobox',
                                         name: 'tags',
                                         label: 'Теги',
@@ -229,69 +225,69 @@
                                         icon: 'mdi-tag',
                                         multiple: true
                                     }"
-                                        v-model="selectedTags"
-                                    />
-                                </v-card-text>
-                            </v-card>
-                        </v-dialog>
+                                            v-model="selectedTags"
+                                        />
+                                    </v-card-text>
+                                </v-card>
+                            </v-dialog>
 
-                        <v-dialog v-model="reapeatTaskDialog" width="600" v-if="false">
-                            <template v-slot:activator="{ on:dialog }">
-                                <v-tooltip top>
-                                    <template v-slot:activator="{ on:tooltip }">
-                                        <v-btn
-                                            v-on="{ ...tooltip, ...dialog }"
-                                            text
-                                            rounded
-                                            min-width="0"
-                                            style="min-width:0"
-                                            class="ma-0 grey--text px-2 text--darken-1"
-                                        >
-                                            <v-icon>mdi-repeat</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Повторение</span>
-                                </v-tooltip>
-                            </template>
+                            <v-dialog v-model="reapeatTaskDialog" width="600" v-if="false">
+                                <template v-slot:activator="{ on:dialog }">
+                                    <v-tooltip top>
+                                        <template v-slot:activator="{ on:tooltip }">
+                                            <v-btn
+                                                v-on="{ ...tooltip, ...dialog }"
+                                                text
+                                                rounded
+                                                min-width="0"
+                                                style="min-width:0"
+                                                class="ma-0 grey--text px-2 text--darken-1"
+                                            >
+                                                <v-icon>mdi-repeat</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>Повторение</span>
+                                    </v-tooltip>
+                                </template>
 
-                            <v-card class="grey lighten-3">
-                                <v-container grid-list-md>
-                                    <v-layout row>
-                                        <v-flex xs3>
-                                            <v-subheader class="justify-end">каждый</v-subheader>
-                                        </v-flex>
-                                        <v-flex xs2>
-                                            <v-text-field
-                                                type="number"
-                                                v-model="intervalNumber"
-                                                min="1"
-                                                single-line
-                                                solo
-                                                class="text-xs-center"
-                                                rounded
-                                                filled
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex xs7>
-                                            <v-select
-                                                v-model="selectedInterval"
-                                                :items="timeIntervals[ selectedIntervals ]"
-                                                item-value="index"
-                                                item-text="name"
-                                                return-object
-                                                solo
-                                                rounded
-                                                filled
-                                            ></v-select>
-                                        </v-flex>
-                                    </v-layout>
-                                    <v-layout row>
-                                        <v-flex xs3>
-                                            <v-subheader class="justify-end">в</v-subheader>
-                                        </v-flex>
-                                        <v-flex xs9>
-                                            <form-field
-                                                :field="{
+                                <v-card class="grey lighten-3">
+                                    <v-container grid-list-md>
+                                        <v-row row>
+                                            <v-col xs3>
+                                                <v-subheader class="justify-end">каждый</v-subheader>
+                                            </v-col>
+                                            <v-col xs2>
+                                                <v-text-field
+                                                    type="number"
+                                                    v-model="intervalNumber"
+                                                    min="1"
+                                                    single-line
+                                                    solo
+                                                    class="text-xs-center"
+                                                    rounded
+                                                    filled
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col xs7>
+                                                <v-select
+                                                    v-model="selectedInterval"
+                                                    :items="timeIntervals[ selectedIntervals ]"
+                                                    item-value="index"
+                                                    item-text="name"
+                                                    return-object
+                                                    solo
+                                                    rounded
+                                                    filled
+                                                ></v-select>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row row>
+                                            <v-col xs3>
+                                                <v-subheader class="justify-end">в</v-subheader>
+                                            </v-col>
+                                            <v-col xs9>
+                                                <form-field
+                                                    :field="{
                                                 type: 'time',
                                                 name: 'time',
                                                 label: 'Выберите время',
@@ -305,44 +301,44 @@
                                                     }
                                                 }
                                             }"
-                                            />
-                                        </v-flex>
-                                    </v-layout>
-                                    <v-layout row>
-                                        <v-flex xs3>
-                                            <v-subheader class="justify-end">заканчивается</v-subheader>
-                                        </v-flex>
-                                        <v-flex v-bind="endTimeMenuSizes[endTime.index]">
-                                            <v-select
-                                                v-model="endTime"
-                                                :items="endTimeMenu"
-                                                item-value="index"
-                                                item-text="label"
-                                                return-object
-                                                solo
-                                                rounded
-                                                filled
-                                            ></v-select>
-                                        </v-flex>
+                                                />
+                                            </v-col>
+                                        </v-row>
+                                        <v-row row>
+                                            <v-col xs3>
+                                                <v-subheader class="justify-end">заканчивается</v-subheader>
+                                            </v-col>
+                                            <v-col v-bind="endTimeMenuSizes[endTime.index]">
+                                                <v-select
+                                                    v-model="endTime"
+                                                    :items="endTimeMenu"
+                                                    item-value="index"
+                                                    item-text="label"
+                                                    return-object
+                                                    solo
+                                                    rounded
+                                                    filled
+                                                ></v-select>
+                                            </v-col>
 
-                                        <v-flex v-if="endTime.index == 1" xs3>
-                                            <v-text-field
-                                                type="number"
-                                                v-model="endsAfterTimes"
-                                                min="1"
-                                                single-line
-                                                solo
-                                                rounded
-                                                filled
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex v-if="endTime.index == 1" xs3>
-                                            <v-subheader>раза</v-subheader>
-                                        </v-flex>
+                                            <v-col v-if="endTime.index == 1" xs3>
+                                                <v-text-field
+                                                    type="number"
+                                                    v-model="endsAfterTimes"
+                                                    min="1"
+                                                    single-line
+                                                    solo
+                                                    rounded
+                                                    filled
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col v-if="endTime.index == 1" xs3>
+                                                <v-subheader>раза</v-subheader>
+                                            </v-col>
 
-                                        <v-flex v-if="endTime.index == 2" xs5>
-                                            <form-field
-                                                :field="{
+                                            <v-col v-if="endTime.index == 2" xs5>
+                                                <form-field
+                                                    :field="{
                                                 type: 'date',
                                                 name: 'endsOnDate',
                                                 label: 'Выберите день',
@@ -356,18 +352,22 @@
                                                     }
                                                 }
                                             }"
-                                            />
-                                        </v-flex>
-                                    </v-layout>
-                                </v-container>
-                            </v-card>
-                        </v-dialog>
-                    </v-flex>
-
-                    <v-spacer></v-spacer>
-
-                    <v-btn color="primary" type="submit" @click="submit">Добавить</v-btn>
-                </v-card-actions>
+                                                />
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card>
+                            </v-dialog>
+                        </v-col>
+                        <v-col cols="3" class="py-0" align-self="end">
+                            <v-btn
+                                color="primary float-right"
+                                type="submit"
+                                @click="submit"
+                            >Добавить</v-btn>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-form>
         </v-card>
     </v-dialog>
