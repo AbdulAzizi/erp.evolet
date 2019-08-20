@@ -15,6 +15,8 @@ export default {
         processes: Array
     },
     data() {
+        console.log(this.processes);
+        
         return {
             cytoScape: null
         };
