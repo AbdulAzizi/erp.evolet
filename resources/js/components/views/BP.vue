@@ -15,15 +15,12 @@ export default {
         processes: Array
     },
     data() {
-        console.log(this.processes);
-        
         return {
             cytoScape: null
         };
     },
     mounted() {
         let nodes = this.extractEdgesNodesFromProcess();
-
         const cytoData = {
             container: document.getElementById("cyto"),
             elements: nodes,
@@ -140,7 +137,7 @@ export default {
 <style>
 #cyto {
     width: 100%;
-    height: 100%;
+    height: 90vh;
     display: block;
 }
 </style>
