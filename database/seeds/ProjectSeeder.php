@@ -14,7 +14,7 @@ class ProjectSeeder extends Seeder
      */
     public function run()
     {
-        $managers = \App\Responsibility::where('name', 'Куратор Портфель ПК')->first()->users;
+        $managers = \App\Responsibility::where('name', 'Куратор Портфел ПК стран')->first()->users;
 
         foreach ($managers as $manager) {
             factory(App\Project::class, 10)->create();

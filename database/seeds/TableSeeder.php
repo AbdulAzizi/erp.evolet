@@ -60,7 +60,7 @@ class TableSeeder extends Seeder
             'title' => 'Заполните следуйщие поля',
             'planned_time' => '180120000',
             'deadline' => date('Y-m-d H:i:s'),
-            'responsibility_id' => App\Responsibility::where('name','Куратор Портфель ПК')->first()->id
+            'responsibility_id' => App\Responsibility::where('name','Куратор Портфел ПК стран')->first()->id
         ]);
                 
         $perviy_god = Field::create(['label' => 'Первый год', 'name' => 'perviy_god']);
