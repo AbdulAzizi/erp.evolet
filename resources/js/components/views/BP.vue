@@ -71,6 +71,7 @@ export default {
 
         const options = {
             name: "klay",
+            zoom: 3,
             klay: {
                 edgeRouting: "SPLINES",
                 edgeSpacingFactor: 0.8,
@@ -105,7 +106,7 @@ export default {
                         label: process.name
                     }
                 };
-                let backEdges = process.back_tethers.map(bt => ({
+                let backEdges = process.back_tethers.map(bt => ({ 
                     group: "edges",
                     data: {
                         id: "t" + bt.id,
