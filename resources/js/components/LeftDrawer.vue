@@ -30,9 +30,9 @@
                         :key="'sybItem'+key"
                         :href="subItem.url"
                     >
-                        <!-- <v-list-item-action>
+                        <v-list-item-action>
 								<v-icon>{{ subItem.icon }}</v-icon>
-                        </v-list-item-action>-->
+                        </v-list-item-action>
 
                         <v-list-item-content>
                             <v-list-item-title>{{ subItem.text }}</v-list-item-title>
@@ -40,7 +40,7 @@
                     </v-list-item>
                 </v-list-group>
 
-                <v-list-item v-else :href="item.url">
+                <v-list-item   :href="item.url">
                     <v-list-item-action v-if="item.icon">
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-item-action>
@@ -56,66 +56,75 @@
 <script>
 export default {
     props: {
-        links: {
-            required: false,
-            default: () => [
-                {
-                    icon: "business_center",
-                    text: "Линк",
-                    items: [
-                        { text: "Линк", url: "/products" },
-                        { text: "Линк", url: "/products/create" }
-                    ]
-                },
-                { icon: "people", text: "Линк", url: "/divisions" },
-                { icon: "home", text: "Линк", url: "/tasks" }
-            ]
-        }
+        // links: {
+        //     required: false
+        // }
     },
     data: function() {
         return {
             auth_user: window.Laravel.auth,
             drawer: true,
-            items: this.links,
-            responsibilityLinks: {
-                "Куратор Портфель ПК": [
-                    { icon: "mdi-projector-screen", text: "Проекты", url: "/projects" },
-                    { icon: "mdi-sitemap", text: "Бизнес процессы", url: "/bp" },
-                    { icon: "mdi-attachment", text: "ЭП", url: "/projects?sortBy=country" },
-                    { icon: "mdi-attachment", text: "ЭН", url: "/bp" },
-				],
-				"НО":[
-					{ icon: "mdi-home", text: "Продукты", url: "/link" }
-				],
-				"ПК":[
-					{ icon: "mdi-home", text: "Продукты", url: "/link2" }
-				],
-				"Программист":[
-					{ icon: "mdi-account-key", text: "Линк Програмиста", url: "/#" }
-				],
-				"Директор":[
-					{ icon: "mdi-account-key", text: "Линк Директор", url: "/#" }
-				],
-				"Контент Менеджер":[],
-                "Веб Мастер":[],
-                "Аналитик":[]
-            }
+            items: [],
+            dynamicLinks: [
+                {
+                    icon: "mdi-attachment",
+                    text: "АСИ",
+                    url: "/#",
+                    responsibilities: [
+                        "Куратор Портфел ПК стран",
+                        "Руководитель ЭН"
+                    ],
+                    divisions: ["Evolet", "НАП", "ОМАР"]
+                },
+                {
+                    icon: "mdi-attachment",
+                    text: "ЭП",
+                    url: "/projects?sortBy=country",
+                    responsibilities: ["Куратор Портфел ПК стран"],
+                    divisions: ["Evolet", "НАП"]
+                },
+                {
+                    icon: "mdi-attachment",
+                    text: "ЭН",
+                    url: "/#",
+                    responsibilities: [
+                        "Куратор Портфел ПК стран",
+                        "Руководитель ЭН"
+                    ],
+                    divisions: ["Evolet", "НАП", "ОМАР"]
+                },
+                {
+                    icon: "mdi-sitemap",
+                    text: "Бизнес процессы",
+                    url: "/bp",
+                    responsibilities: ["Программист"],
+                    divisions: ["ОРПО"]
+                }
+            ]
         };
     },
     methods: {
-        getLinks(responsibilities) {
-			this.items = [ ];
-			
-            for (let key = 0; key < responsibilities.length; key++) {
-
-				let sidebarItem = this.responsibilityLinks[ responsibilities[key].name];
-				this.items = [ ...this.items, ...sidebarItem ];
-			}
-			
+        // return links that belong to this User
+        getLinksOf(user) {
+            // get user responsibilities as array
+            let userResps = user.responsibilities.map( resp => resp.name );
+            // loop through dynamicLinks
+            return this.dynamicLinks.filter( link => {
+                // if link division has users division
+                if( link.divisions.includes(user.division.abbreviation) )
+                    // if user has the position of "Руководитель"
+                    if( user.position.name == "Руководитель" )
+                        return link;
+                // get union elements of two arrays (link.responsibilities,userResps)
+                let unionLinks = link.responsibilities.filter(resp=>userResps.includes( resp ));
+                // return if there is union element
+                if(unionLinks.length)
+                    return link;
+            });
         }
     },
     created() {
-		this.getLinks(this.auth_user.responsibilities);
+        this.items = [...this.getLinksOf(this.auth_user) ];  
     }
 };
 </script>
