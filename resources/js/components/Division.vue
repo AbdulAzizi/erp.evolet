@@ -2,11 +2,13 @@
     <v-expansion-panel class="transparent" >
         <v-expansion-panel-header class="white">
             <h1 class="title">{{division.name}}</h1>
-            <div class="text-xs-right" v-if="!departmentDepth">
+            <div class="text-sm-right" v-if="!departmentDepth">
                 <v-menu offset-y>
                     <template v-slot:activator="{ on }">
                         <v-btn
                             text
+                            small
+                            right
                             icon
                             v-on="on"
                             class="ma-0 mr-2"
@@ -31,11 +33,11 @@
         <v-expansion-panel-content>
             <v-container grid-list-lg fluid px-0 pl-5>
                 <v-layout row wrap>
-                    <v-flex d-flex xs12 md6 lg4 xl3 v-if="division.head">
+                    <v-flex  xs12 md6 lg4 xl3 v-if="division.head">
                         <user-card :user="division.head" />
                     </v-flex>
-                    <v-flex d-flex xs12 md6 lg4 xl3>
-                        <v-card>
+                    <v-flex  xs12 md6 lg4 xl3>
+                        <v-card height="100%">
                             <v-card-text>
                                 <h2 class="subheading">Кол-во сотрудников:</h2>
                                 <h2 class="headline">{{ usersCount }}</h2>
@@ -46,7 +48,7 @@
 
                 <v-layout row wrap>
                     <v-flex
-                        d-flex
+                        
                         xs12
                         md6
                         lg4
@@ -56,9 +58,9 @@
                     >
                         <user-card :user="user" />
                     </v-flex>
-                    <v-flex d-flex xs12 md6 lg4 xl3 v-if="isUserHead && departmentDepth">
-                        <v-card @click="addUser()" hover>
-                            <div class="display-4 text-xs-center align-center">+</div>
+                    <v-flex  xs12 md6 lg4 xl3 v-if="isUserHead && departmentDepth">
+                        <v-card @click="addUser()" hover height="100%">
+                            <div class="display-4 text-sm-center align-center">+</div>
                         </v-card>
                     </v-flex>
                 </v-layout>
