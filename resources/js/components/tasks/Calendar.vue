@@ -57,12 +57,14 @@
 </template>
 
 <script>
+let currentDate = new Date().toJSON().slice(0, 10);
+
 export default {
   props: ["tasks"],
   data() {
     return {
-      today: "2019-01-14",
-      focus: "2019-01-04",
+      today: currentDate,
+      focus: currentDate,
       type: "month",
       typeToLabel: {
         month: "Month",
@@ -70,7 +72,7 @@ export default {
         day: "Day",
         "4day": "4 Days"
       },
-      start: null,
+      start: currentDate,
       end: null,
       selectedEvent: {},
       selectedElement: null,
