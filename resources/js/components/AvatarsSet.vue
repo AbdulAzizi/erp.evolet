@@ -6,7 +6,7 @@
         :key="'avatar-'+index"
         >
             <template v-slot:activator="{ on }">
-                <a v-on="on" :href="appPath + 'users/' + item.id" class="avatar-item" >
+                <a v-on="on" :href="appPath('users/' + item.id)" class="avatar-item" >
                     <v-avatar
                     color="white"
                     size="40"

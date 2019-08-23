@@ -323,6 +323,10 @@ class DivisionTableSeeder extends Seeder
                                     'name' => 'Отдел Информационных Технологии в Странах/ПК',
                                     'abbreviation' => 'ОИС',
                                 ],
+                                [
+                                    'name' => 'Отдел Разработки Програмных Обеспечений',
+                                    'abbreviation' => 'ОРПО',
+                                ],
                             ],
                         ],
                     ],

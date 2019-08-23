@@ -53,7 +53,8 @@
                                 label: 'Исполнители',
                                 icon: 'mdi-account-tie',
                                 hint: 'У каждого исполнителя будет своя отдельная задача',
-                                rules: ['required']
+                                rules: ['required'],
+                                multiple: true
                             }"
                             />
                         </v-col>

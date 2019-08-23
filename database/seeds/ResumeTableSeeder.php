@@ -8,6 +8,7 @@ use App\job;
 use App\Education;
 use App\Family;
 use App\Language;
+use App\User;
 
 
 class ResumeTableSeeder extends Seeder

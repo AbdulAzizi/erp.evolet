@@ -15,15 +15,12 @@ export default {
         processes: Array
     },
     data() {
-        console.log(this.processes);
-        
         return {
             cytoScape: null
         };
     },
     mounted() {
         let nodes = this.extractEdgesNodesFromProcess();
-
         const cytoData = {
             container: document.getElementById("cyto"),
             elements: nodes,
@@ -74,6 +71,7 @@ export default {
 
         const options = {
             name: "klay",
+            zoom: 3,
             klay: {
                 edgeRouting: "SPLINES",
                 edgeSpacingFactor: 0.8,
@@ -108,7 +106,7 @@ export default {
                         label: process.name
                     }
                 };
-                let backEdges = process.back_tethers.map(bt => ({
+                let backEdges = process.back_tethers.map(bt => ({ 
                     group: "edges",
                     data: {
                         id: "t" + bt.id,
@@ -140,7 +138,7 @@ export default {
 <style>
 #cyto {
     width: 100%;
-    height: 100%;
+    height: 90vh;
     display: block;
 }
 </style>

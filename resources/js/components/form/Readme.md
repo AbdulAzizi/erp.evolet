@@ -247,6 +247,7 @@ Field with list of persons with avatar, name and position, serves for selecting 
     :hint="field.hint"
     :icon="field.icon"
     :users="field.users"
+    :multiple="field.multiple"
 />
 ```
 

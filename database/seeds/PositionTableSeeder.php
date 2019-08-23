@@ -13,8 +13,9 @@ class PositionTableSeeder extends Seeder
     {
         $positions = App\Position::insert([
             ['name'=>'Руководитель'],
-            ['name'=>'Сотрудник'],
+            ['name'=>'Ведущий Специалист'],
             ['name'=>'Специалист'],
+            ['name'=>'Стажёр'],
         ]);
     }
 }
