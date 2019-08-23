@@ -4,7 +4,7 @@
     active-class="true"
     height="100%"
     hover
-    :href="appPath + 'users/' + user.id"
+    :href="appPath('users/' + user.id)"
   >
     <v-img
       :src="photo(user.img)"

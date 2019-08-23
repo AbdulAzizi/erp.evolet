@@ -9,12 +9,12 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mr-2">
-      <v-btn color="grey darken-1" text href="/division">{{user.division.abbreviation}}</v-btn>
+      <v-btn color="grey darken-1" text :href="appPath('division')">{{user.division.abbreviation}}</v-btn>
     </v-toolbar-items>
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on" :href="appPath + 'users'">
+        <v-btn icon v-on="on" :href="appPath('users')">
           <v-icon color="grey darken-1">mdi-account-group</v-icon>
         </v-btn>
       </template>
@@ -23,7 +23,7 @@
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on" :href="appPath + 'tasks'">
+        <v-btn icon v-on="on" :href="appPath('tasks')">
           <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
         </v-btn>
       </template>
