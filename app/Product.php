@@ -31,4 +31,8 @@ class Product extends Model
         return $this->belongsTo('App\Project');
     }
 
+    public function history()
+    {
+        return $this->morphMany(History::class, 'happendWith');
+    }
 }
