@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
+
+
+    public function index(Request $request)
+    {
+
+        $users = User::all();
+
+        return view('profile.index', compact('users'));
+    }
+
     public function show(Request $request)
     {
 

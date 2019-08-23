@@ -113,17 +113,17 @@ Vue.mixin({
                 )} !important`
             };
         },
-        durObj(milliseconds){
-            return this.moment.duration(moment(parseInt(milliseconds)).valueOf());
+        durObj(milliseconds) {
+            return this.moment.duration(
+                moment(parseInt(milliseconds)).valueOf()
+            );
         },
         prepareFields(fields) {
             let fieldsClone = [...fields];
 
             return fieldsClone.map(field => {
                 field["rules"] =
-                    field.pivot && field.pivot.required
-                        ? ["required"]
-                        : [true];
+                    field.pivot && field.pivot.required ? ["required"] : [true];
 
                 field["type"] = this.getDynamicFieldsType(field.type.name);
 
@@ -168,14 +168,42 @@ Vue.component("avatar", require("./components/Avatar.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
-Vue.component("profile-banner", require("./components/profile/Banner.vue").default);
-Vue.component("products-view", require("./components/views/Products.vue").default);
-Vue.component("products-create-view", require("./components/views/products/Create.vue").default);
-Vue.component("projects-view", require("./components/views/Projects.vue").default);
+Vue.component(
+    "profile-banner",
+    require("./components/profile/Banner.vue").default
+);
+Vue.component(
+    "products-view",
+    require("./components/views/Products.vue").default
+);
+Vue.component(
+    "products-create-view",
+    require("./components/views/products/Create.vue").default
+);
+Vue.component(
+    "projects-view",
+    require("./components/views/Projects.vue").default
+);
 Vue.component("bp", require("./components/views/BP.vue").default);
-Vue.component("profile-tasks", require("./components/views/ProfileTasks.vue").default);
-Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vue").default);
-Vue.component("profile-resume-create", require('./components/views/ProfileResumeCreate.vue').default);
+Vue.component(
+    "profile-tasks",
+    require("./components/views/ProfileTasks.vue").default
+);
+Vue.component(
+    "profile-resume",
+    require("./components/views/ProfileResumeShow.vue").default
+);
+Vue.component(
+    "profile-resume-create",
+    require("./components/views/ProfileResumeCreate.vue").default
+);
+
+Vue.component(
+    "user-card-vertical",
+    require("./components/profile/UserCard.vue").default
+);
+
+Vue.component("users-view", require("./components/views/Users.vue").default);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
