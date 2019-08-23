@@ -1,15 +1,7 @@
 <template>
     <div>
         <profile-banner :user="user"></profile-banner>
-        <v-alert
-            border="bottom"
-            colored-border
-            type="info"
-            elevation="2"
-            >
-            У вас нету резюме. Создайте!
-        </v-alert>
-        <v-form ref="form" method="POST" :action="appPath+`users/${user.id}/cv`">
+        <v-form ref="form" method="POST" :action="appPath(`users/${user.id}/cv`)">
             <input type="hidden" name="_token" :value="csrf_token" />
             <input type="hidden" name="degrees" :value="JSON.stringify(degrees)" />
             <input type="hidden" name="jobs" :value="JSON.stringify(jobs)" />
@@ -18,8 +10,8 @@
             <input type="hidden" name="achievments" :value="JSON.stringify(achievments)" />
             <v-card>
                 <v-container>
-                    <v-layout row wrap justify-space-between>
-                        <v-flex xs5>
+                    <v-layout wrap justify-space-between>
+                        <v-flex xs2>
                             <form-field
                                 :field="{
                                 type: 'date',
@@ -29,7 +21,7 @@
                             }"
                             />
                         </v-flex>
-                        <v-flex xs5>
+                        <v-flex xs2>
                             <form-field
                                 :field="{
                                 type: 'select',
@@ -40,7 +32,7 @@
                             }"
                             />
                         </v-flex>
-                        <v-flex xs5>
+                        <v-flex xs2>
                             <form-field
                                 :field="{
                                 type: 'string',
@@ -50,14 +42,30 @@
                             }"
                             />
                         </v-flex>
-                        <v-flex xs12 class="mb-3">
-                            <h2>Образование</h2>
+                         <v-flex xs2>
+                            <form-field
+                                :field="{
+                                type: 'select',
+                                name: 'military_status',
+                                label: 'Военная служба',
+                                items: ['Обязан', 'Не обязан'],
+                                rules: ['required'],
+                            }"
+                            />
                         </v-flex>
+
+
+                        <v-flex xs5 class="mb-3">
+                            <h2>Образование
+                                <v-btn @click="dialog = true" color="primary" fab dark width="25" height="25" class="elevation-0">
+                                    <v-icon>mdi-plus</v-icon>
+                                </v-btn>
+                            </h2>
                         <v-container v-for="(item, index) in degrees" v-bind:key="index" justify-space-between class="pa-0">
-                            <v-flex xs4>
-                                <v-card class="elevation-5">
+                            <v-flex>
+                                <v-card class="mb-3" outlined>
                                     <v-card-text>
-                                        <h4>Учреждение: {{item.institute}} </h4>
+                                        <h4>Учреждение: {{item.institute}}</h4>
                                         <h4>Период обучения: {{item.start_at}} - {{item.end_at}} </h4>
                                         <h4>Степень: {{item.degree}} </h4>
                                         <h4>Специальность: {{item.specialty}} </h4>
@@ -65,29 +73,19 @@
                                 </v-card>
                             </v-flex>
                         </v-container>
-                        <template>
+                        </v-flex>
+                        <template outlined>
                         <v-dialog
                         v-model="dialog"
                         width="800"
                         >
-                        <template v-slot:activator="{ on }">
-                            <v-btn
-                            class="mb-2 elevation-0"
-                            color="primary"
-                            fab
-                            dark
-                            v-on="on"
-                            >
-                            <v-icon>+</v-icon>
-                            </v-btn>
-                        </template>
                         <v-card class="pa-3">
                             <v-card-title class="mb-3">
                                 <h3>Добавить образование</h3>
                             </v-card-title>
                             <v-container>
                             <v-form ref="degree">
-                                <v-layout row wrap justify-space-between>
+                                <v-layout wrap justify-space-between>
 
                                 <v-flex xs3>
 
@@ -151,12 +149,15 @@
                         </v-card>
                         </v-dialog>
                     </template>
-                    <v-flex xs12 class="mb-3">
-                        <h2>Опыт работы</h2>
-                    </v-flex>
+                    <v-flex xs5 class="mb-3">
+                        <h2>Опыт работы
+                        <v-btn @click="jobDialog = true" color="primary" fab dark width="25" height="25" class="elevation-0">
+                            <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                        </h2>
                     <v-container v-for="(job, index) in jobs" v-bind:key="index" justify-space-between class="pa-0">
-                        <v-flex xs4>
-                            <v-card class="elevation-5">
+                        <v-flex>
+                            <v-card outlined class="mb-3">
                                 <v-card-text>
                                     <h4>Компания: {{job.name}} </h4>
                                     <h4>Позиция: {{job.position}}</h4>
@@ -166,28 +167,19 @@
                             </v-card>
                         </v-flex>
                     </v-container>
+                    </v-flex>
                     <template>
                         <v-dialog
                         v-model="jobDialog"
                         width="800
                         ">
-                        <template v-slot:activator="{ on }">
-                            <v-btn
-                            class="mb-2 elevation-0"
-                            color="primary"
-                            fab dark
-                            v-on="on"
-                            >
-                            <v-icon>+</v-icon>
-                            </v-btn>
-                        </template>
                         <v-card class="pa-3">
                             <v-card-title class="mb-3">
                                 <h3>Добавить место работы</h3>
                             </v-card-title>
                                 <v-container>
                                     <v-form ref="jobs">
-                                        <v-layout row wrap justify-space-between>
+                                        <v-layout wrap justify-space-between>
                                             <v-flex xs12>
                                                 <form-field
                                                 :field="{
@@ -245,12 +237,15 @@
                         </v-card>
                         </v-dialog>
                     </template>
-                    <v-flex xs12 class="mb-3">
-                        <h2>Семейное положение</h2>
-                    </v-flex>
+                    <v-flex xs5 class="mb-3">
+                        <h2>Семейное положение
+                             <v-btn @click="familyDialog = true" color="primary" fab dark width="25" height="25" class="elevation-0">
+                                    <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                        </h2>
                     <v-container v-for="(family, index) in families" v-bind:key="index" justify-space-between class="pa-0 mb-3">
-                        <v-flex xs4>
-                            <v-card class="elevation-5 mb-3">
+                        <v-flex>
+                            <v-card outlined class="mb-3">
                                 <v-card-text>
                                     <h4>Имя: {{family.name}}</h4>
                                     <h4>Степень родства: {{family.type}}</h4>
@@ -259,24 +254,16 @@
                             </v-card>
                         </v-flex>
                     </v-container>
+                    </v-flex>
                     <template>
                         <v-dialog v-model="familyDialog" width="800">
-                            <template v-slot:activator="{ on }">
-                                <v-btn class="mb-2 elevation-0"
-                                color="primary"
-                                fab
-                                dark
-                                v-on="on">
-                                <v-icon dark>+</v-icon>
-                                </v-btn>
-                            </template>
                             <v-card>
                                 <v-card-title>
                                     <h3>Семейное положение</h3>
                                 </v-card-title>
                                 <v-container>
                                         <v-form ref="family">
-                                            <v-layout row wrap justify-space-between>
+                                            <v-layout wrap justify-space-between>
                                             <v-flex xs5>
                                                 <form-field
                                                 :field="{
@@ -316,12 +303,15 @@
                             </v-card>
                         </v-dialog>
                     </template>
-                    <v-flex xs12 class="mb-3">
-                        <h2>Знание Языков</h2>
-                    </v-flex>
+                    <v-flex xs5 class="mb-3">
+                        <h2>Знание Языков
+                             <v-btn @click="languageDialog = true" color="primary" fab dark width="25" height="25" class="elevation-0">
+                                    <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                        </h2>
                     <v-container v-for="(language, index) in languages" v-bind:key="index" class="pa-0 mb-3">
-                        <v-flex xs4>
-                            <v-card class="elevation-5">
+                        <v-flex>
+                            <v-card outlined class="mb-3">
                                 <v-card-text>
                                     <h4>Язык: {{language.name}}</h4>
                                     <h4>Уровень: {{language.level}}</h4>
@@ -329,26 +319,18 @@
                             </v-card>
                         </v-flex>
                     </v-container>
+                    </v-flex>
                     <template>
                         <v-dialog
                         v-model="languageDialog"
                         width="800">
-                        <template v-slot:activator="{ on }">
-                            <v-btn
-                            class="mb-2"
-                            color="primary"
-                            fab dark
-                            v-on="on">
-                            <v-icon>+</v-icon>
-                            </v-btn>
-                        </template>
                         <v-card>
                             <v-card-title>
                                 <h3>Добавить язык</h3>
                             </v-card-title>
                             <v-container>
                                 <v-form ref="language">
-                                    <v-layout row wrap justify-space-between="">
+                                    <v-layout wrap justify-space-between="">
                                         <v-flex xs5>
                                         <form-field
                                         :field="{
@@ -384,12 +366,15 @@
                         </v-card>
                         </v-dialog>
                     </template>
-                    <v-flex xs12 class="mb-3">
-                        <h2>Достижения</h2>
-                    </v-flex>
+                    <v-flex xs5 class="mb-3">
+                        <h2>Достижения
+                             <v-btn @click="achievmentDialog = true" color="primary" fab dark width="25" height="25" class="elevation-0">
+                                    <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                        </h2>
                     <v-container v-for="(achievment, index) in achievments" v-bind:key="index" class="pa-0 mb-3">
-                        <v-flex xs4>
-                            <v-card class="elevation-5">
+                        <v-flex>
+                            <v-card outlined class="mb-3">
                                 <v-card-text>
                                     <h4>Тип: {{achievment.type}}</h4>
                                     <h4>Достижения: {{achievment.name}}</h4>
@@ -397,26 +382,18 @@
                             </v-card>
                         </v-flex>
                     </v-container>
+                    </v-flex>
                     <template>
                         <v-dialog
                         v-model="achievmentDialog"
                         width="800">
-                        <template v-slot:activator="{ on }">
-                            <v-btn
-                            class="mb-2 elevation-0"
-                            color="primary"
-                            fab dark
-                            v-on="on">
-                            <v-icon>+</v-icon>
-                            </v-btn>
-                        </template>
                         <v-card>
                             <v-card-title>
                                 <h3>Добавить достижение</h3>
                             </v-card-title>
                             <v-container>
                                 <v-form ref="achievment">
-                                    <v-layout row wrap justify-space-between="">
+                                    <v-layout wrap justify-space-between="">
                                         <v-flex xs5>
                                         <form-field
                                         :field="{

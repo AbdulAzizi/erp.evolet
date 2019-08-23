@@ -1,5 +1,5 @@
 <template>
-    <v-card hover :href="appPath + 'users/' + user.id">
+    <v-card hover :href="appPath('users/' + user.id)">
         <v-list three-line>
             <v-list-item>
                 <v-list-item-avatar>

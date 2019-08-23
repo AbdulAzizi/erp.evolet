@@ -86,7 +86,7 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>-->
 
-          <v-list-item href="/profile">
+          <v-list-item :href="appPath('users/'+auth.id)">
             <v-list-item-content>
               <v-list-item-title>Профиль</v-list-item-title>
             </v-list-item-content>

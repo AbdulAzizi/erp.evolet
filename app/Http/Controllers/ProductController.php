@@ -50,26 +50,13 @@ class ProductController extends Controller
 
         // Fetch all products and pass it to data
         $data['products'] = Product::filter($filters)->with(['project.country', 'project.pc', 'fields'])->get();
-
-        foreach ($data['products'] as $product) {
-
-            foreach ($product->fields as $field) {
-
-                if ($field->type->name == "list") {
-
-                    $listTable = DB::table('list_fields')
-                        ->where('field_id', $field->id)
-                        ->value('list_type');
-
-                    $field->pivot->value = DB::table($listTable)
-                        ->where('id', $field->pivot->value)
-                        ->value('name'); //FIXME refactor 'name'
-                }
-            }
-        }
+        
+        $listFields = $this->getListFieldsFromProducts($data['products']);
+        
+        $this->loadListFieldValues($listFields);
 
         $data['participants'] = Project::with('projectParticipant.role', 'projectParticipant.participant')->find($request->project_id);
-        // return $data;
+
         return view('products.index')->with($data);
     }
 
@@ -95,10 +82,10 @@ class ProductController extends Controller
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project);
         // Redirect to Tasks Index page
-        return redirect()->route('products.index', [ 
-            'pc_id' => $request->pc, 
-            'country_id' => $request->strana, 
-            'project_id' => $request->project
+        return redirect()->route('products.index', [
+            'pc_id' => $request->pc,
+            'country_id' => $request->strana,
+            'project_id' => $request->project,
         ]);
     }
 
@@ -108,12 +95,12 @@ class ProductController extends Controller
         $authUser = \Auth::user();
         // Get responsibilitilies of that User
         $responsibilities = $authUser->responsibilities;
-        
+
         $formExists = false;
         // loop through each responsibilities
         foreach ($responsibilities as $responsibility) {
             // If Portfolio Manager
-            if ($responsibility->name == 'Куратор Портфель ПК' || $responsibility->name == 'ПК') {
+            if ($responsibility->name == 'Куратор Портфел ПК стран' || $responsibility->name == 'ПК') {
                 // Get First BP form
                 $form = Form::where('name', 'Форма ПК Этап 1')->first();
                 $formExists = true;
@@ -149,8 +136,12 @@ class ProductController extends Controller
             }
         }
 
-        return view('products.create',compact('form'));
+        return view('products.create', compact('form'));
     }
+
+    /**
+     * Helpers
+     */
 
     private function setTasks($process, $projectId)
     {
@@ -166,9 +157,8 @@ class ProductController extends Controller
                     ->where('project_id', $projectId);
             })->first();
 
-            // dd($responsiblePerson);
-            // Push each task to array
-            $data[] = [
+            // create tasks
+            $createdTask = Task::create([
                 'title' => $task->title,
                 'description' => $task->description,
                 'priority' => 2,
@@ -178,11 +168,52 @@ class ProductController extends Controller
                 'from_id' => $process->id,
                 'from_type' => Process::class,
                 'created_at' => Carbon::now(),
-            ];
+            ]);
 
-            Notification::send($responsiblePerson, new AssignedToTask($process, $task));
+            Notification::send($responsiblePerson, new AssignedToTask($process, $createdTask));
         }
-        // Insert all Tasks at once
-        Task::insert($data);
+    }
+    
+    private function loadListFieldValues($listFields)
+    {
+        $listFieldIDs = $listFields->pluck('id');
+        
+        $listFieldTables = DB::table('list_fields')
+            ->whereIn('field_id', $listFieldIDs)
+            ->select('field_id', 'list_type')
+            ->get()
+            ->groupBy('list_type');
+
+
+        foreach ($listFieldTables as $tableName => $listField) {
+            
+            $fieldsToEager = $listFields->whereIn('id', collect($listField)->pluck('field_id'));
+
+            $toEagerFieldValues = $fieldsToEager->pluck('pivot');
+
+            $values = DB::table($tableName)
+                    ->whereIn('id', $toEagerFieldValues->pluck('value'))
+                    ->get(); 
+
+            foreach ($toEagerFieldValues as $fieldValue) {
+                $realValue = $values->firstWhere('id', $fieldValue->value);
+                $fieldValue->value = $realValue ? $realValue->name: null;
+            }
+        }        
+    }
+
+    private function getListFieldsFromProducts($products)
+    {
+        $listFields = [];
+
+        foreach ($products as $product) {
+            foreach ($product->fields as $field) {
+                if ($field->type->name == "list" || $field->type->name == "many-to-many-list") {
+                    $listFields[] = $field;
+                }
+            }
+        }
+
+        return collect($listFields);
     }
 }

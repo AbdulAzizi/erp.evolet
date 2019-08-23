@@ -17,7 +17,7 @@ class ProjectParticipantTableSeeder extends Seeder
         $projects = Project::all();
 
         $kuratorUsers = User::whereHas('responsibilities',function (Builder $query){
-                        $query->where('name','Куратор Портфель ПК');
+                        $query->where('name','Куратор Портфел ПК стран');
                     })->get();
         $noUsers = User::whereHas('responsibilities',function (Builder $query){
                         $query->where('name','НО');

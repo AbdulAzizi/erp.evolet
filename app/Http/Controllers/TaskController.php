@@ -21,7 +21,7 @@ class TaskController extends Controller
             ->with('from', 'responsible', 'watchers', 'status', 'tags')
             ->get();
 
-            
+
         foreach ($tasks as $task ) {
             // If task is from process
             if( $task->from_type == "App\Process" ) {
@@ -30,7 +30,7 @@ class TaskController extends Controller
                 // return $task;
             }
         }
-        
+
         $tags = Tag::all();
         // All Users needed while choosing user assignee
         $users = User::with(['division'])->get();
@@ -85,9 +85,9 @@ class TaskController extends Controller
         // Get all tasks that have been inserted
         $tasks = Task::where('title', $request->title)->get();
         // Loop through Tasks
-        foreach ($tasks as $task) { 
-            
-            // TODO On the clide side restrickt User to add himself as a watcher 
+        foreach ($tasks as $task) {
+
+            // TODO On the clide side restrickt User to add himself as a watcher
             // TODO select auth user as task responsible by deafauld on the client side
 
             // Attach Task Author as a Watcher
@@ -108,7 +108,9 @@ class TaskController extends Controller
     public function show($id)
     {
         $task = Task::with('watchers','responsible','from','status','tags')->find($id);
-        $task->from->load('frontTethers.form.fields','backTethers');
+        // return $task;
+        if( $task->from_type == "App\Process" )
+            $task->from->load('frontTethers.form.fields','backTethers');
         // return $task;
         return view('tasks.show', compact('task'));
     }

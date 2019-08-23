@@ -15,7 +15,7 @@ class ResponsibilityTableSeeder extends Seeder
             ['name'=>'Программист'],
             ['name'=>'Контент Менеджер'],
             ['name'=>'Веб Мастер'],
-            ['name'=>'Куратор Портфель ПК'],
+            ['name'=>'Куратор Портфел ПК стран'],
             ['name'=>'НО'],
             ['name'=>'ПК'],
         ]);
