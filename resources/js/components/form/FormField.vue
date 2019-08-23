@@ -167,6 +167,7 @@ const getUsersField = field => {
     baseField.component = "user-selector";
     baseField.props["icon"] = field.icon;
     baseField.props["users"] = field.users;
+    baseField.props["multiple"] = field.multiple;
 
     return baseField;
 };

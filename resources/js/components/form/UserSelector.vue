@@ -8,7 +8,6 @@
             no-data-text="Данные отсутствуют"
             hide-selected
             chips
-            multiple
             color="primary"
             :label="label"
             :prepend-icon="icon"

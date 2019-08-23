@@ -48,7 +48,8 @@ export default {
                 name: "watchers",
                 label: "Наблюдатели",
                 users: this.users,
-                icon: 'mdi-eye-plus'
+                icon: 'mdi-eye-plus',
+                multiple: true
             }
         };
     },
