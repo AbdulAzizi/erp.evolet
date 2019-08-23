@@ -138,12 +138,12 @@ Vue.mixin({
                 default:
                     return laravelType;
             }
+        },
+        appPath(url) {
+            return window.Laravel.asset_path+url;
         }
     },
     computed: {
-        appPath() {
-            return window.Laravel.asset_path;
-        },
         auth() {
             return window.Laravel.auth;
         }

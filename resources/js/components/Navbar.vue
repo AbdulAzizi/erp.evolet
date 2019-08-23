@@ -14,7 +14,7 @@
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on" :href="appPath + 'tasks'">
+        <v-btn icon v-on="on" :href="appPath('tasks')">
           <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
         </v-btn>
       </template>
@@ -74,7 +74,7 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item> -->
 
-          <v-list-item href="/profile">
+          <v-list-item :href="appPath('users/'+auth.id)">
             <v-list-item-content>
               <v-list-item-title>Профиль</v-list-item-title>
             </v-list-item-content>
