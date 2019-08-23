@@ -214,6 +214,8 @@ Vue.component(
     "helpers-offset",
     require("./components/helpers/Offset.vue").default
 );
+Vue.component("add-education-dialog", require("./components/profile/AddEducation.vue").default);
+Vue.component("edit-education-dialog", require("./components/profile/EditEducation.vue").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -502,6 +502,7 @@ export default {
         submit(e) {
             this.formHasErrors = false;
             this.formHasErrors = !this.$refs.form.validate();
+            console.log(this.$refs);
 
             if (!this.formHasErrors) return;
 

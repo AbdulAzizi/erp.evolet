@@ -18,7 +18,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Route::group(['middleware'=>['']],function(){
-    
+
 // });
 Route::get('/mnns', 'DataController@mnns')->name('mnns');
 Route::get('/forms', 'DataController@forms')->name('forms');
+
+// Add resume information
+
+Route::post('/education', 'ResumeController@educationAdd')->name('education-add');
+
+Route::delete('/deleteEducation/{id}', 'ResumeController@educationDelete')->name('education-delete');
+
+Route::put('/edit/education/{id}', 'ResumeController@educationEdit')->name('education-edit');
