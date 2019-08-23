@@ -32,6 +32,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
     Route::post('/divisions', 'DivisionController@store')->name('division.store');
 
+    Route::get('/users', 'UserController@index')->name('users.index');
     Route::post('/users', 'UserController@store')->name('users.store');
     Route::get('/users/{id}', 'UserController@show')->name('users.show');
 

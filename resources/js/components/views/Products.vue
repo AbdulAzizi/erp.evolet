@@ -3,11 +3,11 @@
         <v-tabs v-model="tab" right background-color="secondary" color="primary" dark>
             <v-tab href="#products">Продукты</v-tab>
             <v-tab href="#participants">Участники</v-tab>
-            <v-btn 
-            small 
-            class="align-self-center mx-4 primary" 
-            :href="appPath + 'products/create?'+
-            getParam(['pc_id','country_id','project_id'])"
+            <v-btn
+                small
+                class="align-self-center mx-4 primary"
+                :href="appPath('products/create?'+
+                getParam(['pc_id','country_id','project_id']))"
             >Новый продукт</v-btn>
         </v-tabs>
         <v-tabs-items v-model="tab" class="transparent">
@@ -29,7 +29,10 @@
                         <v-card class="mx-auto" max-width="300" tile>
                             <v-list disabled>
                                 <v-list-item-group color="primary">
-                                    <v-list-item v-for="(participant, i) in participants.project_participant" :key="i">
+                                    <v-list-item
+                                        v-for="(participant, i) in participants.project_participant"
+                                        :key="i"
+                                    >
                                         <v-list-item-avatar>
                                             <v-img :src="photo(participant.img)"></v-img>
                                         </v-list-item-avatar>
@@ -77,16 +80,17 @@ export default {
         };
     },
     methods: {
-        getParam(params){
+        getParam(params) {
             let url = new URL(window.location.href);
-            return params.map( function (param) {
-                return param+'='+url.searchParams.get(param) 
-            }).join('&');
+            return params
+                .map(function(param) {
+                    return param + "=" + url.searchParams.get(param);
+                })
+                .join("&");
         }
     },
     created() {
-        
-        if(this.items.length != 0){
+        if (this.items.length != 0) {
             // prepare headers
             let fieldsHeaders = this.items[0].fields.map(function(field) {
                 return {
@@ -118,7 +122,8 @@ export default {
 </script>
 
 <style>
-.table-header, tr {
+.table-header,
+tr {
     white-space: nowrap;
 }
 </style>

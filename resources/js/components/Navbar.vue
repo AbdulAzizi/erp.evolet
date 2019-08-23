@@ -9,12 +9,21 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mr-2">
-      <v-btn color="grey darken-1" text href="/division">{{user.division.abbreviation}}</v-btn>
+      <v-btn color="grey darken-1" text :href="appPath('division')">{{user.division.abbreviation}}</v-btn>
     </v-toolbar-items>
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on" :href="appPath + 'tasks'">
+        <v-btn icon v-on="on" :href="appPath('users')">
+          <v-icon color="grey darken-1">mdi-account-group</v-icon>
+        </v-btn>
+      </template>
+      <span>Сотрудники</span>
+    </v-tooltip>
+
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on" :href="appPath('tasks')">
           <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
         </v-btn>
       </template>
@@ -56,12 +65,15 @@
             <v-flex>
               <v-list dense two-line class="pt-0">
                 <a :href="'/users/' + user.id " class="black--text">
-                  <h2 class="title font-weight-regular text-sm-left" style="line-height: 25px;">{{user.name}}  {{user.surname}}</h2>
+                  <h2
+                    class="title font-weight-regular text-sm-left"
+                    style="line-height: 25px;"
+                  >{{user.name}} {{user.surname}}</h2>
                 </a>
                 <h4
                   v-for="(responsibility,index) in user.responsibilities"
                   :key="'responsibility-'+index"
-                  class="subtheader font-weight-regular grey--text text-sm-left "
+                  class="subtheader font-weight-regular grey--text text-sm-left"
                 >{{responsibility.name}}</h4>
               </v-list>
             </v-flex>
@@ -72,9 +84,9 @@
 
           <!-- <v-list-item v-for="(item, index) in items" :href="item.link" :key="index">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item> -->
+          </v-list-item>-->
 
-          <v-list-item href="/profile">
+          <v-list-item :href="appPath('users/'+auth.id)">
             <v-list-item-content>
               <v-list-item-title>Профиль</v-list-item-title>
             </v-list-item-content>
@@ -164,6 +176,4 @@ a {
 .v-app-bar__items .v-btn {
   border-radius: 0;
 }
-
-
 </style>

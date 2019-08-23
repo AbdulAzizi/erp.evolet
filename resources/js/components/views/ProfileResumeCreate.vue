@@ -1,7 +1,7 @@
 <template>
     <div>
         <profile-banner :user="user"></profile-banner>
-        <v-form ref="form" method="POST" :action="appPath+`users/${user.id}/cv`">
+        <v-form ref="form" method="POST" :action="appPath(`users/${user.id}/cv`)">
             <input type="hidden" name="_token" :value="csrf_token" />
             <input type="hidden" name="degrees" :value="JSON.stringify(degrees)" />
             <input type="hidden" name="jobs" :value="JSON.stringify(jobs)" />
