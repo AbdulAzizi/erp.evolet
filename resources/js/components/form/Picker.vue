@@ -25,19 +25,20 @@
             v-model="pickerData"
         >
             <v-row>
-                <v-col cols="12" v-if="dateWithTime">
+                <v-col cols="12" v-if="dateWithTime" class="py-0">
                     <picker
                         picker-type="time"
                         label="Выберите время"
                         v-model="time"
                         prepend-icon="mdi-clock-outline"
+                        class="d-none"
                     />
                 </v-col>
                 <v-row class="text-right ma-1">
-                    <v-col class="text-left">
+                    <v-col class="text-left pt-0">
                         <v-btn text color="primary" @click="pickerDialog = false">Отмена</v-btn>
                     </v-col>
-                    <v-col class="text-right">
+                    <v-col class="text-right pt-0">
                         <v-btn text color="primary" @click="saveData()">Выбрать</v-btn>
                     </v-col>
                 </v-row>
