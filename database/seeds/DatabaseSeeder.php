@@ -17,8 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TagTableSeeder::class);
         $this->call(FormTableSeeder::class);
         $this->call(FieldTableSeeder::class);
-        $this->call(TableSeeder::class);
-        // $this->call(ProcessTableSeeder::class);
+        $this->call(ProcessTableSeeder::class);
         $this->call(DivisionTableSeeder::class);
         $this->call(PositionTableSeeder::class);
         $this->call(UserTableSeeder::class);
