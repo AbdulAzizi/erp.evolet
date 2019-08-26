@@ -33,4 +33,9 @@ class Division extends Model
     {
         return $this->belongsToMany('App\Country','managers','pc_id','manager_id');
     }
+
+    public static function promoCompanies()
+    {
+        return self::withDepth()->having('depth','=', 4)->get();
+    }
 }

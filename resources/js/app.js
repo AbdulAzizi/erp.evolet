@@ -166,6 +166,7 @@ Vue.component("profile-error", require('./components/profile/ResumeError.vue').d
 Vue.component("resume-edit", require('./components/profile/ResumeEdit.vue').default);
 Vue.component("projects-card", require('./components/projects/Card.vue').default);
 Vue.component("projects-list", require('./components/projects/List.vue').default);
+Vue.component("projects-create", require('./components/projects/Create.vue').default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
