@@ -204,6 +204,8 @@ Vue.component(
     "user-card-vertical",
     require("./components/profile/UserCard.vue").default
 );
+Vue.component("add-education-dialog", require("./components/profile/AddEducation.vue").default);
+Vue.component("edit-education-dialog", require("./components/profile/EditEducation.vue").default);
 
 Vue.component("users-view", require("./components/views/Users.vue").default);
 

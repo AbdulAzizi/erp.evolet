@@ -139,8 +139,37 @@ class ResumeController extends Controller
         return redirect()->back();
     }
 
-    // public function showEdit()
-    // {
+    public function educationAdd()
+    {
+        return Education::create([
+            'degree' => request('degree'),
+            'name' => request('name'),
+            'start_at' => request('start_at'),
+            'end_at' => request('end_at'),
+            'specialty' => request('specialty'),
+            'resume_id' => request('resume_id')
+        ]);
+    }
 
-    // }
+    public function educationDelete(Request $request)
+    {
+        Education::find($request->id)->delete();
+
+        return "success";
+    }
+
+    public function educationEdit(Request $request)
+    {
+         Education::find($request->id)->update([
+
+            'degree' => $request->degree,
+            'name' => $request->institute,
+            'start_at' => $request->start_at,
+            'end_at' => $request->end_at,
+            'specialty' => $request->specialty
+
+        ]);
+
+        return 'success';
+    }
 }

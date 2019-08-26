@@ -24,20 +24,24 @@
             v-bind="{...picker.props, ...$attrs.picker}"
             v-model="pickerData"
         >
-            <v-layout row wrap>
-                <v-flex xs12 v-if="dateWithTime" class="mx-3">
+            <v-row>
+                <v-col cols="12" v-if="dateWithTime">
                     <picker
                         picker-type="time"
                         label="Выберите время"
                         v-model="time"
                         prepend-icon="mdi-clock-outline"
                     />
-                </v-flex>
-                <v-flex xs12 class="text-xs-right ma-1">
-                    <v-btn text color="primary" @click="pickerDialog = false">Отмена</v-btn>
-                    <v-btn text color="primary" @click="saveData()">Выбрать</v-btn>
-                </v-flex>
-            </v-layout>
+                </v-col>
+                <v-row class="text-right ma-1">
+                    <v-col class="text-left">
+                        <v-btn text color="primary" @click="pickerDialog = false">Отмена</v-btn>
+                    </v-col>
+                    <v-col class="text-right">
+                        <v-btn text color="primary" @click="saveData()">Выбрать</v-btn>
+                    </v-col>
+                </v-row>
+            </v-row>
         </component>
     </v-dialog>
 </template>
