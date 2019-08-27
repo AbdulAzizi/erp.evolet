@@ -18,7 +18,7 @@ class TaskController extends Controller
         $authUser = \Auth::user();
 
         $tasks = Task::where('responsible_id', $authUser->id)
-            ->with('from', 'responsible', 'watchers', 'status', 'tags')
+            ->with('from', 'responsible', 'watchers', 'status', 'tags', 'history.user')
             ->get();
 
 
@@ -107,7 +107,7 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $task = Task::with('watchers','responsible','from','status','tags')->find($id);
+        $task = Task::with('watchers','responsible','from','status','tags', 'history.user')->find($id);
         // return $task;
         if( $task->from_type == "App\Process" )
             $task->from->load('frontTethers.form.fields','backTethers');
