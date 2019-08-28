@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\History;
 use App\Notifications\AssignedAsWatcher;
 use App\Notifications\AssignedToTask;
 use App\Tag;
@@ -100,6 +101,8 @@ class TaskController extends Controller
             $task->tags()->attach($existingTags);
             // Notify Assignees
             $task->responsible->notify(new AssignedToTask($task->from, $task));
+            //Log creation to tasks History
+            $this->taskCreated($task);
         }
         // Redirect to Tasks Index page
         return redirect()->route('tasks.index');
@@ -113,5 +116,24 @@ class TaskController extends Controller
             $task->from->load('frontTethers.form.fields','backTethers');
         // return $task;
         return view('tasks.show', compact('task'));
+    }
+
+    /**
+     * Task history events
+     */
+    private function taskCreated(Task $task)
+    {
+        $author = auth()->user();
+
+        $description = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил задачу.";
+
+        History::create([
+            'user_id' => $author->id,
+            'previous_id' => null,
+            'description' => $description,
+            'happened_at' => Carbon::now()->toDateTimeString(),
+            'happend_with_id' => $task->id,
+            'happend_with_type' => Task::class
+        ]);
     }
 }
