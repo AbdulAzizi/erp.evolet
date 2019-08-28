@@ -1,9 +1,10 @@
 <template>
-  <v-container>
+<div>
     <profile-banner :user="user" />
-    <v-row>
+    <resume-create :user="user" v-if="!user.resume" :permit="permit"></resume-create>
+    <v-row v-if="user.resume">
       <v-col cols="12" sm="6" md="4">
-        <v-card class="mt-3 mb-3">
+        <v-card>
           <v-toolbar dark flat dense color="primary">
             <v-toolbar-title>
               <h4>Основное</h4>
@@ -38,165 +39,258 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
-        <v-card class="mt-3 mb-3">
-          <v-toolbar dark flat dense color="primary">
-            <v-toolbar-title>
-              <h4>Образование</h4>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <add-education-dialog :user="user"></add-education-dialog>
-          </v-toolbar>
-          <v-list two-line>
-            <template v-for="(degree, index) in localUser.resume.educations">
-              <v-hover v-slot:default="{ hover }" :key="'hover-' + index">
-                <v-list-item :key="'item-' + index">
-                  <v-list-item-avatar>
-                    <v-icon>mdi-school</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{degree.name}}</v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{degree.degree}} &#183; {{degree.specialty}} &#183;
-                      {{moment(degree.start_at).format('MMMM YYYY')}} -
-                      {{moment(degree.end_at).format('MMMM YYYY')}}
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                  <v-list-item-action v-show="hover">
-                    <edit-education-dialog :user="degree"></edit-education-dialog>
-                  </v-list-item-action>
-                  <v-list-item-action v-if="hover">
-                    <v-btn icon small class="grey lighten-3">
-                      <v-icon small dark @click="deleteEducation(degree.id, index)">mdi-delete</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-hover>
-              <v-divider
-                :key="'divider-' + index"
-                v-if="localUser.resume.educations.length > index + 1 "
-              ></v-divider>
-            </template>
-          </v-list>
-          <v-progress-linear
-            :active="loading"
-            :indeterminate="loading"
-            absolute
-            bottom
-            color="deep-purple accent-4"
-          ></v-progress-linear>
-        </v-card>
+        <resume-card
+          :user="user"
+          title="Образование"
+          :localUser="user.resume.educations"
+          type="education"
+          main_icon="mdi-school"
+          deleteUrl="/api/deleteEducation/"
+          firstMainLine="name"
+          firstSecondaryLine="degree"
+          :secondLineItems="['specialty', 'start_at', 'end_at']"
+        >
+          <resume-add-item
+            :user="user"
+            title="Добавить образование"
+            url="/api/education"
+            :form="education"
+            returnDataEvent="educationAdded"
+          />
+        </resume-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
-        <v-card class="mt-3 mb-3">
-          <v-toolbar dark flat dense color="primary">
-            <v-toolbar-title>
-              <h4>Опыт работы</h4>
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-list two-line>
-            <template v-for="(job, index) in user.resume.jobs">
-              <v-list-item :key="'list-' + index">
-                <v-list-item-avatar>
-                  <v-icon>mdi-office-building</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{job.company_name}} &#183; {{job.location}}</v-list-item-title>
-                  <v-list-item-subtitle>{{job.position}} &#183; {{ datesPeriod(job.end_at, job.start_at) }} год назад</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider :key="'divider-' + index" v-if="index < user.resume.jobs.length - 1"></v-divider>
-            </template>
-          </v-list>
-        </v-card>
+        <resume-card
+          :user="user"
+          title="Опыт работы"
+          :localUser="user.resume.jobs"
+          type="job"
+          main_icon="mdi-office-building"
+          deleteUrl="/api/deleteJob/"
+          firstMainLine="company_name"
+          firstSecondaryLine="location"
+          :secondLineItems="['position', 'start_at', 'end_at']"
+        >
+          <resume-add-item
+            :user="user"
+            title="Добавить образование"
+            url="/api/job"
+            :form="job"
+            returnDataEvent="jobAdded"
+          />
+        </resume-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
-        <v-card class="mt-3 mb-3">
-          <v-toolbar dark flat dense color="primary">
-            <v-toolbar-title>
-              <h4>Семейное положение</h4>
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-list two-line>
-            <template v-for="(family, index) in user.resume.families">
-              <v-list-item :key="'item-' + index">
-                <v-list-item-avatar>
-                  <v-icon>mdi-account-group</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{family.relation}}</v-list-item-title>
-                  <v-list-item-subtitle>{{family.name}} &#183; {{moment(family.birthday).format('L')}}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider :key="'divider-' + index" v-if="index < user.resume.families.length - 1"></v-divider>
-            </template>
-          </v-list>
-        </v-card>
+        <resume-card
+          :user="user"
+          title="Семейное положение"
+          :localUser="user.resume.families"
+          type="family"
+          main_icon="mdi-account-group"
+          deleteUrl="/api/deleteFamily/"
+          firstMainLine="name"
+          firstSecondaryLine="relation"
+          :secondLineItems="['birthday']"
+        >
+          <resume-add-item
+            :user="user"
+            title="Добавить"
+            url="/api/family"
+            :form="family"
+            returnDataEvent="familyAdded"
+          />
+        </resume-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
-        <v-card class="mt-3 mb-3">
-          <v-toolbar dark flat dense color="primary">
-            <v-toolbar-title>
-              <h4>Знание языков</h4>
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-list two-line>
-            <template v-for="(language, index) in user.resume.languages">
-              <v-list-item :key="'list-' + index">
-                <v-list-item-avatar>
-                  <v-icon>mdi-chat</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{language.name}}</v-list-item-title>
-                  <v-list-item-subtitle>{{language.level}}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider :key="'divider-' + index" v-if="index < user.resume.languages.length - 1 "></v-divider>
-            </template>
-          </v-list>
-        </v-card>
+        <resume-card
+          :user="user"
+          title="Знание языков"
+          :localUser="user.resume.languages"
+          type="language"
+          main_icon="mdi-chat"
+          deleteUrl="/api/deleteLanguage/"
+          firstMainLine="name"
+          :secondLineItems="['level']"
+        >
+          <resume-add-item
+            :user="user"
+            title="Добавить"
+            url="/api/language"
+            :form="language"
+            returnDataEvent="languageAdded"
+          />
+        </resume-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
-        <v-card class="mt-3 mb-3">
-          <v-toolbar dark flat dense color="primary">
-            <v-toolbar-title>
-              <h4>Достижения</h4>
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-list two-line>
-            <template v-for="(achievment, index) in user.resume.achievments">
-              <v-list-item :key="'item-' + index">
-                <v-list-item-avatar>
-                  <v-icon>mdi-certificate</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{achievment.type}}</v-list-item-title>
-                  <p class="grey--text caption">{{achievment.description}}</p>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider
-                :key="'divider-' + index"
-                v-if="index < user.resume.achievments.length - 1"
-              ></v-divider>
-            </template>
-          </v-list>
-        </v-card>
+        <resume-card
+          :user="user"
+          title="Достижения"
+          :localUser="user.resume.achievments"
+          main_icon="mdi-certificate"
+          deleteUrl="/api/deleteAchievment/"
+          firstMainLine="type"
+          :secondLineItems="['description']"
+        >
+          <resume-add-item
+            :user="user"
+            title="Добавить достижение"
+            url="/api/achievment"
+            :form="achievment"
+            returnDataEvent="achievmentAdded"
+          />
+        </resume-card>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
 export default {
-  props: ["user"],
+  props: ["user", "permit"],
 
   data() {
     return {
-      showed: false,
-      showDialog: false,
       localUser: this.user,
-      loading: false,
-      showEdit: false
-    };
+      showEdit: false,
+
+      education: {
+        colsPerRow: [4, 4, 4, 12, 12],
+        fields: [
+          {
+            label: "Степень",
+            type: "select",
+            name: "degree",
+            items: ["Среднее", "Бакалавр", "Специалитет", "Магистр"],
+            rules: ["required"]
+          },
+          {
+            label: "Дата начало",
+            type: "date",
+            name: "start_at",
+            rules: ["required"]
+          },
+          {
+            label: "Дата окончания",
+            type: "date",
+            name: "end_at",
+            rules: ["required"]
+          },
+          {
+            label: "Название",
+            type: "string",
+            name: "name",
+            rules: ["required"]
+          },
+          {
+            label: "Название",
+            type: "string",
+            name: "specialty",
+            rules: ["required"]
+          }
+        ]
+      },
+      job: {
+        colsPerRow: [4, 4, 4, 12, 12],
+        fields: [
+          {
+            label: "Название",
+            type: "string",
+            name: "company_name",
+            rules: ["required"]
+          },
+          {
+            label: "Дата начало",
+            type: "date",
+            name: "start_at",
+            rules: ["required"]
+          },
+          {
+            label: "Дата окончания",
+            type: "date",
+            name: "end_at",
+            rules: ["required"]
+          },
+          {
+            label: "Позиция",
+            type: "string",
+            name: "position",
+            rules: ["required"]
+          },
+          {
+            label: "Местоположение",
+            type: "string",
+            name: "location",
+            rules: ["required"]
+          }
+        ]
+      },
+      family: {
+        colsPerRow: [4, 4, 4],
+        fields: [
+          {
+            label: "Степень родства",
+            type: "select",
+            name: "relation",
+            items: ["Муж", "Жена", "Отец", "Мать", "Сын", "Дочь"],
+            rules: ["required"]
+          },
+          {
+            label: "Дата рождения",
+            type: "date",
+            name: "birthday",
+            rules: ["required"]
+          },
+          {
+            label: "Имя",
+            type: "string",
+            name: "name",
+            rules: ["required"]
+          }
+        ]
+      },
+      language: {
+        colsPerRow: [6, 6],
+        fields: [
+          {
+            label: "Язык",
+            type: "string",
+            name: "name",
+            rules: ["required"]
+          },
+          {
+            label: "Уровень",
+            type: "select",
+            name: "level",
+            items: [
+              "Beginner",
+              "Pre-Intermidiate",
+              "Intermidiate",
+              "Upper-Intermidiate",
+              "Advanced"
+            ],
+            rules: ["required"]
+          }
+        ]
+      },
+      achievment: {
+        colsPerRow: [6],
+        fields: [
+          {
+            label: "Тип",
+            type: "select",
+            name: "type",
+            items: ["Спорт", "Наука"],
+            rules: ["required"]
+          },
+          {
+            label: "Описание",
+            type: "text",
+            name: "description",
+            rules: ["required"]
+          }
+        ]
+      }
+    }
   },
 
   methods: {
@@ -204,28 +298,38 @@ export default {
       let a = this.moment(end);
       let b = this.moment(start);
       return a.diff(b, "years");
-    },
-
-    deleteEducation(id, index) {
-      this.loading = true;
-      axios
-        .delete(`/api/deleteEducation/${id}`, {})
-        .then(res => {
-          this.localUser.resume.educations.forEach((education, key) => {
-            if (education.id === id)
-              this.localUser.resume.educations.splice(key, 1);
-          });
-          this.loading = false;
-        })
-        .catch(err => console.log(err.message));
     }
   },
+
   created() {
     Event.listen("educationAdded", data => {
+      console.log("Event listened");
+
       this.localUser.resume.educations.push(data);
     });
     Event.listen("educationEdited", data => {
-        this.localUser.resume.educations.push(data);
+      this.localUser.resume.educations.forEach((education, key) => {
+        if (education.id === data.id) {
+          this.localUser.resume.educations.splice(key, 1);
+        }
+      });
+      this.localUser.resume.educations.push(data);
+    });
+
+    Event.listen("jobAdded", data => {
+      this.localUser.resume.jobs.push(data);
+    });
+
+    Event.listen("familyAdded", data => {
+      this.localUser.resume.families.push(data);
+    });
+
+    Event.listen("languageAdded", data => {
+      this.localUser.resume.languages.push(data);
+    });
+
+    Event.listen("achievmentAdded", data => {
+      this.localUser.resume.achievments.push(data);
     });
   }
 };

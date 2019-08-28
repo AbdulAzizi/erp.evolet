@@ -162,10 +162,11 @@ Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
 Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
 Vue.component("stats-card", require("./components/StatsCard.vue").default);
 Vue.component("avatar", require("./components/Avatar.vue").default);
-Vue.component("profile-error", require('./components/profile/ResumeError.vue').default);
-Vue.component("resume-edit", require('./components/profile/ResumeEdit.vue').default);
-Vue.component("projects-card", require('./components/projects/Card.vue').default);
-Vue.component("projects-list", require('./components/projects/List.vue').default);
+Vue.component("projects-card", require("./components/projects/Card.vue").default);
+Vue.component("projects-list", require("./components/projects/List.vue").default);
+Vue.component("resume-add-item", require("./components/profile/AddItem.vue").default);
+Vue.component("resume-card", require("./components/profile/ResumeCard.vue").default);
+Vue.component("resume-create", require("./components/profile/ResumeCreate.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
@@ -194,17 +195,11 @@ Vue.component(
     "profile-resume",
     require("./components/views/ProfileResumeShow.vue").default
 );
-Vue.component(
-    "profile-resume-create",
-    require("./components/views/ProfileResumeCreate.vue").default
-);
 
 Vue.component(
     "user-card-vertical",
     require("./components/profile/UserCard.vue").default
 );
-Vue.component("add-education-dialog", require("./components/profile/AddEducation.vue").default);
-Vue.component("edit-education-dialog", require("./components/profile/EditEducation.vue").default);
 
 Vue.component("users-view", require("./components/views/Users.vue").default);
 
