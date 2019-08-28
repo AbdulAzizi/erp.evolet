@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Notifications\AssignedAsWatcher;
 use App\Notifications\AssignedToTask;
+use App\Question;
+use App\QuestionOption;
 use App\Tag;
 use App\Task;
 use App\User;
@@ -21,12 +23,11 @@ class TaskController extends Controller
             ->with('from', 'responsible', 'watchers', 'status', 'tags')
             ->get();
 
-
-        foreach ($tasks as $task ) {
+        foreach ($tasks as $task) {
             // If task is from process
-            if( $task->from_type == "App\Process" ) {
+            if ($task->from_type == "App\Process") {
                 // Load Tethers and forms for each tether
-                $task->from->load('frontTethers.form.fields.type','backTethers');
+                $task->from->load('frontTethers.form.fields.type', 'backTethers');
                 // return $task;
             }
         }
@@ -53,6 +54,27 @@ class TaskController extends Controller
         $watchers = json_decode($request->watchers);
         $newTags = json_decode($request->newTags);
         $existingTags = json_decode($request->existingTags);
+        $poll = json_decode($request->poll);
+        // if there is a poll
+        if($poll) {
+            // make question
+            $question = Question::create(['body' => $poll->question]);
+            // holder for questions
+            $options = [];
+            // collect questions
+            foreach ($poll->options as $option) {
+                // if option is not empty
+                if($option != '')
+                    // add option to array
+                    $options[] = [
+                        'question_id' => $question->id,
+                        'body' => $option
+                    ];
+            }
+            // attach options to question
+            $options = QuestionOption::insert($options);
+        }
+
         // Get new Status instance
         $newStatus = \App\Status::where('name', 'Новый')->first();
         // Empty array to keep query
@@ -91,9 +113,9 @@ class TaskController extends Controller
             // TODO select auth user as task responsible by deafauld on the client side
 
             // Attach Task Author as a Watcher
-            $task->watchers()->attach( auth()->user() );
+            $task->watchers()->attach(auth()->user());
             // Attach Watchers to Task
-            $task->watchers()->attach( $watchers );
+            $task->watchers()->attach($watchers);
             // Notify Watchers
             Notification::send($watchers, new AssignedAsWatcher($task->from, $task->responsible, $task));
             // Attach Tags to Task
@@ -107,10 +129,12 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $task = Task::with('watchers','responsible','from','status','tags')->find($id);
+        $task = Task::with('watchers', 'responsible', 'from', 'status', 'tags')->find($id);
         // return $task;
-        if( $task->from_type == "App\Process" )
-            $task->from->load('frontTethers.form.fields','backTethers');
+        if ($task->from_type == "App\Process") {
+            $task->from->load('frontTethers.form.fields', 'backTethers');
+        }
+
         // return $task;
         return view('tasks.show', compact('task'));
     }

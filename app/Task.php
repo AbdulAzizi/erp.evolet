@@ -49,4 +49,9 @@ class Task extends Model
     {
         return $this->morphMany(History::class, 'happend_with');
     }
+
+    public function question()
+    {
+        return $this->belongsToMany('App\Question');
+    }
 }
