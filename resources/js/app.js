@@ -167,6 +167,7 @@ Vue.component("resume-edit", require('./components/profile/ResumeEdit.vue').defa
 Vue.component("projects-card", require('./components/projects/Card.vue').default);
 Vue.component("projects-list", require('./components/projects/List.vue').default);
 Vue.component("projects-create", require('./components/projects/Create.vue').default);
+Vue.component("history", require('./components/History.vue').default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);

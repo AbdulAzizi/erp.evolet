@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\History;
 use App\Notifications\AssignedAsWatcher;
 use App\Notifications\AssignedToTask;
 use App\Question;
@@ -20,7 +21,7 @@ class TaskController extends Controller
         $authUser = \Auth::user();
 
         $tasks = Task::where('responsible_id', $authUser->id)
-            ->with('from', 'responsible', 'watchers', 'status', 'tags')
+            ->with('from', 'responsible', 'watchers', 'status', 'tags', 'history.user')
             ->get();
 
         foreach ($tasks as $task) {
@@ -122,6 +123,8 @@ class TaskController extends Controller
             $task->tags()->attach($existingTags);
             // Notify Assignees
             $task->responsible->notify(new AssignedToTask($task->from, $task));
+            //Log creation to tasks History
+            $this->taskCreated($task);
         }
         // Redirect to Tasks Index page
         return redirect()->route('tasks.index');
@@ -129,7 +132,7 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $task = Task::with('watchers', 'responsible', 'from', 'status', 'tags')->find($id);
+        $task = Task::with('watchers','responsible','from','status','tags', 'history.user')->find($id);
         // return $task;
         if ($task->from_type == "App\Process") {
             $task->from->load('frontTethers.form.fields', 'backTethers');
@@ -137,5 +140,24 @@ class TaskController extends Controller
 
         // return $task;
         return view('tasks.show', compact('task'));
+    }
+
+    /**
+     * Task history events
+     */
+    private function taskCreated(Task $task)
+    {
+        $author = auth()->user();
+
+        $description = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил задачу.";
+
+        History::create([
+            'user_id' => $author->id,
+            'previous_id' => null,
+            'description' => $description,
+            'happened_at' => Carbon::now()->toDateTimeString(),
+            'happend_with_id' => $task->id,
+            'happend_with_type' => Task::class
+        ]);
     }
 }
