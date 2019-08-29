@@ -19,8 +19,8 @@ class CreateHistoriesTable extends Migration
             $table->bigInteger('previous_id')->nullable();
             $table->text('description');
             $table->dateTime('happened_at');
-            $table->bigInteger('happend_with_id');
-            $table->string('happend_with_type');
+            $table->bigInteger('happened_with_id');
+            $table->string('happened_with_type');
         });
     }
 

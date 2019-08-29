@@ -47,6 +47,6 @@ class Task extends Model
 
     public function history()
     {
-        return $this->morphMany(History::class, 'happend_with');
+        return $this->morphMany(History::class, 'happened_with');
     }
 }
