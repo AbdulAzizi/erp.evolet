@@ -1,8 +1,11 @@
 <template>
   <div>
-    <v-alert prominent type="warning" color="primary" v-if="!user.resume">
+    <v-alert prominent type="warning" color="primary" v-if="!user.resume[0]">
       <v-row align="center">
-        <v-col class="grow" v-if="user.id !== permit">У пользователя {{user.name}} {{user.surname}} нету резюме</v-col>
+        <v-col
+          class="grow"
+          v-if="user.id !== permit"
+        >У пользователя {{user.name}} {{user.surname}} нету резюме</v-col>
         <v-col class="grow" v-if="user.id == permit">У вас пока нету резюме. Создайте</v-col>
         <v-col class="shrink">
           <v-btn dark outlined @click="dialog = true" v-if="permit == user.id">Создать резюме</v-btn>
@@ -15,7 +18,8 @@
           <v-toolbar-title>Создать резюме</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-form method="post" action="/api/resume" ref="resumeForm">
+          <v-form method="post" action="/resume" ref="resumeForm">
+            <input type="hidden" name="_token" :value="csrf_token" />
             <v-row>
               <v-col cols="4">
                 <form-field
@@ -60,7 +64,7 @@
                 ></form-field>
               </v-col>
             </v-row>
-            <v-btn color="primary" :loading="loading" :disabled="loading" type="submit">Создать</v-btn>
+            <v-btn color="primary"  @click="onSubmit">Создать</v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -76,7 +80,16 @@ export default {
     return {
       dialog: false,
       loading: false,
+      csrf_token: window.Laravel.csrf_token
     };
+  },
+  methods: {
+    onSubmit() {
+      let form = this.$refs.resumeForm;
+      if (form.validate()) {
+        this.$refs.resumeForm.$el.submit();
+      }
+    }
   }
 };
 </script>

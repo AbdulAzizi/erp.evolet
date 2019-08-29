@@ -16,6 +16,9 @@
         <user-card-vertical :user="user" />
       </v-col>
     </v-row>
+    <v-btn dark fab right bottom :fixed="fixed" color="primary" class="ma-5">
+      <v-icon>mdi-playlist-edit</v-icon>
+    </v-btn>
   </v-container>
 </template>
 
@@ -25,7 +28,9 @@ export default {
   data() {
     return {
       search: "",
-      filteredUsers: this.users
+      filteredUsers: this.users,
+      fab: false,
+      fixed: true
     };
   },
   watch: {

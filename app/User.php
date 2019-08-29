@@ -130,7 +130,7 @@ class User extends Authenticatable
 
     public function resume()
     {
-        return $this->hasOne('\App\Resume');
+        return $this->belongsToMany('App\Resume');
     }
 
 

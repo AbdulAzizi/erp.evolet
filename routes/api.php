@@ -45,4 +45,4 @@ Route::post('/achievment', 'ResumeController@achievmentAdd')->name('achievment-a
 
 Route::delete('/deleteAchievment/{id}', 'ResumeController@achievmentDelete')->name('achievment-delete');
 
-Route::post('/resume', 'ResumeController@create')->name('resume-create');
+

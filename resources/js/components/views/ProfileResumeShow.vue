@@ -1,8 +1,8 @@
 <template>
 <div>
     <profile-banner :user="user" />
-    <resume-create :user="user" v-if="!user.resume" :permit="permit"></resume-create>
-    <v-row v-if="user.resume">
+    <resume-create :user="user" v-if="!user.resume[0]" :permit="permit"></resume-create>
+    <v-row v-if="user.resume[0]">
       <v-col cols="12" sm="6" md="4">
         <v-card>
           <v-toolbar dark flat dense color="primary">
@@ -15,25 +15,25 @@
               <v-list-item-icon>
                 <v-icon>mdi-calendar-range</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{ moment(user.resume.birthday).format("L") }}</v-list-item-content>
+              <v-list-item-content>{{ moment(user.resume[0].birthday).format("L") }}</v-list-item-content>
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-phone</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume.phone}}</v-list-item-content>
+              <v-list-item-content>{{user.resume[0].phone}}</v-list-item-content>
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-human-male-female</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume.male_female}}</v-list-item-content>
+              <v-list-item-content>{{user.resume[0].male_female}}</v-list-item-content>
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-shield-half-full</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume.military_status}}</v-list-item-content>
+              <v-list-item-content>{{user.resume[0].military_status}}</v-list-item-content>
             </v-list-item>
           </v-list>
         </v-card>
@@ -42,7 +42,7 @@
         <resume-card
           :user="user"
           title="Образование"
-          :localUser="user.resume.educations"
+          :localUser="user.resume[0].educations"
           type="education"
           main_icon="mdi-school"
           deleteUrl="/api/deleteEducation/"
@@ -63,7 +63,7 @@
         <resume-card
           :user="user"
           title="Опыт работы"
-          :localUser="user.resume.jobs"
+          :localUser="user.resume[0].jobs"
           type="job"
           main_icon="mdi-office-building"
           deleteUrl="/api/deleteJob/"
@@ -84,7 +84,7 @@
         <resume-card
           :user="user"
           title="Семейное положение"
-          :localUser="user.resume.families"
+          :localUser="user.resume[0].families"
           type="family"
           main_icon="mdi-account-group"
           deleteUrl="/api/deleteFamily/"
@@ -105,7 +105,7 @@
         <resume-card
           :user="user"
           title="Знание языков"
-          :localUser="user.resume.languages"
+          :localUser="user.resume[0].languages"
           type="language"
           main_icon="mdi-chat"
           deleteUrl="/api/deleteLanguage/"
@@ -125,7 +125,7 @@
         <resume-card
           :user="user"
           title="Достижения"
-          :localUser="user.resume.achievments"
+          :localUser="user.resume[0].achievments"
           main_icon="mdi-certificate"
           deleteUrl="/api/deleteAchievment/"
           firstMainLine="type"

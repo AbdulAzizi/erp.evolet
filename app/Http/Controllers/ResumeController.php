@@ -25,7 +25,7 @@ class ResumeController extends Controller
         )->find($request->id);
 
 
-            return view('profile.curriculum', compact('user'));
+        return view('profile.curriculum', compact('user'));
 
 
     }
@@ -33,15 +33,21 @@ class ResumeController extends Controller
     public function create(Request $request)
     {
 
-        Resume::create([
+        $user = User::find(auth()->id());
 
+        $resume = Resume::create([
+            'name' => $user->name,
+            'surname' => $user->surname,
             'birthday' => $request->birthday,
             'male_female' => $request->gender,
             'phone' => $request->phone,
             'military_status' => $request->military_status,
-            'user_id' => auth()->id()
-
         ]);
+
+
+
+        $resume->user()->attach($user->id);
+
 
         return redirect()->back();
 

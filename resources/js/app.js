@@ -167,6 +167,10 @@ Vue.component("projects-list", require("./components/projects/List.vue").default
 Vue.component("resume-add-item", require("./components/profile/AddItem.vue").default);
 Vue.component("resume-card", require("./components/profile/ResumeCard.vue").default);
 Vue.component("resume-create", require("./components/profile/ResumeCreate.vue").default);
+Vue.component("projects-card", require('./components/projects/Card.vue').default);
+Vue.component("projects-list", require('./components/projects/List.vue').default);
+Vue.component("projects-create", require('./components/projects/Create.vue').default);
+Vue.component("history", require('./components/History.vue').default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);

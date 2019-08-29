@@ -43,14 +43,20 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/processes/{id}','ProcessController@show')->name('processes.show');
 
     Route::get('/projects','ProjectController@index')->name('projects.index');
+    Route::post('/projects','ProjectController@store')->name('projects.store');
+    Route::get('/projects/create','ProjectController@create')->name('projects.create');
+
     Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');
 
     Route::get('/bp', 'ProcessController@index')->name('bp');
     Route::get('/profile/tasks', 'UserController@tasks')->name('profile-tasks');
+
     Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume-show');
     Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume-store');
 
     Route::get('/users/{id}/cv/edit', 'ResumeController@showEdit')->name('resume-show-edit');
+    Route::post('/resume', 'ResumeController@create')->name('resume.create');
+
 
 
 });
