@@ -1,13 +1,13 @@
 <template>
     <v-card>
         <v-layout>
-            <V-flex xs6>
+            <V-flex xs6 class="grey lighten-3">
                 <v-tabs v-model="tab">
                     <v-tab href="#task">Задача</v-tab>
                     <v-tab href="#comments">Коментарии</v-tab>
                     <v-tab href="#history">История</v-tab>
                 </v-tabs>
-                <v-tabs-items v-model="tab" class="task-main-content">
+                <v-tabs-items v-model="tab" class="grey lighten-3 task-main-content">
                     <v-tab-item value="task">
                         <v-card-title>
                             <h3 class="headline mb-0">{{task.title}}</h3>

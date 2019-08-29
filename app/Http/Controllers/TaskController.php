@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\History;
 use App\Notifications\AssignedAsWatcher;
 use App\Notifications\AssignedToTask;
+use App\Question;
+use App\QuestionOption;
 use App\Tag;
 use App\Task;
 use App\User;
@@ -53,6 +55,30 @@ class TaskController extends Controller
         $watchers = json_decode($request->watchers);
         $newTags = json_decode($request->newTags);
         $existingTags = json_decode($request->existingTags);
+        $poll = json_decode($request->poll);
+        // if there is a poll
+        if ($poll) {
+            // make question
+            $question = Question::create(['body' => $poll->question]);
+            // holder for questions
+            $options = [];
+            // collect questions
+            foreach ($poll->options as $option) {
+                // if option is not empty
+                if ($option != '')
+                // add option to array
+                {
+                    $options[] = [
+                        'question_id' => $question->id,
+                        'body' => $option,
+                    ];
+                }
+
+            }
+            // attach options to question
+            $options = QuestionOption::insert($options);
+        }
+
         // Get new Status instance
         $newStatus = \App\Status::where('name', 'Новый')->first();
         // Empty array to keep query
@@ -109,12 +135,21 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $task = Task::with('watchers', 'responsible', 'from', 'status', 'tags', 'history.user')->find($id);
-
+        $task = Task::with(
+            'watchers', 
+            'responsible', 
+            'from', 
+            'status', 
+            'tags', 
+            'history.user',
+            'poll'
+        )->find($id);
+        // return $task;
         if ($task->from_type == "App\Process") {
             $task->from->load('frontTethers.form.fields', 'backTethers');
         }
 
+        // return $task;
         return view('tasks.show', compact('task'));
     }
 

@@ -1,9 +1,9 @@
 <template>
-    <v-timeline>
+    <v-timeline dense>
         <v-timeline-item v-for="(historyItem, i) in sortedHistory" :key="i">
-            <template v-slot:opposite>
+            <!-- <template v-slot:opposite>
                 <span class="caption mb-0">{{getDate(historyItem.happened_at)}}</span>
-            </template>
+            </template> -->
             <template v-slot:icon>
                 <a :href="`/users/${historyItem.user.id}`">
                     <v-avatar size="33" color="primary">
@@ -12,7 +12,7 @@
                 </a>
             </template>
             <v-card class="elevation-2">
-                <v-card-text v-html="historyItem.description"></v-card-text>
+                <v-card-text v-html="historyItem.description+'<br>'+getDate(historyItem.happened_at)"></v-card-text>
             </v-card>
         </v-timeline-item>
     </v-timeline>
