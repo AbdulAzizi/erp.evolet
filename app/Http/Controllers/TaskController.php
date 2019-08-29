@@ -22,12 +22,11 @@ class TaskController extends Controller
             ->with('from', 'responsible', 'watchers', 'status', 'tags', 'history.user')
             ->get();
 
-
-        foreach ($tasks as $task ) {
+        foreach ($tasks as $task) {
             // If task is from process
-            if( $task->from_type == "App\Process" ) {
+            if ($task->from_type == "App\Process") {
                 // Load Tethers and forms for each tether
-                $task->from->load('frontTethers.form.fields.type','backTethers');
+                $task->from->load('frontTethers.form.fields.type', 'backTethers');
                 // return $task;
             }
         }
@@ -92,9 +91,9 @@ class TaskController extends Controller
             // TODO select auth user as task responsible by deafauld on the client side
 
             // Attach Task Author as a Watcher
-            $task->watchers()->attach( auth()->user() );
+            $task->watchers()->attach(auth()->user());
             // Attach Watchers to Task
-            $task->watchers()->attach( $watchers );
+            $task->watchers()->attach($watchers);
             // Notify Watchers
             Notification::send($watchers, new AssignedAsWatcher($task->from, $task->responsible, $task));
             // Attach Tags to Task
@@ -110,12 +109,35 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $task = Task::with('watchers','responsible','from','status','tags', 'history.user')->find($id);
-        // return $task;
-        if( $task->from_type == "App\Process" )
-            $task->from->load('frontTethers.form.fields','backTethers');
-        // return $task;
+        $task = Task::with('watchers', 'responsible', 'from', 'status', 'tags', 'history.user')->find($id);
+
+        if ($task->from_type == "App\Process") {
+            $task->from->load('frontTethers.form.fields', 'backTethers');
+        }
+
         return view('tasks.show', compact('task'));
+    }
+
+    public function update($id, Request $request)
+    {
+        $task = Task::find($id);
+
+        $taskFields = collect($task->getAttributes());
+
+        $updatedColumns = collect($request->all())->intersectByKeys($taskFields);
+
+        foreach ($updatedColumns as $columnName => $updatedValue) {
+            switch ($columnName) {
+                case 'responsible_id':
+                    $this->forwardTask($task, $updatedValue);
+                    break;
+                default:
+                    continue;
+                    break;
+            }
+        }
+
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -127,13 +149,58 @@ class TaskController extends Controller
 
         $description = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил задачу.";
 
+        $this->addToTaskHistory($task->id, $description);
+    }
+
+    private function taskForwarded(Task $oldTask, Task $newTask)
+    {
+        $oldResponsible = $oldTask->load('responsible')->responsible;
+        $newResponsible = $newTask->load('responsible')->responsible;
+
+        $description = "Пользователь <a href='/users/$oldResponsible->id'>$oldResponsible->full_name</a> делегировал задачу пользователю <a href='/users/$newResponsible->id'>$newResponsible->full_name</a>";
+
+        $this->addToTaskHistory($newTask->id, $description);
+    }
+
+    /**
+     * Helpers
+     *
+     */
+
+    private function forwardTask(Task $task, $newResponsibleID)
+    {
+        $oldTask = $task->replicate();
+
+        $author = auth()->user();
+        $authorDivision = $author->load('division')->division;
+        
+        $isAuthorHead = $author->id === $authorDivision->head_id;
+
+        if(!$isAuthorHead) return;
+        
+        $task->responsible_id = $newResponsibleID;
+
+        $task->save();
+
+        $this->taskForwarded($oldTask, $task);
+    }
+
+    private function addToTaskHistory($taskId, $description)
+    {
+        $authorId = auth()->id();
+
+        $previous = History::where('happened_with_type', App\Task::class)
+            ->where('happened_with_id', $taskId)
+            ->orderByDesc('happened_at')
+            ->first();
+
         History::create([
-            'user_id' => $author->id,
-            'previous_id' => null,
+            'user_id' => $authorId,
+            'previous_id' => $previous ? $previous->id : null,
             'description' => $description,
             'happened_at' => Carbon::now()->toDateTimeString(),
-            'happend_with_id' => $task->id,
-            'happend_with_type' => Task::class
+            'happened_with_id' => $taskId,
+            'happened_with_type' => Task::class,
         ]);
     }
 }
