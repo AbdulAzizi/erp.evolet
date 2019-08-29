@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTaskQuestionTable extends Migration
+class CreateQuestionTaskTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTaskQuestionTable extends Migration
      */
     public function up()
     {
-        Schema::create('task_question', function (Blueprint $table) {
+        Schema::create('question_task', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('question_id');
@@ -27,6 +27,6 @@ class CreateTaskQuestionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task_question');
+        Schema::dropIfExists('question_task');
     }
 }

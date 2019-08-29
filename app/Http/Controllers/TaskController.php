@@ -57,7 +57,7 @@ class TaskController extends Controller
         $existingTags = json_decode($request->existingTags);
         $poll = json_decode($request->poll);
         // if there is a poll
-        if($poll) {
+        if ($poll) {
             // make question
             $question = Question::create(['body' => $poll->question]);
             // holder for questions
@@ -65,12 +65,15 @@ class TaskController extends Controller
             // collect questions
             foreach ($poll->options as $option) {
                 // if option is not empty
-                if($option != '')
-                    // add option to array
+                if ($option != '')
+                // add option to array
+                {
                     $options[] = [
                         'question_id' => $question->id,
-                        'body' => $option
+                        'body' => $option,
                     ];
+                }
+
             }
             // attach options to question
             $options = QuestionOption::insert($options);
@@ -132,8 +135,16 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $task = Task::with('watchers','responsible','from','status','tags', 'history.user')->find($id);
-        // return $task;
+        $task = Task::with(
+            'watchers', 
+            'responsible', 
+            'from', 
+            'status', 
+            'tags', 
+            'history.user',
+            'poll'
+        )->find($id);
+        return $task;
         if ($task->from_type == "App\Process") {
             $task->from->load('frontTethers.form.fields', 'backTethers');
         }
@@ -157,7 +168,7 @@ class TaskController extends Controller
             'description' => $description,
             'happened_at' => Carbon::now()->toDateTimeString(),
             'happend_with_id' => $task->id,
-            'happend_with_type' => Task::class
+            'happend_with_type' => Task::class,
         ]);
     }
 }
