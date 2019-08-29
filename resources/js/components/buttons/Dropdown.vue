@@ -39,8 +39,8 @@
                 </template>
             </v-list> -->
 
-            <v-card class="text-center">
-                 <div v-if="items.length == 0">
+            <v-card>
+                 <div v-if="items.length == 0" class="text-center">
                     <v-layout py-2  px-3>
                         <v-flex xs12>
                             <h6 class="caption">{{ tooltip }} отсутствуют</h6>
