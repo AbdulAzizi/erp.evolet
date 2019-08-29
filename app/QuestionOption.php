@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuestionOption extends Model
 {
-    public $timestamp = false;
+    public $timestamps = false;
+
+    protected $fillable = ['body'];
 
     public function question()
     {
