@@ -38,7 +38,7 @@
                             label: 'Пол',
                             name: 'gender',
                             type: 'select',
-                            items: ["Мужской", "Женский"],
+                            items: ['Мужской', 'Женский'],
                             rules: ['required']
                         }"
                 ></form-field>
@@ -49,7 +49,7 @@
                             label: 'Военная обязанность',
                             name: 'military_status',
                             type: 'select',
-                            items: ["Обязан", "Не обязан"],
+                            items: ['Обязан', 'Не обязан'],
                             rules: ['required']
                         }"
                 ></form-field>
