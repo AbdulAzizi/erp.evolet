@@ -22,6 +22,7 @@
 export default {
     props: ["projects"]
 };
+
 </script>
 
 <style>
