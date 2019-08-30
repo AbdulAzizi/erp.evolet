@@ -99,6 +99,13 @@ export default {
                     url: "/bp",
                     responsibilities: ["Программист"],
                     divisions: ["ОРПО"]
+                },
+                {
+                    icon: "mdi-account-tie",
+                    text: "HR",
+                    url: "/human-resources",
+                    responsibilities: ["Программист"],
+                    divisions: ["ОРПО", "ДЧ"]
                 }
             ]
         };
@@ -124,7 +131,7 @@ export default {
         }
     },
     created() {
-        this.items = [...this.getLinksOf(this.auth_user) ];  
+        this.items = [...this.getLinksOf(this.auth_user) ];
     }
 };
 </script>

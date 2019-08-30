@@ -60,5 +60,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/resume/index', 'ResumeController@index')->name('resume.index');
     Route::get('/resume/{id}', 'ResumeController@showSingle')->name('show.single');
 
+    Route::get('/human-resources', 'HumanResourcesController@index')->name('human.resources');
+
 
 });
