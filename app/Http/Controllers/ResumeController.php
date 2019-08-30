@@ -17,7 +17,7 @@ class ResumeController extends Controller
 
     public function index()
     {
-        $resumes = Resume::where('creator', auth()->id())->doesnthave('owner')->get();
+        $resumes = Resume::where('creator', auth()->id())->with(['educations', 'languages'])->doesnthave('owner')->get();
 
         return view('resume.index', compact('resumes'));
     }
