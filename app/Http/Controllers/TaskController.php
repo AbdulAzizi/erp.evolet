@@ -126,13 +126,35 @@ class TaskController extends Controller
             'history.user',
             'polls.options'
         )->find($id);
-
+        // return $task;
         if ($task->from_type == "App\Process") {
             $task->from->load('frontTethers.form.fields', 'backTethers');
         }
 
         // return $task;
         return view('tasks.show', compact('task'));
+    }
+
+    public function update($id, Request $request)
+    {
+        $task = Task::find($id);
+
+        $taskFields = collect($task->getAttributes());
+
+        $updatedColumns = collect($request->all())->intersectByKeys($taskFields);
+
+        foreach ($updatedColumns as $columnName => $updatedValue) {
+            switch ($columnName) {
+                case 'responsible_id':
+                    $this->forwardTask($task, $updatedValue);
+                    break;
+                default:
+                    continue;
+                    break;
+            }
+        }
+
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -174,13 +196,58 @@ class TaskController extends Controller
 
         $description = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил задачу.";
 
+        $this->addToTaskHistory($task->id, $description);
+    }
+
+    private function taskForwarded(Task $oldTask, Task $newTask)
+    {
+        $oldResponsible = $oldTask->load('responsible')->responsible;
+        $newResponsible = $newTask->load('responsible')->responsible;
+
+        $description = "Пользователь <a href='/users/$oldResponsible->id'>$oldResponsible->full_name</a> делегировал задачу пользователю <a href='/users/$newResponsible->id'>$newResponsible->full_name</a>";
+
+        $this->addToTaskHistory($newTask->id, $description);
+    }
+
+    /**
+     * Helpers
+     *
+     */
+
+    private function forwardTask(Task $task, $newResponsibleID)
+    {
+        $oldTask = $task->replicate();
+
+        $author = auth()->user();
+        $authorDivision = $author->load('division')->division;
+        
+        $isAuthorHead = $author->id === $authorDivision->head_id;
+
+        if(!$isAuthorHead) return;
+        
+        $task->responsible_id = $newResponsibleID;
+
+        $task->save();
+
+        $this->taskForwarded($oldTask, $task);
+    }
+
+    private function addToTaskHistory($taskId, $description)
+    {
+        $authorId = auth()->id();
+
+        $previous = History::where('happened_with_type', App\Task::class)
+            ->where('happened_with_id', $taskId)
+            ->orderByDesc('happened_at')
+            ->first();
+
         History::create([
-            'user_id' => $author->id,
-            'previous_id' => null,
+            'user_id' => $authorId,
+            'previous_id' => $previous ? $previous->id : null,
             'description' => $description,
             'happened_at' => Carbon::now()->toDateTimeString(),
-            'happend_with_id' => $task->id,
-            'happend_with_type' => Task::class,
+            'happened_with_id' => $taskId,
+            'happened_with_type' => Task::class,
         ]);
     }
 }

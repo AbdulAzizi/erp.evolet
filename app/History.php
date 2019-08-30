@@ -25,7 +25,7 @@ class History extends Model
         return $this->hasOne(History::class, 'id', 'previous_id');
     }
 
-    public function happendWith()
+    public function happenedWith()
     {
         return $this->morphTo();
     }

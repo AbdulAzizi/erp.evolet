@@ -27,6 +27,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/tasks', 'TaskController@index')->name('tasks.index');
     Route::post('/tasks', 'TaskController@store')->name('tasks.store');
     Route::get('/tasks/{id}', 'TaskController@show')->name('tasks.show');
+    Route::put('/tasks/{id}', 'TaskController@update')->name('tasks.update');
 
     Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
@@ -45,15 +46,19 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/projects','ProjectController@index')->name('projects.index');
     Route::post('/projects','ProjectController@store')->name('projects.store');
     Route::get('/projects/create','ProjectController@create')->name('projects.create');
-    
+
     Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');
 
     Route::get('/bp', 'ProcessController@index')->name('bp');
-    Route::get('/profile/tasks', 'UserController@tasks')->name('profile-tasks');
-    Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume-show');
-    Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume-store');
+    Route::get('/profile/tasks', 'UserController@tasks')->name('profile.tasks');
 
-    Route::get('/users/{id}/cv/edit', 'ResumeController@showEdit')->name('resume-show-edit');
+    Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume.show');
+    Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume.store');
+
+    Route::get('/users/{id}/cv/edit', 'ResumeController@showEdit')->name('resume.show.edit');
+    Route::post('/resume', 'ResumeController@create')->name('resume.create');
+    Route::get('/resume/index', 'ResumeController@index')->name('resume.index');
+    Route::get('/resume/{id}', 'ResumeController@showSingle')->name('show.single');
 
 
 });

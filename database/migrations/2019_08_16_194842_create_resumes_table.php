@@ -15,11 +15,13 @@ class CreateResumesTable extends Migration
     {
         Schema::create('resumes', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('surname');
             $table->string('male_female');
             $table->date('birthday');
             $table->string('military_status');
             $table->string('phone');
-            $table->unsignedInteger('user_id');
+            $table->integer('creator');
             $table->timestamps();
         });
     }

@@ -24,7 +24,6 @@ export default {
         history: Array
     },
     data() {
-        console.log(this.history);
         return {};
     },
     methods: {

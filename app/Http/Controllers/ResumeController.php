@@ -14,6 +14,13 @@ use App\Achievment;
 class ResumeController extends Controller
 {
 
+
+    public function index()
+    {
+        $resumes = Resume::where('creator', auth()->id())->doesnthave('owner')->get();
+
+        return view('resume.index', compact('resumes'));
+    }
     public function show(Request $request)
     {
         $user = User::with(
@@ -25,118 +32,62 @@ class ResumeController extends Controller
         )->find($request->id);
 
 
-            return view('profile.curriculum', compact('user'));
+        return view('profile.curriculum', compact('user'));
 
 
     }
 
-    public function store(Request $request)
+    public function showSingle(Request $request)
     {
+        $resume = Resume::with(
+            'educations',
+            'jobs',
+            'families',
+            'achievments',
+            'languages'
+        )->find($request->id);
 
-        $degrees = json_decode($request->degrees);
-        $jobs = json_decode($request->jobs);
-        $families = json_decode($request->families);
-        $languages = json_decode($request->languages);
-        $achievments = json_decode($request->achievments);
 
-        Resume::create([
+        return view('resume.show', compact('resume'));
 
+
+    }
+
+    public function create(Request $request)
+    {
+        if($request->own == 'false'){
+            $resume = Resume::create([
+            'name' => $request->name,
+            'surname' => $request->surname,
             'birthday' => $request->birthday,
             'male_female' => $request->gender,
             'phone' => $request->phone,
             'military_status' => $request->military_status,
-            'user_id' => auth()->id()
-
-        ]);
-
-        $resume = Resume::where('user_id', auth()->id())->first()->id;
-
-        $degreesToInsert = [];
-
-
-        foreach($degrees as $degree){
-
-            $degreesToInsert[] = [
-
-                'degree' => $degree->degree,
-                'start_at' => $degree->start_at,
-                'end_at' => $degree->end_at,
-                'name' => $degree->institute,
-                'specialty' => $degree->specialty,
-                'resume_id' => $resume
-
-            ];
+            'creator' => auth()->id()
+            ]);
         }
+        else{
 
-        Education::insert($degreesToInsert);
+            $user = User::find(auth()->id());
 
-        $jobsToInsert = [];
+            $resume = Resume::create([
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'birthday' => $request->birthday,
+                'male_female' => $request->gender,
+                'phone' => $request->phone,
+                'military_status' => $request->military_status,
+                'creator' => auth()->id()
+            ]);
 
-        foreach($jobs as $job){
 
-            $jobsToInsert[] = [
-
-                'start_at' => $job->start_at,
-                'end_at' => $job->end_at,
-                'company_name' => $job->name,
-                'position' => $job->position,
-                'location' => $job->location,
-                'resume_id' => $resume
-
-            ];
+            $resume->owner()->attach($user->id);
 
         }
 
-        Job::insert($jobsToInsert);
 
-        $familiesToInsert = [];
+        return redirect('/resume/'.$resume->id);
 
-        foreach($families as $family){
-
-            $familiesToInsert[] = [
-
-                'relation' => $family->type,
-                'birthday' => $family->birthday,
-                'name' => $family->name,
-                'resume_id' => $resume
-
-            ];
-
-        }
-
-        Family::insert($familiesToInsert);
-
-        $languagesToInsert = [];
-
-        foreach($languages as $language){
-
-            $languagesToInsert[] = [
-
-                'name' => $language->name,
-                'level' => $language->level,
-                'resume_id' => $resume
-
-            ];
-        }
-
-        Language::insert($languagesToInsert);
-
-        $achievmentsToInsert = [];
-
-        foreach($achievments as $achievment){
-
-            $achievmentsToInsert[] = [
-
-                'type' => $achievment->type,
-                'description' => $achievment->name,
-                'resume_id' => $resume
-
-            ];
-        }
-
-        Achievment::insert($achievmentsToInsert);
-
-        return redirect()->back();
     }
 
     public function educationAdd()
@@ -160,7 +111,9 @@ class ResumeController extends Controller
 
     public function educationEdit(Request $request)
     {
-         Education::find($request->id)->update([
+         $education = Education::find($request->id);
+
+         $education->update([
 
             'degree' => $request->degree,
             'name' => $request->institute,
@@ -169,6 +122,72 @@ class ResumeController extends Controller
             'specialty' => $request->specialty
 
         ]);
+
+        return $education;
+    }
+
+    public function jobAdd()
+    {
+        return Job::create([
+            'company_name' => request('company_name'),
+            'start_at' => request('start_at'),
+            'end_at' => request('end_at'),
+            'position' => request('position'),
+            'location' => request('location'),
+            'resume_id' => request('resume_id')
+        ]);
+
+    }
+
+    public function jobDelete(Request $request)
+    {
+        Job::find($request->id)->delete();
+
+        return "success";
+    }
+
+    public function familyAdd(Request $request)
+    {
+        return Family::create([
+            'relation' => $request->relation,
+            'birthday' => $request->birthday,
+            'name' => $request->name,
+            'resume_id' => $request->resume_id
+        ]);
+    }
+    public function familyDelete(Request $request)
+    {
+        Family::find($request->id)->delete();
+
+        return 'success';
+    }
+
+    public function languageAdd(Request $request)
+    {
+        return Language::create([
+            'name' => $request->name,
+            'level' => $request->level,
+            'resume_id' => $request->resume_id
+        ]);
+    }
+    public function languageDelete(Request $request)
+    {
+        Language::find($request->id)->delete();
+
+        return 'success';
+    }
+
+    public function achievmentAdd(Request $request)
+    {
+        return Achievment::create([
+            'type' => $request->type,
+            'description' => $request->description,
+            'resume_id' => $request->resume_id
+        ]);
+    }
+    public function achievmentDelete(Request $request)
+    {
+        Achievment::find($request->id)->delete();
 
         return 'success';
     }
