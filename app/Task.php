@@ -50,7 +50,7 @@ class Task extends Model
         return $this->morphMany(History::class, 'happened_with');
     }
 
-    public function poll()
+    public function polls()
     {
         return $this->belongsToMany('App\Question');
     }

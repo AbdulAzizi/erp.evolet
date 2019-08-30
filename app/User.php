@@ -135,4 +135,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Resume');
     }
+
+    public function polls()
+    {
+        return $this->belongsToMany('App\Question');
+    }
 }

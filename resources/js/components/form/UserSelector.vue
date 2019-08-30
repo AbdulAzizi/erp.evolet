@@ -66,7 +66,7 @@ export default {
         icon: String,
         name: String,
         hint: String,
-        value: Array
+        value: null
     },
     data(){
         console.log(this.value);

@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call(ResponsibilityTableSeeder::class);
+        $this->call(JobDescriptionSeeder::class);
         $this->call(FieldsTypesSeeder::class);
         $this->call(TagTableSeeder::class);
         $this->call(FormTableSeeder::class);
@@ -31,5 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProjectParticipantTableSeeder::class);
         $this->call(ResumeTableSeeder::class);
         $this->call(HistorySeeder::class);
+        
+
     }
 }
