@@ -130,9 +130,11 @@ class TaskController extends Controller
         if ($task->from_type == "App\Process") {
             $task->from->load('frontTethers.form.fields', 'backTethers');
         }
+        
+        $users = User::with(['division'])->get();
 
         // return $task;
-        return view('tasks.show', compact('task'));
+        return view('tasks.show', compact('task','users'));
     }
 
     public function update($id, Request $request)
