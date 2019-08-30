@@ -12,13 +12,10 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col v-for="(user, i) in filteredUsers" :key="i" cols="12" sm="6" md="4" lg="3" xl="2">
-        <user-card-vertical :user="user" />
+      <v-col v-for="(user, i) in filteredUsers" :key="i" cols="12" sm="6" md="4" lg="4" xl="2">
+        <user-card-horizontal :user="user" />
       </v-col>
     </v-row>
-    <v-btn dark fab right bottom :fixed="fixed" color="primary" class="ma-5">
-      <v-icon>mdi-playlist-edit</v-icon>
-    </v-btn>
   </v-container>
 </template>
 
@@ -29,8 +26,6 @@ export default {
     return {
       search: "",
       filteredUsers: this.users,
-      fab: false,
-      fixed: true
     };
   },
   watch: {

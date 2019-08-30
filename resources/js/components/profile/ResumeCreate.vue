@@ -20,6 +20,7 @@
         <v-card-text>
           <v-form method="post" action="/resume" ref="resumeForm">
             <input type="hidden" name="_token" :value="csrf_token" />
+             <input type="hidden" name="own" :value="own" />
             <v-row>
               <v-col cols="4">
                 <form-field
@@ -37,7 +38,7 @@
                             label: 'Пол',
                             name: 'gender',
                             type: 'select',
-                            items: ['Мужской', 'Женский'],
+                            items: ["Мужской", "Женский"],
                             rules: ['required']
                         }"
                 ></form-field>
@@ -48,7 +49,7 @@
                             label: 'Военная обязанность',
                             name: 'military_status',
                             type: 'select',
-                            items: ['Обязан', 'Не обязан'],
+                            items: ["Обязан", "Не обязан"],
                             rules: ['required']
                         }"
                 ></form-field>
@@ -80,7 +81,8 @@ export default {
     return {
       dialog: false,
       loading: false,
-      csrf_token: window.Laravel.csrf_token
+      csrf_token: window.Laravel.csrf_token,
+      own: true
     };
   },
   methods: {

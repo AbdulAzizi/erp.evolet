@@ -21,6 +21,7 @@ class CreateResumesTable extends Migration
             $table->date('birthday');
             $table->string('military_status');
             $table->string('phone');
+            $table->integer('creator');
             $table->timestamps();
         });
     }

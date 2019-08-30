@@ -9,8 +9,9 @@ class Resume extends Model
 
     protected $guarded = [];
 
-    public function user()
+    public function owner()
     {
+
         return $this->belongsToMany('App\User');
     }
 

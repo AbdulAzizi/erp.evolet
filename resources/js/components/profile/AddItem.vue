@@ -34,12 +34,12 @@
 
 <script>
 export default {
-  props: ["user", "title", "url", "form", "returnDataEvent"],
+  props: ["user", "title", "url", "form", "returnDataEvent", "resume"],
 
   data() {
     return {
       dialog: false,
-      resume_id: this.user.resume.id,
+      resume_id: this.user ? this.user.resume.id : this.resume.id,
       csrf_token: window.Laravel.csrf_token,
       loading: false
     };

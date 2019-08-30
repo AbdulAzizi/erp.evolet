@@ -27,7 +27,8 @@ class ResumeTableSeeder extends Seeder
             'male_female' => 'Мужской',
             'birthday' => new Carbon('1996-01-17'),
             'military_status' => 'Не объязан',
-            'phone' => '985100888'
+            'phone' => '985100888',
+            'creator' => 7
 
         ]);
 

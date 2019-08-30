@@ -14,6 +14,13 @@ use App\Achievment;
 class ResumeController extends Controller
 {
 
+
+    public function index()
+    {
+        $resumes = Resume::where('creator', auth()->id())->doesnthave('owner')->get();
+
+        return view('resume.index', compact('resumes'));
+    }
     public function show(Request $request)
     {
         $user = User::with(
@@ -30,26 +37,56 @@ class ResumeController extends Controller
 
     }
 
+    public function showSingle(Request $request)
+    {
+        $resume = Resume::with(
+            'educations',
+            'jobs',
+            'families',
+            'achievments',
+            'languages'
+        )->find($request->id);
+
+
+        return view('resume.show', compact('resume'));
+
+
+    }
+
     public function create(Request $request)
     {
-
-        $user = User::find(auth()->id());
-
-        $resume = Resume::create([
-            'name' => $user->name,
-            'surname' => $user->surname,
+        if($request->own == 'false'){
+            $resume = Resume::create([
+            'name' => $request->name,
+            'surname' => $request->surname,
             'birthday' => $request->birthday,
             'male_female' => $request->gender,
             'phone' => $request->phone,
             'military_status' => $request->military_status,
-        ]);
+            'creator' => auth()->id()
+            ]);
+        }
+        else{
+
+            $user = User::find(auth()->id());
+
+            $resume = Resume::create([
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'birthday' => $request->birthday,
+                'male_female' => $request->gender,
+                'phone' => $request->phone,
+                'military_status' => $request->military_status,
+                'creator' => auth()->id()
+            ]);
 
 
+            $resume->owner()->attach($user->id);
 
-        $resume->user()->attach($user->id);
+        }
 
 
-        return redirect()->back();
+        return redirect('/resume/'.$resume->id);
 
     }
 

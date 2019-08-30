@@ -205,7 +205,16 @@ Vue.component(
     require("./components/profile/UserCard.vue").default
 );
 
+Vue.component(
+    "user-card-horizontal",
+    require("./components/profile/UserCardHorizontal.vue").default
+);
+
 Vue.component("users-view", require("./components/views/Users.vue").default);
+
+Vue.component("resumes-view", require("./components/views/Resume.vue").default);
+
+Vue.component("resume-show", require("./components/views/ResumeShow.vue").default);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
