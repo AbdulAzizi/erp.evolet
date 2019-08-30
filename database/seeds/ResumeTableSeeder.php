@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 use App\Achievment;
 use App\Resume;
-use App\job;
+use App\Job;
 use App\Education;
 use App\Family;
 use App\Language;
@@ -22,11 +22,13 @@ class ResumeTableSeeder extends Seeder
     {
         $abdulazizResume = Resume::create([
 
+            'name' => 'Abdulaziz',
+            'surname' => 'Nurov',
             'male_female' => 'Мужской',
             'birthday' => new Carbon('1996-01-17'),
             'military_status' => 'Не объязан',
             'phone' => '985100888',
-            'user_id' => User::where('email', 'nurovaziz@gmail.com')->first()->id,
+            'creator' => 7
 
         ]);
 

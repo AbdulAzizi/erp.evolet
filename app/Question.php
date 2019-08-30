@@ -19,4 +19,9 @@ class Question extends Model
     {
         return $this->belongsToMany('App\Task');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
 }

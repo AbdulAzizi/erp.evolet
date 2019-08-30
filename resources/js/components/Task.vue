@@ -12,7 +12,15 @@
                         <v-card-title>
                             <h3 class="headline mb-0">{{task.title}}</h3>
                         </v-card-title>
-                        <v-card-text>{{task.description ? task.description : ''}}</v-card-text>
+                        <v-card-text>
+                            {{task.description ? task.description : ''}}
+                            <!-- {{task.polls[0].question}}
+                            <span v-for="(option, index) in task.polls[0].options" :key="index">
+                                {{option.body}}
+                            </span>-->
+                            <poll-form v-if="task.polls" :poll="task.polls[0]" />
+                            <!-- <poll-display class="mt-5"></poll-display> -->
+                        </v-card-text>
                     </v-tab-item>
                     <v-tab-item value="comments"></v-tab-item>
                     <v-tab-item value="history">
@@ -24,32 +32,7 @@
             </V-flex>
 
             <v-flex xs3>
-                <v-subheader>Участники</v-subheader>
-                <avatars-set
-                    :watchers="task.watchers"
-                    :assignee="task.responsible"
-                    :from="task.from"
-                    class="pl-3"
-                ></avatars-set>
-
-                <v-subheader v-if="task.tags.length">Теги</v-subheader>
-                <div class="px-3">
-                    <v-chip
-                        class="mb-2 mr-2"
-                        color="grey lighten-4"
-                        text-color="grey darken-1"
-                        v-for="(tag, index) in task.tags"
-                        :key="'tag-'+index"
-                        small
-                    >
-                        <v-avatar style="margin-left:-8px" class="mr-0" left>
-                            <v-icon class="body-1">mdi-tag</v-icon>
-                        </v-avatar>
-                        {{ tag.name }}
-                    </v-chip>
-                </div>
-
-                <v-list nav dense v-if="taskHasActions">
+                <v-list nav v-if="task.from.front_tethers">
                     <v-subheader>Действия</v-subheader>
                     <v-list-item-group color="primary">
                         <v-list-item v-if="userCanForward">
@@ -89,7 +72,14 @@
             </v-flex>
 
             <v-flex xs3>
-                <v-list subheader>
+                <v-list subheader dense tile>
+                    <v-subheader>Участники</v-subheader>
+                    <avatars-set
+                        :watchers="task.watchers"
+                        :assignee="task.responsible"
+                        :from="task.from"
+                        class="pl-3"
+                    ></avatars-set>
                     <v-subheader>Параметры</v-subheader>
 
                     <v-list-item>
@@ -221,6 +211,7 @@ export default {
     },
     created() {
         this.synch();
+        console.log(this.task.poll);
     },
     watch: {
         item(v) {
@@ -279,7 +270,7 @@ export default {
 
 <style>
 .task-main-content {
-    max-height: 20rem;
+    /* max-height: 20rem; */
     overflow-y: auto;
 }
 </style>

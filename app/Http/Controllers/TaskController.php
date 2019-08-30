@@ -56,28 +56,6 @@ class TaskController extends Controller
         $newTags = json_decode($request->newTags);
         $existingTags = json_decode($request->existingTags);
         $poll = json_decode($request->poll);
-        // if there is a poll
-        if ($poll) {
-            // make question
-            $question = Question::create(['body' => $poll->question]);
-            // holder for questions
-            $options = [];
-            // collect questions
-            foreach ($poll->options as $option) {
-                // if option is not empty
-                if ($option != '')
-                // add option to array
-                {
-                    $options[] = [
-                        'question_id' => $question->id,
-                        'body' => $option,
-                    ];
-                }
-
-            }
-            // attach options to question
-            $options = QuestionOption::insert($options);
-        }
 
         // Get new Status instance
         $newStatus = \App\Status::where('name', 'Новый')->first();
@@ -108,8 +86,12 @@ class TaskController extends Controller
         }
         // Get all Watcher Users
         $watchers = User::alone()->find($watchers);
-        // Get all tasks that have been inserted
+        // Get all tasks that have been created
         $tasks = Task::where('title', $request->title)->get();
+        // if there is a poll
+        if ($poll) {
+            $this->createPoll($poll, $tasks);
+        }
         // Loop through Tasks
         foreach ($tasks as $task) {
 
@@ -142,7 +124,7 @@ class TaskController extends Controller
             'status', 
             'tags', 
             'history.user',
-            'poll'
+            'polls.options'
         )->find($id);
         // return $task;
         if ($task->from_type == "App\Process") {
@@ -173,6 +155,36 @@ class TaskController extends Controller
         }
 
         return redirect()->route('tasks.index');
+    }
+
+    /**
+     * Create a poll
+     *
+     * @param [object] $poll = { 'question'=>'', 'options'=>['a','b','c',..] }
+     * @param [object] $tasks
+     * @return void
+     */
+    private function createPoll($poll, $tasks)
+    {
+        // make question
+        $question = Question::create(['body' => $poll->question]);
+        //holder for questions
+        $options = [];
+        // collect questions
+        foreach ($poll->options as $option) {
+            // if option is not empty
+            if ($option != '')
+            // add option to array
+                $options[] = new QuestionOption(['body' => $option]);
+        }
+        // attach options to question
+        $question->options()->saveMany($options);
+        // attach poll to task
+        $question->task()->attach($tasks);
+        // attach options for return
+        $question->options = $options;
+        // return
+        return $question;
     }
 
     /**
