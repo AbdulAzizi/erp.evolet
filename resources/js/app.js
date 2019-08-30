@@ -226,6 +226,7 @@ Vue.component("dynamic-form", require("./components/form/Form.vue").default);
 Vue.component("many-to-many-select", require("./components/form/ManyToManySelect.vue").default);
 Vue.component("poll-create", require("./components/tasks/PollCreate.vue").default);
 Vue.component("poll-display", require("./components/tasks/PollDisplay.vue").default);
+Vue.component("poll-form", require("./components/tasks/PollForm.vue").default);
 
 /****************************HELPERS********************************/
 Vue.component("helpers-offset", require("./components/helpers/Offset.vue").default);
