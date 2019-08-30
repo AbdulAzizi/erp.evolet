@@ -26,7 +26,28 @@ Route::get('/forms', 'DataController@forms')->name('forms');
 // Add resume information
 
 Route::post('/education', 'ResumeController@educationAdd')->name('education-add');
-
 Route::delete('/deleteEducation/{id}', 'ResumeController@educationDelete')->name('education-delete');
-
 Route::put('/edit/education/{id}', 'ResumeController@educationEdit')->name('education-edit');
+
+
+Route::middleware(['auth:api'])->group(function () {
+});
+Route::post('/polls','PollController@storeApi')->name('api.polls.store');
+
+Route::post('/job', 'ResumeController@jobAdd')->name('job-add');
+
+Route::delete('/deleteJob/{id}', 'ResumeController@jobDelete')->name('job-delete');
+
+Route::post('/family', 'ResumeController@familyAdd')->name('family-add');
+
+Route::delete('/deleteFamily/{id}', 'ResumeController@familyDelete')->name('family-delete');
+
+Route::post('/language', 'ResumeController@languageAdd')->name('language-add');
+
+Route::delete('/deleteLanguage/{id}', 'ResumeController@languageDelete')->name('language-delete');
+
+Route::post('/achievment', 'ResumeController@achievmentAdd')->name('achievment-add');
+
+Route::delete('/deleteAchievment/{id}', 'ResumeController@achievmentDelete')->name('achievment-delete');
+
+

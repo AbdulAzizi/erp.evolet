@@ -1,8 +1,6 @@
 <template>
-<div>
-    <profile-banner :user="user" />
-    <resume-create :user="user" v-if="!user.resume[0]" :permit="permit"></resume-create>
-    <v-row v-if="user.resume[0]">
+  <div>
+    <v-row>
       <v-col cols="12" sm="6" md="4">
         <v-card>
           <v-toolbar dark flat dense color="primary">
@@ -11,38 +9,43 @@
             </v-toolbar-title>
           </v-toolbar>
           <v-list dense>
+              <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-account</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>{{resume.name}} {{resume.surname}}</v-list-item-content>
+            </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-calendar-range</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{ moment(user.resume[0].birthday).format("L") }}</v-list-item-content>
+              <v-list-item-content>{{ moment(resume.birthday).format("L") }}</v-list-item-content>
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-phone</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].phone}}</v-list-item-content>
+              <v-list-item-content>{{resume.phone}}</v-list-item-content>
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-human-male-female</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].male_female}}</v-list-item-content>
+              <v-list-item-content>{{resume.male_female}}</v-list-item-content>
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-shield-half-full</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].military_status}}</v-list-item-content>
+              <v-list-item-content>{{resume.military_status}}</v-list-item-content>
             </v-list-item>
           </v-list>
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
-          :user="user"
           title="Образование"
-          :localUser="user.resume[0].educations"
+          :localUser="resume.educations"
           type="education"
           main_icon="mdi-school"
           deleteUrl="/api/deleteEducation/"
@@ -51,7 +54,7 @@
           :secondLineItems="['specialty', 'start_at', 'end_at']"
         >
           <resume-add-item
-            :user="user"
+            :resume="resume"
             title="Добавить образование"
             url="/api/education"
             :form="education"
@@ -61,10 +64,8 @@
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
-          :user="user"
           title="Опыт работы"
-          :localUser="user.resume[0].jobs"
-          type="job"
+          :localUser="resume.jobs"
           main_icon="mdi-office-building"
           deleteUrl="/api/deleteJob/"
           firstMainLine="company_name"
@@ -72,7 +73,7 @@
           :secondLineItems="['position', 'start_at', 'end_at']"
         >
           <resume-add-item
-            :user="user"
+            :resume="resume"
             title="Добавить образование"
             url="/api/job"
             :form="job"
@@ -82,9 +83,8 @@
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
-          :user="user"
           title="Семейное положение"
-          :localUser="user.resume[0].families"
+          :localUser="resume.families"
           main_icon="mdi-account-group"
           deleteUrl="/api/deleteFamily/"
           firstMainLine="name"
@@ -92,7 +92,7 @@
           :secondLineItems="['birthday']"
         >
           <resume-add-item
-            :user="user"
+            :resume="resume"
             title="Добавить"
             url="/api/family"
             :form="family"
@@ -102,17 +102,15 @@
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
-          :user="user"
           title="Знание языков"
-          :localUser="user.resume[0].languages"
-          type="language"
+          :localUser="resume.languages"
           main_icon="mdi-chat"
           deleteUrl="/api/deleteLanguage/"
           firstMainLine="name"
           :secondLineItems="['level']"
         >
           <resume-add-item
-            :user="user"
+            :resume="resume"
             title="Добавить"
             url="/api/language"
             :form="language"
@@ -122,16 +120,15 @@
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
-          :user="user"
           title="Достижения"
-          :localUser="user.resume[0].achievments"
+          :localUser="resume.achievments"
           main_icon="mdi-certificate"
           deleteUrl="/api/deleteAchievment/"
           firstMainLine="type"
           :secondLineItems="['description']"
         >
           <resume-add-item
-            :user="user"
+            :resume="resume"
             title="Добавить достижение"
             url="/api/achievment"
             :form="achievment"
@@ -140,18 +137,17 @@
         </resume-card>
       </v-col>
     </v-row>
+      <v-btn color="primary" href="/resume/index">Назад</v-btn>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["user", "permit"],
+  props: ["resume"],
 
   data() {
     return {
-      localUser: this.user,
-      showEdit: false,
-
+      localUser: this.resume,
       education: {
         colsPerRow: [4, 4, 4, 12, 12],
         fields: [
@@ -188,7 +184,7 @@ export default {
           }
         ]
       },
-      job: {
+       job: {
         colsPerRow: [4, 4, 4, 12, 12],
         fields: [
           {
@@ -289,46 +285,33 @@ export default {
           }
         ]
       }
-    }
+    };
   },
-
-  methods: {
-    datesPeriod(end, start) {
-      let a = this.moment(end);
-      let b = this.moment(start);
-      return a.diff(b, "years");
-    }
-  },
-
   created() {
     Event.listen("educationAdded", data => {
       console.log("Event listened");
 
-      this.localUser.resume.educations.push(data);
+      this.localUser.educations.push(data);
     });
-    Event.listen("educationEdited", data => {
-      this.localUser.resume.educations.forEach((education, key) => {
-        if (education.id === data.id) {
-          this.localUser.resume.educations.splice(key, 1);
-        }
-      });
-      this.localUser.resume.educations.push(data);
-    });
+     Event.listen("jobAdded", data => {
+      console.log("Event listened");
 
-    Event.listen("jobAdded", data => {
-      this.localUser.resume.jobs.push(data);
+      this.localUser.jobs.push(data);
     });
+     Event.listen("familyAdded", data => {
+      console.log("Event listened");
 
-    Event.listen("familyAdded", data => {
-      this.localUser.resume.families.push(data);
+      this.localUser.families.push(data);
     });
+     Event.listen("languageAdded", data => {
+      console.log("Event listened");
 
-    Event.listen("languageAdded", data => {
-      this.localUser.resume.languages.push(data);
+      this.localUser.languages.push(data);
     });
+     Event.listen("achievmentAdded", data => {
+      console.log("Event listened");
 
-    Event.listen("achievmentAdded", data => {
-      this.localUser.resume.achievments.push(data);
+      this.localUser.achievments.push(data);
     });
   }
 };

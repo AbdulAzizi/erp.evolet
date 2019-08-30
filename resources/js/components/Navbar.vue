@@ -92,6 +92,12 @@
             </v-list-item-content>
           </v-list-item>
 
+          <v-list-item :href="appPath('resume/index')">
+            <v-list-item-content>
+              <v-list-item-title>Добавленные резюме</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
           <v-list-item @click="$refs.logoutform.submit()">
             <v-list-item-content>
               <v-list-item-title>Выйти</v-list-item-title>

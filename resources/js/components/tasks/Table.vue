@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-dialog v-model="taskDialog" max-width="1000">
-            <task :item="selectedTask"></task>
+            <task :item="selectedTask" :users="users"></task>
         </v-dialog>
 
         <v-data-table
@@ -43,7 +43,10 @@
 
 <script>
 export default {
-    props: ["tasks"],
+    props: {
+        tasks: Array,
+        users: Array
+    },
     data() {
         return {
             headers: [

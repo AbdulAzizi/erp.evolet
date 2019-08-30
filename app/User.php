@@ -39,6 +39,8 @@ class User extends Authenticatable
 
     public $with = ['position', 'responsibilities'];
 
+    protected $append = ['fullname'];
+
     /**
      * Send the password reset notification.
      *
@@ -118,20 +120,24 @@ class User extends Authenticatable
     {
         return self::without(['position', 'responsibilities']);
     }
+
     /**
      * Concatinates name and surname
      *
      * @return string
      */
-    public function fullname()
+    public function getFullNameAttribute()
     {
         return "$this->name $this->surname";
     }
 
     public function resume()
     {
-        return $this->hasOne('\App\Resume');
+        return $this->belongsToMany('App\Resume');
     }
 
-
+    public function polls()
+    {
+        return $this->belongsToMany('App\Question');
+    }
 }

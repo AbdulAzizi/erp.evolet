@@ -11,10 +11,10 @@ use Faker\Generator as Faker;
 $factory->define(History::class, function (Faker $faker) {
     return [
         'user_id' => getRandomId(User::all()),
-        'previous_id' => null,
-        'description' => $faker->text(500),
+        'previous_id' => $faker->numberBetween(1,20),
+        'description' => $faker->text(50),
         'happened_at' => Carbon::now()->toDateTimeString(),
-        'happend_with_id' => getRandomId(Task::all()),
-        'happend_with_type' => Task::class
+        'happened_with_id' => getRandomId(Task::all()),
+        'happened_with_type' => Task::class
     ];
 });

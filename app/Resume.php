@@ -7,39 +7,40 @@ use Illuminate\Database\Eloquent\Model;
 class Resume extends Model
 {
 
-    protected $fillable = ['birthday', 'user_id', 'phone', 'male_female', 'military_status'];
+    protected $guarded = [];
 
-    public function user()
+    public function owner()
     {
-        return $this->belongsTo('\App\User');
+
+        return $this->belongsToMany('App\User');
     }
 
     public function educations()
     {
-        return $this->hasMany('\App\Education');
+        return $this->hasMany('App\Education');
     }
 
 
     public function jobs()
     {
-        return $this->hasMany('\App\Job');
+        return $this->hasMany('App\Job');
     }
 
 
     public function families()
     {
-        return $this->hasMany('\App\Family');
+        return $this->hasMany('App\Family');
     }
 
 
     public function languages()
     {
-        return $this->hasMany('\App\Language');
+        return $this->hasMany('App\Language');
     }
 
 
     public function achievments()
     {
-        return $this->hasMany('\App\Achievment');
+        return $this->hasMany('App\Achievment');
     }
 }
