@@ -140,7 +140,7 @@ Vue.mixin({
             }
         },
         appPath(url) {
-            return window.Laravel.asset_path+url;
+            return window.Laravel.asset_path + url;
         }
     },
     computed: {
@@ -159,14 +159,32 @@ Vue.component("card", require("./components/Card.vue").default);
 Vue.component("user-card", require("./components/UserCard.vue").default);
 Vue.component("division", require("./components/Division.vue").default);
 Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
-Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
+Vue.component(
+    "dropdown-btn",
+    require("./components/buttons/Dropdown.vue").default
+);
 Vue.component("stats-card", require("./components/StatsCard.vue").default);
 Vue.component("avatar", require("./components/Avatar.vue").default);
-Vue.component("profile-error", require('./components/profile/ResumeError.vue').default);
-Vue.component("resume-edit", require('./components/profile/ResumeEdit.vue').default);
-Vue.component("projects-card", require('./components/projects/Card.vue').default);
-Vue.component("projects-list", require('./components/projects/List.vue').default);
-Vue.component("projects-create", require('./components/projects/Create.vue').default);
+Vue.component(
+    "profile-error",
+    require("./components/profile/ResumeError.vue").default
+);
+Vue.component(
+    "resume-edit",
+    require("./components/profile/ResumeEdit.vue").default
+);
+Vue.component(
+    "projects-card",
+    require("./components/projects/Card.vue").default
+);
+Vue.component(
+    "projects-create",
+    require("./components/projects/Create.vue").default
+);
+Vue.component(
+    "project-list",
+    require("./components/projects/List.vue").default
+);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
@@ -201,31 +219,65 @@ Vue.component(
 );
 
 Vue.component(
+    "profile-responsibility",
+    require("./components/views/ProfileResponsibility.vue").default
+);
+
+Vue.component(
+    "profile-responsibility-show",
+    require("./components/profile/Responsibility.vue").default
+);
+
+Vue.component(
     "user-card-vertical",
     require("./components/profile/UserCard.vue").default
 );
-Vue.component("add-education-dialog", require("./components/profile/AddEducation.vue").default);
-Vue.component("edit-education-dialog", require("./components/profile/EditEducation.vue").default);
+Vue.component(
+    "add-education-dialog",
+    require("./components/profile/AddEducation.vue").default
+);
+Vue.component(
+    "edit-education-dialog",
+    require("./components/profile/EditEducation.vue").default
+);
 
 Vue.component("users-view", require("./components/views/Users.vue").default);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
 Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
-Vue.component("tasks-calendar", require("./components/tasks/Calendar.vue").default);
-Vue.component("tasks-watchers", require("./components/tasks/Watchers.vue").default);
+Vue.component(
+    "tasks-calendar",
+    require("./components/tasks/Calendar.vue").default
+);
+Vue.component(
+    "tasks-watchers",
+    require("./components/tasks/Watchers.vue").default
+);
 Vue.component("tasks", require("./components/Tasks.vue").default);
 Vue.component("task", require("./components/Task.vue").default);
 Vue.component("form-field", require("./components/form/FormField.vue").default);
-Vue.component("user-selector", require("./components/form/UserSelector.vue").default);
+Vue.component(
+    "user-selector",
+    require("./components/form/UserSelector.vue").default
+);
 Vue.component("picker", require("./components/form/Picker.vue").default);
-Vue.component("autocomplete", require("./components/form/Autocomplete.vue").default);
+Vue.component(
+    "autocomplete",
+    require("./components/form/Autocomplete.vue").default
+);
 Vue.component("combobox", require("./components/form/Combobox.vue").default);
 Vue.component("dynamic-form", require("./components/form/Form.vue").default);
-Vue.component("many-to-many-select", require("./components/form/ManyToManySelect.vue").default);
+Vue.component(
+    "many-to-many-select",
+    require("./components/form/ManyToManySelect.vue").default
+);
 
 /****************************HELPERS********************************/
-Vue.component("helpers-offset", require("./components/helpers/Offset.vue").default);
+Vue.component(
+    "helpers-offset",
+    require("./components/helpers/Offset.vue").default
+);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

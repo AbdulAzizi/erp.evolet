@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 use App\Achievment;
 use App\Resume;
-use App\job;
+use App\Job;
 use App\Education;
 use App\Family;
 use App\Language;

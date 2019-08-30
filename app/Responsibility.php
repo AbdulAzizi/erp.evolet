@@ -14,4 +14,9 @@ class Responsibility extends Model
     {
         return $this->belongsToMany('App\User');
     }
+
+    public function descriptions()
+    {
+        return $this->hasMany(JobDescription::class);
+    }
 }
