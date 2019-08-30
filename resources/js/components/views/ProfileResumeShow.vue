@@ -73,7 +73,7 @@
         >
           <resume-add-item
             :user="user"
-            title="Добавить образование"
+            title="Добавить место работы"
             url="/api/job"
             :form="job"
             returnDataEvent="jobAdded"
@@ -93,7 +93,7 @@
         >
           <resume-add-item
             :user="user"
-            title="Добавить"
+            title="Добавить члена семьи"
             url="/api/family"
             :form="family"
             returnDataEvent="familyAdded"
@@ -113,7 +113,7 @@
         >
           <resume-add-item
             :user="user"
-            title="Добавить"
+            title="Добавить язык"
             url="/api/language"
             :form="language"
             returnDataEvent="languageAdded"

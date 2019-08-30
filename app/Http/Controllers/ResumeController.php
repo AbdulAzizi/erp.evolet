@@ -65,6 +65,8 @@ class ResumeController extends Controller
             'military_status' => $request->military_status,
             'creator' => auth()->id()
             ]);
+
+            return redirect('/resume/'.$resume->id);
         }
         else{
 
@@ -83,10 +85,12 @@ class ResumeController extends Controller
 
             $resume->owner()->attach($user->id);
 
+            return redirect('/users/' . auth()->id() . '/cv');
+
         }
 
 
-        return redirect('/resume/'.$resume->id);
+
 
     }
 
