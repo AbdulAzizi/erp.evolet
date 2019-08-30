@@ -230,6 +230,8 @@ Vue.component("autocomplete", require("./components/form/Autocomplete.vue").defa
 Vue.component("combobox", require("./components/form/Combobox.vue").default);
 Vue.component("dynamic-form", require("./components/form/Form.vue").default);
 Vue.component("many-to-many-select", require("./components/form/ManyToManySelect.vue").default);
+Vue.component("poll-create", require("./components/tasks/PollCreate.vue").default);
+Vue.component("poll-display", require("./components/tasks/PollDisplay.vue").default);
 
 /****************************HELPERS********************************/
 Vue.component("helpers-offset", require("./components/helpers/Offset.vue").default);

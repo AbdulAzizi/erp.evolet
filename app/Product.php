@@ -33,6 +33,6 @@ class Product extends Model
 
     public function history()
     {
-        return $this->morphMany(History::class, 'happendWith');
+        return $this->morphMany(History::class, 'happened_with');
     }
 }

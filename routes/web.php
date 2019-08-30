@@ -27,6 +27,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/tasks', 'TaskController@index')->name('tasks.index');
     Route::post('/tasks', 'TaskController@store')->name('tasks.store');
     Route::get('/tasks/{id}', 'TaskController@show')->name('tasks.show');
+    Route::put('/tasks/{id}', 'TaskController@update')->name('tasks.update');
 
     Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions

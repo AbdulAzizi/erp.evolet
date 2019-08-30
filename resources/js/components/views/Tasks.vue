@@ -35,7 +35,7 @@
             </v-col>
         </v-row>
 
-        <tasks-table :tasks="tasks" v-if="isTable"></tasks-table>
+        <tasks-table :tasks="tasks" :users="users" v-if="isTable"></tasks-table>
         <tasks-calendar :tasks="tasks" v-if="!isTable"></tasks-calendar>
 
         <tasks-add :users="users" :errors="errors" :tags="tags" />
@@ -44,7 +44,12 @@
 
 <script>
 export default {
-    props: ["tasks", "users", "errors", "tags"],
+    props: {
+      tasks: Array,
+      users: Array,
+      tags: Array,  
+      errors: Array,
+    },
     data() {
         return {
             text: "table",

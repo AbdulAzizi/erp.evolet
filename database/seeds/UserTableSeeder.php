@@ -100,20 +100,14 @@ class UserTableSeeder extends Seeder
                 'position' => 'Руководитель',
                 'responsibilities' => ['Директор'],
             ],
-            [
-                'name' => 'Нозим',
-                'surname' => 'Хакимов',
-                'email' => 'hakimov@gmail.com',
-                'password' => 'admin',
-                'division' => 'НАП',
-                'position' => 'Руководитель',
-                'responsibilities' => ['Аналитик'],
-            ],
         ]);
 
-        $this->userAsDivisionHead('Мирзоева');
-        $this->userAsDivisionHead('Джабаров');
-        $this->userAsDivisionHead('Хакимов');
+        $this->userAsDivisionHead('nozim@admin.com');
+        $this->userAsDivisionHead('firdavs@admin.com');
+        $this->userAsDivisionHead('mehroj@admin.com');
+        $this->userAsDivisionHead('nurovaziz@gmail.com');
+        $this->userAsDivisionHead('anvar@gmail.com');
+        $this->userAsDivisionHead('mirzoeva@gmail.com');
 
         factory(User::class, 40)->create()->each(function ($user){
             for($i = 1; $i <= random_int(1,4); $i++){
@@ -123,9 +117,9 @@ class UserTableSeeder extends Seeder
         
     }
 
-    private function userAsDivisionHead($surname)
+    private function userAsDivisionHead($email)
     {
-        $user = User::where('surname', $surname)->first();
+        $user = User::where('email', $email)->first();
         
         Division::find($user->division_id)->update(['head_id' => $user->id]);
     }

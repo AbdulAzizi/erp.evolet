@@ -1,13 +1,13 @@
 <template>
     <v-card>
         <v-layout>
-            <V-flex xs6 >
+            <V-flex xs6 class="grey lighten-3">
                 <v-tabs v-model="tab">
                     <v-tab href="#task">Задача</v-tab>
                     <v-tab href="#comments">Коментарии</v-tab>
                     <v-tab href="#history">История</v-tab>
                 </v-tabs>
-                <v-tabs-items v-model="tab" class="task-main-content">
+                <v-tabs-items v-model="tab" class="grey lighten-3 task-main-content">
                     <v-tab-item value="task">
                         <v-card-title>
                             <h3 class="headline mb-0">{{task.title}}</h3>
@@ -49,9 +49,22 @@
                     </v-chip>
                 </div>
 
-                <v-list nav v-if="task.from.front_tethers">
+                <v-list nav dense v-if="taskHasActions">
                     <v-subheader>Действия</v-subheader>
                     <v-list-item-group color="primary">
+                        <v-list-item v-if="userCanForward">
+                            <v-list-item-content>
+                                <v-list-item-title @click="forwardTask">Делегировать</v-list-item-title>
+                                <dynamic-form
+                                    dialog
+                                    :fields="[forwardField]"
+                                    title="Выберите сотрудника"
+                                    :actionUrl="'/tasks/' + task.id"
+                                    method="put"
+                                    activatorEventName="forwardTask"
+                                />
+                            </v-list-item-content>
+                        </v-list-item>
                         <v-list-item
                             v-for="( tether, i ) in task.from.front_tethers"
                             :key="'list-item-'+i"
@@ -154,11 +167,14 @@
 </template>
 
 <script>
+const DIVISION_HEAD_POSITION_ID = 1;
+
 export default {
     props: {
         item: {
             required: true
-        }
+        },
+        users: Array
     },
     data() {
         return {
@@ -193,7 +209,14 @@ export default {
             },
             dialog: false,
             preparedForm: null,
-            tab: null
+            tab: null,
+            forwardField: {
+                name: "responsible_id",
+                type: "users",
+                label: "Сотрудники",
+                users: this.users,
+                rules: ['required']
+            }
         };
     },
     created() {
@@ -207,6 +230,9 @@ export default {
     methods: {
         addProduct() {
             Event.fire("addProduct");
+        },
+        forwardTask() {
+            Event.fire("forwardTask");
         },
         synch() {
             if (this.item) {
@@ -235,6 +261,17 @@ export default {
                     return laravelType;
                     break;
             }
+        }
+    },
+    computed: {
+        taskHasActions() {
+            return this.taskHasBPActions || this.userCanForward;
+        },
+        taskHasBPActions(){
+            return this.task.from.front_tethers;
+        },
+        userCanForward(){
+            return this.task.responsible.position.id === DIVISION_HEAD_POSITION_ID;
         }
     }
 };

@@ -232,6 +232,30 @@
                                 </v-card>
                             </v-dialog>
 
+                            <v-dialog v-model="pollDialog" width="500">
+                                <template v-slot:activator="{ on:dialog }">
+                                    <v-tooltip top>
+                                        <template v-slot:activator="{ on:tooltip }">
+                                            <v-btn
+                                                v-on="{ ...tooltip, ...dialog }"
+                                                text
+                                                rounded
+                                                min-width="0"
+                                                style="min-width:0"
+                                                class="ma-0 grey--text px-2 text--darken-1"
+                                            >
+                                                <v-icon>mdi-poll</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>Опрос</span>
+                                    </v-tooltip>
+                                </template>
+                                <poll-create returnEventName="pollAdded" />
+                            </v-dialog>
+
+                            <input type="hidden" name="poll" :value="JSON.stringify(poll)" />
+                            
+
                             <v-dialog v-model="reapeatTaskDialog" width="600" v-if="false">
                                 <template v-slot:activator="{ on:dialog }">
                                     <v-tooltip top>
@@ -452,11 +476,18 @@ export default {
             endsAfterTimes: 1,
 
             endsOnDateDialog: false,
-            endsOnDate: null
+            endsOnDate: null,
+
+            poll: null,
+            pollDialog: false
         };
     },
     created() {
         this.selectedIntervals = 0;
+        Event.listen("pollAdded", data => {
+            this.poll = data;
+            this.pollDialog = false;
+        });
     },
     watch: {
         intervalNumber(value) {
