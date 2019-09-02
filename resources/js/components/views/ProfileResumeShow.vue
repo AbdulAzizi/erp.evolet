@@ -304,31 +304,22 @@ export default {
     Event.listen("educationAdded", data => {
       console.log("Event listened");
 
-      this.localUser.resume.educations.push(data);
+      this.localUser.resume[0].educations.push(data);
     });
-    Event.listen("educationEdited", data => {
-      this.localUser.resume.educations.forEach((education, key) => {
-        if (education.id === data.id) {
-          this.localUser.resume.educations.splice(key, 1);
-        }
-      });
-      this.localUser.resume.educations.push(data);
-    });
-
     Event.listen("jobAdded", data => {
-      this.localUser.resume.jobs.push(data);
+      this.localUser.resume[0].jobs.push(data);
     });
 
     Event.listen("familyAdded", data => {
-      this.localUser.resume.families.push(data);
+      this.localUser.resume[0].families.push(data);
     });
 
     Event.listen("languageAdded", data => {
-      this.localUser.resume.languages.push(data);
+      this.localUser.resume[0].languages.push(data);
     });
 
     Event.listen("achievmentAdded", data => {
-      this.localUser.resume.achievments.push(data);
+      this.localUser.resume[0].achievments.push(data);
     });
   }
 };
