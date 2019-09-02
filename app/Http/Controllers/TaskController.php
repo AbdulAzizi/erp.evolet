@@ -150,7 +150,6 @@ class TaskController extends Controller
                     break;
                 default:
                     continue;
-                    break;
             }
         }
 
