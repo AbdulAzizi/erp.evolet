@@ -32,7 +32,7 @@
             </V-flex>
 
             <v-flex xs3>
-                <v-list nav v-if="task.from.front_tethers">
+                <v-list nav v-if="taskHasActions">
                     <v-subheader>Действия</v-subheader>
                     <v-list-item-group color="primary">
                         <v-list-item v-if="userCanForward">

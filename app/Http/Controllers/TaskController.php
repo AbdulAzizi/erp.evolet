@@ -148,9 +148,6 @@ class TaskController extends Controller
                 case 'responsible_id':
                     $this->forwardTask($task, $updatedValue);
                     break;
-                default:
-                    continue;
-                    break;
             }
         }
 
