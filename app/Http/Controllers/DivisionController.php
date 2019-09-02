@@ -24,7 +24,6 @@ class DivisionController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all()); 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'parentDivisionId' => 'required'
