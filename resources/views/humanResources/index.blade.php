@@ -3,7 +3,9 @@
 @section('content')
 
 <human-resources-view
+
 :user="{{auth()->user()}}"
-:resumes="{{$resumes}}"/>
+:amount-of-users="{{$amountOfUsers}}"
+:amount-of-resumes="{{$amountOfResumes}}"/>
 
 @endsection
