@@ -70,6 +70,7 @@ class TaskController extends Controller
                 'status_id' => $newStatus->id,
                 'priority' => $request->priority === null ? 1 : $request->priority,
                 'planned_time' => $request->estimatedTaskTime,
+                'start_date' => $request->start_date,
                 'deadline' => $request->deadline,
                 'responsible_id' => $assigneeID,
                 'from_id' => auth()->id(),

@@ -21,7 +21,8 @@ class CreateTasksTable extends Migration
             $table->unsignedInteger('priority')->default(1);
             $table->string('spent_time')->nullable();
             $table->string('planned_time')->nullable();
-            $table->timestamp('deadline')->nullable();;
+            $table->string('start_date')->nullable();
+            $table->timestamp('deadline')->nullable();
             $table->unsignedInteger('responsible_id');
             $table->unsignedInteger('from_id');
             $table->string('from_type');
