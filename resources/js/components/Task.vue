@@ -74,12 +74,7 @@
             <v-flex xs3>
                 <v-list subheader dense tile>
                     <v-subheader>Участники</v-subheader>
-                    <avatars-set
-                        :watchers="task.watchers"
-                        :assignee="task.responsible"
-                        :from="task.from"
-                        class="pl-3"
-                    ></avatars-set>
+                    <avatars-set :items="usersForAvatar" item-hint="role" class="pl-3"></avatars-set>
                     <v-subheader>Параметры</v-subheader>
 
                     <v-list-item>
@@ -167,7 +162,6 @@ export default {
         users: Array
     },
     data() {
-        
         return {
             task: {
                 watchers: [],
@@ -206,7 +200,7 @@ export default {
                 type: "users",
                 label: "Сотрудники",
                 users: this.users,
-                rules: ['required']
+                rules: ["required"]
             }
         };
     },
@@ -259,11 +253,26 @@ export default {
         taskHasActions() {
             return this.taskHasBPActions || this.userCanForward;
         },
-        taskHasBPActions(){
+        taskHasBPActions() {
             return this.task.from.front_tethers;
         },
-        userCanForward(){
-            return this.task.responsible.position.id === DIVISION_HEAD_POSITION_ID;
+        userCanForward() {
+            return (
+                this.task.responsible.position.id === DIVISION_HEAD_POSITION_ID
+            );
+        },
+        usersForAvatar() {
+            let users = this.task.watchers.map(watcher => {
+                watcher['role'] = 'Наблюдатель';
+                return watcher;
+            });
+            
+            this.task.responsible["role"] = "Исполнитель";
+            this.task.from["role"] = "Постановщик";
+
+            users.push(this.task.responsible,this.task.from);
+
+            return users;
         }
     }
 };
