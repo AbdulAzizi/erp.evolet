@@ -14,12 +14,7 @@
                         </v-card-title>
                         <v-card-text>
                             {{task.description ? task.description : ''}}
-                            <!-- {{task.polls[0].question}}
-                            <span v-for="(option, index) in task.polls[0].options" :key="index">
-                                {{option.body}}
-                            </span>-->
-                            <poll-form v-if="task.polls" :poll="task.polls[0]" />
-                            <!-- <poll-display class="mt-5"></poll-display> -->
+                            <poll-form v-if="task.polls.length" :poll="task.polls[0]" />
                         </v-card-text>
                     </v-tab-item>
                     <v-tab-item value="comments"></v-tab-item>
@@ -190,7 +185,8 @@ export default {
                         surname: null,
                         img: null
                     }
-                }
+                },
+                polls:[]
             },
             dialog: false,
             preparedForm: null,
@@ -206,7 +202,6 @@ export default {
     },
     created() {
         this.synch();
-        console.log(this.task.poll);
     },
     watch: {
         item(v) {
