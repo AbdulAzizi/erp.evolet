@@ -17,7 +17,7 @@ class ResumeController extends Controller
 
     public function index()
     {
-        $resumes = Resume::where('creator', auth()->id())->doesnthave('owner')->get();
+        $resumes = Resume::where('creator', auth()->id())->with(['educations', 'languages'])->doesnthave('owner')->get();
 
         return view('resume.index', compact('resumes'));
     }
@@ -65,6 +65,8 @@ class ResumeController extends Controller
             'military_status' => $request->military_status,
             'creator' => auth()->id()
             ]);
+
+            return redirect('/resume/'.$resume->id);
         }
         else{
 
@@ -83,10 +85,12 @@ class ResumeController extends Controller
 
             $resume->owner()->attach($user->id);
 
+            return redirect('/users/' . auth()->id() . '/cv');
+
         }
 
 
-        return redirect('/resume/'.$resume->id);
+
 
     }
 

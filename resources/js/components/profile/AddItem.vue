@@ -9,7 +9,7 @@
     <v-card>
       <v-toolbar color="primary" dark flat dense>
         <v-toolbar-title>
-          <h4>{{title}}1</h4>
+          <h4>{{title}}</h4>
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text>
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       dialog: false,
-      resume_id: this.user ? this.user.resume.id : this.resume.id,
+      resume_id: this.user ? this.user.resume[0].id : this.resume.id,
       csrf_token: window.Laravel.csrf_token,
       loading: false
     };

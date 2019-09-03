@@ -223,11 +223,15 @@ Vue.component(
     require("./components/profile/UserCardHorizontal.vue").default
 );
 
+Vue.component("human-resources-view", require("./components/views/HumanResources.vue").default);
+
 Vue.component("users-view", require("./components/views/Users.vue").default);
 
 Vue.component("resumes-view", require("./components/views/Resume.vue").default);
 
 Vue.component("resume-show", require("./components/views/ResumeShow.vue").default);
+
+Vue.component("human-resources-resumes", require("./components/views/HumanResourcesResumes.vue").default);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);

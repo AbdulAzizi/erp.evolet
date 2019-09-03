@@ -65,7 +65,17 @@
                                 name: 'deadline',
                                 label: 'Дедлайн',
                                 icon: 'mdi-calendar-clock',
-                                rules: ['required']
+                                rules: ['required'],
+                            }"
+                            />
+                        </v-col>
+                        <v-col cols="12" class="py-0">
+                            <form-field
+                                :field="{
+                                type: 'date-time',
+                                name: 'start_date',
+                                label: 'Когда планируете начать ?',
+                                icon: 'mdi-clock',
                             }"
                             />
                         </v-col>

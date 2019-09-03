@@ -70,6 +70,7 @@ class TaskController extends Controller
                 'status_id' => $newStatus->id,
                 'priority' => $request->priority === null ? 1 : $request->priority,
                 'planned_time' => $request->estimatedTaskTime,
+                'start_date' => $request->start_date,
                 'deadline' => $request->deadline,
                 'responsible_id' => $assigneeID,
                 'from_id' => auth()->id(),
@@ -151,9 +152,6 @@ class TaskController extends Controller
             switch ($columnName) {
                 case 'responsible_id':
                     $this->forwardTask($task, $updatedValue);
-                    break;
-                default:
-                    continue;
                     break;
             }
         }
