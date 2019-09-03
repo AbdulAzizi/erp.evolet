@@ -6,7 +6,7 @@ use App\History;
 use App\Notifications\AssignedAsWatcher;
 use App\Notifications\AssignedToTask;
 use App\Question;
-use App\QuestionOption;
+use App\Option;
 use App\Tag;
 use App\Task;
 use App\User;
@@ -124,13 +124,15 @@ class TaskController extends Controller
             'status', 
             'tags', 
             'history.user',
-            'polls.options'
+            // 'polls.answers',
+            'polls.options.users'
         )->find($id);
         // return $task;
+        // if has front tether load it
         if ($task->from_type == "App\Process") {
             $task->from->load('frontTethers.form.fields', 'backTethers');
         }
-        
+
         $users = User::with(['division'])->get();
 
         // return $task;
@@ -177,7 +179,7 @@ class TaskController extends Controller
             // if option is not empty
             if ($option != '')
             // add option to array
-                $options[] = new QuestionOption(['body' => $option]);
+                $options[] = new Option(['body' => $option]);
         }
         // attach options to question
         $question->options()->saveMany($options);

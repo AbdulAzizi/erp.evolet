@@ -66,3 +66,6 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
 
 
 });
+
+// later must go API
+Route::post('/polls', 'PollController@storeApi')->prefix('api')->name('api.polls.store');
