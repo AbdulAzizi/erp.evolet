@@ -186,6 +186,10 @@ Vue.component(
     require("./components/views/Products.vue").default
 );
 Vue.component(
+    "product",
+    require("./components/Product.vue").default
+);
+Vue.component(
     "products-create-view",
     require("./components/views/products/Create.vue").default
 );
