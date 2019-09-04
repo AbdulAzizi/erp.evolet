@@ -233,6 +233,12 @@ Vue.component("resume-show", require("./components/views/ResumeShow.vue").defaul
 
 Vue.component("human-resources-resumes", require("./components/views/HumanResourcesResumes.vue").default);
 
+Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
+
+Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
+
+
+
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
 Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
