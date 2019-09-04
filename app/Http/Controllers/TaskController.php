@@ -230,22 +230,8 @@ class TaskController extends Controller
         $this->taskForwarded($oldTask, $task);
     }
 
-    private function addToTaskHistory($taskId, $description)
+    private function addToTaskHistory($taskID, $description)
     {
-        $authorId = auth()->id();
-
-        $previous = History::where('happened_with_type', App\Task::class)
-            ->where('happened_with_id', $taskId)
-            ->orderByDesc('happened_at')
-            ->first();
-
-        History::create([
-            'user_id' => $authorId,
-            'previous_id' => $previous ? $previous->id : null,
-            'description' => $description,
-            'happened_at' => Carbon::now()->toDateTimeString(),
-            'happened_with_id' => $taskId,
-            'happened_with_type' => Task::class,
-        ]);
+        $this->addHistoryItem(Task::class, $taskID, $description);
     }
 }
