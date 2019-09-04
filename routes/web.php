@@ -61,9 +61,13 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::post('/resume', 'ResumeController@create')->name('resume.create');
     Route::get('/resume/index', 'ResumeController@index')->name('resume.index');
     Route::get('/resume/{id}', 'ResumeController@showSingle')->name('show.single');
+    Route::get('/head-resumes', 'ResumeController@headResumes')->name('head.resumes');
 
     Route::get('/human-resources', 'HumanResourcesController@index')->name('human.resources');
     Route::get('/human-resources/resumes', 'HumanResourcesController@showResumes')->name('human.resources.resume');
 
 
 });
+
+// later must go API
+Route::post('/polls', 'PollController@storeApi')->prefix('api')->name('api.polls.store');

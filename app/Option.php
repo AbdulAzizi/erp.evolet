@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QuestionOption extends Model
+class Option extends Model
 {
     public $timestamps = false;
 
@@ -13,5 +13,10 @@ class QuestionOption extends Model
     public function question()
     {
         return $this->belongsTo('App\Question');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User','question_user');
     }
 }

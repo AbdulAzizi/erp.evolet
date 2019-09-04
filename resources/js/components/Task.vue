@@ -14,12 +14,7 @@
                         </v-card-title>
                         <v-card-text>
                             {{task.description ? task.description : ''}}
-                            <!-- {{task.polls[0].question}}
-                            <span v-for="(option, index) in task.polls[0].options" :key="index">
-                                {{option.body}}
-                            </span>-->
-                            <poll-form v-if="task.polls" :poll="task.polls[0]" />
-                            <!-- <poll-display class="mt-5"></poll-display> -->
+                            <poll-form v-if="task.polls.length" :poll="task.polls[0]" />
                         </v-card-text>
                     </v-tab-item>
                     <v-tab-item value="comments"></v-tab-item>
@@ -74,12 +69,7 @@
             <v-flex xs3>
                 <v-list subheader dense tile>
                     <v-subheader>Участники</v-subheader>
-                    <avatars-set
-                        :watchers="task.watchers"
-                        :assignee="task.responsible"
-                        :from="task.from"
-                        class="pl-3"
-                    ></avatars-set>
+                    <avatars-set :items="usersForAvatar" item-hint="role" class="pl-3"></avatars-set>
                     <v-subheader>Параметры</v-subheader>
 
                     <v-list-item>
@@ -195,7 +185,8 @@ export default {
                         surname: null,
                         img: null
                     }
-                }
+                },
+                polls:[]
             },
             dialog: false,
             preparedForm: null,
@@ -205,13 +196,12 @@ export default {
                 type: "users",
                 label: "Сотрудники",
                 users: this.users,
-                rules: ['required']
+                rules: ["required"]
             }
         };
     },
     created() {
         this.synch();
-        console.log(this.task.poll);
     },
     watch: {
         item(v) {
@@ -258,11 +248,26 @@ export default {
         taskHasActions() {
             return this.taskHasBPActions || this.userCanForward;
         },
-        taskHasBPActions(){
+        taskHasBPActions() {
             return this.task.from.front_tethers;
         },
-        userCanForward(){
-            return this.task.responsible.position.id === DIVISION_HEAD_POSITION_ID;
+        userCanForward() {
+            return (
+                this.task.responsible.position.id === DIVISION_HEAD_POSITION_ID
+            );
+        },
+        usersForAvatar() {
+            let users = this.task.watchers.map(watcher => {
+                watcher['role'] = 'Наблюдатель';
+                return watcher;
+            });
+            
+            this.task.responsible["role"] = "Исполнитель";
+            this.task.from["role"] = "Постановщик";
+
+            users.push(this.task.responsible,this.task.from);
+
+            return users;
         }
     }
 };

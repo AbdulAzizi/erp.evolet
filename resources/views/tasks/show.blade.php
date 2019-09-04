@@ -4,7 +4,7 @@
     <v-container>
         <v-row>
             <v-col  align-self="center">
-                <task :item="{{$task}}"></task>
+            <task :item="{{$task}}" :users="{{$users}}"></task>
             </v-col>
         </v-row>
     </v-container>

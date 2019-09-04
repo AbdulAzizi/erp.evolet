@@ -8,14 +8,14 @@
       <slot></slot>
     </v-toolbar>
     <v-list two-line class="pt-1">
-      <v-list-item v-if="localUser.length < 1">
+      <v-list-item v-if="resume.length < 1">
         <v-list-item-content>
           <v-list-item-title>
             <h4 class="mx-3 grey--text body-2 text-center">Нет данных</h4>
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <template v-for="(item, index) in localUser">
+      <template v-for="(item, index) in resume">
         <v-dialog v-model="dialog" max-width="400" :key="index">
           <v-card class="pa-3 text-center">
             <v-card-text class="subtitle-1">Вы действительно хотите удалить данные?</v-card-text>
@@ -25,7 +25,7 @@
               <v-btn
                 color="red lighten-2"
                 outlined
-                @click="deleteItem(item.id, deleteUrl + item.id, localUser)"
+                @click="deleteItem(item.id, deleteUrl + item.id, resume)"
               >Да</v-btn>
             </v-card-actions>
           </v-card>
@@ -49,14 +49,18 @@
                 </span>
               </v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-action v-if="hover">
-              <v-btn icon small class="grey lighten-3" @click="dialog = true">
+            <v-list-item-action v-if="hover && check">
+              <v-btn
+              icon 
+              small 
+              class="grey lighten-3" 
+              @click="dialog = true">
                 <v-icon small dark>mdi-delete</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
         </v-hover>
-        <v-divider :key="'divider-' + index" v-if="localUser.length > index + 1 "></v-divider>
+        <v-divider :key="'divider-' + index" v-if="resume.length > index + 1 "></v-divider>
       </template>
     </v-list>
     <v-progress-linear
@@ -75,13 +79,14 @@ export default {
     "user",
     "returnDataEvent",
     "main_icon",
-    "localUser",
+    "resume",
     "title",
     "deleteUrl",
     "type",
     "firstMainLine",
     "firstSecondaryLine",
-    "secondLineItems"
+    "secondLineItems",
+    "check"
   ],
 
   data() {

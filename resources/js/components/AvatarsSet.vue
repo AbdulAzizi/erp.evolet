@@ -18,9 +18,9 @@
                 </a>
             </template>
             <span>
-                <span v-if="item.img">{{item.name}} {{item.surname}}</span>
+                <span v-if="item.img">{{fullname(item)}}</span>
                 <span v-else>Система</span>
-                ({{item.label}})
+                <span v-if="itemHint">({{item[itemHint]}})</span>
             </span>
         </v-tooltip>
     </div>
@@ -28,22 +28,11 @@
 
 <script>
 export default {
-    props:['watchers','assignee','from', 'label'],
-    computed:{
-        items(){
-            let items = this.watchers.map( function(item){
-                item['label'] = 'Наблюдатель';
-                return item; 
-            });
-
-            this.assignee['label'] = 'Исполнитель';
-            this.from['label'] = 'Постановщик';
-
-            items.push(this.assignee,this.from);
-
-            return items;
+    props:['items','itemHint'],
+    methods:{
+        fullname(item){
+            return item.name+' '+item.surname;
         }
-           
     }
 }
 </script>
