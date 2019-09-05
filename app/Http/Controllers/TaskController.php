@@ -138,7 +138,8 @@ class TaskController extends Controller
             'tags',
             'history.user',
             // 'polls.answers',
-            'polls.options.users'
+            'polls.options.users',
+            'comments.user'
         )->find($id);
         // return $task;
         // if has front tether load it

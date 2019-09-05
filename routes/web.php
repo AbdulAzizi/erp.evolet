@@ -70,3 +70,4 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
 
 // later must go API
 Route::post('/polls', 'PollController@storeApi')->prefix('api')->name('api.polls.store');
+Route::post('/comments', 'CommentController@storeApi')->prefix('api')->name('api.comments.store');
