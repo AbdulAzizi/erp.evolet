@@ -39,6 +39,9 @@ class ResumeController extends Controller
 
     public function showSingle(Request $request)
     {
+        $user = auth()->user();
+
+
         $resume = Resume::with(
             'educations',
             'jobs',
@@ -47,10 +50,16 @@ class ResumeController extends Controller
             'languages'
         )->find($request->id);
 
+        return view('resume.show', compact('resume', 'user'));
 
-        return view('resume.show', compact('resume'));
 
+    }
 
+    public function headResumes(Request $request)
+    {
+        $resumes = Resume::with(['educations', 'languages'])->doesnthave('owner')->get();
+
+        return view('resume.headResumes', compact('resumes'));
     }
 
     public function create(Request $request)

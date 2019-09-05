@@ -49,7 +49,7 @@ class ProductController extends Controller
         // });
 
         // Fetch all products and pass it to data
-        $data['products'] = Product::filter($filters)->with(['project.country', 'project.pc', 'fields'])->get();
+        $data['products'] = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
         
         $listFields = $this->getListFieldsFromProducts($data['products']);
         
@@ -81,6 +81,8 @@ class ProductController extends Controller
         $process = Process::find($product->currentProcess->id);
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project);
+        //Add product creation to history
+        $this->productCreated($product);
         // Redirect to Tasks Index page
         return redirect()->route('products.index', [
             'pc_id' => $request->pc,
@@ -215,5 +217,18 @@ class ProductController extends Controller
         }
 
         return collect($listFields);
+    }
+
+    private function productCreated($product)
+    {
+        $author = auth()->user();
+        $description = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил продукт.";
+
+        $this->addToProductHistory($product->id, $description);
+    }
+
+    private function addToProductHistory($productID, $description)
+    {
+        $this->addHistoryItem(Product::class, $productID, $description);
     }
 }
