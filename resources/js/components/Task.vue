@@ -14,7 +14,7 @@
                         </v-card-title>
                         <v-card-text>
                             {{task.description ? task.description : ''}}
-                            <poll-form v-if="task.polls.length" :poll="task.polls[0]" />
+                            <poll-form v-if="Array.isArray(task.polls) && task.polls.length" :poll="task.polls[0]" />
                         </v-card-text>
                     </v-tab-item>
                     <v-tab-item value="comments"></v-tab-item>
