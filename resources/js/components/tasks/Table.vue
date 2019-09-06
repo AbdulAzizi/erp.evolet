@@ -1,8 +1,8 @@
 <template>
     <div>
-        <v-dialog v-model="taskDialog" max-width="1000">
+        <!-- <v-dialog v-model="taskDialog" max-width="1000">
             <task :item="selectedTask" :users="users"></task>
-        </v-dialog>
+        </v-dialog>-->
 
         <v-data-table
             :headers="headers"
@@ -51,7 +51,6 @@ export default {
         return {
             headers: [
                 { text: "Задача", value: "title" },
-                // { text: 'Статус', value: 'status' },
                 { text: "Приоритет", value: "priority" },
                 { text: "Время на задачу", value: "planned_time" },
                 { text: "Дедлайн", value: "deadline" },
@@ -59,20 +58,20 @@ export default {
                 { text: "CreatedAt", value: "created_at" },
                 { text: "Статус", value: "status" }
             ],
-            selectedTask:null,
-            taskDialog:false
+            selectedTask: null,
+            taskDialog: false
         };
     },
     methods: {
         displayTask(task) {
-            console.log(task);
-            this.selectedTask = task;
-            this.taskDialog = true;
+            window.location.href = 'tasks/'+task.id;
+
+            // this.selectedTask = task;
+            // this.taskDialog = true;
         },
         duration() {}
     },
-    created() {
-    }
+    created() {}
 };
 </script>
 

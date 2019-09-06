@@ -1,5 +1,9 @@
 <template>
     <div>
+        <v-dialog v-model="productDialog" max-width="1000">
+            <product :item="selectedProduct" />
+        </v-dialog>
+
         <v-tabs v-model="tab" right background-color="secondary" color="primary" dark>
             <v-tab href="#products">Продукты</v-tab>
             <v-tab href="#participants">Участники</v-tab>
@@ -21,6 +25,7 @@
                     :fixed-header="true"
                     height="calc(100vh - 48px)"
                     dense
+                    @click:row="showProduct"
                 />
             </v-tab-item>
             <v-tab-item value="participants">
@@ -76,7 +81,9 @@ export default {
                     class: ["primary", "table-header"]
                 }
             ],
-            preparedItems: []
+            preparedItems: [],
+            productDialog: false,
+            selectedProduct: null
         };
     },
     methods: {
@@ -87,36 +94,42 @@ export default {
                     return param + "=" + url.searchParams.get(param);
                 })
                 .join("&");
+        },
+        showProduct(product) {
+            const selectedProduct = this.items.filter(item => item.id === product.id)[0];
+            this.selectedProduct = selectedProduct;
+            this.productDialog = true;
         }
     },
     created() {
-        if (this.items.length != 0) {
-            // prepare headers
-            let fieldsHeaders = this.items[0].fields.map(function(field) {
-                return {
-                    text: field.label,
-                    value: field.label,
-                    class: ["primary", "table-header"]
-                };
-            });
-            // merge headers
-            this.headers = [...this.headers, ...fieldsHeaders];
+        if (this.items.length === 0) return;
+        
+        // prepare headers
+        let fieldsHeaders = this.items[0].fields.map(function(field) {
+            return {
+                text: field.label,
+                value: field.label,
+                class: ["primary", "table-header"]
+            };
+        });
+        // merge headers
+        this.headers = [...this.headers, ...fieldsHeaders];
 
-            // change the structure of items
-            this.preparedItems = this.items.map(function(item) {
-                let preparedFields = {};
+        // change the structure of items
+        this.preparedItems = this.items.map(function(item) {
+            let preparedFields = {};
 
-                for (const field of item.fields) {
-                    preparedFields[field.label] = field.pivot.value;
-                }
+            for (const field of item.fields) {
+                preparedFields[field.label] = field.pivot.value;
+            }
 
-                return {
-                    country: item.project.country.name,
-                    pc: item.project.pc.name,
-                    ...preparedFields
-                };
-            });
-        }
+            return {
+                id: item.id,
+                country: item.project.country.name,
+                pc: item.project.pc.name,
+                ...preparedFields
+            };
+        });
     }
 };
 </script>

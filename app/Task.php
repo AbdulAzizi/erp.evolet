@@ -54,4 +54,9 @@ class Task extends Model
     {
         return $this->belongsToMany('App\Question');
     }
+
+    public function comments()
+    {
+        return $this->morphToMany('App\Comment','commentable');
+    }
 }

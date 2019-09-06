@@ -174,6 +174,7 @@ Vue.component("projects-card", require('./components/projects/Card.vue').default
 Vue.component("projects-list", require('./components/projects/List.vue').default);
 Vue.component("projects-create", require('./components/projects/Create.vue').default);
 Vue.component("history", require('./components/History.vue').default);
+Vue.component("comments", require('./components/Comments.vue').default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
@@ -184,6 +185,10 @@ Vue.component(
 Vue.component(
     "products-view",
     require("./components/views/Products.vue").default
+);
+Vue.component(
+    "product",
+    require("./components/Product.vue").default
 );
 Vue.component(
     "products-create-view",
