@@ -206,9 +206,9 @@ class ResumeController extends Controller
         return 'success';
     }
 
-    public function pdf()
+    public function pdf(Request $request)
     {
-        $resume = Resume::first();
+        $resume = Resume::find($request->id);
 
         $pdf = PDF::loadView('resume.export_pdf', compact('resume'));
 

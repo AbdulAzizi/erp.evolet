@@ -48,7 +48,7 @@
             <p>Название компании: {{$job->company_name}}</p>
             <p>Позиция: {{$job->position}}</p>
             <p>Местоположение: {{$job->location}}</p>
-            <p>Период работы: {{date('d.m.Y', strtotime($job->start_at))}} - {{date('d.m.Y', strtotime($education->end_at))}}</p>
+            <p>Период работы: {{date('d.m.Y', strtotime($job->start_at))}} - {{date('d.m.Y', strtotime($job->end_at))}}</p>
             @if ($resume->jobs->count() > $key + 1)
                 <hr>
             @endif
