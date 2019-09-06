@@ -9,7 +9,7 @@
             </v-toolbar-title>
           </v-toolbar>
           <v-list dense>
-              <v-list-item>
+            <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-account</v-icon>
               </v-list-item-icon>
@@ -54,7 +54,8 @@
           firstSecondaryLine="degree"
           :secondLineItems="['specialty', 'start_at', 'end_at']"
         >
-          <resume-add-item v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+          <resume-add-item
+            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
             :resume="resume"
             title="Добавить образование"
             url="/api/education"
@@ -74,7 +75,8 @@
           firstSecondaryLine="location"
           :secondLineItems="['position', 'start_at', 'end_at']"
         >
-          <resume-add-item v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+          <resume-add-item
+            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
             :resume="resume"
             title="Добавить место работы"
             url="/api/job"
@@ -94,7 +96,8 @@
           firstSecondaryLine="relation"
           :secondLineItems="['birthday']"
         >
-          <resume-add-item v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+          <resume-add-item
+            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
             :resume="resume"
             title="Добавить члена семьи"
             url="/api/family"
@@ -105,7 +108,7 @@
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
-          title="Знание языков"
+          title="Languages"
           :check="user.id == resume.creator || user.division.abbreviaton == 'ДЧ'"
           :resume="resume.languages"
           main_icon="mdi-chat"
@@ -113,7 +116,8 @@
           firstMainLine="name"
           :secondLineItems="['level']"
         >
-          <resume-add-item v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+          <resume-add-item
+            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
             :resume="resume"
             title="Добавить язык"
             url="/api/language"
@@ -132,7 +136,8 @@
           firstMainLine="type"
           :secondLineItems="['description']"
         >
-          <resume-add-item v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+          <resume-add-item
+            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
             :resume="resume"
             title="Добавить достижение"
             url="/api/achievment"
@@ -142,11 +147,13 @@
         </resume-card>
       </v-col>
     </v-row>
-      <v-btn color="primary" href="/resume/index">Назад</v-btn>
+    <v-btn color="primary" href="/resume/index">Назад</v-btn>
+    <v-btn dark color="primary darken-1" :href="`/resume-pdf/${resume.id}`">Экспортировать в PDF</v-btn>
   </div>
 </template>
 
 <script>
+
 export default {
   props: ["resume", "user"],
 
@@ -189,7 +196,7 @@ export default {
           }
         ]
       },
-       job: {
+      job: {
         colsPerRow: [4, 4, 4, 12, 12],
         fields: [
           {
@@ -298,22 +305,22 @@ export default {
 
       this.localUser.educations.push(data);
     });
-     Event.listen("jobAdded", data => {
+    Event.listen("jobAdded", data => {
       console.log("Event listened");
 
       this.localUser.jobs.push(data);
     });
-     Event.listen("familyAdded", data => {
+    Event.listen("familyAdded", data => {
       console.log("Event listened");
 
       this.localUser.families.push(data);
     });
-     Event.listen("languageAdded", data => {
+    Event.listen("languageAdded", data => {
       console.log("Event listened");
 
       this.localUser.languages.push(data);
     });
-     Event.listen("achievmentAdded", data => {
+    Event.listen("achievmentAdded", data => {
       console.log("Event listened");
 
       this.localUser.achievments.push(data);
