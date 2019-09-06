@@ -95,7 +95,7 @@ export default {
          {
           icon: "mdi-file",
           text: "Резюме",
-          url: "head-resumes",
+          url: "/head-resumes",
           responsibilities: [],
           divisions: ["*"]
         }
