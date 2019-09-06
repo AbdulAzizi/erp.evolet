@@ -45,7 +45,7 @@
       <v-col cols="12" sm="6" md="4">
         <resume-card
           title="Образование"
-          :check="user.id == resume.creator || user.division.abbreviaton == 'ДЧ'"
+          :check="check"
           :resume="resume.educations"
           type="education"
           main_icon="mdi-school"
@@ -55,7 +55,7 @@
           :secondLineItems="['specialty', 'start_at', 'end_at']"
         >
           <resume-add-item
-            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+            v-if="check"
             :resume="resume"
             title="Добавить образование"
             url="/api/education"
@@ -67,7 +67,7 @@
       <v-col cols="12" sm="6" md="4">
         <resume-card
           title="Опыт работы"
-          :check="user.id == resume.creator || user.division.abbreviaton == 'ДЧ'"
+          :check="check"
           :resume="resume.jobs"
           main_icon="mdi-office-building"
           deleteUrl="/api/deleteJob/"
@@ -76,7 +76,7 @@
           :secondLineItems="['position', 'start_at', 'end_at']"
         >
           <resume-add-item
-            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+            v-if="check"
             :resume="resume"
             title="Добавить место работы"
             url="/api/job"
@@ -88,7 +88,7 @@
       <v-col cols="12" sm="6" md="4">
         <resume-card
           title="Семейное положение"
-          :check="user.id == resume.creator || user.division.abbreviaton == 'ДЧ'"
+          :check="check"
           :resume="resume.families"
           main_icon="mdi-account-group"
           deleteUrl="/api/deleteFamily/"
@@ -97,7 +97,7 @@
           :secondLineItems="['birthday']"
         >
           <resume-add-item
-            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+            v-if="check"
             :resume="resume"
             title="Добавить члена семьи"
             url="/api/family"
@@ -109,7 +109,7 @@
       <v-col cols="12" sm="6" md="4">
         <resume-card
           title="Languages"
-          :check="user.id == resume.creator || user.division.abbreviaton == 'ДЧ'"
+          :check="check"
           :resume="resume.languages"
           main_icon="mdi-chat"
           deleteUrl="/api/deleteLanguage/"
@@ -117,7 +117,7 @@
           :secondLineItems="['level']"
         >
           <resume-add-item
-            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+            v-if="check"
             :resume="resume"
             title="Добавить язык"
             url="/api/language"
@@ -129,7 +129,7 @@
       <v-col cols="12" sm="6" md="4">
         <resume-card
           title="Достижения"
-          :check="user.id == resume.creator || user.division.abbreviaton == 'ДЧ'"
+          :check="check"
           :resume="resume.achievments"
           main_icon="mdi-certificate"
           deleteUrl="/api/deleteAchievment/"
@@ -137,7 +137,7 @@
           :secondLineItems="['description']"
         >
           <resume-add-item
-            v-if="user.division.abbreviation == 'ДЧ' || resume.creator == user.id"
+            v-if="check"
             :resume="resume"
             title="Добавить достижение"
             url="/api/achievment"
@@ -161,6 +161,7 @@ export default {
     return {
       localUser: this.resume,
       window: window.history,
+      check: this.user.division.abbreviation == 'ДЧ' || this.resume.creator == this.user.id,
       education: {
         colsPerRow: [4, 4, 4, 12, 12],
         fields: [
