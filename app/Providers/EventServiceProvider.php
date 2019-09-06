@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Event;
+use App\Events\ProductCreatedEvent;
+use App\Events\TaskCreatedEvent;
+use App\Events\TaskForwardedEvent;
+use App\Listeners\HistoryListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +21,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        TaskCreatedEvent::class => [
+            HistoryListener::class
+        ],
+        TaskForwardedEvent::class => [
+            HistoryListener::class
+        ],
+        ProductCreatedEvent::class => [
+            HistoryListener::class
+        ]
     ];
 
     /**
