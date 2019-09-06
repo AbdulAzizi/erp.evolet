@@ -1,13 +1,17 @@
 <template>
     <v-card>
         <v-layout>
-            <V-flex xs6 class="grey lighten-3">
-                <v-tabs v-model="tab">
+            <V-flex xs6 class="grey lighten-3" style="position:relative;overflow:hidden;">
+                <v-tabs v-model="tab" style="position:absolute; z-index:1;" class="elevation-4">
                     <v-tab href="#task">Задача</v-tab>
                     <v-tab href="#comments">Коментарии</v-tab>
                     <v-tab href="#history">История</v-tab>
                 </v-tabs>
-                <v-tabs-items v-model="tab" class="grey lighten-3 task-main-content">
+                <v-tabs-items
+                    v-model="tab"
+                    class="grey lighten-3 task-main-content"
+                    style="padding-top:48px;"
+                >
                     <v-tab-item value="task">
                         <v-card-title>
                             <h3 class="headline mb-0">{{task.title}}</h3>
@@ -17,7 +21,9 @@
                             <poll-form v-if="Array.isArray(task.polls) && task.polls.length" :poll="task.polls[0]" />
                         </v-card-text>
                     </v-tab-item>
-                    <v-tab-item value="comments"></v-tab-item>
+                    <v-tab-item value="comments">
+                        <comments :commentable="task"/>
+                    </v-tab-item>
                     <v-tab-item value="history">
                         <v-flex class="ma-4">
                             <history :history="task.history" />
@@ -186,7 +192,7 @@ export default {
                         img: null
                     }
                 },
-                polls:[]
+                polls: []
             },
             dialog: false,
             preparedForm: null,
@@ -202,6 +208,7 @@ export default {
     },
     created() {
         this.synch();
+        console.log(this.task);
     },
     watch: {
         item(v) {
@@ -258,14 +265,14 @@ export default {
         },
         usersForAvatar() {
             let users = this.task.watchers.map(watcher => {
-                watcher['role'] = 'Наблюдатель';
+                watcher["role"] = "Наблюдатель";
                 return watcher;
             });
-            
+
             this.task.responsible["role"] = "Исполнитель";
             this.task.from["role"] = "Постановщик";
 
-            users.push(this.task.responsible,this.task.from);
+            users.push(this.task.responsible, this.task.from);
 
             return users;
         }

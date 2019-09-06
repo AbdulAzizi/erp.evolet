@@ -7,8 +7,8 @@ use App\Events\TaskForwardedEvent;
 use App\History;
 use App\Notifications\AssignedAsWatcher;
 use App\Notifications\AssignedToTask;
-use App\Question;
 use App\Option;
+use App\Question;
 use App\Tag;
 use App\Task;
 use App\User;
@@ -23,24 +23,36 @@ class TaskController extends Controller
         $authUser = \Auth::user();
 
         $tasks = Task::where('responsible_id', $authUser->id)
-            ->with('from', 'responsible', 'watchers', 'status', 'tags', 'history.user')
-            ->get();
-
-        foreach ($tasks as $task) {
-            // If task is from process
-            if ($task->from_type == "App\Process") {
-                // Load Tethers and forms for each tether
-                $task->from->load('frontTethers.form.fields.type', 'backTethers');
-                // return $task;
-            }
-        }
+            ->with(
+                    'from',
+            //      'responsible',
+            //     'watchers',
+                    'status'
+            //      'tags',
+            //     'history.user',
+            //     'polls.options.users'
+            )
+            ->get(); 
+            
+        // foreach ($tasks as $task) {
+        //     // If task is from process
+        //     if ($task->from_type == "App\Process") {
+        //         // Load Tethers and forms for each tether
+        //         $task->from->load('frontTethers.form.fields.type', 'backTethers');
+        //         // return $task;
+        //     }
+        // }
 
         $tags = Tag::all();
         // All Users needed while choosing user assignee
         $users = User::with(['division'])->get();
         // $notifications = $authUser->notifications;
 
-        return view('tasks.index', compact('tasks', 'users', 'tags'));
+        return view('tasks.index', compact(
+            'tasks',
+            'users',
+            'tags'
+        ));
     }
 
     public function store(Request $request)
@@ -121,14 +133,15 @@ class TaskController extends Controller
     public function show($id)
     {
         $task = Task::with(
-            'watchers', 
-            'responsible', 
-            'from', 
-            'status', 
-            'tags', 
+            'watchers',
+            'responsible',
+            'from',
+            'status',
+            'tags',
             'history.user',
             // 'polls.answers',
-            'polls.options.users'
+            'polls.options.users',
+            'comments.user'
         )->find($id);
         // return $task;
         // if has front tether load it
@@ -139,7 +152,7 @@ class TaskController extends Controller
         $users = User::with(['division'])->get();
 
         // return $task;
-        return view('tasks.show', compact('task','users'));
+        return view('tasks.show', compact('task', 'users'));
     }
 
     public function update($id, Request $request)
@@ -179,7 +192,10 @@ class TaskController extends Controller
             // if option is not empty
             if ($option != '')
             // add option to array
+            {
                 $options[] = new Option(['body' => $option]);
+            }
+
         }
         // attach options to question
         $question->options()->saveMany($options);
@@ -224,11 +240,13 @@ class TaskController extends Controller
 
         $author = auth()->user();
         $authorDivision = $author->load('division')->division;
-        
+
         $isAuthorHead = $author->id === $authorDivision->head_id;
 
-        if(!$isAuthorHead) return;
-        
+        if (!$isAuthorHead) {
+            return;
+        }
+
         $task->responsible_id = $newResponsibleID;
 
         $task->save();

@@ -10,6 +10,7 @@ use App\Job;
 use App\Family;
 use App\Language;
 use App\Achievment;
+use PDF;
 
 class ResumeController extends Controller
 {
@@ -203,5 +204,14 @@ class ResumeController extends Controller
         Achievment::find($request->id)->delete();
 
         return 'success';
+    }
+
+    public function pdf(Request $request)
+    {
+        $resume = Resume::find($request->id);
+
+        $pdf = PDF::loadView('resume.export_pdf', compact('resume'));
+
+        return $pdf->download($resume->name . '.pdf');
     }
 }

@@ -1,7 +1,7 @@
 <template>
-  <a :href=" user.surname ? '/users/'+user.id : '#' ">
-    <v-avatar size="40px">
-      <v-tooltip top>
+  <a :href="appPath(user.surname ? 'users/'+user.id : '#' )">
+    <v-avatar :size="size">
+      <v-tooltip bottom>
         <template v-slot:activator="{ on:tooltip }">
           <img v-on="{ ...tooltip }" :src="photo(user.img) " alt="avatar" />
         </template>
@@ -18,6 +18,10 @@ export default {
     user: {
       required: true,
       type: Object
+    },
+    size:{
+      required:false,
+      default:40
     }
   }
 };

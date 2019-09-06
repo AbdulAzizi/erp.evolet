@@ -35,4 +35,9 @@ class Product extends Model
     {
         return $this->morphMany(History::class, 'happened_with');
     }
+    
+    public function comments()
+    {
+        return $this->morphToMany('App\Comment','commentable');
+    }
 }

@@ -62,6 +62,7 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::get('/resume/index', 'ResumeController@index')->name('resume.index');
     Route::get('/resume/{id}', 'ResumeController@showSingle')->name('show.single');
     Route::get('/head-resumes', 'ResumeController@headResumes')->name('head.resumes');
+    Route::get('/resume-pdf/{id}', 'ResumeController@pdf')->name('resume.pdf');
 
     Route::get('/human-resources', 'HumanResourcesController@index')->name('human.resources');
     Route::get('/human-resources/resumes', 'HumanResourcesController@showResumes')->name('human.resources.resume');
@@ -71,3 +72,4 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
 
 // later must go API
 Route::post('/polls', 'PollController@storeApi')->prefix('api')->name('api.polls.store');
+Route::post('/comments', 'CommentController@storeApi')->prefix('api')->name('api.comments.store');

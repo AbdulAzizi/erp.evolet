@@ -16,7 +16,7 @@
         <v-switch color="primary" v-model="withOwner" label="Cотрудники" />
       </v-col>
       <v-col md="2">
-        <v-switch color="primary" v-model="withoutOwner" label="В приоритете"/>
+        <v-switch color="primary" v-model="withoutOwner" label="Кандидаты"/>
       </v-col>
     </v-row>
     <v-row justify="center">
