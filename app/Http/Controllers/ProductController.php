@@ -222,16 +222,4 @@ class ProductController extends Controller
         return collect($listFields);
     }
 
-    private function productCreated($product)
-    {
-        $author = auth()->user();
-        $description = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил продукт.";
-
-        $this->addToProductHistory($product->id, $description);
-    }
-
-    private function addToProductHistory($productID, $description)
-    {
-        $this->addHistoryItem(Product::class, $productID, $description);
-    }
 }

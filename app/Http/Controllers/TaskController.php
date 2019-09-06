@@ -208,28 +208,6 @@ class TaskController extends Controller
     }
 
     /**
-     * Task history events
-     */
-    private function taskCreated(Task $task)
-    {
-        $author = auth()->user();
-
-        $description = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил задачу.";
-
-        $this->addToTaskHistory($task->id, $description);
-    }
-
-    private function taskForwarded(Task $oldTask, Task $newTask)
-    {
-        $oldResponsible = $oldTask->load('responsible')->responsible;
-        $newResponsible = $newTask->load('responsible')->responsible;
-
-        $description = "Пользователь <a href='/users/$oldResponsible->id'>$oldResponsible->full_name</a> делегировал задачу пользователю <a href='/users/$newResponsible->id'>$newResponsible->full_name</a>";
-
-        $this->addToTaskHistory($newTask->id, $description);
-    }
-
-    /**
      * Helpers
      *
      */
