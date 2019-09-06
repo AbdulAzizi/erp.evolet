@@ -232,8 +232,4 @@ class TaskController extends Controller
         event( new TaskForwardedEvent($oldTask, $task));
     }
 
-    private function addToTaskHistory($taskID, $description)
-    {
-        $this->addHistoryItem(Task::class, $taskID, $description);
-    }
 }
