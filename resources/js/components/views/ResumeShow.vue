@@ -147,7 +147,7 @@
         </resume-card>
       </v-col>
     </v-row>
-    <v-btn color="primary" href="/resume/index">Назад</v-btn>
+    <v-btn color="primary" @click="window.back()">Назад</v-btn>
     <v-btn dark color="primary darken-1" :href="`/resume-pdf/${resume.id}`">Экспортировать в PDF</v-btn>
   </div>
 </template>
@@ -160,6 +160,7 @@ export default {
   data() {
     return {
       localUser: this.resume,
+      window: window.history,
       education: {
         colsPerRow: [4, 4, 4, 12, 12],
         fields: [
