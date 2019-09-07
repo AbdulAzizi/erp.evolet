@@ -25,15 +25,15 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>mdi-human-male-female</v-icon>
+                <v-icon>mdi-email</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].male_female}}</v-list-item-content>
+              <v-list-item-content>{{user.resume[0].email}}</v-list-item-content>
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>mdi-shield-half-full</v-icon>
+                <v-icon>mdi-human-male-female</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].military_status}}</v-list-item-content>
+              <v-list-item-content>{{user.resume[0].male_female}}</v-list-item-content>
             </v-list-item>
           </v-list>
         </v-card>

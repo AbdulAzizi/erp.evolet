@@ -132,10 +132,9 @@ export default {
           rules: ["required"]
         },
         military_status: {
-          label: "Военная обязанность",
-          name: "military_status",
-          type: "select",
-          items: ["Обязан", "Не обязан"],
+          label: "Электронная почта",
+          name: "email",
+          type: "string",
           rules: ["required"]
         },
         phone: {

@@ -27,17 +27,17 @@
               </v-list-item-icon>
               <v-list-item-content>{{resume.phone}}</v-list-item-content>
             </v-list-item>
+             <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-email</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>{{resume.email}}</v-list-item-content>
+            </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-human-male-female</v-icon>
               </v-list-item-icon>
               <v-list-item-content>{{resume.male_female}}</v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-shield-half-full</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>{{resume.military_status}}</v-list-item-content>
             </v-list-item>
           </v-list>
         </v-card>

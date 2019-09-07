@@ -46,17 +46,6 @@
               <v-col cols="4">
                 <form-field
                   :field="{
-                            label: 'Военная обязанность',
-                            name: 'military_status',
-                            type: 'select',
-                            items: ['Обязан', 'Не обязан'],
-                            rules: ['required']
-                        }"
-                ></form-field>
-              </v-col>
-              <v-col cols="12">
-                <form-field
-                  :field="{
                             label: 'Номер телефона',
                             name: 'phone',
                             type: 'string',
