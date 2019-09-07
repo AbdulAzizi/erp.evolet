@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TaskCreatedEvent;
+use App\Events\TaskForwardedEvent;
 use App\History;
 use App\Notifications\AssignedAsWatcher;
 use App\Notifications\AssignedToTask;
@@ -122,7 +124,7 @@ class TaskController extends Controller
             // Notify Assignees
             $task->responsible->notify(new AssignedToTask($task->from, $task));
             //Log creation to tasks History
-            $this->taskCreated($task);
+            event(new TaskCreatedEvent($task));
         }
         // Redirect to Tasks Index page
         return redirect()->route('tasks.index');
@@ -206,28 +208,6 @@ class TaskController extends Controller
     }
 
     /**
-     * Task history events
-     */
-    private function taskCreated(Task $task)
-    {
-        $author = auth()->user();
-
-        $description = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил задачу.";
-
-        $this->addToTaskHistory($task->id, $description);
-    }
-
-    private function taskForwarded(Task $oldTask, Task $newTask)
-    {
-        $oldResponsible = $oldTask->load('responsible')->responsible;
-        $newResponsible = $newTask->load('responsible')->responsible;
-
-        $description = "Пользователь <a href='/users/$oldResponsible->id'>$oldResponsible->full_name</a> делегировал задачу пользователю <a href='/users/$newResponsible->id'>$newResponsible->full_name</a>";
-
-        $this->addToTaskHistory($newTask->id, $description);
-    }
-
-    /**
      * Helpers
      *
      */
@@ -249,11 +229,7 @@ class TaskController extends Controller
 
         $task->save();
 
-        $this->taskForwarded($oldTask, $task);
+        event( new TaskForwardedEvent($oldTask, $task));
     }
 
-    private function addToTaskHistory($taskID, $description)
-    {
-        $this->addHistoryItem(Task::class, $taskID, $description);
-    }
 }

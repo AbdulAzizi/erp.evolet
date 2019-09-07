@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ProductCreatedEvent;
+use App\Events\TaskCreatedEvent;
 use App\Field;
 use App\Filters\ProductFilters;
 use App\Form;
@@ -46,7 +48,7 @@ class ProductController extends Controller
         //     $temp['pc'] = $product[0]->pc;
         //     $temp['country'] = $product[0]->country;
         //     return $temp;
-        // });
+             // });
 
         // Fetch all products and pass it to data
         $data['products'] = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
@@ -82,7 +84,7 @@ class ProductController extends Controller
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project);
         //Add product creation to history
-        $this->productCreated($product);
+        event(new ProductCreatedEvent($product));
         // Redirect to Tasks Index page
         return redirect()->route('products.index', [
             'pc_id' => $request->pc,
@@ -171,6 +173,7 @@ class ProductController extends Controller
                 'from_type' => Process::class,
                 'created_at' => Carbon::now(),
             ]);
+            event(new TaskCreatedEvent($createdTask));
 
             Notification::send($responsiblePerson, new AssignedToTask($process, $createdTask));
         }
@@ -219,16 +222,4 @@ class ProductController extends Controller
         return collect($listFields);
     }
 
-    private function productCreated($product)
-    {
-        $author = auth()->user();
-        $description = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил продукт.";
-
-        $this->addToProductHistory($product->id, $description);
-    }
-
-    private function addToProductHistory($productID, $description)
-    {
-        $this->addHistoryItem(Product::class, $productID, $description);
-    }
 }
