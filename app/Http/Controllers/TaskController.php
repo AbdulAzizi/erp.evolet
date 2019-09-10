@@ -102,7 +102,7 @@ class TaskController extends Controller
         // Get all Watcher Users
         $watchers = User::alone()->find($watchers);
         // Get all tasks that have been created
-        $tasks = Task::where('title', $request->title)->get();
+        $tasks = Task::where('title', $request->title)->where('created_at', $data[0]['created_at'])->get();
         // if there is a poll
         if ($poll) {
             $this->createPoll($poll, $tasks);
