@@ -20,7 +20,7 @@
         <v-card-text>
           <v-form method="post" action="/resume" ref="resumeForm">
             <input type="hidden" name="_token" :value="csrf_token" />
-             <input type="hidden" name="own" :value="own" />
+            <input type="hidden" name="own" :value="own" />
             <v-row>
               <v-col cols="4">
                 <form-field
@@ -65,7 +65,7 @@
                 ></form-field>
               </v-col>
             </v-row>
-            <v-btn color="primary"  @click="onSubmit">Создать</v-btn>
+            <v-btn color="primary" @click="onSubmit">Создать</v-btn>
           </v-form>
         </v-card-text>
       </v-card>

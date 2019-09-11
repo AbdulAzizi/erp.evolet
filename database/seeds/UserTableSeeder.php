@@ -127,10 +127,11 @@ class UserTableSeeder extends Seeder
     private function seedUsers($credentials)
     {
         foreach ($credentials as $credential) {
+            $divisionID = Division::where('abbreviation', $credential['division'])->first()->id;
             $userData = [
                 'name' => $credential['name'],
                 'surname' => $credential['surname'],
-                'division_id' => Division::where('abbreviation', $credential['division'])->first()->id,
+                'division_id' => $divisionID,
                 'position_id' => Position::firstOrCreate(['name' => $credential['position']])->id,
                 'email' => $credential['email'],
                 'password' => Hash::make($credential['password']),
@@ -143,7 +144,7 @@ class UserTableSeeder extends Seeder
             
             $user = User::create($userData);
             foreach ($credential['responsibilities'] as $responsibility) {
-                $user->responsibilities()->attach( Responsibility::firstOrCreate(['name' => $responsibility ])->id );
+                $user->responsibilities()->attach( Responsibility::firstOrCreate(['name' => $responsibility, 'division_id' => $divisionID ])->id );
             }
             
         }
