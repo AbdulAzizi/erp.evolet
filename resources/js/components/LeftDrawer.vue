@@ -31,7 +31,7 @@
                         :href="subItem.url"
                     >
                         <v-list-item-action>
-								<v-icon>{{ subItem.icon }}</v-icon>
+                            <v-icon>{{ subItem.icon }}</v-icon>
                         </v-list-item-action>
 
                         <v-list-item-content>
@@ -40,7 +40,7 @@
                     </v-list-item>
                 </v-list-group>
 
-                <v-list-item   :href="item.url">
+                <v-list-item :href="item.url">
                     <v-list-item-action v-if="item.icon">
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-item-action>
@@ -72,7 +72,8 @@ export default {
                     url: "/#",
                     responsibilities: [
                         "Куратор Портфел ПК стран",
-                        "Руководитель ЭН"
+                        "Руководитель ЭН",
+                        "ПК"
                     ],
                     divisions: ["Evolet", "НАП", "ОМАР"]
                 },
@@ -80,7 +81,7 @@ export default {
                     icon: "mdi-attachment",
                     text: "ЭП",
                     url: "/projects?sortBy=country",
-                    responsibilities: ["Куратор Портфел ПК стран"],
+                    responsibilities: ["Куратор Портфел ПК стран", "НО", "ПК"],
                     divisions: ["Evolet", "НАП"]
                 },
                 {
@@ -89,7 +90,8 @@ export default {
                     url: "/#",
                     responsibilities: [
                         "Куратор Портфел ПК стран",
-                        "Руководитель ЭН"
+                        "Руководитель ЭН",
+                        "ПК"
                     ],
                     divisions: ["Evolet", "НАП", "ОМАР"]
                 },
@@ -106,6 +108,13 @@ export default {
                     url: "/human-resources",
                     responsibilities: ["Программист"],
                     divisions: ["ОРПО", "ДЧ"]
+                },
+                {
+                    icon: "mdi-file",
+                    text: "Резюме",
+                    url: "/head-resumes",
+                    responsibilities: [],
+                    divisions: ["*"]
                 }
             ]
         };
@@ -114,24 +123,28 @@ export default {
         // return links that belong to this User
         getLinksOf(user) {
             // get user responsibilities as array
-            let userResps = user.responsibilities.map( resp => resp.name );
+            let userResps = user.responsibilities.map(resp => resp.name);
             // loop through dynamicLinks
-            return this.dynamicLinks.filter( link => {
-                // if link division has users division
-                if( link.divisions.includes(user.division.abbreviation) )
-                    // if user has the position of "Руководитель"
-                    if( user.position.name == "Руководитель" )
+            return this.dynamicLinks.filter(link => {
+                // if link division has users division or *
+                if (
+                    link.divisions.includes(user.division.abbreviation) ||
+                    link.divisions.includes("*")
+                )
+                    if (user.position.name == "Руководитель")
+                        // if user has the position of "Руководитель"
                         return link;
                 // get union elements of two arrays (link.responsibilities,userResps)
-                let unionLinks = link.responsibilities.filter(resp=>userResps.includes( resp ));
+                let unionLinks = link.responsibilities.filter(resp =>
+                    userResps.includes(resp)
+                );
                 // return if there is union element
-                if(unionLinks.length)
-                    return link;
+                if (unionLinks.length) return link;
             });
         }
     },
     created() {
-        this.items = [...this.getLinksOf(this.auth_user) ];
+        this.items = [...this.getLinksOf(this.auth_user)];
     }
 };
 </script>

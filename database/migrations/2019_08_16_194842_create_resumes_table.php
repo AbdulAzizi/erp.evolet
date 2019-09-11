@@ -19,7 +19,7 @@ class CreateResumesTable extends Migration
             $table->string('surname');
             $table->string('male_female');
             $table->date('birthday');
-            $table->string('military_status');
+            $table->string('email');
             $table->string('phone');
             $table->integer('creator');
             $table->timestamps();

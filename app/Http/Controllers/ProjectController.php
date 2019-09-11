@@ -16,7 +16,8 @@ class ProjectController extends Controller
         $authUser = \Auth::user();
         
         $projects = Project::whereHas('participants', function (Builder $query) use ($authUser) {
-            $query->where('role_id', 4)
+            $query
+                //   ->where('role_id', 4)
                   ->where('participant_id', $authUser->id);
         })->with(['pc', 'country'])->get();
 

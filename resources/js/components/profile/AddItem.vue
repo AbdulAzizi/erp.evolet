@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       dialog: false,
-      resume_id: this.user ? this.user.resume.id : this.resume.id,
+      resume_id: this.user ? this.user.resume[0].id : this.resume.id,
       csrf_token: window.Laravel.csrf_token,
       loading: false
     };

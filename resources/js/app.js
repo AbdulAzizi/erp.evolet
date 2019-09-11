@@ -165,39 +165,16 @@ Vue.component(
 );
 Vue.component("stats-card", require("./components/StatsCard.vue").default);
 Vue.component("avatar", require("./components/Avatar.vue").default);
-Vue.component(
-    "projects-card",
-    require("./components/projects/Card.vue").default
-);
-Vue.component(
-    "projects-list",
-    require("./components/projects/List.vue").default
-);
-Vue.component(
-    "resume-add-item",
-    require("./components/profile/AddItem.vue").default
-);
-Vue.component(
-    "resume-card",
-    require("./components/profile/ResumeCard.vue").default
-);
-Vue.component(
-    "resume-create",
-    require("./components/profile/ResumeCreate.vue").default
-);
-Vue.component(
-    "projects-card",
-    require("./components/projects/Card.vue").default
-);
-Vue.component(
-    "projects-list",
-    require("./components/projects/List.vue").default
-);
-Vue.component(
-    "projects-create",
-    require("./components/projects/Create.vue").default
-);
-Vue.component("history", require("./components/History.vue").default);
+Vue.component("projects-card", require("./components/projects/Card.vue").default);
+Vue.component("projects-list", require("./components/projects/List.vue").default);
+Vue.component("resume-add-item", require("./components/profile/AddItem.vue").default);
+Vue.component("resume-card", require("./components/profile/ResumeCard.vue").default);
+Vue.component("resume-create", require("./components/profile/ResumeCreate.vue").default);
+Vue.component("projects-card", require('./components/projects/Card.vue').default);
+Vue.component("projects-list", require('./components/projects/List.vue').default);
+Vue.component("projects-create", require('./components/projects/Create.vue').default);
+Vue.component("history", require('./components/History.vue').default);
+Vue.component("comments", require('./components/Comments.vue').default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
@@ -208,6 +185,10 @@ Vue.component(
 Vue.component(
     "products-view",
     require("./components/views/Products.vue").default
+);
+Vue.component(
+    "product",
+    require("./components/Product.vue").default
 );
 Vue.component(
     "products-create-view",
@@ -252,6 +233,8 @@ Vue.component(
     require("./components/profile/UserCardHorizontal.vue").default
 );
 
+Vue.component("human-resources-view", require("./components/views/HumanResources.vue").default);
+
 Vue.component("users-view", require("./components/views/Users.vue").default);
 
 Vue.component("resumes-view", require("./components/views/Resume.vue").default);
@@ -260,6 +243,14 @@ Vue.component(
     "resume-show",
     require("./components/views/ResumeShow.vue").default
 );
+
+Vue.component("human-resources-resumes", require("./components/views/HumanResourcesResumes.vue").default);
+
+Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
+
+Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
+
+
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);

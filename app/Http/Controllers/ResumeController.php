@@ -10,6 +10,7 @@ use App\Job;
 use App\Family;
 use App\Language;
 use App\Achievment;
+use PDF;
 
 class ResumeController extends Controller
 {
@@ -39,6 +40,9 @@ class ResumeController extends Controller
 
     public function showSingle(Request $request)
     {
+        $user = auth()->user();
+
+
         $resume = Resume::with(
             'educations',
             'jobs',
@@ -47,10 +51,16 @@ class ResumeController extends Controller
             'languages'
         )->find($request->id);
 
+        return view('resume.show', compact('resume', 'user'));
 
-        return view('resume.show', compact('resume'));
 
+    }
 
+    public function headResumes(Request $request)
+    {
+        $resumes = Resume::with(['educations', 'languages'])->doesnthave('owner')->get();
+
+        return view('resume.headResumes', compact('resumes'));
     }
 
     public function create(Request $request)
@@ -62,7 +72,7 @@ class ResumeController extends Controller
             'birthday' => $request->birthday,
             'male_female' => $request->gender,
             'phone' => $request->phone,
-            'military_status' => $request->military_status,
+            'email' => $request->email,
             'creator' => auth()->id()
             ]);
 
@@ -78,7 +88,7 @@ class ResumeController extends Controller
                 'birthday' => $request->birthday,
                 'male_female' => $request->gender,
                 'phone' => $request->phone,
-                'military_status' => $request->military_status,
+                'email' => $user->email,
                 'creator' => auth()->id()
             ]);
 
@@ -194,5 +204,14 @@ class ResumeController extends Controller
         Achievment::find($request->id)->delete();
 
         return 'success';
+    }
+
+    public function pdf(Request $request)
+    {
+        $resume = Resume::find($request->id);
+
+        $pdf = PDF::loadView('resume.export_pdf', compact('resume'));
+
+        return $pdf->download($resume->name . '.pdf');
     }
 }

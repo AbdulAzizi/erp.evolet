@@ -25,15 +25,15 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>mdi-human-male-female</v-icon>
+                <v-icon>mdi-email</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].male_female}}</v-list-item-content>
+              <v-list-item-content>{{user.resume[0].email}}</v-list-item-content>
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>mdi-shield-half-full</v-icon>
+                <v-icon>mdi-human-male-female</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].military_status}}</v-list-item-content>
+              <v-list-item-content>{{user.resume[0].male_female}}</v-list-item-content>
             </v-list-item>
           </v-list>
         </v-card>
@@ -41,8 +41,9 @@
       <v-col cols="12" sm="6" md="4">
         <resume-card
           :user="user"
+          :check="user.id == permit"
           title="Образование"
-          :localUser="user.resume[0].educations"
+          :resume="user.resume[0].educations"
           type="education"
           main_icon="mdi-school"
           deleteUrl="/api/deleteEducation/"
@@ -56,6 +57,7 @@
             url="/api/education"
             :form="education"
             returnDataEvent="educationAdded"
+            v-if="user.id == permit"
           />
         </resume-card>
       </v-col>
@@ -63,7 +65,7 @@
         <resume-card
           :user="user"
           title="Опыт работы"
-          :localUser="user.resume[0].jobs"
+          :resume="user.resume[0].jobs"
           type="job"
           main_icon="mdi-office-building"
           deleteUrl="/api/deleteJob/"
@@ -77,6 +79,7 @@
             url="/api/job"
             :form="job"
             returnDataEvent="jobAdded"
+            v-if="user.id == permit"
           />
         </resume-card>
       </v-col>
@@ -84,7 +87,7 @@
         <resume-card
           :user="user"
           title="Семейное положение"
-          :localUser="user.resume[0].families"
+          :resume="user.resume[0].families"
           main_icon="mdi-account-group"
           deleteUrl="/api/deleteFamily/"
           firstMainLine="name"
@@ -97,6 +100,7 @@
             url="/api/family"
             :form="family"
             returnDataEvent="familyAdded"
+            v-if="user.id == permit"
           />
         </resume-card>
       </v-col>
@@ -104,7 +108,7 @@
         <resume-card
           :user="user"
           title="Знание языков"
-          :localUser="user.resume[0].languages"
+          :resume="user.resume[0].languages"
           type="language"
           main_icon="mdi-chat"
           deleteUrl="/api/deleteLanguage/"
@@ -117,6 +121,7 @@
             url="/api/language"
             :form="language"
             returnDataEvent="languageAdded"
+            v-if="user.id == permit"
           />
         </resume-card>
       </v-col>
@@ -124,7 +129,7 @@
         <resume-card
           :user="user"
           title="Достижения"
-          :localUser="user.resume[0].achievments"
+          :resume="user.resume[0].achievments"
           main_icon="mdi-certificate"
           deleteUrl="/api/deleteAchievment/"
           firstMainLine="type"
@@ -136,6 +141,7 @@
             url="/api/achievment"
             :form="achievment"
             returnDataEvent="achievmentAdded"
+            v-if="user.id == permit"
           />
         </resume-card>
       </v-col>
@@ -304,31 +310,22 @@ export default {
     Event.listen("educationAdded", data => {
       console.log("Event listened");
 
-      this.localUser.resume.educations.push(data);
+      this.localUser.resume[0].educations.push(data);
     });
-    Event.listen("educationEdited", data => {
-      this.localUser.resume.educations.forEach((education, key) => {
-        if (education.id === data.id) {
-          this.localUser.resume.educations.splice(key, 1);
-        }
-      });
-      this.localUser.resume.educations.push(data);
-    });
-
     Event.listen("jobAdded", data => {
-      this.localUser.resume.jobs.push(data);
+      this.localUser.resume[0].jobs.push(data);
     });
 
     Event.listen("familyAdded", data => {
-      this.localUser.resume.families.push(data);
+      this.localUser.resume[0].families.push(data);
     });
 
     Event.listen("languageAdded", data => {
-      this.localUser.resume.languages.push(data);
+      this.localUser.resume[0].languages.push(data);
     });
 
     Event.listen("achievmentAdded", data => {
-      this.localUser.resume.achievments.push(data);
+      this.localUser.resume[0].achievments.push(data);
     });
   }
 };

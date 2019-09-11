@@ -30,7 +30,7 @@
       <span>Задачи</span>
     </v-tooltip>
 
-    <dropdown-btn :items="auth.notifications" tooltip="Уведомления" icon="mdi-bell" max-width="500"></dropdown-btn>
+    <dropdown-btn :items="auth.notifications" :user="user" tooltip="Уведомления" icon="mdi-bell" max-width="500"></dropdown-btn>
     <!-- // TODO if there are not notifications display proper text -->
 
     <v-menu offset-y left>

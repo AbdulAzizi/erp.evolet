@@ -17,7 +17,7 @@ class CreateQuestionUserTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('question_id');
-            $table->unsignedBigInteger('question_option_id');
+            $table->unsignedBigInteger('option_id');
         });
     }
 

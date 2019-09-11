@@ -26,7 +26,7 @@ class ResumeTableSeeder extends Seeder
             'surname' => 'Nurov',
             'male_female' => 'Мужской',
             'birthday' => new Carbon('1996-01-17'),
-            'military_status' => 'Не объязан',
+            'email' => 'abdulaziz@gmail.com',
             'phone' => '985100888',
             'creator' => 7
 

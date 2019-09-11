@@ -59,4 +59,13 @@ class UserController extends Controller
 
         return redirect()->back();
     }
+
+    public function notification(Request $request)
+    {
+        $user = User::find($request->id);
+
+        $user->unreadNotifications->markAsRead();
+
+        return 'success';
+    }
 }

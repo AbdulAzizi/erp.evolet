@@ -42,7 +42,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'НО',
                 'position' => 'Руководитель',
-                'responsibilities' => ['Куратор Портфел ПК стран','НО'],
+                'responsibilities' => ['НО'],
             ],
             [
                 'name' => 'Inoyat',

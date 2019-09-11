@@ -4,6 +4,7 @@
         ref="pickerDialog"
         :width="width ? width : '290px'"
         v-bind="$attrs.dialog"
+        class="d-none"
     >
         <template v-slot:activator="{ on:dialog }">
             <v-text-field

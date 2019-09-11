@@ -1,59 +1,59 @@
 <template>
-  <v-layout fill-height>
-    <v-flex>
-      <v-sheet height="64">
-        <v-toolbar flat color="white">
-          <v-btn outlined class="mr-4" @click="setToday">Today</v-btn>
-          <v-btn fab text small @click="prev">
-            <v-icon small>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-btn fab text small @click="next">
-            <v-icon small>mdi-chevron-right</v-icon>
-          </v-btn>
-          <v-toolbar-title>{{ title }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-menu bottom right>
-            <template v-slot:activator="{ on }">
-              <v-btn outlined v-on="on">
-                <span>{{ typeToLabel[type] }}</span>
-                <v-icon right>mdi-menu-down</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item @click="type = 'day'">
-                <v-list-item-title>Day</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'week'">
-                <v-list-item-title>Week</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'month'">
-                <v-list-item-title>Month</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = '4day'">
-                <v-list-item-title>4 days</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-toolbar>
-      </v-sheet>
-      <v-sheet height="600" class="px-2 pb-2">
-        <v-calendar
-          ref="calendar"
-          v-model="focus"
-          color="primary"
-          :events="events"
-          :event-color="getEventColor"
-          :event-margin-bottom="3"
-          :now="today"
-          :type="type"
-          @click:event="showEvent"
-          @click:more="viewDay"
-          @click:date="viewDay"
-          @change="updateRange"
-        ></v-calendar>
-      </v-sheet>
-    </v-flex>
-  </v-layout>
+    <v-layout fill-height>
+        <v-flex>
+            <v-sheet height="64">
+                <v-toolbar flat color="white">
+                    <v-btn outlined class="mr-4" @click="setToday">Today</v-btn>
+                    <v-btn fab text small @click="prev">
+                        <v-icon small>mdi-chevron-left</v-icon>
+                    </v-btn>
+                    <v-btn fab text small @click="next">
+                        <v-icon small>mdi-chevron-right</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>{{ title }}</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-menu bottom right>
+                        <template v-slot:activator="{ on }">
+                            <v-btn outlined v-on="on">
+                                <span>{{ typeToLabel[type] }}</span>
+                                <v-icon right>mdi-menu-down</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-list>
+                            <v-list-item @click="type = 'day'">
+                                <v-list-item-title>Day</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item @click="type = 'week'">
+                                <v-list-item-title>Week</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item @click="type = 'month'">
+                                <v-list-item-title>Month</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item @click="type = '4day'">
+                                <v-list-item-title>4 days</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+                </v-toolbar>
+            </v-sheet>
+            <v-sheet height="600" class="px-2 pb-2">
+                <v-calendar
+                    ref="calendar"
+                    v-model="focus"
+                    color="primary"
+                    :events="events"
+                    :event-color="getEventColor"
+                    :event-margin-bottom="3"
+                    :now="today"
+                    :type="type"
+                    @click:event="showEvent"
+                    @click:more="viewDay"
+                    @click:date="viewDay"
+                    @change="updateRange"
+                ></v-calendar>
+            </v-sheet>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -77,15 +77,6 @@ export default {
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
-
-      events: this.tasks.map(task => ({
-        id: task.id,
-        name: task.title,
-        details: task.description,
-        start: task.created_at,
-        end: task.deadline,
-        color: this.getRandomColor()
-      }))
     };
   },
 
@@ -123,6 +114,19 @@ export default {
         timeZone: "UTC",
         month: "long"
       });
+    },
+    tasksWithStartDate(){
+      return this.tasks.filter(task => task.start_date)
+    },
+    events(){
+      return this.tasksWithStartDate.map(task => ({
+        id: task.id,
+        name: task.title,
+        details: task.description,
+        start: task.start_time,
+        end: task.deadline,
+        color: this.getRandomColor()
+      }));
     }
   },
   methods: {
