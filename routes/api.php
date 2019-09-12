@@ -40,3 +40,4 @@ Route::post('/language', 'ResumeController@languageAdd')->name('language-add');
 Route::delete('/deleteLanguage/{id}', 'ResumeController@languageDelete')->name('language-delete');
 Route::post('/achievment', 'ResumeController@achievmentAdd')->name('achievment-add');
 Route::delete('/deleteAchievment/{id}', 'ResumeController@achievmentDelete')->name('achievment-delete');
+Route::post('/notifications', 'UserController@notification')->name('user.notification');

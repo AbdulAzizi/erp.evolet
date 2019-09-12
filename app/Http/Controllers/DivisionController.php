@@ -37,6 +37,6 @@ class DivisionController extends Controller
 
         Division::create($request->only(['name', 'abbreviation']), $parentDivision);
 
-        return redirect()->back();
+        return redirect()->back(); 
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Division;
+use App\Responsibility;
 use Illuminate\Database\Seeder;
 
 class ResponsibilityTableSeeder extends Seeder
@@ -11,13 +13,32 @@ class ResponsibilityTableSeeder extends Seeder
      */
     public function run()
     {
-        App\Responsibility::insert([
-            ['name'=>'Программист'],
-            ['name'=>'Контент Менеджер'],
-            ['name'=>'Веб Мастер'],
-            ['name'=>'Куратор Портфел ПК стран'],
-            ['name'=>'НО'],
-            ['name'=>'ПК'],
+
+        Responsibility::insert([
+            [
+                'name' => 'Программист',
+                'division_id' => Division::where('abbreviation', 'ОРПО')->first()->id
+            ],
+            [
+                'name' => 'Контент Менеджер',
+                'division_id' => Division::where('abbreviation', 'ОЦМ')->first()->id
+            ],
+            [
+                'name' => 'Веб Мастер',
+                'division_id' => Division::where('abbreviation', 'ОЦМ')->first()->id
+            ],
+            [
+                'name' => 'Куратор Портфел ПК стран',
+                'division_id' => Division::where('abbreviation', 'ОМАР')->first()->id
+            ],
+            [
+                'name' => 'НО',
+                'division_id' => Division::where('abbreviation', 'НО')->first()->id
+            ],
+            [
+                'name' => 'ПК',
+                'division_id' => Division::where('abbreviation', 'ПК')->first()->id
+            ],
         ]);
     }
 }

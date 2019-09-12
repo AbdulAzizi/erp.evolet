@@ -13,7 +13,7 @@ class Division extends Model
     public $timestamps = false;
 
     protected $fillable = ['name', 'abbreviation', 'head_id'];
-    
+
     public function head()
     {
         return $this->belongsTo('App\User');
@@ -26,16 +26,21 @@ class Division extends Model
 
     public function projects()
     {
-        return $this->hasMany('App\Project','pc_id');
+        return $this->hasMany('App\Project', 'pc_id');
     }
 
     public function countries()
     {
-        return $this->belongsToMany('App\Country','managers','pc_id','manager_id');
+        return $this->belongsToMany('App\Country', 'managers', 'pc_id', 'manager_id');
     }
 
     public static function promoCompanies()
     {
-        return self::withDepth()->having('depth','=', 4)->get();
+        return self::withDepth()->having('depth', '=', 4)->get();
+    }
+
+    public function responsibilities()
+    {
+        return $this->hasMany(Responsibility::class);
     }
 }

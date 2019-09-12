@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Responsibility extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'division_id'];
 
     public $timestamps = false;
 
@@ -18,5 +18,10 @@ class Responsibility extends Model
     public function descriptions()
     {
         return $this->hasMany(JobDescription::class);
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
     }
 }
