@@ -1,18 +1,23 @@
 <template>
-    <div class="messages-view">
+    <div class="chats-view">
         <v-navigation-drawer permanent app clipped>
             <template v-slot:prepend>
                 <v-tabs grow v-model="tab">
-                    <v-tab>
-                        <v-icon>mdi-account-tie</v-icon>
+                    <v-tab  style="min-width:85px;">
+                        <v-icon>mdi-forum</v-icon>
                     </v-tab>
-                    <v-tab>
+                    <v-tab  style="min-width:85px;">
                         <v-icon>mdi-account-group</v-icon>
+                    </v-tab>
+                    <v-tab  style="min-width:85px;">
+                        <v-icon>mdi-account-tie</v-icon>
                     </v-tab>
                 </v-tabs>
             </template>
 
             <v-tabs-items v-model="tab">
+                <v-tab-item>Group</v-tab-item>
+                <v-tab-item>Chats</v-tab-item>
                 <v-tab-item>
                     <v-text-field
                         v-model="search"
@@ -24,7 +29,7 @@
                         hide-details
                     ></v-text-field>
                     <v-divider></v-divider>
-                    <v-list dense shaped style="    max-height: calc(100vh - 177px); overflow-y: scroll;">
+                    <v-list dense shaped style="    max-height: calc(100vh - 201px); overflow-y: scroll;">
                         <v-list-item v-for="user in filteredUsers" :key="user.title" @click>
                             <!-- <v-list-item-icon>
                             <v-icon>{{ user.icon }}</v-icon>
@@ -40,7 +45,6 @@
                         </v-list-item>
                     </v-list>
                 </v-tab-item>
-                <v-tab-item>hi</v-tab-item>
             </v-tabs-items>
         </v-navigation-drawer>
 
@@ -106,7 +110,11 @@ export default {
 </script>
 
 <style>
-/* .messages-view .v-tab {
+.chats-view .v-slide-group__prev,
+.chats-view .v-slide-group__next {
+    display: none;
+}
+.chats-view .v-tab {
     margin-left: 0 !important;
-} */
+}
 </style>

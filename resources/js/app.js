@@ -250,7 +250,7 @@ Vue.component("human-resources-resumes", require("./components/views/HumanResour
 Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
 
 Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
-Vue.component("messages-view", require("./components/views/Messages.vue").default);
+Vue.component("chats-view", require("./components/views/Chats.vue").default);
 
 
 

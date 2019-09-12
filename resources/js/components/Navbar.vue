@@ -32,7 +32,7 @@
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on" :href="appPath('messages')">
+        <v-btn icon v-on="on" :href="appPath('chats')">
           <v-icon color="grey darken-1">mdi-forum</v-icon>
         </v-btn>
       </template>
