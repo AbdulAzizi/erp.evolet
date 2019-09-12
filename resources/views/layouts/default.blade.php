@@ -2,7 +2,7 @@
 
 @section('layout')
 
-	{{-- <right-drawer></right-drawer> --}}
+	{{-- <right-drawer :users="{{$users}}"></right-drawer> --}}
 
 	<left-drawer></left-drawer>
 
