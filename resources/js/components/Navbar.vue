@@ -30,6 +30,15 @@
       <span>Задачи</span>
     </v-tooltip>
 
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on" :href="appPath('messages')">
+          <v-icon color="grey darken-1">mdi-forum</v-icon>
+        </v-btn>
+      </template>
+      <span>Сообщения</span>
+    </v-tooltip>
+
     <dropdown-btn :items="auth.notifications" tooltip="Уведомления" icon="mdi-bell" max-width="500"></dropdown-btn>
     <!-- // TODO if there are not notifications display proper text -->
 
