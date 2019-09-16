@@ -19,4 +19,9 @@ class Responsibility extends Model
     {
         return $this->hasMany(JobDescription::class);
     }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
 }

@@ -22,6 +22,10 @@ class ProvideDefaultData
         ]);
         View::share('authUser', $authUser);
 
+        // $users = \App\User::with('division')->get();
+        // View::share('users', $users );
+
+
         return $next($request);
 
     }

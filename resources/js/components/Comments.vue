@@ -29,7 +29,7 @@
         </v-row>
         <v-row>
             <v-col cols="12 pa-0" align-self="end">
-                <v-card tile flat class="elevation-15">
+                <v-card tile flat>
                     <v-text-field
                         v-model="body"
                         hide-details

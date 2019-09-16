@@ -11,13 +11,37 @@
 {{-- 
     <!-- Scripts -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
+    <style>
+        *::-webkit-scrollbar-track
+        {
+            border-radius: 10px;
+            background-color: #d9d9d9;
+        }
+
+        *::-webkit-scrollbar
+        {
+            width: 8px;
+            background-color: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb
+        {
+            border-radius: 50px;
+            background-color: #ababab;
+        }
+        *::-webkit-scrollbar-thumb:hover
+        {
+            background-color: #777;
+        }
+
+    </style>
 </head>
 <body style="margin:0">
     
     <div id="app">
         {{-- <notification></notification> --}}
 
-        <v-app style="background:#e9ebee;">
+        <v-app style="background:rgb(243,243,243);">
             @yield('layout')
         </v-app>
             

@@ -154,6 +154,7 @@ Vue.mixin({
 /****************************COMPONENTS********************************/
 Vue.component("navbar", require("./components/Navbar.vue").default);
 Vue.component("myform", require("./components/Form.vue").default);
+Vue.component("right-drawer", require("./components/RightDrawer.vue").default);
 Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 Vue.component("priority", require("./components/Priority.vue").default);
 Vue.component("card", require("./components/Card.vue").default);
@@ -221,6 +222,11 @@ Vue.component(
 );
 
 Vue.component(
+    "add-job-description",
+    require("./components/form/AddJobDescription.vue").default
+);
+
+Vue.component(
     "user-card-vertical",
     require("./components/profile/UserCard.vue").default
 );
@@ -236,13 +242,17 @@ Vue.component("users-view", require("./components/views/Users.vue").default);
 
 Vue.component("resumes-view", require("./components/views/Resume.vue").default);
 
-Vue.component("resume-show", require("./components/views/ResumeShow.vue").default);
+Vue.component(
+    "resume-show",
+    require("./components/views/ResumeShow.vue").default
+);
 
 Vue.component("human-resources-resumes", require("./components/views/HumanResourcesResumes.vue").default);
 
 Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
 
 Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
+Vue.component("messages-view", require("./components/views/Messages.vue").default);
 
 
 
@@ -271,9 +281,18 @@ Vue.component(
 );
 Vue.component("combobox", require("./components/form/Combobox.vue").default);
 Vue.component("dynamic-form", require("./components/form/Form.vue").default);
-Vue.component("many-to-many-select", require("./components/form/ManyToManySelect.vue").default);
-Vue.component("poll-create", require("./components/tasks/PollCreate.vue").default);
-Vue.component("poll-display", require("./components/tasks/PollDisplay.vue").default);
+Vue.component(
+    "many-to-many-select",
+    require("./components/form/ManyToManySelect.vue").default
+);
+Vue.component(
+    "poll-create",
+    require("./components/tasks/PollCreate.vue").default
+);
+Vue.component(
+    "poll-display",
+    require("./components/tasks/PollDisplay.vue").default
+);
 Vue.component("poll-form", require("./components/tasks/PollForm.vue").default);
 
 /****************************HELPERS********************************/
