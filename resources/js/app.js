@@ -14,6 +14,7 @@ import "vuetify/dist/vuetify.min.css";
 // import "material-design-icons-iconfont/dist/material-design-icons.css";
 import "@mdi/font/css/materialdesignicons.css";
 import moment from "moment-timezone";
+import draggable from 'vuedraggable';
 
 const vuetifyOptions = {
     theme: {
@@ -175,6 +176,7 @@ Vue.component("projects-list", require('./components/projects/List.vue').default
 Vue.component("projects-create", require('./components/projects/Create.vue').default);
 Vue.component("history", require('./components/History.vue').default);
 Vue.component("comments", require('./components/Comments.vue').default);
+Vue.component("kanban-view", require('./components/Draggable.vue').default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);

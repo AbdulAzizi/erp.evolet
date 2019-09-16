@@ -41,3 +41,5 @@ Route::delete('/deleteLanguage/{id}', 'ResumeController@languageDelete')->name('
 Route::post('/achievment', 'ResumeController@achievmentAdd')->name('achievment-add');
 Route::delete('/deleteAchievment/{id}', 'ResumeController@achievmentDelete')->name('achievment-delete');
 Route::post('/notifications', 'UserController@notification')->name('user.notification');
+Route::put('/change-task-status/{id}', 'TaskController@changeStatus')->name('change.task.status');
+Route::post('/addStatus', 'TaskController@addStatus')->name('add.status');
