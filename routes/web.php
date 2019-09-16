@@ -15,7 +15,7 @@ Auth::routes();
 
 
 
-Route::group(['middleware'=>['auth', 'data.default']],function(){
+Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/', function () {
@@ -37,15 +37,15 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
     Route::post('/users', 'UserController@store')->name('users.store');
     Route::get('/users/{id}', 'UserController@show')->name('users.show');
 
-    Route::get('/products','ProductController@index')->name('products.index');
-    Route::get('/products/create','ProductController@create')->name('products.create');
-    Route::post('/products','ProductController@store')->name('products.store');
+    Route::get('/products', 'ProductController@index')->name('products.index');
+    Route::get('/products/create', 'ProductController@create')->name('products.create');
+    Route::post('/products', 'ProductController@store')->name('products.store');
 
-    Route::get('/processes/{id}','ProcessController@show')->name('processes.show');
+    Route::get('/processes/{id}', 'ProcessController@show')->name('processes.show');
 
-    Route::get('/projects','ProjectController@index')->name('projects.index');
-    Route::post('/projects','ProjectController@store')->name('projects.store');
-    Route::get('/projects/create','ProjectController@create')->name('projects.create');
+    Route::get('/projects', 'ProjectController@index')->name('projects.index');
+    Route::post('/projects', 'ProjectController@store')->name('projects.store');
+    Route::get('/projects/create', 'ProjectController@create')->name('projects.create');
 
     Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');
 
@@ -67,8 +67,6 @@ Route::group(['middleware'=>['auth', 'data.default']],function(){
 
     Route::get('/human-resources', 'HumanResourcesController@index')->name('human.resources');
     Route::get('/human-resources/resumes', 'HumanResourcesController@showResumes')->name('human.resources.resume');
-
-
 });
 
 // later must go API

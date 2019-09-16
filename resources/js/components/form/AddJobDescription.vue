@@ -1,8 +1,9 @@
 <template>
   <v-row justify="end">
-    <v-btn class="mt-4 mr-4" color="primary" @click="showForm" fab dark>
+    <v-btn color="primary" @click="showForm" bottom right fab dark fixed>
       <v-icon dark>mdi-plus</v-icon>
     </v-btn>
+
     <dynamic-form
       title="Добавить должностные обязоности"
       v-show="true"
@@ -13,9 +14,9 @@
       :fields="[
             {
               type: 'select',
-              name: 'responsibilityId',
+              name: 'responsibility_id',
               label: 'Полномочия',
-              items:  this.responsibilities,
+              items:  this.user.responsibilities,
               rules: ['required']
             },
             {
@@ -33,23 +34,13 @@
 
 <script>
 export default {
-  props: ["responsibilities"],
+  props: ["user"],
   data() {
-    console.log(this.responsibilities);
     return {};
   },
   methods: {
     showForm() {
       Event.fire("showForm");
-    },
-    addJobDescription() {
-      Event.fire("addJobDescription", [
-        {
-          type: "input",
-          name: "responsibilityId'",
-          value: this.user.responsibilities
-        }
-      ]);
     }
   }
 };

@@ -13,10 +13,9 @@ class ResponsibilityController extends Controller
 
     public function show(Request $request)
     {
-        $user = User::where('id', $request->id)->with('responsibilities.descriptions')->first();
-        $responsibilities = Responsibility::all();
-
-        return view('profile.responsibility', compact('user', 'responsibilities'));
+        $user = User::with('responsibilities.descriptions')->find($request->id);
+        
+        return view('profile.responsibility', compact('user'));
     }
 
     public function store()
@@ -26,6 +25,6 @@ class ResponsibilityController extends Controller
             'text' => request('text')
         ]);
 
-        return redirect('/users/7/responsibility');
+        return redirect()->back();
     }
 }
