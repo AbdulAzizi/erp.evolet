@@ -5,7 +5,6 @@
         floating
         clipped
         app
-        disable-resize-watcher
         mobile-break-point="960"
         width="240"
         class="elevation-3"
@@ -66,17 +65,17 @@ export default {
             drawer: true,
             items: [],
             dynamicLinks: [
-                {
-                    icon: "mdi-attachment",
-                    text: "АСИ",
-                    url: "/#",
-                    responsibilities: [
-                        "Куратор Портфел ПК стран",
-                        "Руководитель ЭН",
-                        "ПК"
-                    ],
-                    divisions: ["Evolet", "НАП", "ОМАР"]
-                },
+                // {
+                //     icon: "mdi-attachment",
+                //     text: "АСИ",
+                //     url: "/#",
+                //     responsibilities: [
+                //         "Куратор Портфел ПК стран",
+                //         "Руководитель ЭН",
+                //         "ПК"
+                //     ],
+                //     divisions: ["Evolet", "НАП", "ОМАР"]
+                // },
                 {
                     icon: "mdi-attachment",
                     text: "ЭП",
@@ -84,17 +83,17 @@ export default {
                     responsibilities: ["Куратор Портфел ПК стран", "НО", "ПК"],
                     divisions: ["Evolet", "НАП"]
                 },
-                {
-                    icon: "mdi-attachment",
-                    text: "ЭН",
-                    url: "/#",
-                    responsibilities: [
-                        "Куратор Портфел ПК стран",
-                        "Руководитель ЭН",
-                        "ПК"
-                    ],
-                    divisions: ["Evolet", "НАП", "ОМАР"]
-                },
+                // {
+                //     icon: "mdi-attachment",
+                //     text: "ЭН",
+                //     url: "/#",
+                //     responsibilities: [
+                //         "Куратор Портфел ПК стран",
+                //         "Руководитель ЭН",
+                //         "ПК"
+                //     ],
+                //     divisions: ["Evolet", "НАП", "ОМАР"]
+                // },
                 {
                     icon: "mdi-sitemap",
                     text: "Бизнес процессы",

@@ -153,6 +153,7 @@ Vue.mixin({
 /****************************COMPONENTS********************************/
 Vue.component("navbar", require("./components/Navbar.vue").default);
 Vue.component("myform", require("./components/Form.vue").default);
+Vue.component("right-drawer", require("./components/RightDrawer.vue").default);
 Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 Vue.component("priority", require("./components/Priority.vue").default);
 Vue.component("card", require("./components/Card.vue").default);
@@ -249,6 +250,7 @@ Vue.component("human-resources-resumes", require("./components/views/HumanResour
 Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
 
 Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
+Vue.component("messages-view", require("./components/views/Messages.vue").default);
 
 
 

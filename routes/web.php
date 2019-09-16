@@ -67,6 +67,10 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/human-resources', 'HumanResourcesController@index')->name('human.resources');
     Route::get('/human-resources/resumes', 'HumanResourcesController@showResumes')->name('human.resources.resume');
+
+    Route::get('/messages', 'MessageController@index')->name('messages.index');
+
+
 });
 
 // later must go API
