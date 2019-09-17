@@ -22,7 +22,7 @@
                         </v-card-text>
                     </v-tab-item>
                     <v-tab-item value="comments">
-                        <comments :commentable="task"/>
+                        <comments :commentable="task" type="Tasks"/>
                     </v-tab-item>
                     <v-tab-item value="history">
                         <v-flex class="ma-4">

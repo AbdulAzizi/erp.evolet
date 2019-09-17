@@ -6,5 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chat extends Model
 {
-    //
+    public $timestamps = false;
+
+    
+    public function participants()
+    {
+        return $this->belongsToMany('App\User','chat_participants');
+    }
+    
+    public function admin()
+    {
+        return $this->belongsTo('App\User');
+    }
+    
+    public function comments()
+    {
+        return $this->morphToMany('App\Comment','commentable');
+    }
 }

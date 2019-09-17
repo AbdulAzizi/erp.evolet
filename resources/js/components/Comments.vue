@@ -1,6 +1,6 @@
 <template>
     <v-container fluid class="py-0">
-        <v-row style="height:400px; overflow:auto;" ref="asd">
+        <v-row style="height:calc(100vh - 230px); overflow:auto;" ref="asd">
             <v-container fluid>
                 <v-row
                     v-for="(comment,index) in localCommentable.comments"
@@ -35,7 +35,7 @@
                         hide-details
                         append-icon="mdi-send"
                         solo
-                        @click:append="body ? storeComment(commentable) : '' "
+                        @click:append="body ? storeComment(localCommentable) : '' "
                     ></v-text-field>
                 </v-card>
             </v-col>
@@ -47,6 +47,9 @@ export default {
     props: {
         commentable: {
             required: true
+        },
+        type:{
+            required:true
         }
     },
     data() {
@@ -56,7 +59,7 @@ export default {
         };
     },
     created() {
-        console.log(this.commentable);
+        // console.log(this.commentable);
     },
     methods: {
         storeComment(commentable) {
@@ -64,10 +67,8 @@ export default {
             axios
                 .post(this.appPath("api/comments"), {
                     body: self.body,
-                    commentable_id: self.commentable.id,
-                    commentable_type: self.commentable.responsible_id
-                        ? "tasks"
-                        : "products"
+                    commentable_id: commentable.id,
+                    commentable_type: self.type
                 })
                 .then(function(response) {
                     self.localCommentable.comments.push(response.data);
@@ -80,6 +81,12 @@ export default {
                 .catch(function(error) {
                     console.log(error);
                 });
+        }
+    },
+    watch:{
+        commentable(val){
+            this.localCommentable = this.commentable;
+            
         }
     }
 };

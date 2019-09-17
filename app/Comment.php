@@ -18,6 +18,11 @@ class Comment extends Model
         return $this->morphedByMany('App\Task','commentable');
     }
 
+    public function chats()
+    {
+        return $this->morphedByMany('App\Chat','commentable');
+    }
+
     public function user()
     {
         return $this->belongsTo('App\User');

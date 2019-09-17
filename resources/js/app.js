@@ -79,7 +79,7 @@ Vue.mixin({
         },
         photo: function(name) {
             if (name) return window.Laravel.asset_path + "img/" + name;
-            else return window.Laravel.asset_path + "img/green-solo-logo.svg";
+            else return window.Laravel.asset_path + "img/green-solo-logo.png";
         },
         isCssColor(color) {
             return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/);

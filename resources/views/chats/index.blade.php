@@ -1,5 +1,5 @@
 @extends('layouts.withoutSidebars')
 
 @section('content')
-    <chats-view :commentable="{{$task}}" :users="{{$users}}"></chats-view>
+    <chats-view :chats="{{$chats}}" :users="{{$users}}"></chats-view>
 @endsection
