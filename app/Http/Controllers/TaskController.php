@@ -12,6 +12,7 @@ use App\Question;
 use App\Tag;
 use App\Task;
 use App\User;
+use App\Status;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -22,11 +23,13 @@ class TaskController extends Controller
     {
         $authUser = \Auth::user();
 
+        $statuses = Status::all();
+
         $tasks = Task::where('responsible_id', $authUser->id)
             ->with(
                     'from',
-            //      'responsible',
-            //     'watchers',
+                 'responsible',
+                'watchers',
                     'status'
             //      'tags',
             //     'history.user',
@@ -51,7 +54,8 @@ class TaskController extends Controller
         return view('tasks.index', compact(
             'tasks',
             'users',
-            'tags'
+            'tags',
+            'statuses'
         ));
     }
 
@@ -230,6 +234,24 @@ class TaskController extends Controller
         $task->save();
 
         event( new TaskForwardedEvent($oldTask, $task));
+    }
+
+    public function changeStatus(Request $request)
+    {
+         $task = Task::find($request->id);
+         
+         $task->status_id = $request->statusId;
+
+         $task->save();
+
+         return 'success';
+    }
+
+    public function addStatus(Request $request)
+    {
+        return Status::create([
+            'name' => $request->name
+        ]);
     }
 
 }
