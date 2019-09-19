@@ -2,6 +2,7 @@
 
 @section('content')
     <profile-responsibility 
-    :user="{{ $user }}"
+        :user="{{ $user }}"
+        :responsibilities="{{ $division ? $division->responsibilities : null }}"
     ></profile-responsibility>
 @endsection
