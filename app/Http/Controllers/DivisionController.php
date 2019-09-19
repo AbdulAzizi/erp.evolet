@@ -14,12 +14,10 @@ class DivisionController extends Controller
     {
         $userDivisionId = auth()->user()->division_id;
 
-        $division = Division::with('head', 'users')->withDepth()->descendantsAndSelf($userDivisionId)->toTree();
-            
-        $responsibilities = Responsibility::where('name', '!=', 'Директор')->get();
+        $division = Division::with('head', 'users', 'responsibilities')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
         $positions = Position::where('name', '!=', 'Руководитель')->get();
-
-        return view('division', compact('division', 'responsibilities', 'positions'));
+   
+        return view('division', compact('division','positions'));
     }
 
     public function store(Request $request)
