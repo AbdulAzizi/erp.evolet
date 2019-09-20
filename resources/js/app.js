@@ -14,7 +14,6 @@ import "vuetify/dist/vuetify.min.css";
 // import "material-design-icons-iconfont/dist/material-design-icons.css";
 import "@mdi/font/css/materialdesignicons.css";
 import moment from "moment-timezone";
-import draggable from 'vuedraggable';
 
 const vuetifyOptions = {
     theme: {
@@ -167,17 +166,41 @@ Vue.component(
 );
 Vue.component("stats-card", require("./components/StatsCard.vue").default);
 Vue.component("avatar", require("./components/Avatar.vue").default);
-Vue.component("projects-card", require("./components/projects/Card.vue").default);
-Vue.component("projects-list", require("./components/projects/List.vue").default);
-Vue.component("resume-add-item", require("./components/profile/AddItem.vue").default);
-Vue.component("resume-card", require("./components/profile/ResumeCard.vue").default);
-Vue.component("resume-create", require("./components/profile/ResumeCreate.vue").default);
-Vue.component("projects-card", require('./components/projects/Card.vue').default);
-Vue.component("projects-list", require('./components/projects/List.vue').default);
-Vue.component("projects-create", require('./components/projects/Create.vue').default);
-Vue.component("history", require('./components/History.vue').default);
-Vue.component("comments", require('./components/Comments.vue').default);
-Vue.component("kanban-view", require('./components/Draggable.vue').default);
+Vue.component(
+    "projects-card",
+    require("./components/projects/Card.vue").default
+);
+Vue.component(
+    "projects-list",
+    require("./components/projects/List.vue").default
+);
+Vue.component(
+    "resume-add-item",
+    require("./components/profile/AddItem.vue").default
+);
+Vue.component(
+    "resume-card",
+    require("./components/profile/ResumeCard.vue").default
+);
+Vue.component(
+    "resume-create",
+    require("./components/profile/ResumeCreate.vue").default
+);
+Vue.component(
+    "projects-card",
+    require("./components/projects/Card.vue").default
+);
+Vue.component(
+    "projects-list",
+    require("./components/projects/List.vue").default
+);
+Vue.component(
+    "projects-create",
+    require("./components/projects/Create.vue").default
+);
+Vue.component("history", require("./components/History.vue").default);
+Vue.component("comments", require("./components/Comments.vue").default);
+Vue.component("kanban-view", require("./components/Draggable.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
@@ -189,10 +212,7 @@ Vue.component(
     "products-view",
     require("./components/views/Products.vue").default
 );
-Vue.component(
-    "product",
-    require("./components/Product.vue").default
-);
+Vue.component("product", require("./components/Product.vue").default);
 Vue.component(
     "products-create-view",
     require("./components/views/products/Create.vue").default
@@ -236,7 +256,10 @@ Vue.component(
     require("./components/profile/UserCardHorizontal.vue").default
 );
 
-Vue.component("human-resources-view", require("./components/views/HumanResources.vue").default);
+Vue.component(
+    "human-resources-view",
+    require("./components/views/HumanResources.vue").default
+);
 
 Vue.component("users-view", require("./components/views/Users.vue").default);
 
@@ -247,13 +270,21 @@ Vue.component(
     require("./components/views/ResumeShow.vue").default
 );
 
-Vue.component("human-resources-resumes", require("./components/views/HumanResourcesResumes.vue").default);
+Vue.component(
+    "human-resources-resumes",
+    require("./components/views/HumanResourcesResumes.vue").default
+);
 
-Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
+Vue.component(
+    "resumes-head-view",
+    require("./components/views/HeadResume.vue").default
+);
 
-Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
+Vue.component(
+    "resume-index-card",
+    require("./components/ResumeIndexCard.vue").default
+);
 Vue.component("chats-view", require("./components/views/Chats.vue").default);
-
 
 
 /****************************TASKS********************************/
