@@ -6,5 +6,6 @@
     :users="{{ $users }}"
     :errors="{{ $errors }}"
     :tags="{{ $tags }}"
+    :statuses="{{ $statuses }}"
     ></tasks-view>
 @endsection

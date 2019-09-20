@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Responsibility extends Model
 {
-    protected $fillable = ['name', 'division_id'];
+    protected $fillable = ['name'];
 
     public $timestamps = false;
 

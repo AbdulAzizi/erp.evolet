@@ -1,43 +1,39 @@
 <template>
-  <div>
-    <v-toolbar color="primary" dark dense flat>
-      <v-toolbar-title class="headline">Должностные обязанности</v-toolbar-title>
-    </v-toolbar>
+  <v-row justify="center">
+    <v-col md="6">
+      <v-card>
+        <v-toolbar color="primary" dark dense flat>
+          <v-toolbar-title>Должностные обязанности</v-toolbar-title>
+        </v-toolbar>
 
-    <v-card class="mx-auto">
-      <v-list-item-group multiple>
-        <template>
-          <v-list-item
-            v-for="(responsibility, key) in user.responsibilities"
-            :key="'responsibility-'+key"
-          >
-            <v-list-item-content>
-              <v-list-item-title class="my-2">
-                <span class="font-weight-bold title">{{ responsibility.name }}</span>
-              </v-list-item-title>
+        <v-list class="py-0" subheader>
+          <template v-for="(responsibility, index) in user.responsibilities">
+            <v-subheader class="text-uppercase" :key="'subheader-'+index">{{ responsibility.name }}</v-subheader>
+            <template v-for="(description, subIndex) in responsibility.descriptions">
+              <v-list-item :key="'list-item-'+index+subIndex">
+                <v-list-item-icon>
+                  <v-icon color="primary">mdi-check</v-icon>
+                </v-list-item-icon>
 
-              <div
-                class="mb-2"
-                v-for="(description, index) in responsibility.descriptions"
-                :key="index"
-              >
-                <ul>
-                  <li>{{ description.text }}</li>
-                </ul>
-              </div>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
-      </v-list-item-group>
-    </v-card>
-  </div>
+                <v-list-item-content>{{ description.text }}</v-list-item-content>
+              </v-list-item>
+              <v-divider :key="'divider-'+index+subIndex"></v-divider>
+            </template>
+            <v-list-item two-line :key="'noData-'+index" v-if="!responsibility.descriptions.length">
+              <v-list-item-content>
+                <v-list-item-title>{{ responsibility.name }} - не имеет должностных обязанностей</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
-
 
 <script>
 export default {
   props: ["user"],
-
   data() {
     return {};
   }

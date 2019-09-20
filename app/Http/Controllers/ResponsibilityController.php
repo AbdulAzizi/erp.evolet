@@ -11,12 +11,15 @@ use Illuminate\Http\Request;
 class ResponsibilityController extends Controller
 {
 
-    public function show(Request $request)
+    public function show(Request $request, $id)
     {
-        $user = User::where('id', $request->id)->with('responsibilities.descriptions')->first();
-        $responsibilities = Responsibility::all();
-
-        return view('profile.responsibility', compact('user', 'responsibilities'));
+        $user = User::with('responsibilities.descriptions')->find($request->id);
+        $division = new Division();
+        
+        if( \Auth::user()->position->name = "Руководитель" && \Auth::user()->division->id == $user->division->id )
+            $division = Division::with('responsibilities')->find($user->division_id);
+        // return $user;
+        return view('profile.responsibility', compact('user','division'));
     }
 
     public function store()
@@ -26,6 +29,6 @@ class ResponsibilityController extends Controller
             'text' => request('text')
         ]);
 
-        return redirect('/users/7/responsibility');
+        return redirect()->back();
     }
 }

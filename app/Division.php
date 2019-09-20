@@ -41,6 +41,6 @@ class Division extends Model
 
     public function responsibilities()
     {
-        return $this->hasMany(Responsibility::class);
+        return $this->hasMany('App\Responsibility');
     }
 }
