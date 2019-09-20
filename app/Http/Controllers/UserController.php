@@ -25,7 +25,7 @@ class UserController extends Controller
     {
 
         $user = User::find($request->id);
-
+        
         return view('profile.tasks', compact('user'));
     }
 
@@ -51,9 +51,11 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => $randomPassword,
             'position_id' => $request->positionId,
-            'responsibility_id' => $request->responsibilityId,
             'division_id' => $request->divisionId,
         ]);
+
+        $responsibilityIds = json_decode($request->responsibilityId);
+        $newUser->responsibilities()->attach($responsibilityIds);
 
         Password::broker()->sendResetLink(['email' => $newUser->email]);
 

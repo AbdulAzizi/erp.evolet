@@ -86,11 +86,9 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import dragscroll from "vue-dragscroll";
 export default {
   components: {
-    draggable,
-    dragscroll
+    draggable
   },
   props: ["users", "taskStatuses", "tasks"],
   data() {
