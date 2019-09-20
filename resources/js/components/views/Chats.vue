@@ -18,7 +18,7 @@
             <v-tabs-items v-model="tab">
                 <v-tab-item>
                     <v-list dense shaped>
-                        <v-list-item-group v-model="selectedChat" color="primary">
+                        <v-list-item-group v-model="selectedChatIndex" color="primary">
                             <v-list-item v-for="(chat, index) in chats" :key="'chat-'+index">
                                 <v-list-item-avatar>
                                     <v-img :src="photo(chat.img)"></v-img>
@@ -57,7 +57,7 @@
 
                             <v-list-item-content>
                                 <v-list-item-title>{{ user.name }} {{ user.surname }}</v-list-item-title>
-                                <v-list-item-subtitle>{{ user.position.name }}</v-list-item-subtitle>
+                                <v-list-item-subtitle>{{ user.position.name }} {{ user.division.abbreviation }}</v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list>
@@ -65,8 +65,8 @@
             </v-tabs-items>
         </v-navigation-drawer>
 
-        <v-toolbar flat  v-if="selectedChat != null">
-            <v-toolbar-title>{{chats[selectedChat].title}}</v-toolbar-title>
+        <v-toolbar flat v-if="secetedChat">
+            <v-toolbar-title>{{secetedChat.title}}</v-toolbar-title>
 
             <div class="flex-grow-1"></div>
 
@@ -82,29 +82,24 @@
                 </v-btn>
             </template>
         </v-toolbar>
+
         <v-divider></v-divider>
 
-        <!-- <div>{{chats[selectedChat]}}</div> -->
+        <comments v-if="secetedChat" :commentable="secetedChat" type="Chats" />
 
-        <comments
-        v-if="selectedChat != null"
-        :commentable="chats[selectedChat]"
-        type="Chats"
-        />
-        
-        <v-navigation-drawer permanent app clipped right v-if="selectedChat != null">
+        <v-navigation-drawer permanent app clipped right v-if="secetedChat">
             <template v-slot:prepend>
                 <v-list-item style="padding-bottom:2px;">
                     <v-list-item-avatar>
-                        <img :src="photo(chats[selectedChat].admin.img)" />
+                        <img :src="photo(secetedChat.admin.img)" />
                     </v-list-item-avatar>
 
                     <v-list-item-content>
                         <v-list-item-title>
-                            {{chats[selectedChat].admin.name}}
-                            {{chats[selectedChat].admin.surname}}
+                            {{secetedChat.admin.name}}
+                            {{secetedChat.admin.surname}}
                         </v-list-item-title>
-                        <v-list-item-subtitle>Admin</v-list-item-subtitle>
+                        <v-list-item-subtitle>Администратор</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
             </template>
@@ -112,7 +107,7 @@
             <v-divider></v-divider>
             <v-list dense>
                 <v-list-item
-                    v-for="( participant, index ) in chats[selectedChat].participants"
+                    v-for="( participant, index ) in secetedChat.participants"
                     :key="'participant-'+index"
                 >
                     <v-list-item-avatar>
@@ -124,13 +119,11 @@
                             {{participant.name}}
                             {{participant.surname}}
                         </v-list-item-title>
-                        <v-list-item-subtitle>{{participant.position.name}}</v-list-item-subtitle>
+                        <v-list-item-subtitle>{{participant.position.name}} {{participant.division.abbreviation}}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
-
-        <!-- <comments :commentable="commentable"></comments> -->
     </div>
 </template>
 
@@ -146,13 +139,13 @@ export default {
                 { title: "Photos", icon: "mdi-image" },
                 { title: "About", icon: "mdi-help-box" }
             ],
-            right: null,
             filteredUsers: this.users,
-            selectedChat: 0
+            selectedChatIndex: null,
+            secetedChat: null
         };
     },
     created() {
-        // console.log(this.chats);
+        this.selectedChatIndex = 0;
     },
     watch: {
         search(val) {
@@ -163,8 +156,34 @@ export default {
                 );
             });
         },
-        selectedChat(val) {
-            // console.log(this.chats[this.selectedChat]);
+        // On selected chat index change
+        selectedChatIndex(val) {
+            // Undo selected chat
+            this.secetedChat = null;
+            // Check if anything was selected
+            if (val != null) {
+                // Check if selected chat doesnt have details (comments)
+                if (this.chats[val].comments == undefined) {
+                    // Get selected chat
+                    let selectedChatId = this.chats[val].id;
+                    // Initialize 'this' to new variable to use later
+                    let self = this;
+                    // Send request to get details of selected chat
+                    axios.get( this.appPath(`api/chats/${selectedChatId}/details`) )
+                        // On Respond
+                        .then(function(response) {
+                            // Append details to local variable chats
+                            self.chats[val] = response.data;
+                            // Change selected chat
+                            self.secetedChat = self.chats[val];
+                            console.log(response.data);
+                        });
+                // If selected chat has details
+                } else {
+                    // Change selected chat
+                    this.secetedChat = this.chats[val];
+                }
+            }
         }
     }
 };

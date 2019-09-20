@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Events\NewComment;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -18,6 +19,8 @@ class CommentController extends Controller
 
         $comment->$type()->attach($request->commentable_id);
         $comment->load('user');
+
+        event(new NewComment($request->commentable_id, $comment));
         
         return $comment;
     }
