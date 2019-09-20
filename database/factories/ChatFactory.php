@@ -7,6 +7,6 @@ use Faker\Generator as Faker;
 
 $factory->define(Chat::class, function (Faker $faker) {
     return [
-        'title' => $faker->words($nb = 4, $asText = true)
+        'title' => $faker->realText($maxNbChars = 20)  
     ];
 });
