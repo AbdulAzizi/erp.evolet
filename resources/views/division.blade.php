@@ -5,14 +5,14 @@
 @php
 $isUserHead = false;
 
-if($division[0]->head){
-$isUserHead = $division[0]->head->id === $authUser->id;
+if($division->head){
+$isUserHead = $division->head->id === $authUser->id;
 }
 
 $isUserHead = json_encode($isUserHead);
 $oldInputs = json_encode(Session::getOldInput());
 $jsonPositions = json_encode($positions);
-$jsonResponsibilities = json_encode($responsibilities);
+$jsonResponsibilities = json_encode($division->responsibilities);
 
 
 @endphp
@@ -21,7 +21,7 @@ $jsonResponsibilities = json_encode($responsibilities);
     <v-layout>
         <v-flex xs10>
             <v-expansion-panels class="divisions">
-                <division :division="{{$division[0]}}" :is-user-head="{{$isUserHead}}" :is-root="true" />
+                <division :division="{{$division}}" :is-user-head="{{$isUserHead}}" :is-root="true" />
             </v-expansion-panels>
         </v-flex>
     </v-layout>

@@ -11,11 +11,15 @@ use Illuminate\Http\Request;
 class ResponsibilityController extends Controller
 {
 
-    public function show(Request $request)
+    public function show(Request $request, $id)
     {
         $user = User::with('responsibilities.descriptions')->find($request->id);
+        $division = new Division();
         
-        return view('profile.responsibility', compact('user'));
+        if( \Auth::user()->position->name = "Руководитель" && \Auth::user()->division->id == $user->division->id )
+            $division = Division::with('responsibilities')->find($user->division_id);
+        // return $user;
+        return view('profile.responsibility', compact('user','division'));
     }
 
     public function store()

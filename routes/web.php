@@ -68,7 +68,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/human-resources', 'HumanResourcesController@index')->name('human.resources');
     Route::get('/human-resources/resumes', 'HumanResourcesController@showResumes')->name('human.resources.resume');
 
-    Route::get('/messages', 'MessageController@index')->name('messages.index');
+    Route::get('/chats', 'ChatController@index')->name('chats.index');
 
 
 });
@@ -76,3 +76,4 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 // later must go API
 Route::post('/polls', 'PollController@storeApi')->prefix('api')->name('api.polls.store');
 Route::post('/comments', 'CommentController@storeApi')->prefix('api')->name('api.comments.store');
+Route::get('/chats/{id}/details', 'ChatController@getDetails')->prefix('api')->name('api.getDetails');

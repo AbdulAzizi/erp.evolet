@@ -14,7 +14,6 @@ import "vuetify/dist/vuetify.min.css";
 // import "material-design-icons-iconfont/dist/material-design-icons.css";
 import "@mdi/font/css/materialdesignicons.css";
 import moment from "moment-timezone";
-import draggable from 'vuedraggable';
 
 const vuetifyOptions = {
     theme: {
@@ -177,7 +176,8 @@ Vue.component("projects-list", require('./components/projects/List.vue').default
 Vue.component("projects-create", require('./components/projects/Create.vue').default);
 Vue.component("history", require('./components/History.vue').default);
 Vue.component("comments", require('./components/Comments.vue').default);
-Vue.component("kanban-view", require('./components/Draggable.vue').default);
+
+
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
@@ -252,7 +252,7 @@ Vue.component("human-resources-resumes", require("./components/views/HumanResour
 Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
 
 Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
-Vue.component("messages-view", require("./components/views/Messages.vue").default);
+Vue.component("kanban-view", require('./components/Kanban.vue').default);
 
 
 

@@ -45,20 +45,19 @@
 
     <tasks-table :tasks="tasks" :users="users" v-if="isTable"></tasks-table>
     <tasks-calendar :tasks="tasks" v-if="!isTable && isCalendar"></tasks-calendar>
-    <kanban-view v-if="!isTable && !isCalendar" :tasks="tasks" :users="users" :taskStatuses="statuses"/>
+    <kanban-view v-if="!isTable && !isCalendar" :tasks="tasks" :users="users" :taskStatuses="statuses" :authuser="authuser" />
     <tasks-add :users="users" :errors="errors" :tags="tags"/>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    tasks: Array,
-    users: Array,
-    tags: Array,
-    errors: Array,
-    statuses: Array
-  },
+  props: ['tasks',
+    'users',
+    'tags',
+    'errors',
+    'statuses',
+    'authuser'],
   data() {
     return {
       text: "table",

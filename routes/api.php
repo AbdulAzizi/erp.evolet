@@ -43,3 +43,5 @@ Route::delete('/deleteAchievment/{id}', 'ResumeController@achievmentDelete')->na
 Route::post('/notifications', 'UserController@notification')->name('user.notification');
 Route::put('/change-task-status/{id}', 'TaskController@changeStatus')->name('change.task.status');
 Route::post('/addStatus', 'TaskController@addStatus')->name('add.status');
+Route::put('/change-status-name/{id}', 'TaskController@changeStatusName')->name('change.status.name');
+Route::delete('/delete-status/{id}', 'TaskController@deleteStatus')->name('delete.status');

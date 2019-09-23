@@ -16,7 +16,7 @@
               type: 'select',
               name: 'responsibility_id',
               label: 'Полномочия',
-              items:  this.user.responsibilities,
+              items:  this.responsibilities,
               rules: ['required']
             },
             {
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  props: ["user"],
+  props: ["user","responsibilities"],
   data() {
     return {};
   },

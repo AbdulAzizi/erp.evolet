@@ -7,5 +7,6 @@
     :errors="{{ $errors }}"
     :tags="{{ $tags }}"
     :statuses="{{ $statuses }}"
+    :authuser="{{ $authUser }}"
     ></tasks-view>
 @endsection
