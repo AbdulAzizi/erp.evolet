@@ -275,6 +275,7 @@ Vue.component(
     require("./components/views/HumanResourcesResumes.vue").default
 );
 
+Vue.component("kanban-view", require('./components/Kanban.vue').default);
 Vue.component(
     "resumes-head-view",
     require("./components/views/HeadResume.vue").default
