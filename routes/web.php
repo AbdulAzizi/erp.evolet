@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/human-resources/resumes', 'HumanResourcesController@showResumes')->name('human.resources.resume');
 
     Route::get('/chats', 'ChatController@index')->name('chats.index');
+    Route::post('/chats', 'ChatController@store')->name('chats.store');
 
 
 });

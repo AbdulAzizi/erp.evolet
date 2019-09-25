@@ -8,7 +8,10 @@ class Chat extends Model
 {
     public $timestamps = false;
 
-    
+    protected $fillable = [
+        'title', 'admin_id'
+    ];
+
     public function participants()
     {
         return $this->belongsToMany('App\User','chat_participants');

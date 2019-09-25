@@ -27,4 +27,17 @@ class ChatController extends Controller
     {
         return Chat::with('admin','participants.division', 'comments.user')->find($id);
     }
+
+    public function store(Request $request)
+    {
+        $chat = Chat::create([
+            'title' => $request->title,
+            'admin_id' => auth()->user()->id
+        ]);
+        
+        $participants = json_decode($request->participants);
+        $chat->participants()->attach($participants);
+
+        return redirect()->route('chats.index');
+    }
 }

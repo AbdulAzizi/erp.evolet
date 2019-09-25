@@ -15,11 +15,49 @@
                 </v-tabs>
             </template>
 
+            <dynamic-form
+                width="500"
+                :fieldsPerRows="[1]"
+                :fields="newGroupFields"
+                title="Новая Группа"
+                activatorEventName="newGroupDialog"
+                :actionUrl="appPath('chats')"
+                method="post"
+                :dialog="true"
+            ></dynamic-form>
+
             <v-tabs-items v-model="tab">
+                <v-tab-item>Chats</v-tab-item>
                 <v-tab-item>
-                    <v-list dense shaped>
+                    <v-text-field
+                        v-model="groupSearch"
+                        class="ma-3"
+                        label="Поиск групп"
+                        single-line
+                        rounded
+                        filled
+                        hide-details
+                    ></v-text-field>
+                    <v-divider></v-divider>
+                    <v-list
+                        dense
+                        shaped
+                        style="max-height: calc(100vh - 177px); overflow-y: scroll;"
+                    >
+                        <v-list-item @click="newGroupDialog">
+                            <v-list-item-avatar color="primary">
+                                <v-icon color="white">mdi-plus</v-icon>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title>Новая Группа</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
                         <v-list-item-group v-model="selectedChatIndex" color="primary">
-                            <v-list-item v-for="(chat, index) in chats" :key="'chat-'+index">
+                            <v-list-item
+                                v-for="(chat, index) in filteredGroups"
+                                :key="'chat-'+index"
+                                :value="chat.id"
+                            >
                                 <v-list-item-avatar>
                                     <v-img :src="photo(chat.img)"></v-img>
                                 </v-list-item-avatar>
@@ -30,12 +68,11 @@
                         </v-list-item-group>
                     </v-list>
                 </v-tab-item>
-                <v-tab-item>Group</v-tab-item>
                 <v-tab-item>
                     <v-text-field
-                        v-model="search"
+                        v-model="contactSearch"
                         class="ma-3"
-                        label="Search"
+                        label="Поиск контактов"
                         single-line
                         rounded
                         filled
@@ -65,8 +102,8 @@
             </v-tabs-items>
         </v-navigation-drawer>
 
-        <v-toolbar flat v-if="secetedChat">
-            <v-toolbar-title>{{secetedChat.title}}</v-toolbar-title>
+        <v-toolbar flat v-if="selectedChat">
+            <v-toolbar-title>{{selectedChat.title}}</v-toolbar-title>
 
             <div class="flex-grow-1"></div>
 
@@ -85,19 +122,19 @@
 
         <v-divider></v-divider>
 
-        <comments v-if="secetedChat" :commentable="secetedChat" type="Chats" />
+        <comments v-if="selectedChat" :commentable="selectedChat" type="Chats" />
 
-        <v-navigation-drawer permanent app clipped right v-if="secetedChat">
+        <v-navigation-drawer permanent app clipped right v-if="selectedChat">
             <template v-slot:prepend>
                 <v-list-item style="padding-bottom:2px;">
                     <v-list-item-avatar>
-                        <img :src="photo(secetedChat.admin.img)" />
+                        <img :src="photo(selectedChat.admin.img)" />
                     </v-list-item-avatar>
 
                     <v-list-item-content>
                         <v-list-item-title>
-                            {{secetedChat.admin.name}}
-                            {{secetedChat.admin.surname}}
+                            {{selectedChat.admin.name}}
+                            {{selectedChat.admin.surname}}
                         </v-list-item-title>
                         <v-list-item-subtitle>Администратор</v-list-item-subtitle>
                     </v-list-item-content>
@@ -107,7 +144,7 @@
             <v-divider></v-divider>
             <v-list dense>
                 <v-list-item
-                    v-for="( participant, index ) in secetedChat.participants"
+                    v-for="( participant, index ) in selectedChat.participants"
                     :key="'participant-'+index"
                 >
                     <v-list-item-avatar>
@@ -133,55 +170,101 @@ export default {
     data() {
         return {
             tab: null,
-            search: null,
+
+            groupSearch: null,
+            filteredUsers: this.users,
+
+            contactSearch: null,
+            filteredGroups: this.chats,
+
             items: [
                 { title: "Dashboard", icon: "mdi-view-dashboard" },
                 { title: "Photos", icon: "mdi-image" },
                 { title: "About", icon: "mdi-help-box" }
             ],
-            filteredUsers: this.users,
             selectedChatIndex: null,
-            secetedChat: null
+            selectedChat: null,
+            newGroupFields: [
+                {
+                    type: "string",
+                    name: "title",
+                    label: "Название",
+                    rules: ["required"],
+                    icon: "mdi-text-short"
+                },
+                {
+                    type: "users",
+                    name: "participants",
+                    label: "Участники",
+                    rules: ["required"],
+                    icon: "mdi-account-group",
+                    users: this.users,
+                    multiple: true
+                }
+            ]
         };
     },
+    methods: {
+        newGroupDialog() {
+            Event.fire("newGroupDialog");
+        }
+        // On selected chat index change
+        // handleGroup(index, id) {
+
+        // }
+    },
     created() {
-        this.selectedChatIndex = 0;
+        this.selectedChatIndex = this.chats[0].id;
     },
     watch: {
-        search(val) {
+        contactSearch(val) {
             this.filteredUsers = this.users.filter(user => {
                 return (
-                    new RegExp(this.search, "gi").test(user.name) ||
-                    new RegExp(this.search, "gi").test(user.surname)
+                    new RegExp(this.contactSearch, "gi").test(user.name) ||
+                    new RegExp(this.contactSearch, "gi").test(user.surname)
                 );
             });
         },
-        // On selected chat index change
-        selectedChatIndex(val) {
+        groupSearch(val) {
+            this.filteredGroups = this.chats.filter(chat => {
+                return new RegExp(this.groupSearch, "gi").test(chat.title);
+            });
+        },
+        selectedChatIndex(id) {
             // Undo selected chat
-            this.secetedChat = null;
+            this.selectedChat = null;
             // Check if anything was selected
-            if (val != null) {
+            if (id != null) {
+
+                let index = null;
+                let chat = null;
+                // get chat from chats
+                this.chats.map((el, key) => {
+                    if (el.id == id){
+                        index = key;
+                        chat = el;
+                    }
+                });
+
                 // Check if selected chat doesnt have details (comments)
-                if (this.chats[val].comments == undefined) {
-                    // Get selected chat
-                    let selectedChatId = this.chats[val].id;
+                if (chat.comments == undefined) {
                     // Initialize 'this' to new variable to use later
                     let self = this;
                     // Send request to get details of selected chat
-                    axios.get( this.appPath(`api/chats/${selectedChatId}/details`) )
+                    axios
+                        .get(this.appPath(`api/chats/${id}/details`))
                         // On Respond
                         .then(function(response) {
                             // Append details to local variable chats
-                            self.chats[val] = response.data;
+                            self.chats[index] = response.data;
                             // Change selected chat
-                            self.secetedChat = self.chats[val];
-                            console.log(response.data);
+                            self.selectedChat = response.data;
+                            console.log("Ajax sent");
                         });
-                // If selected chat has details
+                    // If selected chat has details
                 } else {
                     // Change selected chat
-                    this.secetedChat = this.chats[val];
+                    this.selectedChat = chat;
                 }
             }
         }
