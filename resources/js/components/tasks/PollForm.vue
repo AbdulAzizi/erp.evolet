@@ -1,14 +1,14 @@
 <template>
-    <v-card class="poll-form">
+    <v-card class="poll-form" flat>
         <v-toolbar flat dense color="primary" dark>
             <v-toolbar-title>{{localPoll.body}}</v-toolbar-title>
         </v-toolbar>
 
         <v-card-text class="pt-0 pb-1">
             <v-row>
-                <v-radio-group v-model="selectedOption" style="width:100% !important;">
+                <v-radio-group v-model="selectedOption" style="width:100% !important;" hide-details>
                     <template v-for="(option, index) in localPoll.options">
-                        <v-col cols="12" :key="'progress-text-'+index">
+                        <v-col cols="12 py-0" :key="'progress-text-'+index">
                             <v-radio :value="option" color="primary">
                                 <template v-slot:label>
                                     <v-row style="width:100% !important;">

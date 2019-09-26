@@ -45,3 +45,4 @@ Route::put('/change-task-status/{id}', 'TaskController@changeStatus')->name('cha
 Route::post('/addStatus', 'TaskController@addStatus')->name('add.status');
 Route::put('/change-status-name/{id}', 'TaskController@changeStatusName')->name('change.status.name');
 Route::delete('/delete-status/{id}', 'TaskController@deleteStatus')->name('delete.status');
+Route::get('/select-task/{id}', 'TaskController@selectTask')->name('select.task');
