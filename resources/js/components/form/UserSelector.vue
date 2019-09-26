@@ -27,7 +27,7 @@
                     <v-avatar left>
                         <img :src="photo(data.item.img)">
                     </v-avatar>
-                    {{ data.item.name }}
+                    {{ data.item.name }} {{data.item.surname}}
                 </v-chip>
             </template>
 

@@ -24,9 +24,9 @@
                     </v-container>
                 </v-card-text>
                 <v-card-actions>
-                    <v-spacer></v-spacer>
                     <!--//TODO Add dynamic actions -->
                     <v-btn color="primary" text v-if="dialog" @click="show = false">Отмена</v-btn>
+                    <v-spacer></v-spacer>
                     <v-btn color="primary" type="submit" @click="submit">Добавить</v-btn>
                 </v-card-actions>
             </v-card>
