@@ -201,7 +201,6 @@ Vue.component(
 Vue.component("history", require("./components/History.vue").default);
 Vue.component("comments", require("./components/Comments.vue").default);
 Vue.component("kanban-view", require("./components/Kanban.vue").default);
-Vue.component("kanban-task-card", require("./components/kanban/TaskCard.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
