@@ -59,7 +59,7 @@
             <v-card-text class="pa-2">
               <v-text-field
                 v-model="updateListName"
-                label="Name"
+                label="Название"
                 required
                 :rules="rules"
                 class="pb-2"
@@ -75,14 +75,14 @@
                 :loading="loading"
                 :disabled="loading"
                 @click="listUpdate(status.id)"
-              >Add</v-btn>
+              >изменить</v-btn>
               <v-btn
                 small
                 color="red lighten-2"
                 dark
                 class="float-right"
                 @click="updateListForm = null"
-              >cancel</v-btn>
+              >отмена</v-btn>
             </v-card-text>
           </v-form>
         </v-card>
@@ -120,7 +120,7 @@
                     <template v-slot:activator="{ on }">
                       <v-icon small v-if="el.watchers.length > 0" v-on="on">mdi-eye-outline</v-icon>
                     </template>
-                    <span>Наблюдатели</span>
+                    <span>У этого задания есть наблюдатели</span>
                   </v-tooltip>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
@@ -161,7 +161,7 @@
       <div>
         <v-card color="grey lighten-3" class="card-btn" outlined v-show="!addListForm" height="50px">
           <v-card-text class="pt-3 font-weight-bold" @click="addListForm = true">
-            <p>+ Add another list</p>
+            <p>+ Добавить новый лист</p>
           </v-card-text>
         </v-card>
         <v-card v-if="addListForm" outlined>
@@ -169,7 +169,7 @@
             <v-card-text class="pa-2">
               <v-text-field
                 v-model="listName"
-                label="Name"
+                label="Название"
                 required
                 :rules="rules"
                 class="pb-2"
@@ -184,14 +184,14 @@
                 :loading="loading"
                 :disabled="loading"
                 @click="addList"
-              >Add</v-btn>
+              >добавить</v-btn>
               <v-btn
                 small
                 color="red lighten-2"
                 dark
                 class="float-right"
                 @click="closeNewList"
-              >cancel</v-btn>
+              >отмена</v-btn>
             </v-card-text>
           </v-form>
         </v-card>
@@ -227,9 +227,9 @@ export default {
       selectedTask: null,
       check: [],
       priorities: [
-        { id: 0, label: "Низкий", color: "light-blue lighten-4" },
-        { id: 1, label: "Средний", color: "amber lighten-1" },
-        { id: 2, label: "Высокий", color: "red" }
+        { id: 0, label: "Низкий", color: "green lighten-3" },
+        { id: 1, label: "Средний", color: "blue lighten-3" },
+        { id: 2, label: "Высокий", color: "red lighten-3" }
       ]
     };
   },

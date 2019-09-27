@@ -1,5 +1,5 @@
 <template>
-  <v-card style="background-color:#f4f5f7;">
+  <v-card style="background-color:#f4f5f7;" height="80vh">
     <v-row no-gutters>
       <v-col cols="8" >
         <v-toolbar dense flat>
@@ -23,7 +23,6 @@
               </v-list>
             </v-card>
           </v-menu>
-
           <template v-slot:extension>
             <v-tabs v-model="tab">
               <v-tab href="#task">Задача</v-tab>
@@ -44,31 +43,6 @@
         </v-toolbar>
         <v-tabs-items v-model="tab" style="background-color:#f4f5f7;" class="task-main-content">
           <v-tab-item value="task">
-            <!-- <v-card-title>
-            <p>{{task.title}}</p>
-          </v-card-title>
-            <p>Участники</p>
-            <avatars-set :items="usersForAvatar" item-hint="role" class="pl-3"></avatars-set>
-            <p class="pt-4">
-              <v-icon small>mdi-calendar-clock</v-icon>
-              <span>{{ moment(task.deadline).format('D MMMM Y') }} - {{ moment(task.created_at).format('D MMMM Y') }}</span>
-            </p>
-            <p>
-              <v-icon small>mdi-timelapse</v-icon>
-              <span v-if="durObj(task.planned_time).days()">{{ durObj(task.planned_time).days() }}д</span>
-              <span
-                v-if="durObj(task.planned_time).hours()"
-              >{{ durObj(task.planned_time).hours() }}ч</span>
-              <span
-                v-if="durObj(task.planned_time).minutes()"
-              >{{ durObj(task.planned_time).minutes() }}м</span>
-            </p>
-            <p>
-              <v-icon small>mdi-format-list-checks</v-icon>
-              <span>{{ task.status.name }}</span>
-            </p>
-
-            <priority :id="task.priority" classes=" lighten-3"></priority>-->
             <v-card-text>
               <p class="font-weight-bold">Описание</p>
               {{task.description ? task.description : ''}}
@@ -324,5 +298,6 @@ export default {
 .task-main-content {
   /* max-height: 20rem; */
   overflow-y: auto;
+  min-height: 80vh;
 }
 </style>
