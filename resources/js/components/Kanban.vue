@@ -116,13 +116,13 @@
               <v-card-text class="pa-2">
                 <p class="font-weight-bold mb-1">{{el.title}}</p>
                 <p class="mb-1">
-                  <v-tooltip bottom>
+                  <v-tooltip bottom z-index="100">
                     <template v-slot:activator="{ on }">
                       <v-icon small v-if="el.watchers.length > 0" v-on="on">mdi-eye-outline</v-icon>
                     </template>
                     <span>У этого задания есть наблюдатели</span>
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip bottom z-index="100">
                     <template v-slot:activator="{ on }">
                       <span v-on="on">
                         <v-icon small>mdi-clock-outline</v-icon>
@@ -131,7 +131,7 @@
                     </template>
                     <span>Дедлайн</span>
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip bottom z-index="100">
                     <template v-slot:activator="{ on }">
                       <v-icon small v-if="el.description" v-on="on">mdi-sort-variant</v-icon>
                     </template>
@@ -149,9 +149,7 @@
                     v-for="(tag, index) in el.tags"
                     :key="'tag-'+index"
                     small
-                  >
-                    {{ tag.name }}
-                  </v-chip>
+                  >{{ tag.name }}</v-chip>
                 </p>
               </v-card-text>
             </v-card>
@@ -159,7 +157,13 @@
         </v-card>
       </div>
       <div>
-        <v-card color="grey lighten-3" class="card-btn" outlined v-show="!addListForm" height="50px">
+        <v-card
+          color="grey lighten-3"
+          class="card-btn"
+          outlined
+          v-show="!addListForm"
+          height="50px"
+        >
           <v-card-text class="pt-3 font-weight-bold" @click="addListForm = true">
             <p>+ Добавить новый лист</p>
           </v-card-text>
@@ -397,7 +401,7 @@ export default {
 }
 .list-group {
   cursor: pointer;
-  min-height: 10vh;
+  min-height: 11vh;
   list-style: none;
 }
 .scrollable-card {
@@ -415,6 +419,10 @@ export default {
   overflow-y: hidden;
   height: 100%;
   position: relative;
+  min-height: calc(100vh - 125px);
+}
+.parent-container::-webkit-scrollbar {
+  height: 8px !important;
 }
 .parent-container > div {
   width: 300px;

@@ -1,5 +1,5 @@
 <template>
-  <v-card style="background-color:#f4f5f7;" height="80vh">
+  <v-card style="background-color:#f4f5f7;" min-height="60vh">
     <v-row no-gutters>
       <v-col cols="8" >
         <v-toolbar dense flat>
@@ -25,7 +25,7 @@
           </v-menu>
           <template v-slot:extension>
             <v-tabs v-model="tab">
-              <v-tab href="#task">Задача</v-tab>
+              <v-tab href="#task" class="ma-0">Задача</v-tab>
               <v-tab href="#comments">Коментарии</v-tab>
               <v-tab href="#history">История</v-tab>
 
