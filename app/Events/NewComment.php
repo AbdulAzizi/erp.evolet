@@ -14,18 +14,20 @@ class NewComment implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $comment;
     public $id;
+    public $type;
+    public $comment;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct( $id , $comment)
+    public function __construct( $id , $type, $comment)
     {
-        $this->comment = $comment;
         $this->id = $id;
+        $this->type = $type;
+        $this->comment = $comment;
     }
 
     /**
@@ -35,6 +37,15 @@ class NewComment implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('chats.' . $this->id);
+        $authID = auth()->user()->id;
+        switch ($this->type) {
+            case 'App\User':
+                return new Channel("newComment.Users.$this->id.$authID");
+                break;
+            
+            default:
+                return new Channel("newComment.Chats.$this->id");
+                break;
+        }
     }
 }

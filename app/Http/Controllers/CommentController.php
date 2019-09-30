@@ -10,17 +10,17 @@ class CommentController extends Controller
 {
     public function storeApi(Request $request)
     {
+        // return $request;
         $comment = Comment::create([
             'user_id' => auth()->user()->id,
             'body' => $request->body,
+            'commentable_id' => $request->commentable_id,
+            'commentable_type' => $request->commentable_type
         ]);
+        
+        $comment->load('sender');
 
-        $type = $request->commentable_type;
-
-        $comment->$type()->attach($request->commentable_id);
-        $comment->load('user');
-
-        event(new NewComment($request->commentable_id, $comment));
+        event(new NewComment($comment->commentable_id, $comment->commentable_type, $comment));
         
         return $comment;
     }

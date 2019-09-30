@@ -17,14 +17,22 @@ class CommentTableSeeder extends Seeder
         $tasks = Task::all();
         $chats = Chat::all();
 
-        $comments = factory(Comment::class, 50)->create()->pluck('id')->toArray();
+        // $comments = factory(Comment::class, 50)->create()->pluck('id')->toArray();
 
         foreach ($tasks as $task) {
-            $task->comments()->attach(array_rand($comments, rand(1,15)));
+            factory(Comment::class, 10)->create([
+                'commentable_id' => $task->id,
+                'commentable_type' => "App\Task"
+            ]);
+            // $task->comments()->attach(array_rand($comments, rand(1,15)));
         }
 
         foreach ($chats as $chat) {
-            $chat->comments()->attach(array_rand($comments, rand(1,15)));
+            factory(Comment::class, 10)->create([
+                'commentable_id' => $chat->id,
+                'commentable_type' => "App\Chat"
+            ]);
+            // $chat->comments()->attach(array_rand($comments, rand(1,15)));
         }
     }
 }

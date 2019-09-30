@@ -145,4 +145,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Chat');
     }
+
+    public function comments()
+    {
+        return $this->morphMany('App\Comment','commentable');
+    }
 }

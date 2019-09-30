@@ -84,19 +84,21 @@
                         shaped
                         style="max-height: calc(100vh - 177px); overflow-y: scroll;"
                     >
-                        <v-list-item v-for="user in filteredUsers" :key="user.title" @click>
-                            <!-- <v-list-item-icon>
+                        <v-list-item-group v-model="selectedUser" color="primary">
+                            <v-list-item v-for="user in filteredUsers" :key="user.title" :value="user.id">
+                                <!-- <v-list-item-icon>
                             <v-icon>{{ user.icon }}</v-icon>
-                            </v-list-item-icon>-->
-                            <v-list-item-avatar>
-                                <v-img :src="appPath('img/'+user.img)"></v-img>
-                            </v-list-item-avatar>
+                                </v-list-item-icon>-->
+                                <v-list-item-avatar>
+                                    <v-img :src="appPath('img/'+user.img)"></v-img>
+                                </v-list-item-avatar>
 
-                            <v-list-item-content>
-                                <v-list-item-title>{{ user.name }} {{ user.surname }}</v-list-item-title>
-                                <v-list-item-subtitle>{{ user.position.name }} {{ user.division.abbreviation }}</v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-list-item>
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ user.name }} {{ user.surname }}</v-list-item-title>
+                                    <v-list-item-subtitle>{{ user.position.name }} {{ user.division.abbreviation }}</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list-item-group>
                     </v-list>
                 </v-tab-item>
             </v-tabs-items>
@@ -109,22 +111,16 @@
 
             <template v-if="$vuetify.breakpoint.smAndUp">
                 <v-btn icon>
-                    <v-icon>mdi-export-variant</v-icon>
-                </v-btn>
-                <v-btn icon>
-                    <v-icon>mdi-delete-circle</v-icon>
-                </v-btn>
-                <v-btn icon>
-                    <v-icon>mdi-plus-circle</v-icon>
+                    <v-icon>mdi-pencil</v-icon>
                 </v-btn>
             </template>
         </v-toolbar>
 
         <v-divider></v-divider>
 
-        <comments v-if="selectedChat" :commentable="selectedChat" type="Chats" />
+        <comments v-if="selectedChat" :commentable="selectedChat" :type="selectedType" />
 
-        <v-navigation-drawer permanent app clipped right v-if="selectedChat">
+        <v-navigation-drawer permanent app clipped right v-if="selectedChat && ( selectedType != 'App\\User' )">
             <template v-slot:prepend>
                 <v-list-item style="padding-bottom:2px;">
                     <v-list-item-avatar>
@@ -201,7 +197,8 @@ export default {
                     users: this.users,
                     multiple: true
                 }
-            ]
+            ],
+            selectedUser: null
         };
     },
     methods: {
@@ -233,14 +230,14 @@ export default {
         selectedChatIndex(id) {
             // Undo selected chat
             this.selectedChat = null;
+            this.selectedType = null;
             // Check if anything was selected
             if (id != null) {
-
                 let index = null;
                 let chat = null;
                 // get chat from chats
                 this.chats.map((el, key) => {
-                    if (el.id == id){
+                    if (el.id == id) {
                         index = key;
                         chat = el;
                     }
@@ -259,14 +256,37 @@ export default {
                             self.chats[index] = response.data;
                             // Change selected chat
                             self.selectedChat = response.data;
-                            console.log("Ajax sent");
+                            self.selectedType = "App\\Chat";
                         });
                     // If selected chat has details
                 } else {
                     // Change selected chat
                     this.selectedChat = chat;
+                    this.selectedType = "App\\Chat";
                 }
             }
+        },
+        selectedUser(id) {
+            this.selectedChat = null;
+            let self = this;
+            axios
+                .get(this.appPath(`api/conversations/${id}`))
+                // On Respond
+                .then(function(response) {
+                    self.selectedChat = {
+                        comments: response.data,
+                        id : id
+                    }
+                    self.selectedType = "App\\User";
+                    
+                    console.log(self.selectedChat);
+                    
+                    // console.log(response.data);
+                });
+        },
+        selectedChat(val){
+            // console.log("selectedChat");
+            // console.log(val);
         }
     }
 };
