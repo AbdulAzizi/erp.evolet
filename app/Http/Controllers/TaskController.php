@@ -30,8 +30,8 @@ class TaskController extends Controller
                 'from',
                 'responsible',
                 'watchers',
-                'status'
-                //      'tags',
+                'status',
+                'tags'
                 //     'history.user',
                 //     'polls.options.users'
             )
@@ -282,5 +282,26 @@ class TaskController extends Controller
         $status->delete();
 
         return 'success';
+    }
+
+    public function selectTask($id)
+    {
+        $task = Task::with(
+            'watchers',
+            'responsible',
+            'from',
+            'status',
+            'tags',
+            'history.user',
+            'polls.options.users',
+            'comments.user'
+        )->find($id);
+
+        // if has front tether load it
+        if ($task->from_type == "App\Process") {
+            $task->from->load('frontTethers.form.fields', 'backTethers');
+        }
+
+        return $task;
     }
 }

@@ -23,6 +23,9 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="cardDialog" v-if="cardDialog" width="800px">
+      <task :item="selectedTask" :users="users"></task>
+    </v-dialog>
     <div class="parent-container">
       <div v-for="(status, index) in statuses" :key="index">
         <v-hover v-slot:default="{hover}" v-if="updateListForm !== status.id">
@@ -56,7 +59,7 @@
             <v-card-text class="pa-2">
               <v-text-field
                 v-model="updateListName"
-                label="Name"
+                label="Название"
                 required
                 :rules="rules"
                 class="pb-2"
@@ -72,19 +75,23 @@
                 :loading="loading"
                 :disabled="loading"
                 @click="listUpdate(status.id)"
-              >Add</v-btn>
+              >изменить</v-btn>
               <v-btn
                 small
                 color="red lighten-2"
                 dark
                 class="float-right"
                 @click="updateListForm = null"
-              >cancel</v-btn>
+              >отмена</v-btn>
             </v-card-text>
           </v-form>
         </v-card>
-        <div class="stick-top"></div>
-        <v-card color="grey lighten-3" outlined class="scrollable-card">
+        <v-card
+          color="grey lighten-3"
+          outlined
+          class="scrollable-card"
+          style="border-top:8px solid red;border-bottom:8px solid red;"
+        >
           <draggable
             class="list-group"
             @start="isDragging = true"
@@ -100,39 +107,65 @@
             <v-card
               v-for="el in status.items"
               :key="el.id"
-              class="mx-2 mb-2 mt-1"
+              class="mx-2 mb-2"
               :dataId="el.id"
               flat
+              @click="showSelectedTask(el)"
             >
-              <v-card-text>
-                <p>{{el.title}}</p>
-                <p>
-                  <span class="float-left">Progress</span>
-                  <span class="mb-2 float-right">{{progressValue}}%</span>
+              <v-system-bar :color="priorities[el.priority].color" height="5px"></v-system-bar>
+              <v-card-text class="pa-2">
+                <p class="font-weight-bold mb-1">{{el.title}}</p>
+                <p class="mb-1">
+                  <v-tooltip bottom z-index="100">
+                    <template v-slot:activator="{ on }">
+                      <v-icon small v-if="el.watchers.length > 0" v-on="on">mdi-eye-outline</v-icon>
+                    </template>
+                    <span>У этого задания есть наблюдатели</span>
+                  </v-tooltip>
+                  <v-tooltip bottom z-index="100">
+                    <template v-slot:activator="{ on }">
+                      <span v-on="on">
+                        <v-icon small>mdi-clock-outline</v-icon>
+                        <span class="caption">{{moment(el.deadline).format('D MMMM')}}</span>
+                      </span>
+                    </template>
+                    <span>Дедлайн</span>
+                  </v-tooltip>
+                  <v-tooltip bottom z-index="100">
+                    <template v-slot:activator="{ on }">
+                      <v-icon small v-if="el.description" v-on="on">mdi-sort-variant</v-icon>
+                    </template>
+                    <span>У этого задания есть описание</span>
+                  </v-tooltip>
                 </p>
-                <v-progress-linear v-model="progressValue" color="primary" class="mb-2" />
-
-                <p>
-                  <span class="float-left">Due date</span>
-                  <span class="float-right">{{el.deadline}}</span>
+                <p class="mb-1">
+                  <avatars-set :items="usersForAvatar(el)" :size="30" item-hint="role" />
                 </p>
-                <br />
-                <p>
-                  <span class="float-left">Team</span>
-                  <span class="float-right">
-                    <avatar :user="el.responsible" :size="25" />
-                  </span>
+                <p class="mt-4 mb-0">
+                  <v-chip
+                    class="mb-2 mr-2"
+                    color="grey lighten-4"
+                    text-color="grey darken-1"
+                    v-for="(tag, index) in el.tags"
+                    :key="'tag-'+index"
+                    small
+                  >{{ tag.name }}</v-chip>
                 </p>
               </v-card-text>
             </v-card>
           </draggable>
         </v-card>
-        <div class="stick-bottom"></div>
       </div>
       <div>
-        <v-card color="grey lighten-3" class="card-btn" outlined v-if="!addListForm" height="50px">
+        <v-card
+          color="grey lighten-3"
+          class="card-btn"
+          outlined
+          v-show="!addListForm"
+          height="50px"
+        >
           <v-card-text class="pt-3 font-weight-bold" @click="addListForm = true">
-            <p>+ Add another list</p>
+            <p>+ Добавить новый лист</p>
           </v-card-text>
         </v-card>
         <v-card v-if="addListForm" outlined>
@@ -140,7 +173,7 @@
             <v-card-text class="pa-2">
               <v-text-field
                 v-model="listName"
-                label="Name"
+                label="Название"
                 required
                 :rules="rules"
                 class="pb-2"
@@ -155,14 +188,14 @@
                 :loading="loading"
                 :disabled="loading"
                 @click="addList"
-              >Add</v-btn>
+              >добавить</v-btn>
               <v-btn
                 small
                 color="red lighten-2"
                 dark
                 class="float-right"
                 @click="closeNewList"
-              >cancel</v-btn>
+              >отмена</v-btn>
             </v-card-text>
           </v-form>
         </v-card>
@@ -172,6 +205,7 @@
 </template>
 <script>
 import draggable from "vuedraggable";
+import { send } from "q";
 export default {
   components: {
     draggable
@@ -189,17 +223,24 @@ export default {
       ),
       acceptBeforeDelete: null,
       statuses: [],
-      progressValue: 50,
       loading: false,
       rules: [v => !!v || "Форма должна быть заполнена"],
       dialog: false,
-      warning: false
+      warning: false,
+      cardDialog: false,
+      selectedTask: null,
+      check: [],
+      priorities: [
+        { id: 0, label: "Низкий", color: "green lighten-3" },
+        { id: 1, label: "Средний", color: "blue lighten-3" },
+        { id: 2, label: "Высокий", color: "red lighten-3" }
+      ]
     };
   },
   computed: {
     dragOptions() {
       return {
-        animation: 200,
+        animation: 250,
         group: "description",
         disabled: false,
         ghostClass: "ghost"
@@ -314,6 +355,36 @@ export default {
           }
         });
       });
+    },
+    showSelectedTask(task) {
+      let checkTask = this.check.some(elem => elem.id == task.id);
+      if (!checkTask) {
+        axios.get(`/api/select-task/${task.id}`, {}).then(res => {
+          this.check.push(res.data);
+          this.selectedTask = res.data;
+          this.cardDialog = true;
+        });
+      } else {
+        this.check.forEach(elem => {
+          if (elem.id === task.id) {
+            this.selectedTask = elem;
+            this.cardDialog = true;
+          }
+        });
+      }
+    },
+    usersForAvatar(task) {
+      let users = task.watchers.map(watcher => {
+        watcher["role"] = "Наблюдатель";
+        return watcher;
+      });
+
+      task.responsible["role"] = "Исполнитель";
+      task.from["role"] = "Постановщик";
+
+      users.push(task.responsible, task.from);
+
+      return users;
     }
   },
   created() {
@@ -321,17 +392,16 @@ export default {
     this.userStatuses.forEach(elem => this.statuses.push(elem));
     this.prepareStatuses();
     this.preparestatusItems();
-    this.lists = this.statuses;
   }
 };
 </script>
 <style>
 .ghost {
-  transition: transform 1s;
+  opacity: 0;
 }
 .list-group {
   cursor: pointer;
-  min-height: 15vh;
+  min-height: 11vh;
   list-style: none;
 }
 .scrollable-card {
@@ -349,33 +419,15 @@ export default {
   overflow-y: hidden;
   height: 100%;
   position: relative;
+  min-height: calc(100vh - 125px);
+}
+.parent-container::-webkit-scrollbar {
+  height: 8px !important;
 }
 .parent-container > div {
   width: 300px;
   flex: 0 0 auto;
   margin-right: 1%;
   margin-bottom: 1%;
-}
-.stick-top {
-  height: 8px;
-  width: 100%;
-  background: #eeeeee;
-  position: sticky;
-  position: -webkit-sticky;
-  z-index: 2;
-  margin-bottom: -5px;
-  border: solid 0.5px #eeeeee;
-  border-radius: 10px;
-}
-.stick-bottom {
-  height: 7px;
-  width: 100%;
-  background: #eeeeee;
-  position: sticky;
-  position: -webkit-sticky;
-  z-index: 2;
-  margin-top: -5px;
-  border: solid 0.5px #eeeeee;
-  border-radius: 10px;
 }
 </style>

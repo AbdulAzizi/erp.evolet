@@ -1,5 +1,5 @@
 <template>
-    <v-timeline dense>
+    <v-timeline dense flat >
         <v-timeline-item v-for="(historyItem, i) in sortedHistory" :key="i">
             <!-- <template v-slot:opposite>
                 <span class="caption mb-0">{{getDate(historyItem.happened_at)}}</span>
@@ -11,7 +11,7 @@
                     </v-avatar>
                 </a>
             </template>
-            <v-card class="elevation-2">
+            <v-card>
                 <v-card-text v-html="historyItem.description+'<br>'+getDate(historyItem.happened_at)"></v-card-text>
             </v-card>
         </v-timeline-item>
