@@ -1,17 +1,17 @@
 <template>
-    <v-container fluid class="py-0">
-        <v-row style="height:400px; overflow:auto;" ref="asd">
+    <v-container fluid class="py-0 grey lighten-3" >
+        <v-row style="height:calc(100vh - 230px); overflow:auto;" ref="commentsWrapper">
             <v-container fluid>
                 <v-row
                     v-for="(comment,index) in localCommentable.comments"
                     :key="'comment-'+index"
-                    :justify="(( comment.user.id === auth.id ) ? 'end' : 'start')"
+                    :justify="(( comment.sender.id === auth.id ) ? 'end' : 'start')"
                 >
                     <avatar
-                        :user="comment.user"
+                        :user="comment.sender"
                         size="30"
                         :class="' ml-2 mt-2'"
-                        v-if="comment.user.id != auth.id"
+                        v-if="comment.sender.id != auth.id"
                     />
 
                     <v-card flat :class="'mx-2 mt-2'" max-width="60%">
@@ -19,10 +19,10 @@
                     </v-card>
 
                     <avatar
-                        :user="comment.user"
+                        :user="comment.sender"
                         size="30"
                         :class="' mr-2 mt-2'"
-                        v-if="comment.user.id === auth.id"
+                        v-if="comment.sender.id === auth.id"
                     />
                 </v-row>
             </v-container>
@@ -35,7 +35,8 @@
                         hide-details
                         append-icon="mdi-send"
                         solo
-                        @click:append="body ? storeComment(commentable) : '' "
+                        @click:append="body ? storeComment(localCommentable) : '' "
+                        @keyup.enter="body ? storeComment(localCommentable) : '' "
                     ></v-text-field>
                 </v-card>
             </v-col>
@@ -47,6 +48,9 @@ export default {
     props: {
         commentable: {
             required: true
+        },
+        type: {
+            required: true
         }
     },
     data() {
@@ -56,7 +60,38 @@ export default {
         };
     },
     created() {
-        console.log(this.commentable);
+        // console.log('------------------');
+        
+        // console.log(this.commentable);
+        // console.log(this.commentable.type);
+        
+        switch (this.type) {
+            case 'App\\User':
+                Echo.channel(`newComment.Users.${this.auth.id}.${this.commentable.id}`).listen("NewComment", event => {
+                    // console.log(event.comment);
+                    this.localCommentable.comments.push(event.comment);
+                    this.scrollToBotom();
+                });
+
+                Echo.channel(`newComment.Users.${this.commentable.id}.${this.auth.id}`).listen("NewComment", event => {
+                    // console.log(event.comment);
+                    this.localCommentable.comments.push(event.comment);
+                    this.scrollToBotom();
+                });
+
+                break;
+        
+            default:
+
+                Echo.channel(`newComment.Chats.${this.commentable.id}`).listen("NewComment", event => {
+                    // console.log(event.comment);
+                    this.localCommentable.comments.push(event.comment);
+                    this.scrollToBotom();
+                });
+
+                break;
+        }
+        
     },
     methods: {
         storeComment(commentable) {
@@ -64,22 +99,32 @@ export default {
             axios
                 .post(this.appPath("api/comments"), {
                     body: self.body,
-                    commentable_id: self.commentable.id,
-                    commentable_type: self.commentable.responsible_id
-                        ? "tasks"
-                        : "products"
+                    commentable_id: commentable.id,
+                    commentable_type: self.type
                 })
                 .then(function(response) {
-                    self.localCommentable.comments.push(response.data);
+                    console.log(response);
+                    
                     self.body = "";
-
-                    self.$nextTick(function () {
-                        self.$refs.asd.scrollTop = self.$refs.asd.scrollHeight;
-                    });
                 })
                 .catch(function(error) {
                     console.log(error);
                 });
+        },
+        scrollToBotom() {
+            this.$nextTick(function() {
+                this.$refs.commentsWrapper.scrollTop =
+                    this.$refs.commentsWrapper.scrollHeight;
+            });
+        }
+    },
+    watch: {
+        commentable(val) {
+            console.log("commantable");
+            console.log(this.commentable);
+            
+            this.localCommentable = this.commentable;
+            this.scrollToBotom();
         }
     }
 };

@@ -38,6 +38,6 @@ class Product extends Model
     
     public function comments()
     {
-        return $this->morphToMany('App\Comment','commentable');
+        return $this->morphMany('App\Comment','commentable');
     }
 }

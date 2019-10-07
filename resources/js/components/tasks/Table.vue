@@ -6,11 +6,12 @@
 
         <v-data-table
             :headers="headers"
-            :items="tasks"
-            class="elevation-1"
+            :items="localTasks"
+            class="elevation-1 tasks-table"
             item-key="id"
             hide-default-footer
             @click:row="displayTask"
+            
         >
             <template v-slot:item.priority="{ item }">
                 <priority :id="item.priority" icon></priority>
@@ -49,6 +50,7 @@ export default {
     },
     data() {
         return {
+            localTasks: this.tasks,
             headers: [
                 { text: "Задача", value: "title" },
                 { text: "Приоритет", value: "priority" },
@@ -71,9 +73,24 @@ export default {
         },
         duration() {}
     },
-    created() {}
+    created() {
+        Event.listen('taskStatusChanged', data => {
+
+            this.localTasks.forEach( ( task, index) => {
+
+                if (task.id == data.id){
+                    this.localTasks[index] = data;
+                }
+                
+            });            
+            
+        });
+    }
 };
 </script>
 
 <style>
+.tasks-table {
+    cursor: pointer;
+}
 </style>

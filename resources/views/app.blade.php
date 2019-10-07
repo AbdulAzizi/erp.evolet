@@ -41,7 +41,7 @@
     <div id="app">
         {{-- <notification></notification> --}}
 
-        <v-app style="background:rgb(243,243,243);">
+        <v-app style="background-color:#fafafa;">
             @yield('layout')
         </v-app>
             

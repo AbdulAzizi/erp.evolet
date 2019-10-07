@@ -27,16 +27,16 @@ class TaskController extends Controller
 
         $tasks = Task::where('responsible_id', $authUser->id)
             ->with(
-                    'from',
-                 'responsible',
+                'from',
+                'responsible',
                 'watchers',
-                    'status'
-            //      'tags',
-            //     'history.user',
-            //     'polls.options.users'
+                'status',
+                'tags'
+                //     'history.user',
+                //     'polls.options.users'
             )
-            ->get(); 
-            
+            ->get();
+
         // foreach ($tasks as $task) {
         //     // If task is from process
         //     if ($task->from_type == "App\Process") {
@@ -55,7 +55,8 @@ class TaskController extends Controller
             'tasks',
             'users',
             'tags',
-            'statuses'
+            'statuses',
+            'authUser'
         ));
     }
 
@@ -145,7 +146,7 @@ class TaskController extends Controller
             'history.user',
             // 'polls.answers',
             'polls.options.users',
-            'comments.user'
+            'comments.sender'
         )->find($id);
         // return $task;
         // if has front tether load it
@@ -199,7 +200,6 @@ class TaskController extends Controller
             {
                 $options[] = new Option(['body' => $option]);
             }
-
         }
         // attach options to question
         $question->options()->saveMany($options);
@@ -233,25 +233,75 @@ class TaskController extends Controller
 
         $task->save();
 
-        event( new TaskForwardedEvent($oldTask, $task));
+        event(new TaskForwardedEvent($oldTask, $task));
     }
 
     public function changeStatus(Request $request)
     {
-         $task = Task::find($request->id);
-         
-         $task->status_id = $request->statusId;
+        $task = Task::find($request->id);
 
-         $task->save();
+        $task->status_id = $request->statusId;
 
-         return 'success';
+        $task->save();
+
+        $task->load([
+            'from',
+            'responsible',
+            'watchers',
+            'status'
+        ]);
+
+        return $task;
     }
 
     public function addStatus(Request $request)
     {
-        return Status::create([
-            'name' => $request->name
+        $status = Status::create([
+            'name' => $request->name,
+            'user_id' => $request->auth_user_id
         ]);
+
+        return $status;
     }
 
+    public function changeStatusName(Request $request)
+    {
+        $status = Status::find($request->id);
+
+        $status->name = $request->name;
+
+        $status->save();
+
+        return 'success';
+    }
+
+    public function deleteStatus(Request $request)
+    {
+        $status = Status::find($request->id);
+
+        $status->delete();
+
+        return 'success';
+    }
+
+    public function selectTask($id)
+    {
+        $task = Task::with(
+            'watchers',
+            'responsible',
+            'from',
+            'status',
+            'tags',
+            'history.user',
+            'polls.options.users',
+            'comments.sender'
+        )->find($id);
+
+        // if has front tether load it
+        if ($task->from_type == "App\Process") {
+            $task->from->load('frontTethers.form.fields', 'backTethers');
+        }
+
+        return $task;
+    }
 }

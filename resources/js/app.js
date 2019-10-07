@@ -79,7 +79,7 @@ Vue.mixin({
         },
         photo: function(name) {
             if (name) return window.Laravel.asset_path + "img/" + name;
-            else return window.Laravel.asset_path + "img/green-solo-logo.svg";
+            else return window.Laravel.asset_path + "img/green-solo-logo.png";
         },
         isCssColor(color) {
             return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/);
@@ -200,7 +200,7 @@ Vue.component(
 );
 Vue.component("history", require("./components/History.vue").default);
 Vue.component("comments", require("./components/Comments.vue").default);
-Vue.component("kanban-view", require("./components/Draggable.vue").default);
+Vue.component("kanban-view", require("./components/Kanban.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
@@ -280,6 +280,7 @@ Vue.component(
     require("./components/views/HumanResourcesResumes.vue").default
 );
 
+Vue.component("kanban-view", require('./components/Kanban.vue').default);
 Vue.component(
     "resumes-head-view",
     require("./components/views/HeadResume.vue").default
@@ -301,6 +302,8 @@ Vue.component(
     "division",
     require("./components/views/Division.vue").default
 );
+Vue.component("chats-view", require("./components/views/Chats.vue").default);
+
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);

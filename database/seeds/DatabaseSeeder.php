@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProjectParticipantTableSeeder::class);
         $this->call(ResumeTableSeeder::class);
         $this->call(HistorySeeder::class);
+        $this->call(ChatSeeder::class);
         $this->call(CommentTableSeeder::class);
     }
 }
