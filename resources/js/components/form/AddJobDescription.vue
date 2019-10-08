@@ -31,10 +31,9 @@
 </template>
 
 
-
 <script>
 export default {
-  props: ["user","responsibilities"],
+  props: ["user", "responsibilities"],
   data() {
     return {};
   },

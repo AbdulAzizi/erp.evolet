@@ -205,7 +205,6 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import { send } from "q";
 export default {
   components: {
     draggable
@@ -255,11 +254,13 @@ export default {
           statusId: statusId
         })
         .then(res => {
-          this.statuses.find(elem => {
+          this.statuses.forEach(elem => {
             if (elem.id == statusId) {
               this.tasks.find(task => {
                 if (task.id == id) {
                   elem.items.push(task);
+                  elem.count = elem.items.length
+                  console.log(elem.count)
                 }
               });
             }
@@ -274,6 +275,8 @@ export default {
         elem.items.forEach((item, index) => {
           if (item.id == id) {
             elem.items.splice(index, 1);
+            elem.count = elem.items.length;
+            console.log(elem.count)
           }
         });
       });
@@ -392,7 +395,8 @@ export default {
     this.userStatuses.forEach(elem => this.statuses.push(elem));
     this.prepareStatuses();
     this.preparestatusItems();
-  }
+    console.log(this.statuses);
+  },
 };
 </script>
 <style>
@@ -422,7 +426,7 @@ export default {
   min-height: calc(100vh - 125px);
 }
 .parent-container::-webkit-scrollbar {
-  height: 8px !important;
+  height: 8px;
 }
 .parent-container > div {
   width: 300px;

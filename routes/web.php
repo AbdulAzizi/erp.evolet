@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/users/{id}/responsibility', 'ResponsibilityController@show')->name('responsibility.show');
     Route::post('/users/{id}/responsibility', 'ResponsibilityController@store')->name('responsibility.store');
+    Route::post('/users/{id}/create-job-description', 'ResponsibilityController@createJobDescription')->name('responsibility.create.job.description');
 
     Route::get('/users/{id}/cv/edit', 'ResumeController@showEdit')->name('resume.show.edit');
     Route::post('/resume', 'ResumeController@create')->name('resume.create');
