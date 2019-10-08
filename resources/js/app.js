@@ -199,7 +199,7 @@ Vue.component(
     require("./components/projects/Create.vue").default
 );
 Vue.component("history", require("./components/History.vue").default);
-Vue.component("comments", require("./components/Comments.vue").default);
+Vue.component("messages", require("./components/Messages.vue").default);
 Vue.component("kanban-view", require("./components/Kanban.vue").default);
 
 /****************************VIEWS********************************/

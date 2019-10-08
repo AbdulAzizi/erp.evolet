@@ -12,6 +12,8 @@ class Chat extends Model
         'title', 'admin_id'
     ];
 
+    protected $appends = ['last_message'];
+
     public function participants()
     {
         return $this->belongsToMany('App\User','chat_participants');
@@ -22,8 +24,13 @@ class Chat extends Model
         return $this->belongsTo('App\User');
     }
     
-    public function comments()
+    public function messages()
     {
-        return $this->morphMany('App\Comment','commentable');
+        return $this->morphMany('App\Message','messageable');
+    }
+
+    public function getLastMessageAttribute()
+    {
+        return $this->messages->sortByDesc('created_at')->first();
     }
 }

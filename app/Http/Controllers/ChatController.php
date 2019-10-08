@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Chat;
-use App\Comment;
+use App\Direct;
+use App\Message;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -12,20 +13,43 @@ class ChatController extends Controller
 {
     public function index()
     {
-        $users = User::with('division')->get();
-        // get chats where auth user is admin or participant
-        $chats = Chat::whereHas('participants', function (Builder $query) {
+        $directsStartedByMe = Direct::where('from', auth()->user()->id)
+                        ->with('to.division','messages')
+                        ->has('messages')
+                        ->get();
+                         
+        $directsStartedByOthers = Direct::where('to', auth()->user()->id)
+                        ->with('from.division','messages')
+                        ->has('messages')
+                        ->get();
+        
+        $chats = $directsStartedByMe->merge($directsStartedByOthers);
+
+        $messagedGroups = Chat::whereHas('participants', function (Builder $query) {
             $query->where('user_id', auth()->user()->id);
         })
-            ->orWhere('admin_id', auth()->user()->id)
-            ->get();
+        ->orWhere('admin_id', auth()->user()->id)
+        ->has('messages')
+        ->with('messages')
+        ->get();
 
-        return view('chats.index', compact('users', 'chats'));
+        $chats = $messagedGroups->merge($chats)->sortByDesc('last_message.created_at')->values()->all();
+
+        $users = User::with('division')->get();
+        // get chats where auth user is admin or participant
+        $groups = Chat::whereHas('participants', function (Builder $query) {
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->orWhere('admin_id', auth()->user()->id)
+        ->with('messages')
+        ->get();
+
+        return view('chats.index', compact('users', 'chats','groups'));
     }
 
     public function getDetails($id)
     {
-        return Chat::with('admin', 'participants.division', 'comments')->find($id);
+        return Chat::with('admin', 'participants.division', 'messages')->find($id);
     }
 
     public function store(Request $request)
@@ -41,39 +65,30 @@ class ChatController extends Controller
         return redirect()->route('chats.index');
     }
 
-    public function getConversation(Request $request, $userID)
+    public function getDirect(Request $request, $userID)
     {
-        // return User::whereHas('comments', function (Builder $query){
-        //     $query->where('user_id', auth()->user()->id );
-        // })->find($userID);
+        $direct = Direct::where([
+                            ['from', auth()->user()->id],
+                            ['to', $userID],
+                        ])
+                        ->orWhere([
+                            ['from', $userID],
+                            ['to', auth()->user()->id],
+                        ])
+                        ->with('messages')
+                        ->first();
+        if(!$direct)
+            $direct = Direct::create([
+                'from' => auth()->user()->id, 
+                'to' => $userID
+            ]);
 
-        // return Comment::whereHas('users', function (Builder $query){
-        //     $query->where('id', auth()->user()->id );
-        // })->get();
+        $user = User::find($userID);
+        
+        $direct['title'] = "$user->name $user->surname";
 
-        // return User::with('comments')->find($userID);
+        $direct->load('messages');
 
-        $one  = Comment::whereHasMorph(
-            'commentable', 
-            ['App\User'], 
-            function (Builder $query) use ($userID) {
-                $query->where('id', $userID);
-            }
-        )
-        ->where('user_id', auth()->user()->id )
-        ->get();
-
-        $two  = Comment::whereHasMorph(
-            'commentable', 
-            ['App\User'], 
-            function (Builder $query) use ($userID) {
-                $query->where('id', auth()->user()->id);
-            }
-        )
-        ->where('user_id', $userID )
-        ->get();
-
-        return $one->merge($two)->sortBy('created_at')->values()->all();
-
+        return $direct;
     }
 }

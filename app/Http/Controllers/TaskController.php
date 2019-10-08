@@ -146,7 +146,7 @@ class TaskController extends Controller
             'history.user',
             // 'polls.answers',
             'polls.options.users',
-            'comments.sender'
+            'messages.sender'
         )->find($id);
         // return $task;
         // if has front tether load it
@@ -294,7 +294,7 @@ class TaskController extends Controller
             'tags',
             'history.user',
             'polls.options.users',
-            'comments.sender'
+            'messages.sender'
         )->find($id);
 
         // if has front tether load it

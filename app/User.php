@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public $with = ['position', 'responsibilities'];
 
-    protected $append = ['fullname'];
+    // protected $appends = ['fullname', 'last_message_date'];
 
     /**
      * Send the password reset notification.
@@ -79,7 +79,7 @@ class User extends Authenticatable
 
     public function pcs()
     {
-        return $this->belongsToMany('App\Division','managers','manager_id','pc_id')->as('manager')->withPivot('pc_id','country_id')->using('App\Manager');
+        return $this->belongsToMany('App\Division', 'managers', 'manager_id', 'pc_id')->as('manager')->withPivot('pc_id', 'country_id')->using('App\Manager');
     }
 
     public function allTasks()
@@ -98,11 +98,11 @@ class User extends Authenticatable
 
     public function projects()
     {
-        return $this->belongsToMany('App\Project','project_participants','participant_id','project_id')
-                    ->using('App\ProjectParticipant')
-                    ->withPivot([
-                        'role_id'
-                    ]);
+        return $this->belongsToMany('App\Project', 'project_participants', 'participant_id', 'project_id')
+            ->using('App\ProjectParticipant')
+            ->withPivot([
+                'role_id',
+            ]);
     }
 
     public function projectParticipant()
@@ -144,10 +144,5 @@ class User extends Authenticatable
     public function chats()
     {
         return $this->belongsToMany('App\Chat');
-    }
-
-    public function comments()
-    {
-        return $this->morphMany('App\Comment','commentable');
     }
 }

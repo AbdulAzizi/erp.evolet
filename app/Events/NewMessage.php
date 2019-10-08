@@ -10,24 +10,24 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class NewComment implements ShouldBroadcast
+class NewMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $id;
     public $type;
-    public $comment;
+    public $message;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct( $id , $type, $comment)
+    public function __construct( $id , $type, $message)
     {
         $this->id = $id;
         $this->type = $type;
-        $this->comment = $comment;
+        $this->message = $message;
     }
 
     /**
@@ -40,11 +40,11 @@ class NewComment implements ShouldBroadcast
         $authID = auth()->user()->id;
         switch ($this->type) {
             case 'App\User':
-                return new Channel("newComment.Users.$this->id.$authID");
+                return new Channel("newMessage.Users.$this->id.$authID");
                 break;
             
             default:
-                return new Channel("newComment.Chats.$this->id");
+                return new Channel("newMessage.Chats.$this->id");
                 break;
         }
     }

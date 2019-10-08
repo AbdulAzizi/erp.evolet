@@ -26,7 +26,7 @@
           <template v-slot:extension>
             <v-tabs v-model="tab">
               <v-tab href="#task" class="ma-0">Задача</v-tab>
-              <v-tab href="#comments">Коментарии</v-tab>
+              <v-tab href="#messages">Коментарии</v-tab>
               <v-tab href="#history">История</v-tab>
 
               <dynamic-form
@@ -81,8 +81,8 @@
               </v-list>
             </v-card-text>
           </v-tab-item>
-          <v-tab-item value="comments">
-            <comments :commentable="task" type="Tasks" />
+          <v-tab-item value="messages">
+            <messages :messageable="task" type="Tasks" />
           </v-tab-item>
           <v-tab-item value="history">
             <v-col>
