@@ -291,10 +291,6 @@ Vue.component(
     require("./components/ResumeIndexCard.vue").default
 );
 Vue.component(
-    "messages-view",
-    require("./components/views/Messages.vue").default
-);
-Vue.component(
     "division-responsibilities",
     require("./components/views/DivisionResponsibilities.vue").default
 );
