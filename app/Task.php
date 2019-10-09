@@ -59,4 +59,9 @@ class Task extends Model
     {
         return $this->morphMany('App\Comment','commentable');
     }
+
+    public function timeSets()
+    {
+        return $this->hasMany('App\Timeset');
+    }
 }

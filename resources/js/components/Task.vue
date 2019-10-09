@@ -1,7 +1,7 @@
 <template>
   <v-card style="background-color:#f4f5f7;" min-height="60vh">
     <v-row no-gutters>
-      <v-col cols="8" >
+      <v-col cols="8">
         <v-toolbar dense flat>
           <v-toolbar-title>{{task.title}}</v-toolbar-title>
           <div class="flex-grow-1"></div>
@@ -148,6 +148,11 @@
           </v-list-item>
 
           <priority :id="task.priority" classes=" lighten-3"></priority>
+          <v-list-item>
+            <v-list-item-content>
+              <task-control-buttons :task="task" />
+            </v-list-item-content>
+          </v-list-item>
 
           <v-subheader v-if="task.tags.length">Теги</v-subheader>
           <div class="px-3">
@@ -223,11 +228,18 @@ export default {
         users: this.users,
         rules: ["required"]
       }
-    };
+    };  
   },
   created() {
+    Event.listen("taskStarted", data => {
+      return (this.task.status.name = "В процессе");
+    });
+
+    Event.listen("stopTask", data => {
+      return (this.task.status.name = "Закрытый");
+    });
+
     this.synch();
-    console.log(this.task);
   },
   watch: {
     item(v) {

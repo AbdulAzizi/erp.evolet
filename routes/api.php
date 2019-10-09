@@ -46,3 +46,6 @@ Route::post('/addStatus', 'TaskController@addStatus')->name('add.status');
 Route::put('/change-status-name/{id}', 'TaskController@changeStatusName')->name('change.status.name');
 Route::delete('/delete-status/{id}', 'TaskController@deleteStatus')->name('delete.status');
 Route::get('/select-task/{id}', 'TaskController@selectTask')->name('select.task');
+Route::post('/start-task', 'TaskController@startTask')->name('start.task');
+Route::put('/pause-task/{id}', 'TaskController@pauseTask')->name('pause.task');
+Route::put('/stop-task/{id}', 'TaskController@stopTask')->name('stop.task');
