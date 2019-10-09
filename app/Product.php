@@ -36,8 +36,8 @@ class Product extends Model
         return $this->morphMany(History::class, 'happened_with');
     }
     
-    public function comments()
+    public function messages()
     {
-        return $this->morphMany('App\Comment','commentable');
+        return $this->morphMany('App\Message','messageable');
     }
 }

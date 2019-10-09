@@ -2,31 +2,15 @@
 
 @section('content')
 
-@php
-$isUserHead = false;
-
-if($division->head){
-$isUserHead = $division->head->id === $authUser->id;
-}
-
-$isUserHead = json_encode($isUserHead);
-$oldInputs = json_encode(Session::getOldInput());
-$jsonPositions = json_encode($positions);
-$jsonResponsibilities = json_encode($division->responsibilities);
-
-
-@endphp
-
-<v-container fluid ma-0 grid-list-lg>
-    <v-layout>
-        <v-flex xs10>
-            <v-expansion-panels class="divisions">
-                <division :division="{{$division}}" :is-user-head="{{$isUserHead}}" :is-root="true" />
-            </v-expansion-panels>
-        </v-flex>
-    </v-layout>
-</v-container>
-
+<division
+    :division="{{$division}}" 
+    :is-user-head="{{$isUserHead}}" 
+    :is-root="true"
+    :jsonResponsibilities="{{$jsonResponsibilities}}"
+    :ildInputs="{{$oldInputs}}"
+    :errors="{{ $errors }}"
+    :user="{{$authUser}}"
+    ></division>
 
 <dynamic-form title="Новый сотрудник" dialog activator-event-name="addUser" action-url="/users" method="POST"
     :errors="{{$errors}}" :old-inputs="{{$oldInputs}}" :fields="[

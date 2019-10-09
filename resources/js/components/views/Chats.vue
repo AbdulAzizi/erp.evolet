@@ -27,7 +27,50 @@
             ></dynamic-form>
 
             <v-tabs-items v-model="tab">
-                <v-tab-item>Chats</v-tab-item>
+            
+                <v-tab-item>
+                    <v-list
+                        dense
+                        shaped
+                        style="max-height: calc(100vh - 96px); overflow-y: scroll;"
+                    >
+                        <v-list-item-group color="primary">
+                            <v-list-item
+                                v-for="(chat, index) in chats"
+                                :key="'chat-'+index"
+                                :value="chat.id"
+                            >
+                                <template v-if="chat.title">
+                                    <v-list-item-avatar>
+                                        <v-img :src="photo(chat.img)"></v-img>
+                                    </v-list-item-avatar>
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{chat.title}}</v-list-item-title>
+                                    </v-list-item-content>
+                                </template>
+                                <template v-if="typeof chat.from === 'object'">
+                                    <v-list-item-avatar>
+                                        <v-img :src="photo(chat.from.img)"></v-img>
+                                    </v-list-item-avatar>
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ chat.from.name }} {{ chat.from.surname }}</v-list-item-title>
+                                        <v-list-item-subtitle>{{ chat.from.position.name }} {{ chat.from.division.abbreviation }}</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </template>
+                                <template v-if="typeof chat.to === 'object'">
+                                    <v-list-item-avatar>
+                                        <v-img :src="photo(chat.to.img)"></v-img>
+                                    </v-list-item-avatar>
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ chat.to.name }} {{ chat.to.surname }}</v-list-item-title>
+                                        <v-list-item-subtitle>{{ chat.to.position.name }} {{ chat.to.division.abbreviation }}</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </template>
+                            </v-list-item>
+                        </v-list-item-group>
+                    </v-list>
+                </v-tab-item>
+                
                 <v-tab-item>
                     <v-text-field
                         v-model="groupSearch"
@@ -46,7 +89,7 @@
                     >
                         <v-list-item @click="newGroupDialog">
                             <v-list-item-avatar color="primary">
-                                <v-icon color="white">mdi-plus</v-icon>
+                                <v-icon color="white">mdi-account-multiple-plus</v-icon>
                             </v-list-item-avatar>
                             <v-list-item-content>
                                 <v-list-item-title>Новая Группа</v-list-item-title>
@@ -68,6 +111,7 @@
                         </v-list-item-group>
                     </v-list>
                 </v-tab-item>
+                
                 <v-tab-item>
                     <v-text-field
                         v-model="contactSearch"
@@ -85,7 +129,11 @@
                         style="max-height: calc(100vh - 177px); overflow-y: scroll;"
                     >
                         <v-list-item-group v-model="selectedUser" color="primary">
-                            <v-list-item v-for="user in filteredUsers" :key="user.title" :value="user.id">
+                            <v-list-item
+                                v-for="user in filteredUsers"
+                                :key="user.title"
+                                :value="user.id"
+                            >
                                 <!-- <v-list-item-icon>
                             <v-icon>{{ user.icon }}</v-icon>
                                 </v-list-item-icon>-->
@@ -101,12 +149,12 @@
                         </v-list-item-group>
                     </v-list>
                 </v-tab-item>
+            
             </v-tabs-items>
         </v-navigation-drawer>
 
         <v-toolbar flat v-if="selectedChat">
-            <v-toolbar-title>{{selectedChat.title}}</v-toolbar-title>
-
+            <v-toolbar-title v-text="selectedChat.title ? selectedChat.title : selectedChat.name"></v-toolbar-title>
             <div class="flex-grow-1"></div>
 
             <template v-if="$vuetify.breakpoint.smAndUp">
@@ -118,9 +166,15 @@
 
         <v-divider></v-divider>
 
-        <comments v-if="selectedChat" :commentable="selectedChat" :type="selectedType" />
+        <messages v-if="selectedChat" :messageable="selectedChat" :type="selectedType" />
 
-        <v-navigation-drawer permanent app clipped right v-if="selectedChat && ( selectedType != 'App\\User' )">
+        <v-navigation-drawer
+            permanent
+            app
+            clipped
+            right
+            v-if="selectedChat && ( selectedType != 'App\\Direct' )"
+        >
             <template v-slot:prepend>
                 <v-list-item style="padding-bottom:2px;">
                     <v-list-item-avatar>
@@ -162,7 +216,7 @@
 
 <script>
 export default {
-    props: ["users", "chats"],
+    props: ["users", "groups", "chats"],
     data() {
         return {
             tab: null,
@@ -171,7 +225,7 @@ export default {
             filteredUsers: this.users,
 
             contactSearch: null,
-            filteredGroups: this.chats,
+            filteredGroups: this.groups,
 
             items: [
                 { title: "Dashboard", icon: "mdi-view-dashboard" },
@@ -198,20 +252,21 @@ export default {
                     multiple: true
                 }
             ],
-            selectedUser: null
+            selectedUser: null,
+            damnyou: []
         };
     },
     methods: {
         newGroupDialog() {
             Event.fire("newGroupDialog");
+        },
+        getMeesages(){
+            // make one function to get messages of direct or chat
         }
-        // On selected chat index change
-        // handleGroup(index, id) {
-
-        // }
     },
     created() {
-        this.selectedChatIndex = this.chats[0].id;
+        this.selectedChatIndex = this.groups[0].id;
+        console.log(this.groups);
     },
     watch: {
         contactSearch(val) {
@@ -223,7 +278,7 @@ export default {
             });
         },
         groupSearch(val) {
-            this.filteredGroups = this.chats.filter(chat => {
+            this.filteredGroups = this.groups.filter(chat => {
                 return new RegExp(this.groupSearch, "gi").test(chat.title);
             });
         },
@@ -235,16 +290,16 @@ export default {
             if (id != null) {
                 let index = null;
                 let chat = null;
-                // get chat from chats
-                this.chats.map((el, key) => {
+                // get chat from groups
+                this.groups.map((el, key) => {
                     if (el.id == id) {
                         index = key;
                         chat = el;
                     }
                 });
 
-                // Check if selected chat doesnt have details (comments)
-                if (chat.comments == undefined) {
+                // Check if selected chat doesnt have details (messages)
+                if (chat.participants == undefined) {
                     // Initialize 'this' to new variable to use later
                     let self = this;
                     // Send request to get details of selected chat
@@ -252,8 +307,8 @@ export default {
                         .get(this.appPath(`api/chats/${id}/details`))
                         // On Respond
                         .then(function(response) {
-                            // Append details to local variable chats
-                            self.chats[index] = response.data;
+                            // Append details to local variable groups
+                            self.groups[index] = response.data;
                             // Change selected chat
                             self.selectedChat = response.data;
                             self.selectedType = "App\\Chat";
@@ -270,21 +325,19 @@ export default {
             this.selectedChat = null;
             let self = this;
             axios
-                .get(this.appPath(`api/conversations/${id}`))
+                .get(this.appPath(`api/directs/${id}`))
                 // On Respond
                 .then(function(response) {
-                    self.selectedChat = {
-                        comments: response.data,
-                        id : id
-                    }
-                    self.selectedType = "App\\User";
-                    
+                    self.selectedChat = response.data;
+
+                    self.selectedType = "App\\Direct";
+
                     console.log(self.selectedChat);
-                    
+
                     // console.log(response.data);
                 });
         },
-        selectedChat(val){
+        selectedChat(val) {
             // console.log("selectedChat");
             // console.log(val);
         }

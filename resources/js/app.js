@@ -158,7 +158,7 @@ Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 Vue.component("priority", require("./components/Priority.vue").default);
 Vue.component("card", require("./components/Card.vue").default);
 Vue.component("user-card", require("./components/UserCard.vue").default);
-Vue.component("division", require("./components/Division.vue").default);
+Vue.component("division-structure", require("./components/DivisionStructure.vue").default);
 Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
 Vue.component(
     "dropdown-btn",
@@ -199,7 +199,7 @@ Vue.component(
     require("./components/projects/Create.vue").default
 );
 Vue.component("history", require("./components/History.vue").default);
-Vue.component("comments", require("./components/Comments.vue").default);
+Vue.component("messages", require("./components/Messages.vue").default);
 Vue.component("kanban-view", require("./components/Kanban.vue").default);
 
 /****************************VIEWS********************************/
@@ -247,6 +247,11 @@ Vue.component(
 );
 
 Vue.component(
+    "add-responsibilities",
+    require("./components/form/addResponsibilities.vue").default
+);
+
+Vue.component(
     "user-card-vertical",
     require("./components/profile/UserCard.vue").default
 );
@@ -284,6 +289,14 @@ Vue.component(
 Vue.component(
     "resume-index-card",
     require("./components/ResumeIndexCard.vue").default
+);
+Vue.component(
+    "division-responsibilities",
+    require("./components/views/DivisionResponsibilities.vue").default
+);
+Vue.component(
+    "division",
+    require("./components/views/Division.vue").default
 );
 Vue.component("chats-view", require("./components/views/Chats.vue").default);
 

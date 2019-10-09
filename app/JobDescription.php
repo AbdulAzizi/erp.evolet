@@ -9,7 +9,7 @@ class JobDescription extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['division_id', 'responsibility_id', 'text'];
+    protected $fillable = ['responsibility_id', 'text'];
 
     public function responsibility()
     {
