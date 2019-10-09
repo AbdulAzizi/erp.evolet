@@ -62,6 +62,13 @@ class ProductController extends Controller
         return view('products.index')->with($data);
     }
 
+    public function show(ProductFilters $filters, $id)
+    {
+        $product = Product::with('currentProcess', 'project.country', 'project.pc', 'fields', 'history.user')->find($id);
+
+        return view('products.show', compact('product'));
+    }
+
     public function store(Request $request)
     {
         // return $request;

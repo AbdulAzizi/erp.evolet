@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/chats', 'ChatController@index')->name('chats.index');
     Route::post('/chats', 'ChatController@store')->name('chats.store');
+    Route::get('/product/{id}', 'ProductController@show')->name('product.show');
 
 
 });
