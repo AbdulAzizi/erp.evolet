@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-tabs v-model="tab" right background-color="secondary" color="primary" dark>
+    <v-tabs v-model="tab" background-color="secondary" color="primary" dark>
+      <p class="pa-4 white--text">{{project.country.name}} · {{project.pc.name}}</p>
+      <v-spacer></v-spacer>
       <v-tab href="#products">Продукты</v-tab>
       <v-tab href="#participants">Участники</v-tab>
       <v-btn
@@ -59,6 +61,9 @@ export default {
       required: true
     },
     participants: {
+      required: true
+    },
+    project: {
       required: true
     }
   },
@@ -124,6 +129,7 @@ export default {
         ...preparedFields
       };
     });
+    console.log(this.items)
   }
 };
 </script>

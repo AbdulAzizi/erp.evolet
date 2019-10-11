@@ -53,6 +53,8 @@ class ProductController extends Controller
         // Fetch all products and pass it to data
         $data['products'] = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
 
+        $data['project'] = Project::with('country', 'pc')->find($request->project_id);
+
         $listFields = $this->getListFieldsFromProducts($data['products']);
 
         $this->loadListFieldValues($listFields);
