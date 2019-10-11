@@ -1,7 +1,7 @@
 <template>
   <v-card style="background-color:#f4f5f7;" min-height="60vh">
     <v-row no-gutters>
-      <v-col cols="8" >
+      <v-col cols="8">
         <v-toolbar dense flat>
           <v-toolbar-title>{{task.title}}</v-toolbar-title>
           <div class="flex-grow-1"></div>
@@ -26,7 +26,7 @@
           <template v-slot:extension>
             <v-tabs v-model="tab">
               <v-tab href="#task" class="ma-0">Задача</v-tab>
-              <v-tab href="#comments">Коментарии</v-tab>
+              <v-tab href="#messages">Коментарии</v-tab>
               <v-tab href="#history">История</v-tab>
 
               <dynamic-form
@@ -81,8 +81,8 @@
               </v-list>
             </v-card-text>
           </v-tab-item>
-          <v-tab-item value="comments">
-            <comments :commentable="task" type="Tasks" />
+          <v-tab-item value="messages">
+            <messages :messageable="task" type="Tasks" />
           </v-tab-item>
           <v-tab-item value="history">
             <v-col>
@@ -148,6 +148,11 @@
           </v-list-item>
 
           <priority :id="task.priority" classes=" lighten-3"></priority>
+          <v-list-item>
+            <v-list-item-content>
+              <task-control-buttons :task="task" />
+            </v-list-item-content>
+          </v-list-item>
 
           <v-subheader v-if="task.tags.length">Теги</v-subheader>
           <div class="px-3">
@@ -223,11 +228,18 @@ export default {
         users: this.users,
         rules: ["required"]
       }
-    };
+    };  
   },
   created() {
+    Event.listen("taskStarted", data => {
+      return (this.task.status.name = "В процессе");
+    });
+
+    Event.listen("stopTask", data => {
+      return (this.task.status.name = "Закрытый");
+    });
+
     this.synch();
-    console.log(this.task);
   },
   watch: {
     item(v) {

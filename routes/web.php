@@ -71,12 +71,17 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/chats', 'ChatController@index')->name('chats.index');
     Route::post('/chats', 'ChatController@store')->name('chats.store');
+    Route::get('/product/{id}', 'ProductController@show')->name('product.show');
 
 
 });
 
-// later must go API
-Route::post('/polls', 'PollController@storeApi')->prefix('api')->name('api.polls.store');
-Route::post('/comments', 'CommentController@storeApi')->prefix('api')->name('api.comments.store');
-Route::get('/chats/{id}/details', 'ChatController@getDetails')->prefix('api')->name('api.getDetails');
-Route::get('/conversations/{userID}', 'ChatController@getconversation')->prefix('api')->name('api.getConversation');
+
+
+Route::prefix('api')->group(function () {
+    // later must go API
+    Route::post('/polls', 'PollController@storeApi')->name('api.polls.store');
+    Route::post('/messages', 'MessageController@storeApi')->name('api.messages.store');
+    Route::get('/chats/{id}/details', 'ChatController@getDetails')->name('api.getDetails');
+    Route::get('/directs/{userID}', 'ChatController@getdirect')->name('api.getDirect');
+});

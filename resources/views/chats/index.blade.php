@@ -1,5 +1,9 @@
 @extends('layouts.withoutSidebars')
 
 @section('content')
-    <chats-view :chats="{{$chats}}" :users="{{$users}}"></chats-view>
+    <chats-view 
+    :chats="{{json_encode($chats)}}" 
+    :groups="{{$groups}}" 
+    :users="{{$users}}"
+    />
 @endsection

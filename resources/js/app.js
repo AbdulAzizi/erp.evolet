@@ -199,7 +199,7 @@ Vue.component(
     require("./components/projects/Create.vue").default
 );
 Vue.component("history", require("./components/History.vue").default);
-Vue.component("comments", require("./components/Comments.vue").default);
+Vue.component("messages", require("./components/Messages.vue").default);
 Vue.component("kanban-view", require("./components/Kanban.vue").default);
 
 /****************************VIEWS********************************/
@@ -291,10 +291,6 @@ Vue.component(
     require("./components/ResumeIndexCard.vue").default
 );
 Vue.component(
-    "messages-view",
-    require("./components/views/Messages.vue").default
-);
-Vue.component(
     "division-responsibilities",
     require("./components/views/DivisionResponsibilities.vue").default
 );
@@ -343,6 +339,7 @@ Vue.component(
     require("./components/tasks/PollDisplay.vue").default
 );
 Vue.component("poll-form", require("./components/tasks/PollForm.vue").default);
+Vue.component("task-control-buttons", require("./components/tasks/ControlButtons.vue").default);
 
 /****************************HELPERS********************************/
 Vue.component(
