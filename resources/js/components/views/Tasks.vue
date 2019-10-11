@@ -2,11 +2,11 @@
   <div>
     <v-row>
       <v-col class="pt-0">
-        <v-btn-toggle v-model="text" active-class="primary" class="float-right">
+        <v-btn-toggle v-model="currentView" active-class="primary" class="float-right">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn small text value="table" @click="isTable = true" dark v-on="on">
-                <v-icon :color="isTable ? 'white': 'grey lighten-0'">mdi-table-of-contents</v-icon>
+              <v-btn small text :value="activeBtn.TABLE" dark v-on="on">
+                <v-icon :color="isTable ? 'white' : 'grey lighten-0'">mdi-table-of-contents</v-icon>
               </v-btn>
             </template>
             <span>таблица</span>
@@ -14,27 +14,17 @@
 
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn small text value="calendar" @click="selectTab" dark v-on="on">
-                <v-icon
-                  :color="!isTable && isCalendar ? 'white': 'grey lighten-0'"
-                >mdi-calendar-month</v-icon>
+              <v-btn small text :value="activeBtn.CALENDAR" dark v-on="on">
+                <v-icon :color="isCalendar ? 'white' : 'grey lighten-0'">mdi-calendar-month</v-icon>
               </v-btn>
             </template>
             <span>календарь</span>
           </v-tooltip>
+
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn
-                small
-                text
-                value="kanban"
-                @click="isTable = false, isCalendar = false"
-                dark
-                v-on="on"
-              >
-                <v-icon
-                  :color="!isTable && !isCalendar ? 'white': 'grey lighten-0'"
-                >mdi-view-dashboard</v-icon>
+              <v-btn small text :value="activeBtn.KANBAN" dark v-on="on">
+                <v-icon :color="isKanban ? 'white' : 'grey lighten-0'">mdi-view-dashboard</v-icon>
               </v-btn>
             </template>
             <span>Канбан доска</span>
@@ -44,9 +34,9 @@
     </v-row>
 
     <tasks-table :tasks="tasks" :users="users" v-if="isTable"></tasks-table>
-    <tasks-calendar :tasks="tasks" v-if="!isTable && isCalendar"></tasks-calendar>
+    <tasks-calendar :tasks="tasks" v-if="isCalendar"></tasks-calendar>
     <kanban-view
-      v-if="!isTable && !isCalendar"
+      v-if="isKanban"
       :tasks="tasks"
       :users="users"
       :taskStatuses="statuses"
@@ -61,17 +51,39 @@ export default {
   props: ["tasks", "users", "tags", "errors", "statuses", "authuser"],
   data() {
     return {
-      text: "table",
-      icon: "justify",
-      isTable: true,
-      isCalendar: false,
-      justify: "end"
+      currentView: null
     };
   },
-  methods: {
-    selectTab() {
-      this.isTable = false;
-      this.isCalendar = true;
+  mounted() {
+    this.currentView = this.localCurrentView;
+  },
+  computed: {
+    activeBtn() {
+      return Object.freeze({
+        TABLE: 1,
+        CALENDAR: 2,
+        KANBAN: 3
+      });
+    },
+    localCurrentView() {
+      if (!localStorage.hasOwnProperty("currentView")) {
+        return this.activeBtn.TABLE;
+      }
+      return parseInt(localStorage.currentView);
+    },
+    isTable() {
+      return this.currentView === this.activeBtn.TABLE;
+    },
+    isCalendar() {
+      return this.currentView === this.activeBtn.CALENDAR;
+    },
+    isKanban() {
+      return this.currentView === this.activeBtn.KANBAN;
+    }
+  },
+  watch: {
+    currentView(value) {
+      localStorage.currentView = value;
     }
   }
 };
