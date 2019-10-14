@@ -7,6 +7,7 @@
         <products-view
         :items="{{$products}}"
         :participants="{{$participants}}"
+        :project="{{$project}}"
         ></products-view>
 
 @endsection

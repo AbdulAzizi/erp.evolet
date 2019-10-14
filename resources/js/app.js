@@ -339,6 +339,7 @@ Vue.component(
     require("./components/tasks/PollDisplay.vue").default
 );
 Vue.component("poll-form", require("./components/tasks/PollForm.vue").default);
+Vue.component("task-control-buttons", require("./components/tasks/ControlButtons.vue").default);
 
 /****************************HELPERS********************************/
 Vue.component(

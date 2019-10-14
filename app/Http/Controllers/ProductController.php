@@ -25,16 +25,57 @@ class ProductController extends Controller
 {
     public function index(Request $request, ProductFilters $filters)
     {
+        // $products = DB::table('products')
+        //     ->join('product_values', 'products.id', '=', 'product_values.product_id')
+        //     ->join('projects', 'products.project_id', '=', 'projects.id')
+        //     ->join('divisions', 'projects.pc_id', '=', 'divisions.id')
+        //     ->join('countries', 'projects.country_id', '=', 'countries.id')
+        //     ->join('fields', 'product_values.field_id', '=', 'fields.id')
+
+        //     ->select(
+        //         'fields.label',
+        //         'product_values.value',
+        //         'product_values.product_id',
+        //         'countries.name as country',
+        //         'divisions.name as pc'
+        //     )
+        //     ->where('divisions.id', $request->pc_id)
+        //     ->get()
+        //     ->groupBy('product_id');
+
+        // $data['products'] = $products->map(function ($product)
+        // {
+        //     $temp = $product->pluck('value','label');
+        //     $temp['pc'] = $product[0]->pc;
+        //     $temp['country'] = $product[0]->country;
+        //     return $temp;
+        // });
+
         // Fetch all products and pass it to data
         $data['products'] = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
-        
+
+        $data['project'] = Project::with('country', 'pc')->find($request->project_id);
+
         $listFields = $this->getListFieldsFromProducts($data['products']);
-        
+
         $this->loadListFieldValues($listFields);
 
         $data['participants'] = Project::with('projectParticipant.role', 'projectParticipant.participant')->find($request->project_id);
 
         return view('products.index')->with($data);
+    }
+
+    public function show($id)
+    {
+        $data['product'] = Product::with(['currentProcess', 'project.country', 'project.pc', 'fields', 'history.user'])->find($id);
+
+        $listFields = $this->getListFieldsFromProduct($data['product']);
+
+        $this->loadListFieldValues($listFields);
+
+        $data['participants'] = Project::with('projectParticipant.role', 'projectParticipant.participant')->find($data['product']->project_id);
+
+        return view('products.show')->with($data);
     }
 
     public function store(Request $request)
@@ -207,11 +248,11 @@ class ProductController extends Controller
             Notification::send($responsiblePerson, new AssignedToTask($process, $createdTask));
         }
     }
-    
+
     private function loadListFieldValues($listFields)
     {
         $listFieldIDs = $listFields->pluck('id');
-        
+
         $listFieldTables = DB::table('list_fields')
             ->whereIn('field_id', $listFieldIDs)
             ->select('field_id', 'list_type')
@@ -220,20 +261,20 @@ class ProductController extends Controller
 
 
         foreach ($listFieldTables as $tableName => $listField) {
-            
+
             $fieldsToEager = $listFields->whereIn('id', collect($listField)->pluck('field_id'));
 
             $toEagerFieldValues = $fieldsToEager->pluck('pivot');
 
             $values = DB::table($tableName)
-                    ->whereIn('id', $toEagerFieldValues->pluck('value'))
-                    ->get(); 
+                ->whereIn('id', $toEagerFieldValues->pluck('value'))
+                ->get();
 
             foreach ($toEagerFieldValues as $fieldValue) {
                 $realValue = $values->firstWhere('id', $fieldValue->value);
-                $fieldValue->value = $realValue ? $realValue->name: null;
+                $fieldValue->value = $realValue ? $realValue->name : null;
             }
-        }        
+        }
     }
 
     private function getListFieldsFromProducts($products)
@@ -251,4 +292,16 @@ class ProductController extends Controller
         return collect($listFields);
     }
 
+    private function getListFieldsFromProduct($product)
+    {
+        $listField = [];
+
+        foreach ($product->fields as $field) {
+            if ($field->type->name == "list" || $field->type->name == "many-to-many-list") {
+                $listField[] = $field;
+            }
+        }
+
+        return collect($listField);
+    }
 }

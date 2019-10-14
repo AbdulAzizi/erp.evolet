@@ -395,7 +395,6 @@ export default {
     this.userStatuses.forEach(elem => this.statuses.push(elem));
     this.prepareStatuses();
     this.preparestatusItems();
-    console.log(this.statuses);
   },
 };
 </script>

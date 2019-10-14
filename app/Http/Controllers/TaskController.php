@@ -14,6 +14,7 @@ use App\Task;
 use App\User;
 use App\Status;
 use Carbon\Carbon;
+use Illuminate\Foundation\Console\Presets\React;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
@@ -147,7 +148,8 @@ class TaskController extends Controller
             // 'polls.answers',
             'polls.options.users',
             'messages.sender',
-            'forms.fields'
+            'forms.fields',
+            'timeSets'
         )->find($id);
         // if has front tether load it
         
@@ -157,7 +159,6 @@ class TaskController extends Controller
 
         $users = User::with(['division'])->get();
 
-        // return $task;
         return view('tasks.show', compact('task', 'users'));
     }
 
@@ -295,6 +296,7 @@ class TaskController extends Controller
             'tags',
             'history.user',
             'polls.options.users',
+            'timeSets',
             'messages.sender'
         )->find($id);
 
@@ -304,5 +306,63 @@ class TaskController extends Controller
         }
 
         return $task;
+    }
+
+    public function startTask(Request $request)
+    {
+
+        $timeset = \App\Timeset::create([
+            'task_id' => $request->task_id,
+            'start_time' => date(now())
+        ]);
+
+        $task = Task::with('status', 'timeSets')->find($request->task_id);
+
+        $task->status_id = 2;
+
+        $task->save();
+
+        return $task;
+    }
+
+    public function pauseTask(Request $request, $id)
+    {
+        $timeset = \App\Timeset::find($id);
+
+        $timeset->update([
+            'end_time' => date(now())
+        ]);
+
+        $task = Task::with('status', 'timeSets')->find($request->task_id);
+
+        $timeset->save();
+
+        return $task;
+    }
+
+    public function stopTask(Request $request, $id)
+    {
+        $timeset = \App\Timeset::find($id);
+
+        $task = Task::find($request->task_id);
+
+        if ($timeset->end_time !== null) {
+
+            $task->status_id = 3;
+
+            $task->save();
+        } else {
+            $timeset->update([
+                'end_time' => date(now())
+            ]);
+
+            $task->status_id = 3;
+
+            $task->save();
+
+            $timeset->save();
+        }
+
+        return $timeset;
     }
 }

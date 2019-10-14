@@ -64,4 +64,8 @@ class Task extends Model
     {
         return $this->belongsToMany('App\Form')->withPivot('product_id');
     }
+    public function timeSets()
+    {
+        return $this->hasMany('App\Timeset');
+    }
 }
