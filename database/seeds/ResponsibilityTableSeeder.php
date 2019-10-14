@@ -39,6 +39,14 @@ class ResponsibilityTableSeeder extends Seeder
                 'name' => 'ПК',
                 'division_id' => Division::where('abbreviation', 'ПК')->first()->id
             ],
+            [
+                'name' => 'Рук НАП',
+                'division_id' => Division::where('abbreviation', 'НАП')->first()->id
+            ],
+            [
+                'name' => 'РВЗ',
+                'division_id' => Division::where('abbreviation', 'Evolet')->first()->id
+            ],
         ]);
     }
 }

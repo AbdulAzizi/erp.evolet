@@ -55,13 +55,16 @@ class AssignedAsWatcher extends Notification
      */
     public function toArray($notifiable)
     {
-        $from = $this->from->name;
-        $title = $this->task->title;
-        $responsible = $this->responsible->name;
+        // $from = $this->from->name;
+        // $title = $this->task->title;
+        // $responsible = $this->responsible->name;
 
         return [
             'avatar' => $this->from->img,
-            'title' =>  "$from назначил(а) вас наблюдателем в задаче: $title Исполнитель: $responsible"
+            'title' =>  'Процесс <a href="'.route("processes.show", $this->from->id).'">'.$this->from->name.'</a>'.
+                        'назначил(а) вас наблюдателем в задаче:
+                        <a href="' . route("tasks.show", $this->task->id) . '">' . $this->task->title . '</a> 
+                        Исполнитель:<a href="' . route("users.show", $this->responsible->id) . '">' . $this->responsible->name . '</a>'
         ];
     }
 }

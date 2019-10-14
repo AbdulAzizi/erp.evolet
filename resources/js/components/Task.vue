@@ -44,7 +44,7 @@
         <v-tabs-items v-model="tab" style="background-color:#f4f5f7;" class="task-main-content">
           <v-tab-item value="task">
             <v-card-text>
-              <p class="font-weight-bold">Описание</p>
+              <p v-if="task.description" class="font-weight-bold">Описание</p>
               {{task.description ? task.description : ''}}
               <p
                 class="font-weight-bold mt-3"
@@ -56,7 +56,7 @@
                 :poll="task.polls[0]"
               />
               <!-- <v-list nav v-if="taskHasActions"> -->
-              <v-list nav v-if="false">
+              <v-list nav v-if="true">
                 <v-list-item-group color="primary">
                   <v-list-item
                     v-for="( tether, i ) in task.from.front_tethers"
@@ -69,9 +69,9 @@
                         width="800"
                         dialog
                         :fieldsPerRows="[2]"
-                        :fields="preparedFields(tether.form)"
-                        :title="tether.form.label"
-                        actionUrl="/products"
+                        :fields="preparedFields(task.forms[0])"
+                        :title="task.forms[0].label"
+                        :actionUrl="`/products/${task.forms[0].pivot.product_id}/nextstep`"
                         activatorEventName="addProduct"
                         method="post"
                       ></dynamic-form>
@@ -254,6 +254,7 @@ export default {
           type: this.getDynamicFieldsType(field.type.name)
         };
       });
+      // return [ ...fields, { type: "input", name: "product_id", value: form.pivot.product_id } ];
     },
     getDynamicFieldsType(laravelType) {
       // TODO Make a normal adapter or refactor to use same types in vue and laravel

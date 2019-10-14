@@ -146,13 +146,14 @@ class TaskController extends Controller
             'history.user',
             // 'polls.answers',
             'polls.options.users',
-            'messages.sender'
+            'messages.sender',
+            'forms.fields'
         )->find($id);
-        // return $task;
         // if has front tether load it
-        if ($task->from_type == "App\Process") {
-            $task->from->load('frontTethers.form.fields', 'backTethers');
-        }
+        
+        // if ($task->from_type == "App\Process") {
+        //     $task->from->load('frontTethers.form.fields', 'backTethers');
+        // }
 
         $users = User::with(['division'])->get();
 

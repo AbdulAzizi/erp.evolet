@@ -6,7 +6,7 @@
                 <template v-for="(subItem,i) in item">
                     <v-btn
                         :key="i"
-                        class="mr-3 primary"
+                        class="mr-3 primary mt-3"
                         :href="`/products?pc_id=${subItem.pc_id}&country_id=${subItem.country_id}&project_id=${subItem.id}`"
                     >
                         <span v-if="key == subItem.pc.name">{{subItem.country.name}}</span>

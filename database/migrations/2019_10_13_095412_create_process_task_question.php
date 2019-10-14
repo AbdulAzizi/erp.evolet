@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTethersTable extends Migration
+class CreateProcessTaskQuestion extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateTethersTable extends Migration
      */
     public function up()
     {
-        Schema::create('tethers', function (Blueprint $table) {
+        Schema::create('process_task_question', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('from_process_id');
-            $table->unsignedInteger('to_process_id');
-            $table->string('action_text');
+            $table->unsignedBigInteger('process_task_id');
+            $table->unsignedBigInteger('question_id');
         });
     }
 
@@ -28,6 +27,6 @@ class CreateTethersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tethers');
+        Schema::dropIfExists('process_task_question');
     }
 }

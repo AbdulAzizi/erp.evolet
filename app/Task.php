@@ -59,4 +59,9 @@ class Task extends Model
     {
         return $this->morphMany('App\Message','messageable');
     }
+
+    public function forms()
+    {
+        return $this->belongsToMany('App\Form')->withPivot('product_id');
+    }
 }
