@@ -64,13 +64,15 @@ class ProductController extends Controller
         return view('products.index')->with($data);
     }
 
-    public function show(ProductFilters $filters, $id)
+    public function show($id)
     {
         $data['product'] = Product::with(['currentProcess', 'project.country', 'project.pc', 'fields', 'history.user'])->find($id);
 
         $listFields = $this->getListFieldsFromProduct($data['product']);
 
         $this->loadListFieldValues($listFields);
+
+        $data['participants'] = Project::with('projectParticipant.role', 'projectParticipant.participant')->find($data['product']->project_id);
 
         return view('products.show')->with($data);
     }

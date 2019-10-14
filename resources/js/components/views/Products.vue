@@ -21,7 +21,7 @@
           hide-default-footer
           :items-per-page="-1"
           :fixed-header="true"
-          height="calc(100vh - 48px)"
+          height="calc(100vh - 96px)"
           dense
           @click:row="showProduct"
         />

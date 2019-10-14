@@ -27,6 +27,21 @@
       </v-card>
     </v-col>
     <v-col cols="6" class="pt-0">
+      <v-card class="mx-auto mb-2" outlined>
+        <v-list disabled>
+          <v-list-item-group color="primary">
+            <v-list-item v-for="(participant, i) in participants.project_participant" :key="i">
+              <v-list-item-avatar>
+                <v-img :src="photo(participant.img)"></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{participant.role.name}}</v-list-item-title>
+                <v-list-item-subtitle>{{participant.participant.name}} {{participant.participant.surname}}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
       <v-card outlined>
         <v-card-text>
           <p v-if="!product.history.length">Нет событий</p>
@@ -39,7 +54,7 @@
 
 <script>
 export default {
-  props: ["product"],
+  props: ["product", "participants"],
   data() {
     return {
       window: window.history
