@@ -1,10 +1,14 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <p class="grey--text text--darken-2 mb-1">{{ product.current_process.name }}</p>
       <p class="grey--text text--darken-2 mb-1">
-        {{ product.project.pc.name }} ·
+        <span class="grey--text">Текущий процесс</span>
+        · {{ product.current_process.name }}
+      </p>
+      <p class="grey--text text--darken-2 mb-1">
         <span class="grey--text">{{ product.project.country.name }}</span>
+        ·
+        {{ product.project.pc.name }}
       </p>
       <v-btn small depressed color="primary" class="mb-0" @click="window.back()">Назад</v-btn>
     </v-col>
