@@ -45,6 +45,7 @@ class ProcessTableSeeder extends Seeder
         $bp1task2->watchers()->attach([
             App\Responsibility::where('name','ПК')->first()->id,
             App\Responsibility::where('name','РВЗ')->first()->id,
+            App\Responsibility::where('name','Куратор Портфел ПК стран')->first()->id,
         ]);
 
         $bp1task2->polls()->attach( Question::where('body', 'Стоит ли браться за этот продукт?')->first()->id );
