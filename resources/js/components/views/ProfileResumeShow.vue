@@ -277,7 +277,7 @@ export default {
         ]
       },
       achievment: {
-        colsPerRow: [6],
+        colsPerRow: [12],
         fields: [
           {
             label: "Тип",

@@ -71,6 +71,10 @@ class DivisionTableSeeder extends Seeder
                                             'abbreviation' => 'N',
                                         ],
                                         [
+                                            'name' => 'Belinda Ophtolmology',
+                                            'abbreviation' => 'BO',
+                                        ],
+                                        [
                                             'name' => 'Lady Healthcare',
                                             'abbreviation' => 'L',
                                         ],
