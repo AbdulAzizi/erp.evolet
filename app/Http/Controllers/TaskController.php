@@ -4,17 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
-use App\History;
 use App\Notifications\AssignedAsWatcher;
-use App\Notifications\AssignedToTask;
 use App\Option;
 use App\Question;
 use App\Tag;
 use App\Task;
 use App\User;
 use App\Status;
-use Carbon\Carbon;
-use Illuminate\Foundation\Console\Presets\React;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
@@ -80,11 +76,11 @@ class TaskController extends Controller
         // Get new Status instance
         $newStatus = \App\Status::where('name', 'Новый')->first();
         // Empty array to keep query
-        $data = [];
+        $tasks = [];
         // Loop through assignees
         foreach ($assignees as $key => $assigneeID) {
             // Push each query array to one that must be executed for Tasks
-            $data[] = [
+            $tasks[] = Task::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'status_id' => $newStatus->id,
@@ -95,11 +91,8 @@ class TaskController extends Controller
                 'responsible_id' => $assigneeID,
                 'from_id' => auth()->id(),
                 'from_type' => User::class,
-                'created_at' => Carbon::now(),
-            ];
+            ]);
         }
-        // Insert all Tasks at once
-        Task::insert($data);
         // Loop through newTags
         foreach ($newTags as $newTag) {
             // Create new tags and merge them to existing tags array
@@ -107,8 +100,6 @@ class TaskController extends Controller
         }
         // Get all Watcher Users
         $watchers = User::alone()->find($watchers);
-        // Get all tasks that have been created
-        $tasks = Task::where('title', $request->title)->where('created_at', $data[0]['created_at'])->get();
         // if there is a poll
         if ($poll) {
             $this->createPoll($poll, $tasks);
@@ -127,8 +118,6 @@ class TaskController extends Controller
             Notification::send($watchers, new AssignedAsWatcher($task->from, $task->responsible, $task));
             // Attach Tags to Task
             $task->tags()->attach($existingTags);
-            // Notify Assignees
-            $task->responsible->notify(new AssignedToTask($task->from, $task));
             //Log creation to tasks History
             event(new TaskCreatedEvent($task));
         }

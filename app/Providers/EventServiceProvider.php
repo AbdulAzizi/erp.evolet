@@ -6,6 +6,8 @@ use App\Events\ProductCreatedEvent;
 use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
 use App\Listeners\HistoryListener;
+use App\Observers\TaskObserver;
+use App\Task;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -41,6 +43,6 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        //
+        Task::observe(TaskObserver::class);
     }
 }
