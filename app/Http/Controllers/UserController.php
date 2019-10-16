@@ -68,6 +68,6 @@ class UserController extends Controller
 
         $user->unreadNotifications->markAsRead();
 
-        return 'success';
+        return $user->unreadNotifications;
     }
 }
