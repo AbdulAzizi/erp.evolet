@@ -12,4 +12,9 @@ class Form extends Model
     {
         return $this->belongsToMany(FormField::class, 'field_form', 'form_id', 'field_id')->withPivot('required');
     }
+
+    public function task()
+    {
+        return $this->belongsToMany('App\Task');
+    }
 }

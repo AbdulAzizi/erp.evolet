@@ -24,7 +24,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'НАП',
                 'position' => 'Руководитель',
-                'responsibilities' => ['Куратор Портфел ПК стран'],
+                'responsibilities' => ['Рук НАП'],
             ],
             [
                 'name' => 'Firdavs',
@@ -49,9 +49,27 @@ class UserTableSeeder extends Seeder
                 'surname' => 'Nasridinshoev',
                 'email' => 'inoyat@admin.com',
                 'password' => 'admin',
-                'division' => 'ОМАР',
+                'division' => 'ПК',
                 'position' => 'Специалист',
-                'responsibilities' => ['Куратор Портфел ПК стран'],
+                'responsibilities' => ['ПК'],
+            ],
+            [
+                'name' => 'Azimjon',
+                'surname' => 'Vohidi',
+                'email' => 'azimjon@admin.com',
+                'password' => 'admin',
+                'division' => 'ПК',
+                'position' => 'Специалист',
+                'responsibilities' => ['ПК'],
+            ],
+            [
+                'name' => 'Behruz',
+                'surname' => 'Kholov',
+                'email' => 'behruz@admin.com',
+                'password' => 'admin',
+                'division' => 'НО',
+                'position' => 'Специалист',
+                'responsibilities' => ['НО'],
             ],
             [
                 'name' => 'Alisher',
@@ -98,7 +116,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'Evolet',
                 'position' => 'Руководитель',
-                'responsibilities' => ['Директор'],
+                'responsibilities' => ['РВЗ'],
             ],
         ]);
 

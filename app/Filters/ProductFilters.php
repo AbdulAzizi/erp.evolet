@@ -48,4 +48,9 @@ class ProductFilters extends QueryFilters{
             $query->where('id', $term);
         });
     }
+
+    public function product_id($term)
+    {
+        return $this->builder->where('id', $term);
+    }
 }

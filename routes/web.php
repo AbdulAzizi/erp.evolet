@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/products', 'ProductController@index')->name('products.index');
     Route::get('/products/create', 'ProductController@create')->name('products.create');
     Route::post('/products', 'ProductController@store')->name('products.store');
+    Route::post('/products/{id}/nextstep', 'ProductController@nextStep')->name('products.nextStep');
 
     Route::get('/processes/{id}', 'ProcessController@show')->name('processes.show');
 
