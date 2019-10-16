@@ -87,7 +87,7 @@
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
-          title="Семейное положение"
+          title="Состав семьи"
           :check="check"
           :resume="resume.families"
           main_icon="mdi-account-group"
@@ -108,7 +108,7 @@
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
-          title="Languages"
+          title="Знание языков"
           :check="check"
           :resume="resume.languages"
           main_icon="mdi-chat"
@@ -185,13 +185,13 @@ export default {
             rules: ["required"]
           },
           {
-            label: "Название",
+            label: "Учебное заведение",
             type: "string",
             name: "name",
             rules: ["required"]
           },
           {
-            label: "Название",
+            label: "Специальность",
             type: "string",
             name: "specialty",
             rules: ["required"]
@@ -271,11 +271,10 @@ export default {
             type: "select",
             name: "level",
             items: [
-              "Beginner",
-              "Pre-Intermidiate",
-              "Intermidiate",
-              "Upper-Intermidiate",
-              "Advanced"
+              "Начальный",
+              "Средний",
+              "Продвинутый",
+              "Профессиональный"
             ],
             rules: ["required"]
           }
@@ -286,9 +285,8 @@ export default {
         fields: [
           {
             label: "Тип",
-            type: "select",
+            type: "string",
             name: "type",
-            items: ["Спорт", "Наука"],
             rules: ["required"]
           },
           {

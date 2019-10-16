@@ -65,12 +65,15 @@ class ResumeController extends Controller
 
     public function create(Request $request)
     {
+
+        $gender = json_decode($request->gender);
+
         if($request->own == 'false'){
             $resume = Resume::create([
             'name' => $request->name,
             'surname' => $request->surname,
             'birthday' => $request->birthday,
-            'male_female' => $request->gender,
+            'male_female' => $gender,
             'phone' => $request->phone,
             'email' => $request->email,
             'creator' => auth()->id()
@@ -86,7 +89,7 @@ class ResumeController extends Controller
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'birthday' => $request->birthday,
-                'male_female' => $request->gender,
+                'male_female' => $gender,
                 'phone' => $request->phone,
                 'email' => $user->email,
                 'creator' => auth()->id()
