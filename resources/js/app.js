@@ -151,6 +151,8 @@ Vue.mixin({
 });
 
 /****************************COMPONENTS********************************/
+Vue.component("alert", require("./components/Alert.vue").default);
+Vue.component("alerts", require("./components/Alerts.vue").default);
 Vue.component("navbar", require("./components/Navbar.vue").default);
 Vue.component("myform", require("./components/Form.vue").default);
 Vue.component("right-drawer", require("./components/RightDrawer.vue").default);
@@ -355,5 +357,5 @@ Vue.component(
 
 const app = new Vue({
     el: "#app",
-    vuetify: new Vuetify(vuetifyOptions)
+    vuetify: new Vuetify(vuetifyOptions),
 });
