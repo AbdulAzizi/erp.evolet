@@ -1,19 +1,18 @@
 <template>
   <v-row>
-    <v-col cols="12">
-      <p class="grey--text text--darken-2 mb-1">
-        <span class="grey--text">Текущий процесс</span>
-        · {{ product.current_process.name }}
-      </p>
-      <p class="grey--text text--darken-2 mb-1">
-        <span class="grey--text">{{ product.project.country.name }}</span>
+    <v-col cols="12" class="pt-0">
+      <p class="title mb-0">
+        {{ product.project.country.name }}
         ·
         {{ product.project.pc.name }}
       </p>
+      <p class="grey--text text--darken-2 mb-1">
+        <span class="grey--text ">Текущий процесс:</span> {{ product.current_process.name }}
+      </p>
       <v-btn small depressed color="primary" class="mb-0" @click="window.back()">Назад</v-btn>
     </v-col>
-    <v-col cols="6" class="pt-0">
-      <v-card class="pt-0">
+    <v-col cols="6" class="pt-0 pr-0">
+      <v-card flat class="pt-0">
         <v-simple-table fixed-header dense :height="'calc(100vh - 30vh)'">
           <thead>
             <tr>
