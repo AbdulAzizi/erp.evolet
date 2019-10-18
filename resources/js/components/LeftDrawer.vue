@@ -110,7 +110,7 @@ export default {
                 },
                 {
                     icon: "mdi-file",
-                    text: "Резюме",
+                    text: "Резерв кандидатов",
                     url: "/head-resumes",
                     responsibilities: [],
                     divisions: ["*"]

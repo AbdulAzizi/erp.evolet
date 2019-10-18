@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        $users = User::all();
+        $users = User::with('division')->get();
 
         return view('profile.index', compact('users'));
     }
@@ -68,6 +68,6 @@ class UserController extends Controller
 
         $user->unreadNotifications->markAsRead();
 
-        return 'success';
+        return $user->unreadNotifications;
     }
 }
