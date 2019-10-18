@@ -35,12 +35,7 @@ export default {
 			
 		}, this.timeout);
 			
-        Event.listen("notify", ([message, color]) => {
-            this.value = true;
-            setTimeout(function() {
-                this.value = false;
-            }, this.timeout);
-        });
+        
     }
 };
 </script>

@@ -17,20 +17,14 @@
 export default {
     data() {
         return {
-			alerts: window.Laravel.alerts,
+			alerts: window.Laravel.alerts ? window.Laravel.alerts : [],
         };
     },
     created() {
-        // Event.listen("notify", ([message, color]) => {
-        //     if (color) this.snackbar.color = color;
-        //     this.snackbar.message = message;
-        //     this.snackbar.show = true;
-        // });
-
-        // if (window.Laravel.alerts) {
-        //     this.snackbar.message = window.Laravel.alerts;
-        //     this.snackbar.show = true;
-        // }
+        Event.listen("notify", ([message, color]) => {
+            console.log(this.alerts);
+            this.alerts.push(message);
+        });
     },
 };
 </script>

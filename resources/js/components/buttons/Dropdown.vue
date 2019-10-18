@@ -100,7 +100,22 @@ export default {
     this.check = this.item.length > 0;
     Echo.private("App.User." + this.auth.id).notification(notification => {
       this.localItems.unshift(notification.notification);
-      this.sound.play();
+
+      Event.fire("notify",["У вас новое уведомление!"]);
+      
+
+      let promise = this.sound.play();
+
+      if (promise !== undefined) {
+          promise.then(_ => {
+              // Autoplay started!
+              
+          }).catch(error => {
+              console.log("Sound did not not play");
+              // Autoplay was prevented.
+              // Show a "Play" button so that user can start playback.
+          });
+      }
     });
   },
   methods: {
