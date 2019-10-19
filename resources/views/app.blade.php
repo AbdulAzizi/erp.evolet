@@ -39,9 +39,8 @@
 <body style="margin:0">
     
     <div id="app">
-        {{-- <notification></notification> --}}
-
         <v-app style="background-color:#e6e6e6;">
+            <alerts></alerts>
             @yield('layout')
         </v-app>
             
@@ -51,7 +50,8 @@
 		window.Laravel = {!! json_encode([
         	'csrf_token' => csrf_token(),
             'asset_path' => asset(''),
-            'auth'       => Auth::user()
+            'auth'       => Auth::user(),
+            'alerts'    => session()->get('alerts')
         ]); !!}
 	</script>
 
