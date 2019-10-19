@@ -29,13 +29,12 @@ class ResumeController extends Controller
             'resume.jobs',
             'resume.families',
             'resume.achievments',
-            'resume.languages'
+            'resume.languages',
+            'resume.skills'
         )->find($request->id);
 
 
         return view('profile.curriculum', compact('user'));
-
-
     }
 
     public function showSingle(Request $request)
@@ -48,12 +47,11 @@ class ResumeController extends Controller
             'jobs',
             'families',
             'achievments',
-            'languages'
+            'languages',
+            'skills'
         )->find($request->id);
 
         return view('resume.show', compact('resume', 'user'));
-
-
     }
 
     public function headResumes(Request $request)
@@ -68,20 +66,19 @@ class ResumeController extends Controller
 
         $gender = json_decode($request->gender);
 
-        if($request->own == 'false'){
+        if ($request->own == 'false') {
             $resume = Resume::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'birthday' => $request->birthday,
-            'male_female' => $gender,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'creator' => auth()->id()
+                'name' => $request->name,
+                'surname' => $request->surname,
+                'birthday' => $request->birthday,
+                'male_female' => $gender,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'creator' => auth()->id()
             ]);
 
-            return redirect('/resume/'.$resume->id);
-        }
-        else{
+            return redirect('/resume/' . $resume->id);
+        } else {
 
             $user = User::find(auth()->id());
 
@@ -99,12 +96,7 @@ class ResumeController extends Controller
             $resume->owner()->attach($user->id);
 
             return redirect('/users/' . auth()->id() . '/cv');
-
         }
-
-
-
-
     }
 
     public function educationAdd()
@@ -128,9 +120,9 @@ class ResumeController extends Controller
 
     public function educationEdit(Request $request)
     {
-         $education = Education::find($request->id);
+        $education = Education::find($request->id);
 
-         $education->update([
+        $education->update([
 
             'degree' => $request->degree,
             'name' => $request->institute,
@@ -153,7 +145,6 @@ class ResumeController extends Controller
             'location' => request('location'),
             'resume_id' => request('resume_id')
         ]);
-
     }
 
     public function jobDelete(Request $request)
