@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Achievment;
 use Illuminate\Http\Request;
-use App\Skill;
 
-class SkillsController extends Controller
+class AchievmentController extends Controller
 {
     public function create(Request $request)
     {
-        return  Skill::create([
+        return Achievment::create([
+            'type' => $request->type,
             'description' => $request->description,
             'resume_id' => $request->resume_id
         ]);
     }
-    public function delete($id)
+    public function delete(Request $request)
     {
-        Skill::find($id)->delete();
+        Achievment::find($request->id)->delete();
 
         return 'success';
     }

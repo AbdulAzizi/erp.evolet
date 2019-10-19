@@ -325,12 +325,6 @@ export default {
         event: "skills",
         fields: [
           {
-            label: "Тип",
-            type: "string",
-            name: "type",
-            rules: ["required"]
-          },
-          {
             label: "Описание",
             type: "text",
             name: "description",
