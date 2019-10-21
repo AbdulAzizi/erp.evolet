@@ -195,7 +195,11 @@ class TaskController extends Controller
         // attach options to question
         $question->options()->saveMany($options);
         // attach poll to task
-        $question->task()->attach($tasks);
+        $taskIDs = [];
+        foreach ($tasks as $task) {
+            $taskIDs[] = $task->id;
+        }
+        $question->task()->attach($taskIDs);
         // attach options for return
         $question->options = $options;
         // return
