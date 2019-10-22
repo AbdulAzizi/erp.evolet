@@ -50,3 +50,6 @@ Route::put('/pause-task/{id}', 'TaskController@pauseTask')->name('pause.task');
 Route::put('/stop-task/{id}', 'TaskController@stopTask')->name('stop.task');
 Route::post('/skill', 'SkillsController@create')->name('skill.create');
 Route::delete('/deleteSkill/{id}', 'SkillsController@delete')->name('delete.skill');
+
+Route::post('/country', 'CountryController@create')->name('country.create');
+Route::post('/pc', 'DivisionController@create')->name('division.create');

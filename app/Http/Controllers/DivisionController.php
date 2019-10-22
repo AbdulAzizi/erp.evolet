@@ -12,6 +12,17 @@ use Validator;
 
 class DivisionController extends Controller
 {
+    public function create(Request $request)
+    
+    {
+        $parentDivision = Division::where('name', 'Промо Компания')->get();
+
+        return Division::create([
+            'name' => $request->name,
+            'abbreviation' => $request->abbreviation
+        ], $parentDivision->first());
+    }
+
     public function show(Request $request)
     {
 
