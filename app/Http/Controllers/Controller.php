@@ -31,4 +31,15 @@ class Controller extends BaseController
             'happened_with_type' => $modelClass,
         ]);
     }
+
+    protected function alert($message){
+        $alerts = session()->get('alerts');
+        
+        if( $alerts )
+            $alerts[] = $message;
+        else
+            $alerts = [$message];
+        
+        session()->flash('alerts', $alerts);
+    }
 }

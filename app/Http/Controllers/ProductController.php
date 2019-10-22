@@ -183,6 +183,9 @@ class ProductController extends Controller
                     'name' => 'project',
                     'value' => $request->project_id,
                 ];
+            } else {
+                $this->alert("Вы не можете добавить продукт!");
+                return redirect()->back();
             }
         }
 
