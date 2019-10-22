@@ -2,8 +2,10 @@
 
 namespace App\Observers;
 
+use App\Notifications\AssignedAsAuthor;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AssignedAsWatcher;
 use App\Notifications\AssignedToTask;
-use Illuminate\Http\Request;
 use App\Task;
 
 class TaskObserver
@@ -17,8 +19,11 @@ class TaskObserver
     public function created(Task $task){
         // Notify Assignees
         $task->responsible->notify(new AssignedToTask($task->from, $task));
+        if( $task->from_type == "App\User")
+            // Notify Author
+            $task->from->notify(new AssignedAsAuthor($task));
+        
         // Make flash notification
-
         $alerts = session()->get('alerts');
         if( $alerts )
             $alerts[] = "Успешно добавили задачу!";

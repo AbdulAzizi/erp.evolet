@@ -110,8 +110,6 @@ class TaskController extends Controller
             // TODO On the clide side restrickt User to add himself as a watcher
             // TODO select auth user as task responsible by deafauld on the client side
 
-            // Attach Task Author as a Watcher
-            $task->watchers()->attach(auth()->user());
             // Attach Watchers to Task
             $task->watchers()->attach($watchers);
             // Notify Watchers
