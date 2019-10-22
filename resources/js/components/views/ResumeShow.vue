@@ -27,7 +27,7 @@
               </v-list-item-icon>
               <v-list-item-content>{{resume.phone}}</v-list-item-content>
             </v-list-item>
-             <v-list-item>
+            <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-email</v-icon>
               </v-list-item-icon>
@@ -60,7 +60,7 @@
             title="Добавить образование"
             url="/api/education"
             :form="education"
-            returnDataEvent="educationAdded"
+            :returnDataEvent="education.event"
           />
         </resume-card>
       </v-col>
@@ -81,7 +81,7 @@
             title="Добавить место работы"
             url="/api/job"
             :form="job"
-            returnDataEvent="jobAdded"
+            :returnDataEvent="job.event"
           />
         </resume-card>
       </v-col>
@@ -102,7 +102,7 @@
             title="Добавить члена семьи"
             url="/api/family"
             :form="family"
-            returnDataEvent="familyAdded"
+            :returnDataEvent="family.event"
           />
         </resume-card>
       </v-col>
@@ -122,7 +122,7 @@
             title="Добавить язык"
             url="/api/language"
             :form="language"
-            returnDataEvent="languageAdded"
+            :returnDataEvent="language.event"
           />
         </resume-card>
       </v-col>
@@ -142,7 +142,28 @@
             title="Добавить достижение"
             url="/api/achievment"
             :form="achievment"
-            returnDataEvent="achievmentAdded"
+            :returnDataEvent="achievment.event"
+          />
+        </resume-card>
+      </v-col>
+      <v-col cols="12" sm="6" md="4">
+        <resume-card
+          :user="user"
+          :check="check"
+          title="Сильные стороны"
+          :resume="resume.skills"
+          main_icon="mdi-human-greeting"
+          deleteUrl="/api/deleteSkill/"
+          firstMainLine="type"
+          :secondLineItems="['description']"
+        >
+          <resume-add-item
+            v-if="check"
+            :resume="resume"
+            title="Добавить сильные стороны"
+            url="/api/skill"
+            :form="skills"
+            :returnDataEvent="skills.event"
           />
         </resume-card>
       </v-col>
@@ -153,7 +174,6 @@
 </template>
 
 <script>
-
 export default {
   props: ["resume", "user"],
 
@@ -161,9 +181,13 @@ export default {
     return {
       localUser: this.resume,
       window: window.history,
-      check: this.user.division.abbreviation == 'ДЧ' || this.resume.creator == this.user.id,
+      check:
+        this.user.division.abbreviation == "ДЧ" ||
+        this.resume.creator == this.user.id,
+      listenEventName: null,
       education: {
         colsPerRow: [4, 4, 4, 12, 12],
+        event: "educations",
         fields: [
           {
             label: "Степень",
@@ -200,6 +224,7 @@ export default {
       },
       job: {
         colsPerRow: [4, 4, 4, 12, 12],
+        event: "jobs",
         fields: [
           {
             label: "Название",
@@ -235,6 +260,7 @@ export default {
       },
       family: {
         colsPerRow: [4, 4, 4],
+        event: "families",
         fields: [
           {
             label: "Степень родства",
@@ -259,6 +285,7 @@ export default {
       },
       language: {
         colsPerRow: [6, 6],
+        event: "languages",
         fields: [
           {
             label: "Язык",
@@ -270,18 +297,14 @@ export default {
             label: "Уровень",
             type: "select",
             name: "level",
-            items: [
-              "Начальный",
-              "Средний",
-              "Продвинутый",
-              "Профессиональный"
-            ],
+            items: ["Начальный", "Средний", "Продвинутый", "Профессиональный"],
             rules: ["required"]
           }
         ]
       },
       achievment: {
-        colsPerRow: [6],
+        colsPerRow: [12],
+        event: "achievments",
         fields: [
           {
             label: "Тип",
@@ -296,35 +319,40 @@ export default {
             rules: ["required"]
           }
         ]
+      },
+      skills: {
+        colsPerRow: [12],
+        event: "skills",
+        fields: [
+          {
+            label: "Описание",
+            type: "text",
+            name: "description",
+            rules: ["required"]
+          }
+        ]
       }
     };
   },
+  methods: {
+    defineEvent() {
+      Event.listen("passDataEvent", data => {
+        this.listenEventName = data;
+      });
+    },
+    listenEvents(event) {
+      Event.listen(event, data => {
+        this.localUser[event].push(data);
+      });
+    }
+  },
   created() {
-    Event.listen("educationAdded", data => {
-      console.log("Event listened");
-
-      this.localUser.educations.push(data);
-    });
-    Event.listen("jobAdded", data => {
-      console.log("Event listened");
-
-      this.localUser.jobs.push(data);
-    });
-    Event.listen("familyAdded", data => {
-      console.log("Event listened");
-
-      this.localUser.families.push(data);
-    });
-    Event.listen("languageAdded", data => {
-      console.log("Event listened");
-
-      this.localUser.languages.push(data);
-    });
-    Event.listen("achievmentAdded", data => {
-      console.log("Event listened");
-
-      this.localUser.achievments.push(data);
-    });
+    this.defineEvent();
+  },
+  watch: {
+    listenEventName(element) {
+      this.listenEvents(element);
+    }
   }
 };
 </script>

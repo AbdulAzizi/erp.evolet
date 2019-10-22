@@ -5,23 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Resume;
-use App\Education;
-use App\Job;
-use App\Family;
-use App\Language;
-use App\Achievment;
 use PDF;
-
 class ResumeController extends Controller
 {
-
-
+    // Show all resumes
     public function index()
     {
         $resumes = Resume::where('creator', auth()->id())->with(['educations', 'languages'])->doesnthave('owner')->get();
 
         return view('resume.index', compact('resumes'));
     }
+
+    // Show resume in users profile
     public function show(Request $request)
     {
         $user = User::with(
@@ -29,59 +24,31 @@ class ResumeController extends Controller
             'resume.jobs',
             'resume.families',
             'resume.achievments',
-            'resume.languages'
+            'resume.languages',
+            'resume.skills'
         )->find($request->id);
-
 
         return view('profile.curriculum', compact('user'));
-
-
-    }
-
-    public function showSingle(Request $request)
-    {
-        $user = auth()->user();
-
-
-        $resume = Resume::with(
-            'educations',
-            'jobs',
-            'families',
-            'achievments',
-            'languages'
-        )->find($request->id);
-
-        return view('resume.show', compact('resume', 'user'));
-
-
-    }
-
-    public function headResumes(Request $request)
-    {
-        $resumes = Resume::with(['educations', 'languages'])->doesnthave('owner')->get();
-
-        return view('resume.headResumes', compact('resumes'));
     }
 
     public function create(Request $request)
     {
-
         $gender = json_decode($request->gender);
 
-        if($request->own == 'false'){
+        if ($request->own == 'false') {
             $resume = Resume::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'birthday' => $request->birthday,
-            'male_female' => $gender,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'creator' => auth()->id()
+                'name' => $request->name,
+                'surname' => $request->surname,
+                'birthday' => $request->birthday,
+                'male_female' => $gender,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'creator' => auth()->id()
             ]);
 
-            return redirect('/resume/'.$resume->id);
-        }
-        else{
+            return redirect('/resume/' . $resume->id);
+
+        } else {
 
             $user = User::find(auth()->id());
 
@@ -95,118 +62,35 @@ class ResumeController extends Controller
                 'creator' => auth()->id()
             ]);
 
-
             $resume->owner()->attach($user->id);
 
             return redirect('/users/' . auth()->id() . '/cv');
-
         }
-
-
-
-
     }
 
-    public function educationAdd()
+    // Show candidate resume added by employee
+    public function showSingle(Request $request)
     {
-        return Education::create([
-            'degree' => request('degree'),
-            'name' => request('name'),
-            'start_at' => request('start_at'),
-            'end_at' => request('end_at'),
-            'specialty' => request('specialty'),
-            'resume_id' => request('resume_id')
-        ]);
+        $user = auth()->user();
+
+        $resume = Resume::with(
+            'educations',
+            'jobs',
+            'families',
+            'achievments',
+            'languages',
+            'skills'
+        )->find($request->id);
+
+        return view('resume.show', compact('resume', 'user'));
     }
 
-    public function educationDelete(Request $request)
+    // Show resumes to HR
+    public function hrShowResumes(Request $request)
     {
-        Education::find($request->id)->delete();
+        $resumes = Resume::with(['educations', 'languages'])->doesnthave('owner')->get();
 
-        return "success";
-    }
-
-    public function educationEdit(Request $request)
-    {
-         $education = Education::find($request->id);
-
-         $education->update([
-
-            'degree' => $request->degree,
-            'name' => $request->institute,
-            'start_at' => $request->start_at,
-            'end_at' => $request->end_at,
-            'specialty' => $request->specialty
-
-        ]);
-
-        return $education;
-    }
-
-    public function jobAdd()
-    {
-        return Job::create([
-            'company_name' => request('company_name'),
-            'start_at' => request('start_at'),
-            'end_at' => request('end_at'),
-            'position' => request('position'),
-            'location' => request('location'),
-            'resume_id' => request('resume_id')
-        ]);
-
-    }
-
-    public function jobDelete(Request $request)
-    {
-        Job::find($request->id)->delete();
-
-        return "success";
-    }
-
-    public function familyAdd(Request $request)
-    {
-        return Family::create([
-            'relation' => $request->relation,
-            'birthday' => $request->birthday,
-            'name' => $request->name,
-            'resume_id' => $request->resume_id
-        ]);
-    }
-    public function familyDelete(Request $request)
-    {
-        Family::find($request->id)->delete();
-
-        return 'success';
-    }
-
-    public function languageAdd(Request $request)
-    {
-        return Language::create([
-            'name' => $request->name,
-            'level' => $request->level,
-            'resume_id' => $request->resume_id
-        ]);
-    }
-    public function languageDelete(Request $request)
-    {
-        Language::find($request->id)->delete();
-
-        return 'success';
-    }
-
-    public function achievmentAdd(Request $request)
-    {
-        return Achievment::create([
-            'type' => $request->type,
-            'description' => $request->description,
-            'resume_id' => $request->resume_id
-        ]);
-    }
-    public function achievmentDelete(Request $request)
-    {
-        Achievment::find($request->id)->delete();
-
-        return 'success';
+        return view('resume.headResumes', compact('resumes'));
     }
 
     public function pdf(Request $request)

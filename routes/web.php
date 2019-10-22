@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::post('/resume', 'ResumeController@create')->name('resume.create');
     Route::get('/resume/index', 'ResumeController@index')->name('resume.index');
     Route::get('/resume/{id}', 'ResumeController@showSingle')->name('show.single');
-    Route::get('/head-resumes', 'ResumeController@headResumes')->name('head.resumes');
+    Route::get('/head-resumes', 'ResumeController@hrShowResumes')->name('head.resumes');
     Route::get('/resume-pdf/{id}', 'ResumeController@pdf')->name('resume.pdf');
 
     Route::get('/human-resources', 'HumanResourcesController@index')->name('human.resources');

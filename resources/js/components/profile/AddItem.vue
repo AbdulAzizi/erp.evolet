@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" width="800">
     <template v-slot:activator="{ on }">
-      <v-btn icon v-on="on">
+      <v-btn icon v-on="on" @click="pasteEvent()">
         <v-icon>mdi-plus-circle</v-icon>
       </v-btn>
     </template>
@@ -16,7 +16,6 @@
         <v-form :action="url" method="POST" @submit.prevent="onSubmit" ref="form">
           <v-row>
             <input type="hidden" name="_token" :value="csrf_token" />
-
             <v-col
               :cols=" form.colsPerRow.length <= index ? 12 : form.colsPerRow[index]"
               v-for="(field, index) in form.fields"
@@ -25,7 +24,7 @@
               <form-field :field="field"></form-field>
             </v-col>
           </v-row>
-            <v-btn  color="primary" type="submit" :loading="loading" :disabled="loading">Добавить</v-btn>
+          <v-btn color="primary" type="submit" :loading="loading" :disabled="loading">Добавить</v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -64,13 +63,14 @@ export default {
           .then(res => {
             this.dialog = false;
             Event.fire(this.returnDataEvent, res.data);
-            console.log("Event Fired");
-
             this.loading = false;
             form.reset();
           })
           .catch(err => console.log(err.message));
       }
+    },
+    pasteEvent() {
+      Event.fire("passDataEvent", this.returnDataEvent);
     }
   }
 };

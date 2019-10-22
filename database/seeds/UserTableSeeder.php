@@ -100,8 +100,8 @@ class UserTableSeeder extends Seeder
                 'responsibilities' => ['Программист'],
             ],
             [
-                'name' => 'Анвар',
-                'surname' => 'Джабаров',
+                'name' => 'Anvar',
+                'surname' => 'Jabarov',
                 'img' => 'anvar.jpg',
                 'email' => 'anvar@gmail.com',
                 'password' => 'admin',
@@ -110,8 +110,8 @@ class UserTableSeeder extends Seeder
                 'responsibilities' => ['НО'],
             ],
             [
-                'name' => 'Сайёра',
-                'surname' => 'Мирзоева',
+                'name' => 'Sayora',
+                'surname' => 'Mirzoeva',
                 'email' => 'mirzoeva@gmail.com',
                 'password' => 'admin',
                 'division' => 'Evolet',

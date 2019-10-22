@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class Skill extends Model
+
 {
+    protected $guarded = [];
+
     public $timestamps = false;
 
-    public $guarded = [];
     
 }
