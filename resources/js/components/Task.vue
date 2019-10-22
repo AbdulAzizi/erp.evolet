@@ -82,7 +82,7 @@
             </v-card-text>
           </v-tab-item>
           <v-tab-item value="messages">
-            <messages :messageable="task" type="Tasks" />
+            <messages :messageable="task" type="App\Task" />
           </v-tab-item>
           <v-tab-item value="history">
             <v-col>
