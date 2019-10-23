@@ -136,7 +136,7 @@ class ProductController extends Controller
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $projectID, $product);
         // Redirect to Tasks Index page
-        return redirect()->route('product.show',$product->id);
+        return redirect()->route('products.show',$product->id);
     }
 
     public function create(Request $request)
@@ -202,6 +202,9 @@ class ProductController extends Controller
         $processTasks = ProcessTask::with('forms')->where('process_id', $process->id)->get();
         // Make empty array
         $data = [];
+        //
+        $project = Project::with('country', 'pc')->find($projectId);
+        $productDescripttion = '<a href="' . route('products.show', $product->id) . '">Продукт</a> (<a href="' . route('products.index', ['project_id' => $projectId]) . '">' . $project->country->name . ' ' . $project->pc->name . '</a>)</br>';
         // Loop through each task
         foreach ($processTasks as $key => $task) {
             $responsiblePerson = User::whereHas('projectParticipant', function (Builder $query) use ($task, $projectId) {
@@ -212,7 +215,7 @@ class ProductController extends Controller
             // create tasks
             $createdTask = Task::create([
                 'title' => $task->title,
-                'description' => $task->description,
+                'description' => $productDescripttion . $task->description,
                 'priority' => 2,
                 'planned_time' => $task->planned_time,
                 'deadline' => Carbon::now()->addMilliseconds($task->planned_time),

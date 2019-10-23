@@ -45,7 +45,7 @@
           <v-tab-item value="task">
             <v-card-text>
               <p v-if="task.description" class="font-weight-bold">Описание</p>
-              {{task.description ? task.description : ''}}
+              <p v-html="task.description ? task.description : ''"></p>
               <p
                 class="font-weight-bold mt-3"
                 v-if="Array.isArray(task.polls) && task.polls.length"
