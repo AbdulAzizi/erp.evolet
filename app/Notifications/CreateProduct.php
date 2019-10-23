@@ -49,7 +49,6 @@ class CreateProduct extends Notification
      */
     public function toArray($notifiable)
     {
-        $url = 'products?project_id=' . $this->project->id;
         $country = $this->project->country->name;
         $pc = $this->project->pc->name;
 
@@ -57,7 +56,7 @@ class CreateProduct extends Notification
             'avatar' => $this->from->img,
             'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
                 ' добавил(a) <a href="' . route("products.show", $this->product->id) . '">' . 'новый продукт' .
-            '</a>' . ' в проекте <a href="' . $url . '">' . $pc . ' · ' . $country . '</a>',
+            '</a>' . ' в проекте <a href="' . route('products.index',['project_id'=>$this->project->id]) . '">' . $pc . ' · ' . $country . '</a>',
         ];
     }
 
