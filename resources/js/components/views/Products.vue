@@ -103,7 +103,7 @@ export default {
         .join("&");
     },
     showProduct(product){
-        window.location.href = `product/${product.id}`;
+        window.location.href = `products/${product.id}`;
     },
     canCreate(){
       let canCreate = false;
