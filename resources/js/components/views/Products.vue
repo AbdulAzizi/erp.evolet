@@ -6,6 +6,7 @@
       <v-tab href="#products">Продукты</v-tab>
       <v-tab href="#participants">Участники</v-tab>
       <v-btn
+        v-if="canCreate()"
         small
         class="align-self-center mx-4 primary"
         :href="appPath('products/create?'+
@@ -84,7 +85,12 @@ export default {
       ],
       preparedItems: [],
       productDialog: false,
-      selectedProduct: null
+      selectedProduct: null,
+      usersThatCanCreate:[
+        "Куратор Портфел ПК стран",
+        "ПК",
+        "НО"
+      ]
     };
   },
   methods: {
@@ -98,6 +104,16 @@ export default {
     },
     showProduct(product){
         window.location.href = `product/${product.id}`;
+    },
+    canCreate(){
+      let canCreate = false;
+      
+      this.auth.responsibilities.forEach(responsibility => {
+        if(this.usersThatCanCreate.includes(responsibility.name))
+          canCreate = true;
+      });
+      
+      return canCreate;
     }
   },
   created() {
