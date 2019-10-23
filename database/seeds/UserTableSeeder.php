@@ -83,7 +83,7 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'Akbar',
                 'surname' => 'Ergashev',
-                'email' => 'ergashev.akb@gmail.com',
+                'email' => 'ergashev.akb@admin.com',
                 'password' => 'admin',
                 'division' => 'ОЦМ',
                 'position' => 'Специалист',
@@ -93,7 +93,7 @@ class UserTableSeeder extends Seeder
                 'name' => 'AbdulAziz',
                 'surname' => 'Nurov',
                 'img' => 'abdulaziz.jpg',
-                'email' => 'nurovaziz@gmail.com',
+                'email' => 'nurovaziz@admin.com',
                 'password' => 'admin',
                 'division' => 'ОРПО',
                 'position' => 'Руководитель',
@@ -103,7 +103,7 @@ class UserTableSeeder extends Seeder
                 'name' => 'Anvar',
                 'surname' => 'Jabarov',
                 'img' => 'anvar.jpg',
-                'email' => 'anvar@gmail.com',
+                'email' => 'anvar@admin.com',
                 'password' => 'admin',
                 'division' => 'ОЦМ',
                 'position' => 'Руководитель',
@@ -112,7 +112,7 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'Sayora',
                 'surname' => 'Mirzoeva',
-                'email' => 'mirzoeva@gmail.com',
+                'email' => 'mirzoeva@admin.com',
                 'password' => 'admin',
                 'division' => 'Evolet',
                 'position' => 'Руководитель',
@@ -123,9 +123,9 @@ class UserTableSeeder extends Seeder
         $this->userAsDivisionHead('nozim@admin.com');
         $this->userAsDivisionHead('firdavs@admin.com');
         $this->userAsDivisionHead('mehroj@admin.com');
-        $this->userAsDivisionHead('nurovaziz@gmail.com');
-        $this->userAsDivisionHead('anvar@gmail.com');
-        $this->userAsDivisionHead('mirzoeva@gmail.com');
+        $this->userAsDivisionHead('nurovaziz@admin.com');
+        $this->userAsDivisionHead('anvar@admin.com');
+        $this->userAsDivisionHead('mirzoeva@admin.com');
 
         factory(User::class, 40)->create()->each(function ($user){
             for($i = 1; $i <= random_int(1,4); $i++){
