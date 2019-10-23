@@ -112,9 +112,6 @@ class TaskController extends Controller
 
             // Attach Watchers to Task
             $task->watchers()->attach($watchers);
-            // Notify Watchers
-            Notification::send($watchers, new AssignedAsWatcher($task->from, $task->responsible, $task));
-            // Attach Tags to Task
             $task->tags()->attach($existingTags);
             //Log creation to tasks History
             event(new TaskCreatedEvent($task));

@@ -240,13 +240,7 @@ class ProductController extends Controller
                 })->get();
 
                 $createdTask->watchers()->attach($usersByResponsibility);
-
-                Notification::send($usersByResponsibility, new AssignedAsWatcher($createdTask->from, $createdTask->responsible, $createdTask));
             }
-
-            event(new TaskCreatedEvent($createdTask));
-
-            Notification::send($responsiblePerson, new AssignedToTask($process, $createdTask));
         }
     }
 

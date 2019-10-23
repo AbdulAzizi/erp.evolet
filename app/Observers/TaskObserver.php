@@ -18,7 +18,6 @@ class TaskObserver
     }
     public function created(Task $task){
         // Notify Assignees
-        $task->responsible->notify(new AssignedToTask($task->from, $task));
         if( $task->from_type == "App\User")
             // Notify Author
             $task->from->notify(new AssignedAsAuthor($task));

@@ -57,7 +57,7 @@ class AssignedToTask extends Notification
     public function toArray($notifiable)
     {
         // if user
-        if ($this->from->email)
+        if (isset($this->from->email))
             return [
                 'avatar' => $this->from->img,
                 'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
@@ -76,7 +76,7 @@ class AssignedToTask extends Notification
 
     public function toBroadcast($notifiable)
     {
-        if ($this->from->email)
+        if (isset($this->from->email))
             return new BroadcastMessage([
                 'avatar' => $this->from->img,
                 'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .

@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -15,7 +16,7 @@ class AssignedAsWatcher extends Notification
      *
      * @return void
      */
-    public function __construct( $from, $responsible, $task )
+    public function __construct($from, $responsible, $task)
     {
         $this->from = $from;
         $this->task = $task;
@@ -55,16 +56,40 @@ class AssignedAsWatcher extends Notification
      */
     public function toArray($notifiable)
     {
-        // $from = $this->from->name;
-        // $title = $this->task->title;
-        // $responsible = $this->responsible->name;
+        // if user
+        if (isset($this->from->email))
+            return [
+                'avatar' => $this->from->img,
+                'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
+                    ' Назначил(а) вас наблюдателем в задаче <a href="' . route("tasks.show", $this->task->id) . '">' .
+                    $this->task->title . '</a>' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+            ];
+        // if procces
+        else
+            return [
+                'avatar' => null,
+                'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
+                    ' назначил(а) вас наблюдателем в задаче <a href="' . route("tasks.show", $this->task->id) . '">' .
+                    $this->task->title . '</a>' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+            ];
+    }
 
-        return [
-            'avatar' => $this->from->img,
-            'title' =>  'Процесс <a href="'.route("processes.show", $this->from->id).'">'.$this->from->name.'</a>'.
-                        ' назначил(а) вас наблюдателем в задаче:
-                        <a href="' . route("tasks.show", $this->task->id) . '">' . $this->task->title . '</a> 
-                        Исполнитель:<a href="' . route("users.show", $this->responsible->id) . '">' . $this->responsible->name . '</a>'
-        ];
+    public function toBroadcast($notifiable)
+    {
+        if (isset($this->from->email))
+            return new BroadcastMessage([
+                'avatar' => $this->from->img,
+                'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
+                    ' Назначил(а) вас наблюдателем в задаче <a href="' . route("tasks.show", $this->task->id) . '">' .
+                    $this->task->title . '</a>' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+            ]);
+        // if procces
+        else
+            return new BroadcastMessage([
+                'avatar' => null,
+                'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
+                    ' назначил(а) вас наблюдателем в задаче <a href="' . route("tasks.show", $this->task->id) . '">' .
+                    $this->task->title . '</a>' . '<a href="' . route("users.show", $this->responsible->id) . '">' . ' исполнитель: ' . $this->responsible->name . '</a>',
+            ]);
     }
 }

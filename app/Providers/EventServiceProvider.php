@@ -7,8 +7,8 @@ use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
 use App\Listeners\HistoryListener;
 use App\Observers\TaskObserver;
-use App\Observers\ProductObserver;
-use App\Product;
+use App\Observers\HistoryObserver;
+use App\History;
 use App\Task;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -47,6 +47,6 @@ class EventServiceProvider extends ServiceProvider
 
         Task::observe(TaskObserver::class);
 
-        Product::observe(ProductObserver::class);
+        History::observe(HistoryObserver::class);
     }
 }
