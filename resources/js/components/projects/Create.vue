@@ -9,17 +9,22 @@
           </v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <template v-if="addCountry">
-            <form-field :field="dialogForm.country.nameField" v-model="dialogForm.country.name"></form-field>
-            <form-field
-              :field="dialogForm.abbreviationField"
-              v-model="dialogForm.country.abbreviation"
-            ></form-field>
-          </template>
-          <template v-if="addPc">
-            <form-field :field="dialogForm.pc.nameField" v-model="dialogForm.pc.name"></form-field>
-            <form-field :field="dialogForm.abbreviationField" v-model="dialogForm.pc.abbreviation"></form-field>
-          </template>
+          <v-form ref="addCountryAndPcForm">
+            <template v-if="addCountry">
+              <form-field :field="dialogForm.country.nameField" v-model="dialogForm.country.name"></form-field>
+              <form-field
+                :field="dialogForm.abbreviationField"
+                v-model="dialogForm.country.abbreviation"
+              ></form-field>
+            </template>
+            <template v-if="addPc">
+              <form-field :field="dialogForm.pc.nameField" v-model="dialogForm.pc.name"></form-field>
+              <form-field
+                :field="dialogForm.abbreviationField"
+                v-model="dialogForm.pc.abbreviation"
+              ></form-field>
+            </template>
+          </v-form>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -173,19 +178,24 @@ export default {
       let abbreviation = this.addPc
         ? this.dialogForm.pc.abbreviation
         : this.dialogForm.country.abbreviation;
-      axios
-        .post(url, {
-          name: name,
-          abbreviation: abbreviation
-        })
-        .then(res => {
-          model.push(res.data);
-          this.addPc
-            ? Event.fire("notify", ["Промо компания добавлена!"])
-            : Event.fire("notify", ["Страна добавлена!"]);
-          this.dialog = this.addCountry = this.addPc = false;
-          this.dialogForm.name = this.dialogForm.abbreviation = null;
-        });
+      let form = this.$refs.addCountryAndPcForm;
+      console.log(form)
+
+      if (form.validate()) {
+        axios
+          .post(url, {
+            name: name,
+            abbreviation: abbreviation
+          })
+          .then(res => {
+            model.push(res.data);
+            this.addPc
+              ? Event.fire("notify", ["Промо компания добавлена!"])
+              : Event.fire("notify", ["Страна добавлена!"]);
+            this.dialog = this.addCountry = this.addPc = false;
+            this.dialogForm.name = this.dialogForm.abbreviation = null;
+          });
+      }
     }
   }
 };
