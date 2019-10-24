@@ -139,7 +139,7 @@ export default {
         {
           type: "users",
           name: "kurator_pc",
-          label: "Куратор Портфел ПК стран",
+          label: "Куратор Портфеля ПК стран",
           rules: ["required"],
           icon: "mdi-account-tie",
           users: this.users

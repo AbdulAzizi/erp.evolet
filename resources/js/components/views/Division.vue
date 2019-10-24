@@ -2,7 +2,7 @@
   <v-flex>
     <v-tabs v-model="tab" background-color="white" class="d-inline-flex justify-end my-4" grow>
       <v-tab>Структура</v-tab>
-      <v-tab>Объязанности</v-tab>
+      <v-tab>Обязанности</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab" class="transparent">

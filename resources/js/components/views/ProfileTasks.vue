@@ -78,7 +78,7 @@
             </v-layout>
             <v-layout row wrap>
                 <v-flex xs3>
-                    <card color="primary" title="Задачи" text="По преоритетам">
+                    <card color="primary" title="Задачи" text="По приоритетам">
                         <v-list dense>
                             <template v-for="(priority,key) in priorities">
                                 <v-list-item href="#" :key="'list-item-'+key">

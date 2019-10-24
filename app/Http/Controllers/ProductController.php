@@ -150,7 +150,7 @@ class ProductController extends Controller
         // loop through each responsibilities
         foreach ($responsibilities as $responsibility) {
             // If Portfolio Manager
-            if ($responsibility->name == 'Куратор Портфел ПК стран' || $responsibility->name == 'ПК') {
+            if ($responsibility->name == 'Куратор Портфеля ПК стран' || $responsibility->name == 'ПК') {
                 // Get First BP form
                 $form = Form::where('name', 'Форма ПК Этап 1')->first();
                 $formExists = true;

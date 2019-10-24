@@ -87,7 +87,7 @@ export default {
       productDialog: false,
       selectedProduct: null,
       usersThatCanCreate:[
-        "Куратор Портфел ПК стран",
+        "Куратор Портфеля ПК стран",
         "ПК",
         "НО"
       ]
