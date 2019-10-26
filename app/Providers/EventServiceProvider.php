@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\AssignedToTaskProductEvent;
 use App\Events\ProductCreatedEvent;
 use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
@@ -32,6 +33,9 @@ class EventServiceProvider extends ServiceProvider
             HistoryListener::class
         ],
         ProductCreatedEvent::class => [
+            HistoryListener::class
+        ],
+        AssignedToTaskProductEvent::class => [
             HistoryListener::class
         ]
     ];
