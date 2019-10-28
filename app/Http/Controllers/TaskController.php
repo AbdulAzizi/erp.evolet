@@ -6,6 +6,7 @@ use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
 use App\Notifications\AssignedAsWatcher;
 use App\Option;
+use App\Product;
 use App\Question;
 use App\Tag;
 use App\Task;
@@ -131,12 +132,17 @@ class TaskController extends Controller
             'history.user',
             // 'polls.answers',
             'polls.options.users',
-            'messages.sender',
+            // 'messages',
             'forms.fields',
             'timeSets'
         )->find($id);
+        // return $task;
+
+        if ($task->from_type == "App\Process")
+            $task->load('products.messages');
+        else
+            $task->load('messages');
         // if has front tether load it
-        
         // if ($task->from_type == "App\Process") {
         //     $task->from->load('frontTethers.form.fields', 'backTethers');
         // }

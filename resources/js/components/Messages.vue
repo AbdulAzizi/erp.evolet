@@ -65,42 +65,36 @@ export default {
     };
   },
   created() {
-    // console.log('------------------');
+    if(this.type == "App\\User"){
 
-    // console.log(this.messageable);
-    // console.log(this.messageable.type);
+      Echo.channel(
+        `User.${this.auth.id}.${this.messageable.id}.messages`
+      ).listen("NewMessage", event => {
+        this.localMessageable.messages.push(event.message);
+        this.scrollToBotom();
+      });
 
-    switch (this.type) {
-      case "App\\User":
-        Echo.channel(
-          `newMessage.Users.${this.auth.id}.${this.messageable.id}`
-        ).listen("NewMessage", event => {
-          // console.log(event.message);
+      Echo.channel(
+        `User.${this.messageable.id}.${this.auth.id}.messages`
+      ).listen("NewMessage", event => {
+        this.localMessageable.messages.push(event.message);
+        this.scrollToBotom();
+      });
+      console.log(`User.${this.messageable.id}.${this.auth.id}.messages`);
+      
+
+    } else {
+
+      let result = this.type.split('\\');
+      let model = result[1];
+      console.log(`${model}.${this.messageable.id}.messages`);
+      
+      Echo.channel(`${model}.${this.messageable.id}.messages`).listen(
+        "NewMessage",
+        event => {
           this.localMessageable.messages.push(event.message);
           this.scrollToBotom();
-        });
-
-        Echo.channel(
-          `newMessage.Users.${this.messageable.id}.${this.auth.id}`
-        ).listen("NewMessage", event => {
-          // console.log(event.message);
-          this.localMessageable.messages.push(event.message);
-          this.scrollToBotom();
-        });
-
-        break;
-
-      default:
-        Echo.channel(`newMessage.Chats.${this.messageable.id}`).listen(
-          "NewMessage",
-          event => {
-            // console.log(event.message);
-            this.localMessageable.messages.push(event.message);
-            this.scrollToBotom();
-          }
-        );
-
-        break;
+      });
     }
   },
   methods: {

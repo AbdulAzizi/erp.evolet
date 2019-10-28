@@ -71,7 +71,7 @@
                         :fieldsPerRows="[2]"
                         :fields="preparedFields(task.forms[0])"
                         :title="task.forms[0].label"
-                        :actionUrl="`/products/${task.forms[0].pivot.product_id}/nextstep`"
+                        :actionUrl="`/products/${task.products[0].id}/nextstep`"
                         activatorEventName="addProduct"
                         method="post"
                       ></dynamic-form>
@@ -82,7 +82,8 @@
             </v-card-text>
           </v-tab-item>
           <v-tab-item value="messages">
-            <messages :messageable="task" type="App\Task" />
+            <messages v-if="task.products" :messageable="task.products[0]" type="App\Product" />
+            <messages v-else :messageable="task" type="App\Task" />
           </v-tab-item>
           <v-tab-item value="history">
             <v-col>
@@ -231,6 +232,7 @@ export default {
     };  
   },
   created() {
+    
     Event.listen("taskStarted", data => {
       return (this.task.status.name = "В процессе");
     });
@@ -240,6 +242,8 @@ export default {
     });
 
     this.synch();
+
+    console.log(this.task);
   },
   watch: {
     item(v) {
