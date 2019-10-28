@@ -26,7 +26,7 @@
           <template v-slot:extension>
             <v-tabs v-model="tab">
               <v-tab href="#task" class="ma-0">Задача</v-tab>
-              <v-tab href="#messages">Коментарии</v-tab>
+              <v-tab href="#messages">Комментарии</v-tab>
               <v-tab href="#history">История</v-tab>
 
               <dynamic-form

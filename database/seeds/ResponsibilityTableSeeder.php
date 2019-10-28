@@ -28,7 +28,7 @@ class ResponsibilityTableSeeder extends Seeder
                 'division_id' => Division::where('abbreviation', 'ОЦМ')->first()->id
             ],
             [
-                'name' => 'Куратор Портфел ПК стран',
+                'name' => 'Куратор Портфеля ПК стран',
                 'division_id' => Division::where('abbreviation', 'ОМАР')->first()->id
             ],
             [

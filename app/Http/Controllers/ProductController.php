@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AssignedToTaskProductEvent;
 use App\Events\ProductCreatedEvent;
 use App\Events\TaskCreatedEvent;
 use App\Field;
@@ -97,10 +98,15 @@ class ProductController extends Controller
         $product->fields()->attach($preparedFields->toArray());
         // Fetch current Process
         $process = Process::find($product->currentProcess->id);
+
+        
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project, $product);
+
         //Add product creation to history
+        
         event(new ProductCreatedEvent($product));
+        
         // Redirect to Tasks Index page
         return redirect()->route('products.index', [
             'pc_id' => $request->pc,
@@ -150,7 +156,7 @@ class ProductController extends Controller
         // loop through each responsibilities
         foreach ($responsibilities as $responsibility) {
             // If Portfolio Manager
-            if ($responsibility->name == 'Куратор Портфел ПК стран' || $responsibility->name == 'ПК') {
+            if ($responsibility->name == 'Куратор Портфеля ПК стран' || $responsibility->name == 'ПК') {
                 // Get First BP form
                 $form = Form::where('name', 'Форма ПК Этап 1')->first();
                 $formExists = true;
@@ -200,8 +206,6 @@ class ProductController extends Controller
     {
         // Fetch Process Tasks
         $processTasks = ProcessTask::with('forms')->where('process_id', $process->id)->get();
-        // Make empty array
-        $data = [];
         //
         $project = Project::with('country', 'pc')->find($projectId);
         $productDescripttion = '<a href="' . route('products.show', $product->id) . '">Продукт</a> (<a href="' . route('products.index', ['project_id' => $projectId]) . '">' . $project->country->name . ' ' . $project->pc->name . '</a>)</br>';
@@ -226,6 +230,9 @@ class ProductController extends Controller
             ]);
 
             $createdTask->products()->attach( $product->id);
+            $responsible = User::find($createdTask->responsible_id);
+
+            event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));
 
             if(count($task->forms) != 0)
             {
