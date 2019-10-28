@@ -54,9 +54,7 @@ class CreateProduct extends Notification
 
         return [
             'avatar' => $this->from->img,
-            'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                ' добавил(a) <a href="' . route("products.show", $this->product->id) . '">' . 'новый продукт' .
-            '</a>' . ' в проекте <a href="' . route('products.index',['project_id'=>$this->project->id]) . '">' . $pc . ' · ' . $country . '</a>',
+            'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a> добавил(a) <a href="' . route("products.show", $this->product->id) . '"> новый продукт</a> в проекте <a href="' . route('products.index',['project_id'=>$this->project->id]) . '">' . $pc . ' · ' . $country . '</a>',
         ];
     }
 
@@ -65,11 +63,8 @@ class CreateProduct extends Notification
 
         return new BroadcastMessage([
             'avatar' => $this->from->img,
-            'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-               ' добавил(a) <a href="' . route("products.show", $this->product->id) . '">' . 'добавил(a) новый продукт' .
-                '</a>',
+            'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a> добавил(a) <a href="' . route("products.show", $this->product->id) . '"> новый продукт</a>',
             'notification' => $notifiable->notifications()->latest()->first()
         ]);
-        // if procces
     }
 }
