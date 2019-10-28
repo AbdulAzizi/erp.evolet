@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::post('/products', 'ProductController@store')->name('products.store');
     Route::post('/products/{id}/nextstep', 'ProductController@nextStep')->name('products.nextStep');
 
-    Route::get('/processes/{id}', 'ProcessController@show')->name('processes.show');
+    // Route::get('/processes/{id}', 'ProcessController@show')->name('processes.show');
 
     Route::get('/projects', 'ProjectController@index')->name('projects.index');
     Route::post('/projects', 'ProjectController@store')->name('projects.store');

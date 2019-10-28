@@ -62,10 +62,14 @@ class Task extends Model
 
     public function forms()
     {
-        return $this->belongsToMany('App\Form')->withPivot('product_id');
+        return $this->belongsToMany('App\Form');
     }
     public function timeSets()
     {
         return $this->hasMany('App\Timeset');
+    }
+    public function products()
+    {
+        return $this->belongsToMany('App\Product');
     }
 }

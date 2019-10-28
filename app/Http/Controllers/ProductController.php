@@ -69,7 +69,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $data['product'] = Product::with(['currentProcess', 'project.country', 'project.pc', 'fields', 'history.user'])->find($id);
+        $data['product'] = Product::with(['messages','currentProcess', 'project.country', 'project.pc', 'fields', 'history.user'])->find($id);
 
         $listFields = $this->getListFieldsFromProduct($data['product']);
 
@@ -232,19 +232,20 @@ class ProductController extends Controller
                 'created_at' => Carbon::now(),
             ]);
 
+            $createdTask->products()->attach( $product->id);
             $responsible = User::find($createdTask->responsible_id);
 
             event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));
 
             if(count($task->forms) != 0)
             {
-                $createdTask->forms()->attach([
-                    $task->forms->first()->id => ['product_id' => $product->id ]
-                ]);
+                $createdTask->forms()->attach($task->forms->first()->id);
             }
             if(count($task->polls) != 0)
             {
+                dd($task->polls);
                 $createdTask->polls()->attach( $task->polls->first()->id );
+                $createdTask->polls()->create($task->polls->first());
             }
             if(count($task->watchers) != 0)
             {

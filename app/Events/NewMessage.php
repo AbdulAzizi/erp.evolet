@@ -38,14 +38,15 @@ class NewMessage implements ShouldBroadcast
     public function broadcastOn()
     {
         $authID = auth()->user()->id;
-        switch ($this->type) {
-            case 'App\User':
-                return new Channel("newMessage.Users.$this->id.$authID");
-                break;
-            
-            default:
-                return new Channel("newMessage.Chats.$this->id");
-                break;
-        }
+        $result = explode('\\', $this->type);
+        $model = $result[1];
+
+        if($this->type == 'App\User')
+            //     Model.messageableID.authID.messages
+            // Ex: User.2.4.messages
+            return new Channel("$model.$this->id.$authID.messages");
+        else
+            // Ex: Task.4.messages
+            return new Channel("$model.$this->id.messages");
     }
 }

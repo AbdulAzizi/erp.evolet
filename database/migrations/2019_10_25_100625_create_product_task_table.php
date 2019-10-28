@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormTaskTable extends Migration
+class CreateProductTaskTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateFormTaskTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_task', function (Blueprint $table) {
+        Schema::create('product_task', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('form_id');
+            $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('task_id');
         });
     }
@@ -27,6 +27,6 @@ class CreateFormTaskTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_task');
+        Schema::dropIfExists('product_task');
     }
 }

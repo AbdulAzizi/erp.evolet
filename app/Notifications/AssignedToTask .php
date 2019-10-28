@@ -68,7 +68,7 @@ class AssignedToTask extends Notification
         else
             return [
                 'avatar' => null,
-                'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
+                'title' =>  'Процесс <a href="#">' . $this->from->name . '</a>' .
                     ' поставил вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' .
                     $this->task->title . '</a>',
             ];
@@ -88,7 +88,7 @@ class AssignedToTask extends Notification
         else
             return new BroadcastMessage([
                 'avatar' => null,
-                'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
+                'title' =>  'Процесс <a href="#">' . $this->from->name . '</a>' .
                     ' поставил вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' .
                     $this->task->title . '</a>',
                 'notification' => $notifiable->notifications()->latest()->first()

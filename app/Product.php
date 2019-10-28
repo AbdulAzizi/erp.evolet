@@ -40,4 +40,9 @@ class Product extends Model
     {
         return $this->morphMany('App\Message','messageable');
     }
+
+    public function tasks()
+    {
+        return $this->belongsToMany('App\Task');
+    }
 }
