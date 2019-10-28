@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AssignedToTaskProductEvent;
 use App\Events\ProductCreatedEvent;
+use App\Events\ProductStatusChangedEvent;
 use App\Events\TaskCreatedEvent;
 use App\Field;
 use App\Filters\ProductFilters;
@@ -141,6 +142,8 @@ class ProductController extends Controller
         $projectID = $product->project->id;
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $projectID, $product);
+
+        event(new ProductStatusChangedEvent($product, $process));
         // Redirect to Tasks Index page
         return redirect()->route('products.show',$product->id);
     }
