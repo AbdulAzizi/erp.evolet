@@ -13,7 +13,7 @@
     </v-col>
     <v-col cols="6" class="pt-0 pr-0">
       <v-card flat class="pt-0">
-        <v-simple-table fixed-header dense :height="'calc(100vh - 30vh)'">
+        <v-simple-table fixed-header dense :height="'calc(100vh - 180px)'">
           <thead>
             <tr>
               <th class="text-left">Наименование</th>
@@ -30,6 +30,7 @@
       </v-card>
     </v-col>
     <v-col cols="6" class="pt-0">
+      <messages :messageable="product" type="App\Product" class="pb-2"/>
       <v-card class="mx-auto mb-2" outlined>
         <v-list disabled>
           <v-list-item-group color="primary">
