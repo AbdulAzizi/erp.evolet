@@ -26,7 +26,7 @@
           <template v-slot:extension>
             <v-tabs v-model="tab">
               <v-tab href="#task" class="ma-0">Задача</v-tab>
-              <v-tab href="#messages">Коментарии</v-tab>
+              <v-tab href="#messages">Комментарии</v-tab>
               <v-tab href="#history">История</v-tab>
 
               <dynamic-form
@@ -44,8 +44,8 @@
         <v-tabs-items v-model="tab" style="background-color:#f4f5f7;" class="task-main-content">
           <v-tab-item value="task">
             <v-card-text>
-              <p class="font-weight-bold">Описание</p>
-              {{task.description ? task.description : ''}}
+              <p v-if="task.description" class="font-weight-bold">Описание</p>
+              <p v-html="task.description ? task.description : ''"></p>
               <p
                 class="font-weight-bold mt-3"
                 v-if="Array.isArray(task.polls) && task.polls.length"
@@ -56,7 +56,7 @@
                 :poll="task.polls[0]"
               />
               <!-- <v-list nav v-if="taskHasActions"> -->
-              <v-list nav v-if="false">
+              <v-list nav v-if="true">
                 <v-list-item-group color="primary">
                   <v-list-item
                     v-for="( tether, i ) in task.from.front_tethers"
@@ -69,9 +69,9 @@
                         width="800"
                         dialog
                         :fieldsPerRows="[2]"
-                        :fields="preparedFields(tether.form)"
-                        :title="tether.form.label"
-                        actionUrl="/products"
+                        :fields="preparedFields(task.forms[0])"
+                        :title="task.forms[0].label"
+                        :actionUrl="`/products/${task.products[0].id}/nextstep`"
                         activatorEventName="addProduct"
                         method="post"
                       ></dynamic-form>
@@ -82,7 +82,8 @@
             </v-card-text>
           </v-tab-item>
           <v-tab-item value="messages">
-            <messages :messageable="task" type="Tasks" />
+            <messages v-if="task.products" :messageable="task.products[0]" type="App\Product" />
+            <messages v-else :messageable="task" type="App\Task" />
           </v-tab-item>
           <v-tab-item value="history">
             <v-col>
@@ -231,6 +232,7 @@ export default {
     };  
   },
   created() {
+    
     Event.listen("taskStarted", data => {
       return (this.task.status.name = "В процессе");
     });
@@ -240,6 +242,8 @@ export default {
     });
 
     this.synch();
+
+    console.log(this.task);
   },
   watch: {
     item(v) {
@@ -266,6 +270,7 @@ export default {
           type: this.getDynamicFieldsType(field.type.name)
         };
       });
+      // return [ ...fields, { type: "input", name: "product_id", value: form.pivot.product_id } ];
     },
     getDynamicFieldsType(laravelType) {
       // TODO Make a normal adapter or refactor to use same types in vue and laravel

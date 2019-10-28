@@ -1,5 +1,5 @@
 <template>
-<div>
+  <div>
     <profile-banner :user="user" />
     <resume-create :user="user" v-if="!user.resume[0]" :permit="permit"></resume-create>
     <v-row v-if="user.resume[0]">
@@ -56,7 +56,7 @@
             title="Добавить образование"
             url="/api/education"
             :form="education"
-            returnDataEvent="educationAdded"
+            :returnDataEvent="education.event"
             v-if="user.id == permit"
           />
         </resume-card>
@@ -64,6 +64,7 @@
       <v-col cols="12" sm="6" md="4">
         <resume-card
           :user="user"
+          :check="user.id == permit"
           title="Опыт работы"
           :resume="user.resume[0].jobs"
           type="job"
@@ -78,7 +79,7 @@
             title="Добавить место работы"
             url="/api/job"
             :form="job"
-            returnDataEvent="jobAdded"
+            :returnDataEvent="job.event"
             v-if="user.id == permit"
           />
         </resume-card>
@@ -86,7 +87,8 @@
       <v-col cols="12" sm="6" md="4">
         <resume-card
           :user="user"
-          title="Семейное положение"
+          :check="user.id == permit"
+          title="Состав семьи"
           :resume="user.resume[0].families"
           main_icon="mdi-account-group"
           deleteUrl="/api/deleteFamily/"
@@ -99,13 +101,14 @@
             title="Добавить члена семьи"
             url="/api/family"
             :form="family"
-            returnDataEvent="familyAdded"
+            :returnDataEvent="family.event"
             v-if="user.id == permit"
           />
         </resume-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
+          :check="user.id == permit"
           :user="user"
           title="Знание языков"
           :resume="user.resume[0].languages"
@@ -120,13 +123,14 @@
             title="Добавить язык"
             url="/api/language"
             :form="language"
-            returnDataEvent="languageAdded"
+            :returnDataEvent="language.event"
             v-if="user.id == permit"
           />
         </resume-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <resume-card
+          :check="user.id == permit"
           :user="user"
           title="Достижения"
           :resume="user.resume[0].achievments"
@@ -140,7 +144,29 @@
             title="Добавить достижение"
             url="/api/achievment"
             :form="achievment"
-            returnDataEvent="achievmentAdded"
+            :returnDataEvent="achievment.event"
+            v-if="user.id == permit"
+          />
+        </resume-card>
+      </v-col>
+
+      <v-col cols="12" sm="6" md="4">
+        <resume-card
+          :check="user.id == permit"
+          :user="user"
+          title="Сильные стороны"
+          :resume="user.resume[0].skills"
+          main_icon="mdi-human-greeting"
+          deleteUrl="/api/deleteSkill/"
+          firstMainLine="type"
+          :secondLineItems="['description']"
+        >
+          <resume-add-item
+            :user="user"
+            title="Добавить достижение"
+            url="/api/skill"
+            :form="skills"
+            :returnDataEvent="skills.event"
             v-if="user.id == permit"
           />
         </resume-card>
@@ -157,9 +183,10 @@ export default {
     return {
       localUser: this.user,
       showEdit: false,
-
+      listenEventName: null,
       education: {
         colsPerRow: [4, 4, 4, 12, 12],
+        event: 'educations',
         fields: [
           {
             label: "Степень",
@@ -181,13 +208,13 @@ export default {
             rules: ["required"]
           },
           {
-            label: "Название",
+            label: "Учебное заведение",
             type: "string",
             name: "name",
             rules: ["required"]
           },
           {
-            label: "Название",
+            label: "Специальность",
             type: "string",
             name: "specialty",
             rules: ["required"]
@@ -196,6 +223,7 @@ export default {
       },
       job: {
         colsPerRow: [4, 4, 4, 12, 12],
+        event: 'jobs',
         fields: [
           {
             label: "Название",
@@ -231,6 +259,7 @@ export default {
       },
       family: {
         colsPerRow: [4, 4, 4],
+        event: 'families',
         fields: [
           {
             label: "Степень родства",
@@ -255,6 +284,7 @@ export default {
       },
       language: {
         colsPerRow: [6, 6],
+        event: 'languages',
         fields: [
           {
             label: "Язык",
@@ -266,25 +296,19 @@ export default {
             label: "Уровень",
             type: "select",
             name: "level",
-            items: [
-              "Beginner",
-              "Pre-Intermidiate",
-              "Intermidiate",
-              "Upper-Intermidiate",
-              "Advanced"
-            ],
+            items: ["Начальный", "Средний", "Продвинутый", "Профессиональный"],
             rules: ["required"]
           }
         ]
       },
       achievment: {
-        colsPerRow: [6],
+        colsPerRow: [12],
+        event: 'achievments',
         fields: [
           {
             label: "Тип",
-            type: "select",
+            type: "string",
             name: "type",
-            items: ["Спорт", "Наука"],
             rules: ["required"]
           },
           {
@@ -294,8 +318,20 @@ export default {
             rules: ["required"]
           }
         ]
+      },
+      skills: {
+        colsPerRow: [12],
+        event:'skills',
+        fields: [
+          {
+            label: "Описание",
+            type: "text",
+            name: "description",
+            rules: ["required"]
+          }
+        ]
       }
-    }
+    };
   },
 
   methods: {
@@ -303,30 +339,26 @@ export default {
       let a = this.moment(end);
       let b = this.moment(start);
       return a.diff(b, "years");
+    },
+     defineEvent() {
+      Event.listen("passDataEvent", data => {
+        this.listenEventName = data;
+      });
+    },
+    listenEvents(event) {
+      Event.listen(event, data => {
+        this.localUser.resume[0][event].push(data);
+      });
     }
   },
 
   created() {
-    Event.listen("educationAdded", data => {
-      console.log("Event listened");
-
-      this.localUser.resume[0].educations.push(data);
-    });
-    Event.listen("jobAdded", data => {
-      this.localUser.resume[0].jobs.push(data);
-    });
-
-    Event.listen("familyAdded", data => {
-      this.localUser.resume[0].families.push(data);
-    });
-
-    Event.listen("languageAdded", data => {
-      this.localUser.resume[0].languages.push(data);
-    });
-
-    Event.listen("achievmentAdded", data => {
-      this.localUser.resume[0].achievments.push(data);
-    });
+    this.defineEvent();
+  },
+  watch: {
+    listenEventName(element){
+      this.listenEvents(element);
+    }
   }
 };
 </script>

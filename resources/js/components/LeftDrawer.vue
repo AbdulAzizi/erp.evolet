@@ -80,7 +80,7 @@ export default {
                     icon: "mdi-attachment",
                     text: "ЭП",
                     url: "/projects?sortBy=country",
-                    responsibilities: ["Куратор Портфел ПК стран", "НО", "ПК"],
+                    responsibilities: ["Куратор Портфеля ПК стран", "НО", "ПК"],
                     divisions: ["Evolet", "НАП"]
                 },
                 // {
@@ -110,7 +110,7 @@ export default {
                 },
                 {
                     icon: "mdi-file",
-                    text: "Резюме",
+                    text: "Резерв кандидатов",
                     url: "/head-resumes",
                     responsibilities: [],
                     divisions: ["*"]

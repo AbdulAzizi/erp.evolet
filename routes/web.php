@@ -40,8 +40,9 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/products', 'ProductController@index')->name('products.index');
     Route::get('/products/create', 'ProductController@create')->name('products.create');
     Route::post('/products', 'ProductController@store')->name('products.store');
+    Route::post('/products/{id}/nextstep', 'ProductController@nextStep')->name('products.nextStep');
 
-    Route::get('/processes/{id}', 'ProcessController@show')->name('processes.show');
+    // Route::get('/processes/{id}', 'ProcessController@show')->name('processes.show');
 
     Route::get('/projects', 'ProjectController@index')->name('projects.index');
     Route::post('/projects', 'ProjectController@store')->name('projects.store');
@@ -63,7 +64,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::post('/resume', 'ResumeController@create')->name('resume.create');
     Route::get('/resume/index', 'ResumeController@index')->name('resume.index');
     Route::get('/resume/{id}', 'ResumeController@showSingle')->name('show.single');
-    Route::get('/head-resumes', 'ResumeController@headResumes')->name('head.resumes');
+    Route::get('/head-resumes', 'ResumeController@hrShowResumes')->name('head.resumes');
     Route::get('/resume-pdf/{id}', 'ResumeController@pdf')->name('resume.pdf');
 
     Route::get('/human-resources', 'HumanResourcesController@index')->name('human.resources');
@@ -71,7 +72,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/chats', 'ChatController@index')->name('chats.index');
     Route::post('/chats', 'ChatController@store')->name('chats.store');
-    Route::get('/product/{id}', 'ProductController@show')->name('product.show');
+    Route::get('/products/{id}', 'ProductController@show')->name('products.show');
 
 
 });

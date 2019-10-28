@@ -16,7 +16,7 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title>{{priorities[id].label}}</v-list-item-title>
-        <v-list-item-subtitle>Преоритет</v-list-item-subtitle>
+        <v-list-item-subtitle>Приоритет</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
   </div>

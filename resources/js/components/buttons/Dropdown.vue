@@ -4,7 +4,7 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on:tooltip }">
           <v-btn icon v-on="{ ...tooltip, ...menu }" @click="notify">
-            <v-badge left overlap v-model="items.length">
+            <v-badge left overlap v-model="localItems.length">
               <template v-slot:badge>
                 <span v-if="check">{{ item.length}}</span>
               </template>
@@ -39,14 +39,14 @@
     </v-list>-->
 
     <v-card>
-      <div v-if="items.length == 0" class="text-center">
+      <div v-if="localItems.length == 0" class="text-center">
         <v-layout py-2 px-3>
           <v-flex xs12>
             <h6 class="caption">{{ tooltip }} отсутствуют</h6>
           </v-flex>
         </v-layout>
       </div>
-      <div v-for="(item, key) in items" :key="'item-'+key">
+      <div v-for="(item, key) in localItems" :key="'item-'+key">
         <v-layout py-2 px-3>
           <v-flex xs1>
             <v-avatar size="40">
@@ -89,12 +89,34 @@ export default {
   },
   data() {
     return {
-      item: this.items.filter(el => el.read_at == null),
-      check: false
+      localItems: this.items,
+      item: null,
+      check: false,
+      sound: new Audio("/audio/q.mp3")
     };
   },
   created() {
+    this.item = this.localItems.filter(element => element.read_at == null);
     this.check = this.item.length > 0;
+    Echo.private("App.User." + this.auth.id).notification(notification => {
+      this.localItems.unshift(notification.notification);
+
+      Event.fire("notify",["У вас новое уведомление!"]);
+      
+
+      let promise = this.sound.play();
+
+      if (promise !== undefined) {
+          promise.then(_ => {
+              // Autoplay started!
+              
+          }).catch(error => {
+              console.log("Sound did not not play");
+              // Autoplay was prevented.
+              // Show a "Play" button so that user can start playback.
+          });
+      }
+    });
   },
   methods: {
     notify() {
@@ -103,9 +125,22 @@ export default {
           id: this.user.id
         })
         .then(res => {
+          this.localItems.forEach(element => {
+            res.data.forEach(notification => {
+              if (element.id === notification.id) {
+                element.read_at = notification.read_at;
+              }
+            });
+          });
           this.check = false;
         })
         .catch(err => err.message);
+    }
+  },
+  watch: {
+    localItems(val) {
+      this.item = val.filter(element => element.read_at == null);
+      this.check = this.item.length > 0;
     }
   }
 };

@@ -1,9 +1,12 @@
 <template>
   <div>
-    <v-tabs v-model="tab" right background-color="secondary" color="primary" dark>
+    <v-tabs v-model="tab" background-color="secondary" color="primary" dark>
+      <p class="pa-4 white--text">{{project.country.name}} · {{project.pc.name}}</p>
+      <v-spacer></v-spacer>
       <v-tab href="#products">Продукты</v-tab>
       <v-tab href="#participants">Участники</v-tab>
       <v-btn
+        v-if="canCreate()"
         small
         class="align-self-center mx-4 primary"
         :href="appPath('products/create?'+
@@ -19,7 +22,7 @@
           hide-default-footer
           :items-per-page="-1"
           :fixed-header="true"
-          height="calc(100vh - 48px)"
+          height="calc(100vh - 96px)"
           dense
           @click:row="showProduct"
         />
@@ -60,6 +63,9 @@ export default {
     },
     participants: {
       required: true
+    },
+    project: {
+      required: true
     }
   },
   data() {
@@ -79,7 +85,12 @@ export default {
       ],
       preparedItems: [],
       productDialog: false,
-      selectedProduct: null
+      selectedProduct: null,
+      usersThatCanCreate:[
+        "Куратор Портфеля ПК стран",
+        "ПК",
+        "НО"
+      ]
     };
   },
   methods: {
@@ -92,7 +103,17 @@ export default {
         .join("&");
     },
     showProduct(product){
-        window.location.href = `product/${product.id}`;
+        window.location.href = `products/${product.id}`;
+    },
+    canCreate(){
+      let canCreate = false;
+      
+      this.auth.responsibilities.forEach(responsibility => {
+        if(this.usersThatCanCreate.includes(responsibility.name))
+          canCreate = true;
+      });
+      
+      return canCreate;
     }
   },
   created() {
@@ -124,6 +145,7 @@ export default {
         ...preparedFields
       };
     });
+    console.log(this.items)
   }
 };
 </script>

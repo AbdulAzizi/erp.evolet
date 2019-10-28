@@ -113,6 +113,10 @@ class CountryTableSeeder extends Seeder
                 'name' => 'Estonia',
                 'abbreviation' => 'EST'
             ],
+            [
+                'name' => 'Kyrgyzstan',
+                'abbreviation' => 'kg'
+            ],
         ]);
     }
 }
