@@ -4,27 +4,29 @@ namespace App\Http\Controllers;
 
 use App\PollAnswer;
 use App\Question;
+use App\QuestionTask;
 use Illuminate\Http\Request;
 
 class PollController extends Controller
 {
     public function storeAPI(Request $request)
     {
+        // return $request;
         $user = auth()->user();
-        $pollId = $request['poll']['id'];
-        $selected_option = $request['selected_option']['id'];
+        $questionTaskID = $request['questionTask']['id'];
+        $selectedOptionID = $request['selected_option_id'];
+        // return $selectedOptionID;
+        $answer = PollAnswer::where('user_id', $user->id)
+                        ->where('question_task_id', $questionTaskID)->first();
 
-        $poll = PollAnswer::where('user_id', $user->id)
-                        ->where('question_id', $pollId)->first();
-
-        if ($poll === null)
-            $user->polls()->attach($pollId, ['option_id' => $selected_option]);
+        if ($answer === null)
+            $user->questionTask()->attach($questionTaskID, ['option_id' => $selectedOptionID]);
         else{
-            $poll->option_id = $selected_option;
-            $poll->save();
+            $answer->option_id = $selectedOptionID;
+            $answer->save();
         }
-        
-        $poll = Question::with('options.users')->find($pollId);
-        return $poll;
+        return QuestionTask::with('question.options','answers')->find($questionTaskID);
+        // $poll = Question::with('options.users')->find($request['questionTask']['question']['id']);
+        // return $poll;
     }
 }

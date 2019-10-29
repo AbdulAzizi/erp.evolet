@@ -13,10 +13,10 @@ class CreateQuestionUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('question_user', function (Blueprint $table) {
+        Schema::create('question_answers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('question_id');
+            $table->unsignedBigInteger('question_task_id');
             $table->unsignedBigInteger('option_id');
         });
     }
@@ -28,6 +28,6 @@ class CreateQuestionUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('question_user');
+        Schema::dropIfExists('question_answers');
     }
 }

@@ -243,9 +243,9 @@ class ProductController extends Controller
             }
             if(count($task->polls) != 0)
             {
-                dd($task->polls);
+                // dd($task->polls);
                 $createdTask->polls()->attach( $task->polls->first()->id );
-                $createdTask->polls()->create($task->polls->first());
+                // $createdTask->polls()->create($task->polls->first());
             }
             if(count($task->watchers) != 0)
             {

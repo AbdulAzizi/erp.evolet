@@ -17,6 +17,6 @@ class Option extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\User','question_user');
+        return $this->belongsToMany('App\User','question_answers');
     }
 }
