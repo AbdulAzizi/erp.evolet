@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PollOptionChosenEvent;
 use App\PollAnswer;
 use App\Question;
 use App\QuestionTask;
@@ -25,6 +26,10 @@ class PollController extends Controller
             $answer->option_id = $selectedOptionID;
             $answer->save();
         }
+        
+        $questionTask = QuestionTask::with('answers','question.options')->find($questionTaskID);
+        event(new PollOptionChosenEvent($questionTask));
+        
         return QuestionTask::with('question.options','answers')->find($questionTaskID);
         // $poll = Question::with('options.users')->find($request['questionTask']['question']['id']);
         // return $poll;
