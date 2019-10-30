@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Process extends Model
 {
+    public $guarded = [];
+
     public $timestamps = false;
-    
-    protected $with = ['frontTethers', 'backTethers'];
+
+    // protected $with = ['frontTethers', 'backTethers'];
 
     public function tasks()
     {
@@ -27,7 +29,6 @@ class Process extends Model
 
     public function products()
     {
-        return $this->hasMany('App\Product','process_id');
+        return $this->hasMany('App\Product', 'process_id');
     }
-
 }

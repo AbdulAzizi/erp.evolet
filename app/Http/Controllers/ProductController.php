@@ -233,6 +233,7 @@ class ProductController extends Controller
             ]);
 
             $createdTask->products()->attach( $product->id);
+            
             $responsible = User::find($createdTask->responsible_id);
 
             event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));
@@ -243,7 +244,7 @@ class ProductController extends Controller
             }
             if(count($task->polls) != 0)
             {
-                dd($task->polls);
+                // dd($task->polls);
                 $createdTask->polls()->attach( $task->polls->first()->id );
                 $createdTask->polls()->create($task->polls->first());
             }
