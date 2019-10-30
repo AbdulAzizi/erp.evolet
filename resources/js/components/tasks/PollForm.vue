@@ -66,7 +66,12 @@ export default {
     };
   },
   created(){
-    console.log(this.getUsersFor(1));
+    // Listen
+    Echo.channel(
+      `questionTasks.${this.questionTask.id}`
+    ).listen("PollOptionChosenEvent", event => {
+      this.localQuestionTask = event.questionTask;
+    });
     
   },
   watch: {
