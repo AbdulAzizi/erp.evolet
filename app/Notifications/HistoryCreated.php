@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use App\User;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
@@ -48,7 +47,7 @@ class HistoryCreated extends Notification
     public function toArray()
     {
         return [
-            'avatar' => User::find($this->history->user_id)->img,
+            'avatar' => null,
             'title' =>  $this->history->description,
         ];
     }
@@ -56,7 +55,7 @@ class HistoryCreated extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'avatar' => User::find($this->history->user_id)->img,
+            'avatar' => null,
             'title' => $this->history->description,
             'notification' => $notifiable->notifications()->latest()->first()
         ]);

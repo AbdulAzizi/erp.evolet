@@ -236,7 +236,7 @@ class ProductController extends Controller
             
             $responsible = User::find($createdTask->responsible_id);
 
-            event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));
+            // event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));
 
             if(count($task->forms) != 0)
             {
