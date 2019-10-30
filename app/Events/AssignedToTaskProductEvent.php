@@ -3,9 +3,7 @@
 namespace App\Events;
 
 use App\Product;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
@@ -28,15 +26,5 @@ class AssignedToTaskProductEvent extends HistoryEvent
         $this->historyItem = $product->id;
 
         $this->historyType = Product::class;
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
     }
 }

@@ -15,7 +15,7 @@ class ProductObserver
         
         $project = Project::find($product->project_id);
 
-        Notification::send($project->participants, new CreateProduct($user, $product, $project));
+        // Notification::send($project->participants, new CreateProduct($user, $product, $project));
         
         // Make flash notification
         $alerts = session()->get('alerts');

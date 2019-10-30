@@ -233,6 +233,7 @@ class ProductController extends Controller
             ]);
 
             $createdTask->products()->attach( $product->id);
+            
             $responsible = User::find($createdTask->responsible_id);
 
             event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));

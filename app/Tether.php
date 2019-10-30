@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Tether extends Model
 {
     public $timestamps = false;
+
+    public $guarded = [];
     
     public function fromProcess()
     {
