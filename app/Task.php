@@ -50,26 +50,33 @@ class Task extends Model
         return $this->morphMany(History::class, 'happened_with');
     }
 
-    public function polls()
-    {
-        return $this->belongsToMany('App\Question');
-    }
-
     public function messages()
     {
-        return $this->morphMany('App\Message','messageable');
+        return $this->morphMany('App\Message', 'messageable');
     }
 
     public function forms()
     {
         return $this->belongsToMany('App\Form');
     }
+
     public function timeSets()
     {
         return $this->hasMany('App\Timeset');
     }
+
     public function products()
     {
         return $this->belongsToMany('App\Product');
+    }
+
+    public function polls()
+    {
+        return $this->belongsToMany('App\Question')->withPivot('id');
+    }
+
+    public function questionTasks()
+    {
+        return $this->hasMany('App\QuestionTask');
     }
 }

@@ -18,6 +18,7 @@ class UserTableSeeder extends Seeder
         // TODO fix many to many responsibilities seed code
         $this->seedUsers([
             [
+                'img' => 'nozim.jpg',
                 'name' => 'Nozim',
                 'surname' => 'Khakimov',
                 'email' => 'nozim@admin.com',
@@ -27,6 +28,7 @@ class UserTableSeeder extends Seeder
                 'responsibilities' => ['Рук НАП'],
             ],
             [
+                'img' => 'firdavs.jpg',
                 'name' => 'Firdavs',
                 'surname' => 'Kilichbekov',
                 'email' => 'firdavs@admin.com',
@@ -36,6 +38,7 @@ class UserTableSeeder extends Seeder
                 'responsibilities' => [],
             ],
             [
+                'img' => 'mehroj.jpg',
                 'name' => 'Mehroj',
                 'surname' => 'Khakimov',
                 'email' => 'mehroj@admin.com',
@@ -45,6 +48,7 @@ class UserTableSeeder extends Seeder
                 'responsibilities' => ['НО'],
             ],
             [
+                'img' => 'inoyat.jpg',
                 'name' => 'Inoyat',
                 'surname' => 'Nasridinshoev',
                 'email' => 'inoyat@admin.com',
@@ -54,6 +58,7 @@ class UserTableSeeder extends Seeder
                 'responsibilities' => ['ПК'],
             ],
             [
+                'img' => 'azimv.jpg',
                 'name' => 'Azimjon',
                 'surname' => 'Vohidi',
                 'email' => 'azimjon@admin.com',
@@ -63,6 +68,7 @@ class UserTableSeeder extends Seeder
                 'responsibilities' => ['ПК'],
             ],
             [
+                'img' => 'behruz.jpg',
                 'name' => 'Behruz',
                 'surname' => 'Kholov',
                 'email' => 'behruz@admin.com',
@@ -72,6 +78,7 @@ class UserTableSeeder extends Seeder
                 'responsibilities' => ['НО'],
             ],
             [
+                'img' => 'alisher.jpg',
                 'name' => 'Alisher',
                 'surname' => 'Baratov',
                 'email' => 'alisher@admin.com',

@@ -26,13 +26,13 @@ class Question extends Model
         return $this->belongsToMany('App\User');
     }
 
-    public function answers()
-    {
-        return $this->hasMany('App\PollAnswer');
-    }
-
     public function getAnswersCountAttribute()
     {
-        return $this->answers->count();
+        return $this->questionTasks()->first()->answers()->count();
+    }
+
+    public function questionTasks()
+    {
+        return $this->hasMany('App\QuestionTask');
     }
 }

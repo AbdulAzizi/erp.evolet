@@ -17,7 +17,7 @@ class CreateTethersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('from_process_id');
             $table->unsignedInteger('to_process_id');
-            $table->string('action_text');
+            $table->string('action_text')->nullable();
         });
     }
 

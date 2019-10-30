@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col class="pt-0">
-        <v-btn-toggle v-model="currentView" active-class="primary" class="float-right">
+        <v-btn-toggle v-model="currentView" active-class="primary" class="float-right" mandatory>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn small text :value="activeBtn.TABLE" dark v-on="on">
@@ -33,10 +33,10 @@
       </v-col>
     </v-row>
 
-    <tasks-table :tasks="tasks" :users="users" v-if="isTable"></tasks-table>
-    <tasks-calendar :tasks="tasks" v-if="isCalendar"></tasks-calendar>
+    <tasks-table :tasks="tasks" :users="users" v-show="isTable"></tasks-table>
+    <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar>
     <kanban-view
-      v-if="isKanban"
+      v-show="isKanban"
       :tasks="tasks"
       :users="users"
       :taskStatuses="statuses"
@@ -83,6 +83,7 @@ export default {
   },
   watch: {
     currentView(value) {
+      console.log(value);
       localStorage.currentView = value;
     }
   }

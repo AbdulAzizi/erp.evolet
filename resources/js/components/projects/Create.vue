@@ -175,7 +175,6 @@ export default {
       let name = this.addPc ? this.dialogForm.pc.name : this.dialogForm.country.name; // One 'name' field for both forms
       let abbreviation = this.addPc ? this.dialogForm.pc.abbreviation : this.dialogForm.country.abbreviation; // One 'abbreviation' field for both forms
       let form = this.$refs.addCountryAndPcForm; // define the ref to the variable
-
       // send axios request if forms validated
       if (form.validate()) {
         axios
