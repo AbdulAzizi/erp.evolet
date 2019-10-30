@@ -136,9 +136,9 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Resume');
     }
 
-    public function polls()
+    public function questionTask()
     {
-        return $this->belongsToMany('App\Question');
+        return $this->belongsToMany('App\QuestionTask','question_answers','user_id','question_task_id');
     }
 
     public function chats()

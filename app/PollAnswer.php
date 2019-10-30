@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class PollAnswer extends Pivot
 {
     protected $with = ['user','option'];
-    protected $table = 'question_user';
+    protected $table = 'question_answers';
     public $timestamps = false;
 
     public function user()
@@ -20,9 +20,9 @@ class PollAnswer extends Pivot
         return $this->belongsTo('App\Option');
     }
 
-    public function question()
+    public function questionTask()
     {
-        return $this->belongsTo('App\Question');
+        return $this->belongsTo('App\QuestionTask');
     }
 
 }

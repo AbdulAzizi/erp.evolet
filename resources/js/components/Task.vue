@@ -48,12 +48,12 @@
               <p v-html="task.description ? task.description : ''"></p>
               <p
                 class="font-weight-bold mt-3"
-                v-if="Array.isArray(task.polls) && task.polls.length"
-                :poll="task.polls[0]"
+                v-if="Array.isArray(task.question_tasks) && task.question_tasks.length"
+                :questionTask="task.question_tasks[0]"
               >Опрос</p>
               <poll-form
-                v-if="Array.isArray(task.polls) && task.polls.length"
-                :poll="task.polls[0]"
+                v-if="Array.isArray(task.question_tasks) && task.question_tasks.length"
+                :questionTask="task.question_tasks[0]"
               />
               <!-- <v-list nav v-if="taskHasActions"> -->
               <v-list nav v-if="true">

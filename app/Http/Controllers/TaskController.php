@@ -131,7 +131,8 @@ class TaskController extends Controller
             'tags',
             'history.user',
             // 'polls.answers',
-            'polls.options.users',
+            'questionTasks.answers',
+            'questionTasks.question.options',
             // 'messages',
             'forms.fields',
             'timeSets'
