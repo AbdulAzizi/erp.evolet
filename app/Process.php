@@ -10,7 +10,7 @@ class Process extends Model
 
     public $timestamps = false;
 
-    // protected $with = ['frontTethers', 'backTethers'];
+    protected $with = ['frontTethers', 'backTethers'];
 
     public function tasks()
     {
