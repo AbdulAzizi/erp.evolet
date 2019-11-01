@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\History;
+use App\Option;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -16,9 +18,21 @@ class PollOptionChosenEvent implements ShouldBroadcast
 
     public $questionTask;
     
-    public function __construct($questionTask)
+    public function __construct($questionTask, $user, $selectedOptionID)
     {
         $this->questionTask = $questionTask;
+        $option = Option::find($selectedOptionID);
+        $product = $questionTask->task->products->first();
+
+        History::create([
+            'user_id' => $user->id,
+            'description' => 
+                'Пользователь <a href="' . route('users.show',$user->id) . '">' . $user->fullname . '</a> 
+                выбрал опцию <span class="primary--text">'.$option->body.'</span> в опросе <span class="primary--text">'.$questionTask->question->body.'</span>',
+            'historyable_id' => $product->id,
+            'historyable_type' => 'App\Product',
+            'created_at' => date(now())
+        ]);
     }
     
     public function broadcastOn()

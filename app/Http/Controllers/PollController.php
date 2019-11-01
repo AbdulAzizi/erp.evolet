@@ -28,7 +28,7 @@ class PollController extends Controller
         }
         
         $questionTask = QuestionTask::with('answers','question.options')->find($questionTaskID);
-        event(new PollOptionChosenEvent($questionTask));
+        event(new PollOptionChosenEvent($questionTask, $user, $selectedOptionID));
         
         return QuestionTask::with('question.options','answers')->find($questionTaskID);
         // $poll = Question::with('options.users')->find($request['questionTask']['question']['id']);

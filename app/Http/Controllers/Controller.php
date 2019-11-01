@@ -12,26 +12,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    protected function addHistoryItem(string $modelClass, int $modelItemID, string $description)
-    {
-        $authorId = auth()->id();
-
-        $previous = History::where('happened_with_type', $modelClass)
-            ->where('happened_with_id', $modelItemID)
-            ->orderByDesc('happened_at')
-            ->first();
-
-        History::create([
-            'user_id' => $authorId,
-            'previous_id' => $previous ? $previous->id : null,
-            'description' => $description,
-            'happened_at' => Carbon::now()->toDateTimeString(),
-            'happened_with_id' => $modelItemID,
-            'happened_with_type' => $modelClass,
-        ]);
-    }
-
+    
     protected function alert($message){
         $alerts = session()->get('alerts');
         

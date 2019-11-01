@@ -2,27 +2,29 @@
 
 namespace App\Events;
 
-use App\Product;
+use App\History;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 
-class ProductCreatedEvent extends HistoryEvent
+class ProductCreatedEvent
 {
     use Dispatchable, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
     public function __construct($product)
     {
-        $author = auth()->user();
+        $user = auth()->user();
+        $project = $product->project->load('country', 'pc');
 
-        $this->historyDescription = "Пользователь <a href='/users/$author->id'>$author->full_name</a> добавил продукт.";
-
-        $this->historyItem = $product->id;
-        $this->historyType = Product::class;
+        History::create([
+            'user_id' => $user->id,
+            'description' => 
+                'Пользователь <a href="' . route('users.show', $user->id) . '">' . $user->fullname . '</a> добавил новый 
+                <a href="' . route("products.show", $product->id) . '">продукт</a> в проекте 
+                <a href="' . route('products.index',['project_id'=>$project->id]) . '">' . $project->country->name . ' · ' . $project->pc->name . '</a>',
+            'historyable_id' => $product->id,
+            'historyable_type' => 'App\Product',
+            'created_at' => date(now())
+        ]);
     }
 
 }

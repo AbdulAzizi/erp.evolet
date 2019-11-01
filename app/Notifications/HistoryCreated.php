@@ -26,7 +26,7 @@ class HistoryCreated extends Notification
      * @return array
      */
     }
-    public function via()
+    public function via($notifiable)
     {
         return ['database', 'broadcast'];
     }
@@ -47,7 +47,7 @@ class HistoryCreated extends Notification
     public function toArray()
     {
         return [
-            'avatar' => null,
+            'avatar' => $this->history->user->img,
             'title' =>  $this->history->description,
         ];
     }
@@ -55,7 +55,7 @@ class HistoryCreated extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'avatar' => null,
+            'avatar' => $this->history->user->img,
             'title' => $this->history->description,
             'notification' => $notifiable->notifications()->latest()->first()
         ]);

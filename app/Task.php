@@ -47,7 +47,7 @@ class Task extends Model
 
     public function history()
     {
-        return $this->morphMany(History::class, 'happened_with');
+        return $this->morphMany('App\History', 'historyable');
     }
 
     public function messages()
@@ -67,7 +67,7 @@ class Task extends Model
 
     public function products()
     {
-        return $this->belongsToMany('App\Product');
+        return $this->belongsToMany('App\Product'); 
     }
 
     public function polls()

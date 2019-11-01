@@ -2,39 +2,26 @@
 
 namespace App\Events;
 
-use App\Product;
-use Illuminate\Broadcasting\Channel;
+use App\History;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
-class ProductStatusChangedEvent extends HistoryEvent
+class ProductStatusChangedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
+    
     public function __construct($product, $process)
     {
+        $user = auth()->user();
 
-        $this->historyDescription = "Статус процесса изменен на <a href='#'> $process->name </a> ";
-
-        $this->historyItem = $product->id;
-
-        $this->historyType = Product::class;
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
+        History::create([
+            'user_id' => $user->id,
+            'description' => 
+                $user->fullname . ' закрыл задачу. Статус процесса изменен на <a href="#">' .  $process->name . '</a>',
+            'historyable_id' => $product->id,
+            'historyable_type' => 'App\Product',
+            'created_at' => date(now())
+        ]);
     }
 }

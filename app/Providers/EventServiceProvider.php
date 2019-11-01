@@ -6,7 +6,6 @@ use App\Events\AssignedToTaskProductEvent;
 use App\Events\ProductCreatedEvent;
 use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
-use App\Listeners\HistoryListener;
 use App\Observers\TaskObserver;
 use App\Observers\HistoryObserver;
 use App\History;
@@ -24,23 +23,7 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
-        TaskCreatedEvent::class => [
-            HistoryListener::class
-        ],
-        TaskForwardedEvent::class => [
-            HistoryListener::class
-        ],
-        ProductCreatedEvent::class => [
-            HistoryListener::class
-        ],
-        AssignedToTaskProductEvent::class => [
-            HistoryListener::class
-        ]
-    ];
+    protected $listen = [];
 
     /**
      * Register any events for your application.

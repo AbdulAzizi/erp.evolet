@@ -99,14 +99,14 @@ class ProductController extends Controller
         $product->fields()->attach($preparedFields->toArray());
         // Fetch current Process
         $process = Process::find($product->currentProcess->id);
-
+        //
+        event(new ProductCreatedEvent($product));
         
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project, $product);
 
         //Add product creation to history
         
-        event(new ProductCreatedEvent($product));
         
         // Redirect to Tasks Index page
         return redirect()->route('products.index', [
@@ -137,13 +137,15 @@ class ProductController extends Controller
         $process = $currentProcess->frontTethers->first()->toProcess;
         // set products process to next one
         $product->currentProcess()->associate($process);
+        //
         $product->save();
+        //
+        event(new ProductStatusChangedEvent($product, $process));
         //
         $projectID = $product->project->id;
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $projectID, $product);
 
-        event(new ProductStatusChangedEvent($product, $process));
         // Redirect to Tasks Index page
         return redirect()->route('products.show',$product->id);
     }
@@ -235,8 +237,9 @@ class ProductController extends Controller
             $createdTask->products()->attach( $product->id);
             
             $responsible = User::find($createdTask->responsible_id);
-
-            // event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));
+            
+            event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));
+            
 
             if(count($task->forms) != 0)
             {
