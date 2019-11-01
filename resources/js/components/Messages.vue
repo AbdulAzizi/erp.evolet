@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="py-0 grey lighten-3">
-    <v-row style="height:calc(100vh - 230px); overflow:auto;" ref="messagesWrapper">
+    <v-row style="height:300px; overflow:auto;" ref="messagesWrapper">
       <v-container fluid>
         <v-row
           v-for="(message,index) in localMessageable.messages"
