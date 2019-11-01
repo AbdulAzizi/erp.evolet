@@ -17,7 +17,6 @@ class ProjectSeeder extends Seeder
     {
         // PC id's
 
-        $Et = Division::where('abbreviation', 'Evolet')->first()->id;
         $V = Division::where('abbreviation', 'V')->first()->id;
         $S = Division::where('abbreviation', 'S')->first()->id;
         $B = Division::where('abbreviation', 'B')->first()->id;
@@ -33,12 +32,13 @@ class ProjectSeeder extends Seeder
         $ge = Country::where('abbreviation', 'GE')->first()->id;
         $kg = Country::where('abbreviation', 'KG')->first()->id;
         $afg = Country::where('abbreviation', 'AFG')->first()->id;
-        $mmr = Country::where('abbreviation', 'MMR')->first()->id;
-        $mng = Country::where('abbreviation', 'MNG')->first()->id;
+        $KHM = Country::where('abbreviation', 'KHM')->first()->id;
+        $MMR = Country::where('abbreviation', 'MMR')->first()->id;
+        $MNG = Country::where('abbreviation', 'MNG')->first()->id;
         $tkm = Country::where('abbreviation', 'TKM')->first()->id;
-        $phl = Country::where('abbreviation', 'PHL')->first()->id;
+        $PHL = Country::where('abbreviation', 'PHL')->first()->id;
         $rus = Country::where('abbreviation', 'RUS')->first()->id;
-        $arm = Country::where('abbreviation', 'ARM')->first()->id;
+        $ARM = Country::where('abbreviation', 'ARM')->first()->id;
         $vnm = Country::where('abbreviation', 'VNM')->first()->id;
         $hkg = Country::where('abbreviation', 'HKG')->first()->id;
         $aze = Country::where('abbreviation', 'AZE')->first()->id;
@@ -55,11 +55,6 @@ class ProjectSeeder extends Seeder
         $est = Country::where('abbreviation', 'EST')->first()->id;
 
         $product = Project::insert([
-            [
-                'pc_id' => $Et,
-                'country_id' => $tj
-
-            ],
             [
                 'pc_id' => $V,
                 'country_id' => $tj
@@ -91,11 +86,6 @@ class ProjectSeeder extends Seeder
 
             ],
             [
-                'pc_id' => $Et,
-                'country_id' => $kz
-
-            ],
-            [
                 'pc_id' => $S,
                 'country_id' => $kz
 
@@ -116,11 +106,6 @@ class ProjectSeeder extends Seeder
 
             ],
             [
-                'pc_id' => $Et,
-                'country_id' => $uz
-
-            ],
-            [
                 'pc_id' => $V,
                 'country_id' => $uz
 
@@ -138,11 +123,6 @@ class ProjectSeeder extends Seeder
             [
                 'pc_id' => $N,
                 'country_id' => $uz
-
-            ],
-            [
-                'pc_id' => $Et,
-                'country_id' => $ge
 
             ],
             [
@@ -166,11 +146,6 @@ class ProjectSeeder extends Seeder
 
             ],
             [
-                'pc_id' => $Et,
-                'country_id' => $kg
-
-            ],
-            [
                 'pc_id' => $V,
                 'country_id' => $kg
 
@@ -191,10 +166,85 @@ class ProjectSeeder extends Seeder
 
             ],
             [
-                'pc_id' => $Et,
-                'country_id' => $afg
+                'pc_id' => $V,
+                'country_id' => $KHM
 
             ],
-        ]);
+            [
+                'pc_id' => $S,
+                'country_id' => $KHM
+
+            ],
+            [
+                'pc_id' => $B,
+                'country_id' => $KHM
+
+            ],
+            [
+                'pc_id' => $N,
+                'country_id' => $KHM
+
+            ],
+            [
+                'pc_id' => $V,
+                'country_id' => $MMR
+
+            ],
+            [
+                'pc_id' => $S,
+                'country_id' => $MMR
+
+            ],
+            [
+                'pc_id' => $B,
+                'country_id' => $MMR
+
+            ],
+            [
+                'pc_id' => $N,
+                'country_id' => $MMR
+
+            ],
+            [
+                'pc_id' => $V,
+                'country_id' => $MNG
+
+            ],
+            [
+                'pc_id' => $S,
+                'country_id' => $MNG
+
+            ],
+            [
+                'pc_id' => $B,
+                'country_id' => $MNG
+
+            ],
+            [
+                'pc_id' => $N,
+                'country_id' => $MNG
+
+            ],
+            [
+                'pc_id' => $S,
+                'country_id' => $PHL
+
+            ],
+            [
+                'pc_id' => $V,
+                'country_id' => $ARM
+
+            ],
+            [
+                'pc_id' => $S,
+                'country_id' => $ARM
+
+            ],
+            [
+                'pc_id' => $B,
+                'country_id' => $ARM
+
+            ],
+        ]);    
     }
 }
