@@ -1,8 +1,8 @@
 <template>
     <v-timeline dense flat >
-        <v-timeline-item v-for="(historyItem, i) in sortedHistory" :key="i">
+        <v-timeline-item v-for="(historyItem, i) in reversedHistory" :key="i">
             <!-- <template v-slot:opposite>
-                <span class="caption mb-0">{{getDate(historyItem.happened_at)}}</span>
+                <span class="caption mb-0">{{getDate(historyItem.created_at)}}</span>
             </template> -->
             <template v-slot:icon>
                 <a :href="`/users/${historyItem.user.id}`">
@@ -12,7 +12,7 @@
                 </a>
             </template>
             <v-card>
-                <v-card-text v-html="historyItem.description+'<br>'+getDate(historyItem.happened_at)"></v-card-text>
+                <v-card-text v-html="historyItem.description+'<br>'+getDate(historyItem.created_at)"></v-card-text>
             </v-card>
         </v-timeline-item>
     </v-timeline>
@@ -23,21 +23,21 @@ export default {
     props: {
         history: Array
     },
-    data() {
-        return {};
-    },
     methods: {
         getDate(date) {
             return this.moment(date).local().format("Do MMMM YYYY, HH:mm");
         }
     },
     computed: {
-        sortedHistory() {
-            return this.history.sort((first, second) => {
-                return (
-                    new Date(first.happened_at) - new Date(second.happened_at)
-                );
-            });
+        // sortedHistory() {
+        //     return this.history.sort((first, second) => {
+        //         return (
+        //             new Date(first.created_at) - new Date(second.created_at)
+        //         );
+        //     });
+        // },
+        reversedHistory(){
+            return this.history.reverse();
         }
     }
 };
