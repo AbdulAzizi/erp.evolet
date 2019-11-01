@@ -7,7 +7,7 @@
         dark
         dense
         >
-            <v-toolbar-title>Новое лекарственное средство</v-toolbar-title>
+            <v-toolbar-title>КАП</v-toolbar-title>
         </v-toolbar>
         <v-form action="" method="post">
             <v-container>

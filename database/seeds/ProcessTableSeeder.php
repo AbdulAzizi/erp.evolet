@@ -14,8 +14,8 @@ class ProcessTableSeeder extends Seeder
      */
     public function run()
     {
-        $bp1 = Process::create(['name' => 'Новое Лекарственное Средство']);            
-        $bp2 = Process ::create(['name' => 'Заполнение данных НО']);
+        $bp1 = Process::create(['name' => 'КАП']);            
+        $bp2 = Process ::create(['name' => 'Опрос мнений']);
             
         $tether1 = App\Tether::create([
             'from_process_id' => $bp1->id,
