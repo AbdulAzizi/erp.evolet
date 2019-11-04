@@ -114,6 +114,13 @@ export default {
                     url: "/head-resumes",
                     responsibilities: [],
                     divisions: ["*"]
+                },
+                {
+                    icon: "mdi-sort-variant",
+                    text: "Фильтры",
+                    url: "/admin/products",
+                    responsibilities: ["РВЗ"],
+                    divisions: []
                 }
             ]
         };
