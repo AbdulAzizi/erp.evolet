@@ -203,6 +203,13 @@ class ProductController extends Controller
         return view('products.create', compact('form'));
     }
 
+    public function adminProducts(Request $request, ProductFilters $filters)
+    {
+        $products = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
+
+        return view('products.admin', compact("products"));
+    }
+
     /**
      * Helpers
      */

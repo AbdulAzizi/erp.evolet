@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/chats', 'ChatController@index')->name('chats.index');
     Route::post('/chats', 'ChatController@store')->name('chats.store');
     Route::get('/products/{id}', 'ProductController@show')->name('products.show');
+    Route::get('/admin/products', 'ProductController@adminProducts')->name('products.admin');
 
 
 });
