@@ -117,6 +117,10 @@ class CountryTableSeeder extends Seeder
                 'name' => 'Kyrgyzstan',
                 'abbreviation' => 'kg'
             ],
+            [
+                'name' => 'Cambodia',
+                'abbreviation' => 'KHM'
+            ],
         ]);
     }
 }
