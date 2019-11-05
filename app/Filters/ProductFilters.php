@@ -23,6 +23,15 @@ class ProductFilters extends QueryFilters{
         return $this->builder->where('pc_id', Division::where('name', 'LIKE' ,"%$term%")->first()->id );
     }
 
+    public function pc_ids($term)
+    {
+        $localTerm = json_decode($term);
+
+        return $this->builder->whereHas('project', function (Builder $query) use ($localTerm) {
+            $query->whereIn('pc_id', $localTerm);
+        });
+    }
+
     public function pc_id($term)
     {
         return $this->builder->whereHas('project', function (Builder $query) use ($term) {
@@ -33,6 +42,15 @@ class ProductFilters extends QueryFilters{
     public function country($term)
     {
         return $this->builder->where('country_id', Country::where('name', 'LIKE' ,"%$term%")->first()->id );
+    }
+    
+    public function country_ids($term)
+    {
+        $localTerm = json_decode($term);
+
+        return $this->builder->whereHas('project', function (Builder $query) use ($localTerm) {
+            $query->whereIn('country_id', $localTerm);
+        });
     }
 
     public function country_id($term)

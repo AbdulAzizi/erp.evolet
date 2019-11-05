@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
+use App\Division;
 use App\Events\AssignedToTaskProductEvent;
 use App\Events\ProductCreatedEvent;
 use App\Events\ProductStatusChangedEvent;
@@ -203,11 +205,17 @@ class ProductController extends Controller
         return view('products.create', compact('form'));
     }
 
-    public function adminProducts(Request $request, ProductFilters $filters)
+    public function adminIndex()
     {
-        $products = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
+        $pcs =  Division::withDepth()->having('depth','=', 4)->get();
+        $countries =  Country::all();
 
-        return view('products.admin', compact("products"));
+        return view('admin.products.index', compact('pcs','countries'));
+    }
+
+    public function getProducts(Request $request,ProductFilters $filters)
+    {
+        return Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
     }
 
     /**

@@ -1,61 +1,138 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="preparedItems"
-    item-key="id"
-    hide-default-footer
-    :items-per-page="100"
-    :fixed-header="true"
-    height="calc(100vh - 96px)"
-    dense
-  />
+    <div>
+        <v-container fluid class="py-0">
+            <v-row>
+                <v-col>
+                    <v-combobox
+                        v-model="pcObjects"
+                        :items="pcs"
+                        item-text="name"
+                        item-value="id"
+                        dense
+                        solo
+                        label="Промо Компания"
+                        multiple
+                        small-chips
+                        deletable-chips
+                        hide-details
+                    />
+                </v-col>
+                <v-col>
+                    <v-combobox
+                        v-model="countryObjects"
+                        :items="countries"
+                        item-text="name"
+                        item-value="id"
+                        dense
+                        solo
+                        label="Страна"
+                        multiple
+                        small-chips
+                        deletable-chips
+                        hide-details
+                    />
+                </v-col>
+            </v-row>
+        </v-container>
+        <v-overlay :value="loading" color="white" opacity="0.7">
+            <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
+        </v-overlay>
+        <v-data-table
+            v-if="items.length"
+            :headers="headers"
+            :items="preparedItems"
+            item-key="id"
+            hide-default-footer
+            :items-per-page="100"
+            :fixed-header="true"
+            height="calc(100vh - 112px)"
+            dense
+        />
+    </div>
 </template>
 
 <script>
 export default {
-  props: ["items"],
-  data() {
-    return {
-      preparedItems: [],
-      headers: [
-        {
-          text: "Промо Компания",
-          value: "pc",
-          class: ["primary", "table-header"]
-        },
-        {
-          text: "Страна",
-          value: "country",
-          class: ["primary", "table-header"]
+    props: ["pcs", "countries"],
+    data() {
+        return {
+            loading: false,
+            pcObjects: [],
+            countryObjects: null,
+            filters: {},
+            items: [],
+            preparedItems: [],
+            headers: [
+                {
+                    text: "Промо Компания",
+                    value: "pc",
+                    class: ["primary", "table-header"]
+                },
+                {
+                    text: "Страна",
+                    value: "country",
+                    class: ["primary", "table-header"]
+                }
+            ]
+        };
+    },
+    created() {},
+    methods: {
+        getData() {
+            this.loading = true;
+            axios
+                .get(this.appPath("api/get/products"), { params: this.filters })
+                .then(response => {
+                    this.loading = false;
+                    this.items = response.data;
+                    console.log(response);
+                });
         }
-      ]
-    };
-  },
-  created() {
-    let fieldsHeaders = this.items[0].fields.map(function(field) {
-      return {
-        text: field.label,
-        value: field.label,
-        class: ["primary", "table-header"]
-      };
-    });
-    // merge headers
-    this.headers = [...this.headers, ...fieldsHeaders];
+    },
+    watch: {
+        pcObjects(val) {
+            if (val.length == 0) delete this.filters.pc_ids;
+            else this.filters.pc_ids = JSON.stringify(val.map(pc => pc.id));
 
-    this.preparedItems = this.items.map(function(item) {
-      let preparedFields = {};
+            this.getData();
+        },
+        countryObjects(val) {
+            if (val.length == 0) delete this.filters.country_ids;
+            else
+                this.filters.country_ids = JSON.stringify(
+                    val.map(country => country.id)
+                );
 
-      for (const field of item.fields) {
-        preparedFields[field.label] = field.pivot.value;
-      }
+            this.getData();
+        },
+        items(val) {
+            if (val.length != 0) {
+                let fieldsHeaders = this.items[0].fields.map(function(field) {
+                    return {
+                        text: field.label,
+                        value: field.label,
+                        class: ["primary", "table-header"]
+                    };
+                });
+                // merge headers
+                this.headers = [...this.headers, ...fieldsHeaders];
 
-      return {
-        id: item.id,
-        country: item.project.country.name,
-        pc: item.project.pc.name,
-        ...preparedFields
-      };
-    });
-  }
+                this.preparedItems = this.items.map(function(item) {
+                    let preparedFields = {};
+
+                    for (const field of item.fields) {
+                        preparedFields[field.label] = field.pivot.value;
+                    }
+
+                    return {
+                        id: item.id,
+                        country: item.project.country.name,
+                        pc: item.project.pc.name,
+                        ...preparedFields
+                    };
+                });
+            }
+        }
+    }
 };
 </script>
