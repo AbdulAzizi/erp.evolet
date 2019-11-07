@@ -12,7 +12,7 @@
             </p>
             <v-btn small depressed color="primary" class="mb-0" @click="window.back()">Назад</v-btn>
         </v-col>
-        <v-col cols="4" class="pt-0">
+        <v-col lg="4" md="6" sm="12" class="pt-0">
             <v-card flat class="pt-0">
                 <v-simple-table fixed-header dense>
                     <thead>
@@ -30,7 +30,7 @@
                 </v-simple-table>
             </v-card>
         </v-col>
-        <v-col cols="4" class="pt-0">
+        <v-col lg="4" md="6" sm="12" class="pt-0">
             <v-card outlined>
                 <v-card-text>
                     <div class="text-center">Журнал действий продукта</div>
@@ -40,7 +40,7 @@
             </v-card>
         </v-col>
 
-        <v-col cols="4" class="pt-0">
+        <v-col lg="4" md="6" sm="12" class="pt-0">
             <v-card class="mx-auto mb-2" outlined>
                 <v-card-text class="pb-0">
                     <div class="text-center">Участники продукта</div>
