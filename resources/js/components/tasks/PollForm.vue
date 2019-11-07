@@ -8,15 +8,15 @@
         <v-toolbar-title v-if="localQuestionTask.answers.length">Голосов: {{localQuestionTask.answers.length}}</v-toolbar-title>
     </v-toolbar>
 
-    <v-card-text class="pt-0 pb-1">
+    <v-card-text class="py-0">
       <v-row>
-        <v-radio-group v-model="selectedOption" style="width:100% !important;" hide-details>
+        <v-radio-group v-model="selectedOption" style="width:100% !important;" hide-details class="mt-0 pt-4 pb-2">
           <template v-for="(option, index) in this.localQuestionTask.question.options">
-            <v-col cols="12 py-0" :key="'progress-text-'+index">
-              <v-radio :value="option.id" color="primary">
+            <v-col cols="12 py-0 pb-4" :key="'progress-text-'+index">
+              <v-radio :value="option.id" color="primary" class="mr-0">
                 <template v-slot:label>
                   <v-row style="width:100% !important;">
-                    <v-col cols="12 pt-0 pb-1">{{option.body}}</v-col>
+                    <v-col cols="12 pt-0 pb-0">{{option.body}}</v-col>
                     <v-col cols="12 py-0" style="height:100%;">
                       <v-menu offset-y open-on-hover>
                         <template v-slot:activator="{ on:menu }">
