@@ -66,12 +66,9 @@
                                 <v-list nav>
                                     <v-list-item-group color="primary">
                                         <template v-for="( tether, i ) in task.from.front_tethers">
-                                            <v-list-item :key="'list-item-'+i" class="mb-0">
+                                            <v-list-item :key="'list-item-'+i" class="mb-0" :href="appPath(`products/${task.products[0].id}/changeProcess/${tether.to_process_id}`)">
                                                 <v-list-item-content>
-                                                    <v-list-item-title
-                                                        @click="addProduct"
-                                                    >{{ tether.action_text }}</v-list-item-title>
-                                                    <!-- {{preparedFields({...tether.form})}} -->
+                                                    <v-list-item-title>{{ tether.action_text }}</v-list-item-title>
                                                 </v-list-item-content>
                                             </v-list-item>
                                         </template>
@@ -87,7 +84,6 @@
                                     :fields="preparedFields(task.forms[0])"
                                     :title="task.forms[0].label"
                                     :actionUrl="`/products/${task.products[0].id}/nextstep`"
-                                    activatorEventName="addProduct"
                                     method="post"
                                 ></dynamic-form>
                             </div>
@@ -266,9 +262,6 @@ export default {
         }
     },
     methods: {
-        addProduct() {
-            Event.fire("addProduct");
-        },
         forwardTask() {
             Event.fire("forwardTask");
         },

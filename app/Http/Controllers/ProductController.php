@@ -2,59 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Country;
-use App\Division;
-use App\Events\AssignedToTaskProductEvent;
-use App\Events\ProductCreatedEvent;
-use App\Events\ProductStatusChangedEvent;
-use App\Events\TaskCreatedEvent;
-use App\Field;
-use App\Filters\ProductFilters;
 use App\Form;
-use App\Notifications\AssignedToTask;
-use App\Process;
-use App\ProcessTask;
-use App\Product;
-use App\Project;
 use App\Task;
 use App\User;
+use App\Field;
+use App\Process;
+use App\Country;
+use App\Product;
+use App\Project;
+use App\Division;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+use App\ProcessTask;
 use Illuminate\Http\Request;
+use App\Filters\ProductFilters;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\AssignedAsWatcher;
+use App\Events\ProductCreatedEvent;
+use App\Events\ProductStatusChangedEvent;
+use Illuminate\Database\Eloquent\Builder;
+use App\Events\AssignedToTaskProductEvent;
 
 class ProductController extends Controller
 {
     public function index(Request $request, ProductFilters $filters)
     {
-        // $products = DB::table('products')
-        //     ->join('product_values', 'products.id', '=', 'product_values.product_id')
-        //     ->join('projects', 'products.project_id', '=', 'projects.id')
-        //     ->join('divisions', 'projects.pc_id', '=', 'divisions.id')
-        //     ->join('countries', 'projects.country_id', '=', 'countries.id')
-        //     ->join('fields', 'product_values.field_id', '=', 'fields.id')
-
-        //     ->select(
-        //         'fields.label',
-        //         'product_values.value',
-        //         'product_values.product_id',
-        //         'countries.name as country',
-        //         'divisions.name as pc'
-        //     )
-        //     ->where('divisions.id', $request->pc_id)
-        //     ->get()
-        //     ->groupBy('product_id');
-
-        // $data['products'] = $products->map(function ($product)
-        // {
-        //     $temp = $product->pluck('value','label');
-        //     $temp['pc'] = $product[0]->pc;
-        //     $temp['country'] = $product[0]->country;
-        //     return $temp;
-        // });
-
         // Fetch all products and pass it to data
         $data['products'] = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
 
@@ -71,7 +41,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $data['product'] = Product::with(['messages','currentProcess', 'project.country', 'project.pc', 'fields', 'history.user'])->find($id);
+        $data['product'] = Product::with(['messages', 'currentProcess', 'project.country', 'project.pc', 'fields', 'history.user'])->find($id);
 
         $listFields = $this->getListFieldsFromProduct($data['product']);
 
@@ -80,76 +50,6 @@ class ProductController extends Controller
         $data['participants'] = Project::with('projectParticipant.role', 'projectParticipant.participant')->find($data['product']->project_id);
 
         return view('products.show')->with($data);
-    }
-
-    public function store(Request $request)
-    {
-        // return $request;
-        $fieldKeys = array_keys($request->all());
-        // Retrive all Fields
-        $fields = Field::whereIn('name', $fieldKeys)->get();
-        // Prepare Fields for attachment with their values
-        $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
-            return [$field->id => ['value' => $request->input($field->name)]];
-        });
-        // Make new Product
-        $product = Product::create([
-            'process_id' => 1,
-            'project_id' => $request->project,
-        ]);
-        // Attach fields to Product with their value
-        $product->fields()->attach($preparedFields->toArray());
-        // Fetch current Process
-        $process = Process::find($product->currentProcess->id);
-        //
-        event(new ProductCreatedEvent($product));
-        
-        // Set tasks to responsible people of the Process
-        $this->setTasks($process, $request->project, $product);
-
-        //Add product creation to history
-        
-        
-        // Redirect to Tasks Index page
-        return redirect()->route('products.index', [
-            'pc_id' => $request->pc,
-            'country_id' => $request->strana,
-            'project_id' => $request->project,
-        ]);
-    }
-
-    public function nextStep($id, Request $request)
-    {
-        // return $request;
-        // All keys to array
-        $fieldKeys = array_keys($request->all());
-        // Retrive all Fields
-        $fields = Field::whereIn('name', $fieldKeys)->get();
-        // Prepare Fields for attachment with their values
-        $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
-            return [$field->id => ['value' => $request->input($field->name)]];
-        });
-        // Get product
-        $product = Product::find($id);
-        // Attach fields to Product with their value
-        $product->fields()->attach($preparedFields->toArray());
-        // Fetch current Process
-        $currentProcess = $product->currentProcess;
-        // find next process
-        $process = $currentProcess->frontTethers->first()->toProcess;
-        // set products process to next one
-        $product->currentProcess()->associate($process);
-        //
-        $product->save();
-        //
-        event(new ProductStatusChangedEvent($product, $process));
-        //
-        $projectID = $product->project->id;
-        // Set tasks to responsible people of the Process
-        $this->setTasks($process, $projectID, $product);
-
-        // Redirect to Tasks Index page
-        return redirect()->route('products.show',$product->id);
     }
 
     public function create(Request $request)
@@ -205,15 +105,102 @@ class ProductController extends Controller
         return view('products.create', compact('form'));
     }
 
-    public function adminIndex()
+    public function store(Request $request)
     {
-        $pcs =  Division::withDepth()->having('depth','=', 4)->get();
-        $countries =  Country::all();
+        // return $request;
+        $fieldKeys = array_keys($request->all());
+        // Retrive all Fields
+        $fields = Field::whereIn('name', $fieldKeys)->get();
+        // Prepare Fields for attachment with their values
+        $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
+            return [$field->id => ['value' => $request->input($field->name)]];
+        });
+        // Make new Product
+        $product = Product::create([
+            'process_id' => 1,
+            'project_id' => $request->project,
+        ]);
+        // Attach fields to Product with their value
+        $product->fields()->attach($preparedFields->toArray());
+        // Fetch current Process
+        $process = Process::find($product->currentProcess->id);
+        //
+        event(new ProductCreatedEvent($product));
 
-        return view('admin.products.index', compact('pcs','countries'));
+        // Set tasks to responsible people of the Process
+        $this->setTasks($process, $request->project, $product);
+
+        //Add product creation to history
+
+        // Redirect to Tasks Index page
+        return redirect()->route('products.index', [
+            'pc_id' => $request->pc,
+            'country_id' => $request->strana,
+            'project_id' => $request->project,
+        ]);
     }
 
-    public function getProducts(Request $request,ProductFilters $filters)
+    public function nextStep($id, Request $request)
+    {
+        // return $request;
+        // All keys to array
+        $fieldKeys = array_keys($request->all());
+        // Retrive all Fields
+        $fields = Field::whereIn('name', $fieldKeys)->get();
+        // Prepare Fields for attachment with their values
+        $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
+            return [$field->id => ['value' => $request->input($field->name)]];
+        });
+        // Get product
+        $product = Product::find($id);
+        // Attach fields to Product with their value
+        $product->fields()->attach($preparedFields->toArray());
+        // Fetch current Process
+        $currentProcess = $product->currentProcess;
+        // find next process
+        $process = $currentProcess->frontTethers->first()->toProcess;
+        // set products process to next one
+        $product->currentProcess()->associate($process);
+        //
+        $product->save();
+        //
+        event(new ProductStatusChangedEvent($product, $process));
+        //
+        $projectID = $product->project_id;
+        // Set tasks to responsible people of the Process
+        $this->setTasks($process, $projectID, $product);
+
+        // Redirect to Tasks Index page
+        return redirect()->route('products.show', $product->id);
+    }
+
+    public function changeProcess($productID, $processID)
+    {
+        // Get product
+        $product = Product::find($productID);
+        // set products process to next one
+        $product->currentProcess()->associate($processID);
+        //
+        $product->save();
+        //
+        event(new ProductStatusChangedEvent($product, $product->currentProcess ));
+        //
+        $projectID = $product->project_id;
+        // Set tasks to responsible people of the Process
+        $this->setTasks($product->currentProcess, $projectID, $product);
+        // Redirect to Tasks Index page
+        return redirect()->route('products.show', $product->id);
+    }
+
+    public function adminIndex()
+    {
+        $pcs = Division::withDepth()->having('depth', '=', 4)->get();
+        $countries = Country::all();
+
+        return view('admin.products.index', compact('pcs', 'countries'));
+    }
+
+    public function getProducts(Request $request, ProductFilters $filters)
     {
         return Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
     }
@@ -228,7 +215,7 @@ class ProductController extends Controller
         $processTasks = ProcessTask::with('forms')->where('process_id', $process->id)->get();
         //
         $project = Project::with('country', 'pc')->find($projectId);
-        $productDescripttion = '<a href="' . route('products.show', $product->id) . '">Продукт</a> (<a href="' . route('products.index', ['project_id' => $projectId]) . '">' . $project->country->name . ' ' . $project->pc->name . '</a>)</br>';
+        $productLink = '<a href="' . route('products.show', $product->id) . '">Продукт</a> (<a href="' . route('products.index', ['project_id' => $projectId]) . '">' . $project->country->name . ' ' . $project->pc->name . '</a>)</br>';
         // Loop through each task
         foreach ($processTasks as $key => $task) {
             $responsiblePerson = User::whereHas('projectParticipant', function (Builder $query) use ($task, $projectId) {
@@ -239,7 +226,7 @@ class ProductController extends Controller
             // create tasks
             $createdTask = Task::create([
                 'title' => $task->title,
-                'description' => $productDescripttion . $task->description,
+                'description' => $productLink . $task->description,
                 'priority' => 2,
                 'planned_time' => $task->planned_time,
                 'deadline' => Carbon::now()->addMilliseconds($task->planned_time),
@@ -249,28 +236,24 @@ class ProductController extends Controller
                 'created_at' => Carbon::now(),
             ]);
 
-            $createdTask->products()->attach( $product->id);
-            
-            $responsible = User::find($createdTask->responsible_id);
-            
-            event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));
-            
+            $createdTask->products()->attach($product->id);
 
-            if(count($task->forms) != 0)
-            {
+            $responsible = User::find($createdTask->responsible_id);
+
+            event(new AssignedToTaskProductEvent($product, $process, $createdTask, $responsible));
+
+            if (count($task->forms) != 0) {
                 $createdTask->forms()->attach($task->forms->first()->id);
             }
-            if(count($task->polls) != 0)
-            {
+            if (count($task->polls) != 0) {
                 // dd($task->polls);
-                $createdTask->polls()->attach( $task->polls->first()->id );
+                $createdTask->polls()->attach($task->polls->first()->id);
                 // $createdTask->polls()->create($task->polls->first());
             }
-            if(count($task->watchers) != 0)
-            {
+            if (count($task->watchers) != 0) {
                 $watcherResponsibilities = $task->watchers->pluck('id');
                 $usersByResponsibility = User::whereHas('projectParticipant', function (Builder $query) use ($watcherResponsibilities, $projectId) {
-                    $query->whereIn('role_id', $watcherResponsibilities )
+                    $query->whereIn('role_id', $watcherResponsibilities)
                         ->where('project_id', $projectId);
                 })->get();
 
@@ -288,7 +271,6 @@ class ProductController extends Controller
             ->select('field_id', 'list_type')
             ->get()
             ->groupBy('list_type');
-
 
         foreach ($listFieldTables as $tableName => $listField) {
 
