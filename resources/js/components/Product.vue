@@ -12,6 +12,32 @@
             </p>
             <v-btn small depressed color="primary" class="mb-0" @click="window.back()">Назад</v-btn>
         </v-col>
+
+        <v-col lg="4" md="6" sm="12" class="pt-0">
+            <v-card class="mx-auto mb-2" outlined>
+                <v-card-text>
+                    <div class="text-center">Участники продукта</div>
+                </v-card-text>
+                <v-list disabled class="py-0">
+                    <v-list-item-group color="primary">
+                        <template v-for="(participant, i) in participants.project_participant">
+                            <v-divider :key="'divider-'+i"></v-divider>
+                            <v-list-item :key="'participant-'+i">
+                                <v-list-item-avatar>
+                                    <v-img :src="photo(participant.participant.img)"></v-img>
+                                </v-list-item-avatar>
+                                <v-list-item-content>
+                                    <v-list-item-title>{{participant.role.name}}</v-list-item-title>
+                                    <v-list-item-subtitle>{{participant.participant.name}} {{participant.participant.surname}}</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </template>
+                    </v-list-item-group>
+                </v-list>
+            </v-card>
+            <messages :messageable="product" type="App\Product" class="mt-5" />
+        </v-col>
+
         <v-col lg="4" md="6" sm="12" class="pt-0">
             <v-card flat class="pt-0">
                 <v-simple-table fixed-header dense>
@@ -30,39 +56,15 @@
                 </v-simple-table>
             </v-card>
         </v-col>
-        <v-col lg="4" md="6" sm="12" class="pt-0">
-            <v-card outlined>
-                <v-card-text>
-                    <div class="text-center">Журнал действий продукта</div>
-                    <p v-if="!product.history.length">Нет событий</p>
-                    <history :history="product.history" v-if="product.history.length" />
-                </v-card-text>
-            </v-card>
-        </v-col>
 
         <v-col lg="4" md="6" sm="12" class="pt-0">
-            <v-card class="mx-auto mb-2" outlined>
-                <v-card-text class="pb-0">
-                    <div class="text-center">Участники продукта</div>
-                </v-card-text>
-                <v-list disabled>
-                    <v-list-item-group color="primary">
-                        <v-list-item
-                            v-for="(participant, i) in participants.project_participant"
-                            :key="i"
-                        >
-                            <v-list-item-avatar>
-                                <v-img :src="photo(participant.img)"></v-img>
-                            </v-list-item-avatar>
-                            <v-list-item-content>
-                                <v-list-item-title>{{participant.role.name}}</v-list-item-title>
-                                <v-list-item-subtitle>{{participant.participant.name}} {{participant.participant.surname}}</v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list-item-group>
-                </v-list>
-            </v-card>
-            <messages :messageable="product" type="App\Product" class="mt-5" />
+            <!-- <v-card outlined>
+            <v-card-text>-->
+            <div class="text-center">Журнал действий продукта</div>
+            <p v-if="!product.history.length">Нет событий</p>
+            <history :history="product.history" v-if="product.history.length" />
+            <!-- </v-card-text>
+            </v-card>-->
         </v-col>
     </v-row>
 </template>
