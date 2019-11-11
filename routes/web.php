@@ -32,27 +32,30 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
     Route::post('/divisions', 'DivisionController@store')->name('division.store');
-
+    
     Route::get('/users', 'UserController@index')->name('users.index');
     Route::post('/users', 'UserController@store')->name('users.store');
     Route::get('/users/{id}', 'UserController@show')->name('users.show');
-
+    
     Route::get('/products', 'ProductController@index')->name('products.index');
     Route::get('/products/create', 'ProductController@create')->name('products.create');
     Route::post('/products', 'ProductController@store')->name('products.store');
     Route::post('/products/{id}/nextstep', 'ProductController@nextStep')->name('products.nextStep');
-
+    Route::get('/products/{id}/changeProcess/{processID}', 'ProductController@changeProcess')->name('products.changeProcess');
+    Route::get('/products/{id}', 'ProductController@show')->name('products.show');
+    Route::get('/admin/products', 'ProductController@adminIndex')->name('admin.products');
+    
     // Route::get('/processes/{id}', 'ProcessController@show')->name('processes.show');
-
+    
     Route::get('/projects', 'ProjectController@index')->name('projects.index');
     Route::post('/projects', 'ProjectController@store')->name('projects.store');
     Route::get('/projects/create', 'ProjectController@create')->name('projects.create');
 
     Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');
-
+    
     Route::get('/bp', 'ProcessController@index')->name('bp');
     Route::get('/profile/tasks', 'UserController@tasks')->name('profile.tasks');
-
+    
     Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume.show');
     Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume.store');
 
@@ -66,16 +69,14 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/resume/{id}', 'ResumeController@showSingle')->name('show.single');
     Route::get('/head-resumes', 'ResumeController@hrShowResumes')->name('head.resumes');
     Route::get('/resume-pdf/{id}', 'ResumeController@pdf')->name('resume.pdf');
-
+    
     Route::get('/human-resources', 'HumanResourcesController@index')->name('human.resources');
     Route::get('/human-resources/resumes', 'HumanResourcesController@showResumes')->name('human.resources.resume');
 
     Route::get('/chats', 'ChatController@index')->name('chats.index');
     Route::post('/chats', 'ChatController@store')->name('chats.store');
-    Route::get('/products/{id}', 'ProductController@show')->name('products.show');
-    Route::get('/admin/products', 'ProductController@adminProducts')->name('products.admin');
 
-
+    
 });
 
 
@@ -86,4 +87,5 @@ Route::prefix('api')->group(function () {
     Route::post('/messages', 'MessageController@storeApi')->name('api.messages.store');
     Route::get('/chats/{id}/details', 'ChatController@getDetails')->name('api.getDetails');
     Route::get('/directs/{userID}', 'ChatController@getdirect')->name('api.getDirect');
+    Route::get('/get/products', 'ProductController@getProducts')->name('get.products');
 });

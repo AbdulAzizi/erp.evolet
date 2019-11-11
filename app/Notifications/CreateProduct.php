@@ -46,7 +46,7 @@ class CreateProduct extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray()
+    public function toArray($notifiable)
     {
         $country = $this->project->country->name;
         $pc = $this->project->pc->name;
@@ -67,7 +67,7 @@ class CreateProduct extends Notification
             'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
                ' добавил(a) <a href="' . route("products.show", $this->product->id) . '">' . 'добавил(a) новый продукт' .
                 '</a>',
-            'notification' => $notifiable->notifications()->latest()->first()
+                'notification' => $notifiable->notifications()->find($this->id)
         ]);
     }
 }

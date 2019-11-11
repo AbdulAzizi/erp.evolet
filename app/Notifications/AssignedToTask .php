@@ -82,7 +82,7 @@ class AssignedToTask extends Notification
                 'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
                     ' поставил(a) вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' .
                     $this->task->title . '</a>',
-                'notification' => $notifiable->notifications()->latest()->first()
+                'notification' => $notifiable->notifications()->find($this->id)
             ]);
         // if procces
         else
@@ -91,7 +91,7 @@ class AssignedToTask extends Notification
                 'title' =>  'Процесс <a href="#">' . $this->from->name . '</a>' .
                     ' поставил вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' .
                     $this->task->title . '</a>',
-                'notification' => $notifiable->notifications()->latest()->first()
+                'notification' => $notifiable->notifications()->find($this->id)
             ]);
     }
 }

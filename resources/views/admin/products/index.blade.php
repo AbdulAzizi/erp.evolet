@@ -2,6 +2,7 @@
 
 @section('content')
     <products-admin-view
-        :items="{{$products}}"
+        :pcs="{{$pcs}}"
+        :countries="{{$countries}}"
     ></products-admin-view>
 @endsection

@@ -44,7 +44,7 @@ class HistoryCreated extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray()
+    public function toArray($notifiable)
     {
         return [
             'avatar' => $this->history->user->img,
@@ -57,7 +57,7 @@ class HistoryCreated extends Notification
         return new BroadcastMessage([
             'avatar' => $this->history->user->img,
             'title' => $this->history->description,
-            'notification' => $notifiable->notifications()->latest()->first()
+            'notification' => $notifiable->notifications()->find($this->id)
         ]);
     }
 }
