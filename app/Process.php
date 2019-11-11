@@ -31,4 +31,9 @@ class Process extends Model
     {
         return $this->hasMany('App\Product', 'process_id');
     }
+
+    public function product()
+    {
+        return $this->belongsToMany('App\Product');
+    }
 }

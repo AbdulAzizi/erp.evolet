@@ -45,4 +45,9 @@ class Product extends Model
     {
         return $this->belongsToMany('App\Task');
     }
+
+    public function processes()
+    {
+        return $this->belongsToMany('App\Process')->withPivot('created_at');
+    }
 }

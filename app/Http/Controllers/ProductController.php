@@ -69,7 +69,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $data['product'] = Product::with(['messages','currentProcess', 'project.country', 'project.pc', 'fields', 'history.user'])->find($id);
+        $data['product'] = Product::with(['messages','currentProcess', 'project.country', 'project.pc', 'fields', 'history.user', 'processes'])->find($id);
 
         $listFields = $this->getListFieldsFromProduct($data['product']);
 
