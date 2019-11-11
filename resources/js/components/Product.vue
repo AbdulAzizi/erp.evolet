@@ -14,6 +14,40 @@
         </v-col>
 
         <v-col lg="4" md="6" sm="12" class="pt-0">
+            <v-card outlined class="mt-3 pa-0">
+                <v-card-text class="px-0">
+                    <div class="text-center">История статуса</div>
+                    <p v-if="!product.processes.length">Нет событий</p>
+                    <v-simple-table dense class="mt-3">
+                        <template v-slot:default>
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Статус</th>
+                                    <th class="text-left">Дата</th>
+                                    <th class="text-left">Потраченное время</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(status, index) in getDuration" :key="index">
+                                    <td>{{status.name}}</td>
+                                    <td>{{moment(status.pivot.created_at).local().format('DD-M-YY HH:mm')}}</td>
+                                    <td v-if="status.spent_time">
+                                        <span
+                                            v-if="durObj(status.spent_time).days()"
+                                        >{{ durObj(status.spent_time).days() }}д</span>
+                                        <span
+                                            v-if="durObj(status.spent_time).hours()"
+                                        >{{ durObj(status.spent_time).hours() }}ч</span>
+                                        <span
+                                            v-if="durObj(status.spent_time).minutes()"
+                                        >{{ durObj(status.spent_time).minutes() }}м</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </template>
+                    </v-simple-table>
+                </v-card-text>
+            </v-card>
             <v-card class="mx-auto mb-2" outlined>
                 <v-card-text>
                     <div class="text-center">Участники продукта</div>
@@ -74,8 +108,23 @@ export default {
     props: ["product", "participants"],
     data() {
         return {
-            window: window.history
+            window: window.history,
+            localProducts: this.product
         };
+    },
+    computed: {
+        getDuration() {
+            if (this.localProducts.processes.length > 1) {
+                return this.localProducts.processes.reduce((prev, next) => {
+                    prev["spent_time"] = this.moment(
+                        next.pivot.created_at
+                    ).diff(this.moment(prev.pivot.created_at));
+                    return this.localProducts.processes;
+                });
+            } else {
+                return this.localProducts.processes;
+            }
+        }
     }
 };
 </script>
