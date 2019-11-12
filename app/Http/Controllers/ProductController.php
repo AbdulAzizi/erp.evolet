@@ -202,7 +202,13 @@ class ProductController extends Controller
 
     public function getProducts(Request $request, ProductFilters $filters)
     {
-        return Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
+        $products = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
+        
+        $listFields = $this->getListFieldsFromProducts($products);
+
+        $this->loadListFieldValues($listFields);
+    
+        return $products;
     }
 
     /**

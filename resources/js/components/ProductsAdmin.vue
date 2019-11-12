@@ -39,15 +39,18 @@
         </v-overlay>
         <v-data-table
             v-if="items.length"
+            hide-default-footer
             :headers="headers"
             :items="preparedItems"
+            :page.sync="page"
             item-key="id"
-            hide-default-footer
             :items-per-page="100"
             :fixed-header="true"
-            height="calc(100vh - 112px)"
+            height="calc(100vh - 154px)"
             dense
+            @page-count="pageCount = $event"
         />
+        <v-pagination v-if="preparedItems.length" v-model="page" :length="pageCount"></v-pagination>
     </div>
 </template>
 
@@ -62,18 +65,9 @@ export default {
             filters: {},
             items: [],
             preparedItems: [],
-            headers: [
-                {
-                    text: "Промо Компания",
-                    value: "pc",
-                    class: ["primary", "table-header"]
-                },
-                {
-                    text: "Страна",
-                    value: "country",
-                    class: ["primary", "table-header"]
-                }
-            ]
+            headers: [],
+            page:1,
+            pageCount:0
         };
     },
     created() {},
@@ -107,7 +101,7 @@ export default {
         },
         items(val) {
             if (val.length != 0) {
-                let fieldsHeaders = this.items[0].fields.map(function(field) {
+                let fieldsHeaders = this.items[0].fields.map(function(field) {                    
                     return {
                         text: field.label,
                         value: field.label,
@@ -115,6 +109,18 @@ export default {
                     };
                 });
                 // merge headers
+                this.headers = [
+                    {
+                        text: "Промо Компания",
+                        value: "pc",
+                        class: ["primary", "table-header"]
+                    },
+                    {
+                        text: "Страна",
+                        value: "country",
+                        class: ["primary", "table-header"]
+                    }
+                ];
                 this.headers = [...this.headers, ...fieldsHeaders];
 
                 this.preparedItems = this.items.map(function(item) {
