@@ -12,11 +12,14 @@ class TagTableSeeder extends Seeder
     public function run()
     {
         \App\Tag::insert([
-            ['name'=>'Битрикс'],
-            ['name'=>'Конкурс'],
             ['name'=>'Упаковка'],
             ['name'=>'Макет'],
-            ['name'=>'ФУРП'],
+            ['name'=>'ПУРП'],
+            ['name'=>'DISC'],
+            ['name'=>'Lafeum'],
+            ['name'=>'Разработка'],
+            ['name'=>'SEO'],
+            ['name'=>'SMM'],
         ]);
     }
 }
