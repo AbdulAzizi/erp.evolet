@@ -190,6 +190,30 @@ const getPicker = field => {
     return baseField;
 };
 
+const getYearField = field => {
+    const baseField = getBaseField(field);
+    let years = [];
+    let year = new Date().getFullYear();
+
+    for(let i = 1990; i <= year; i++){
+        years.push(i);
+    }
+
+    //Default props for select field
+    baseField.component = "v-select";
+    baseField.props = {
+        ...baseField.props,
+
+        items: years.reverse(),
+        "item-text": "name",
+        "item-value": "id"
+    };
+
+    baseField["hasSeparateInput"] = true;
+    return baseField;
+};
+
+
 export default {
     props: {
         field: Object,
@@ -244,6 +268,9 @@ export default {
                     break;
                 case "users":
                     fieldData = getUsersField(this.field);
+                    break;
+                case "year":
+                    fieldData = getYearField(this.field);
                     break;
                 case "date":
                 case "time":
