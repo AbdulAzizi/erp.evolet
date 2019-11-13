@@ -7,6 +7,7 @@ use App\Country;
 use App\Process;
 use App\Manager;
 use App\Project;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
@@ -31,8 +32,15 @@ class ProductSeeder extends Seeder
                 $faker = Faker\Factory::create();
     
                 $preparedFields = $fields->mapWithKeys(function ($field) use ($faker) {
-                    if($field->type->name == 'list'){
-                        return [$field->id => ['value' => rand(1, 5)]];
+                    if($field->type->name == 'list' || $field->type->name == 'many-to-many-list'){
+                        $tableName = DB::table('list_fields')
+                            ->where('field_id', $field->id)
+                            ->pluck('list_type')
+                            ->first();
+                        
+                        $numberOfListElement = DB::table($tableName)->count();
+
+                        return [$field->id => ['value' => rand(1, $numberOfListElement)]];
                     }
                     return [$field->id => ['value' => $faker->word]];
                 });
