@@ -55,26 +55,35 @@
                                 <div class="font-weight-medium pb-1">Описание</div>
                                 <div v-html="task.description"></div>
                             </div>
-                            <div v-if="task.question_tasks.length"  class="pb-3">
+                            <div v-if="task.question_tasks.length" class="pb-3">
                                 <div class="font-weight-medium pb-1">Опрос</div>
-                                <poll-form :questionTask="task.question_tasks[0]"/>
+                                <poll-form :questionTask="task.question_tasks[0]" />
                             </div>
-
-                            <div v-if="task.from.front_tethers.length > 1 && task.question_tasks.length ===0">
-                                <div class="font-weight-medium pb-1">Действия</div>
-                                <!-- <v-list nav v-if="taskHasActions"> -->
-                                <v-list nav>
-                                    <v-list-item-group color="primary">
-                                        <template v-for="( tether, i ) in task.from.front_tethers">
-                                            <v-list-item :key="'list-item-'+i" class="mb-0" :href="appPath(`products/${task.products[0].id}/changeProcess/${tether.to_process_id}`)">
-                                                <v-list-item-content>
-                                                    <v-list-item-title>{{ tether.action_text }}</v-list-item-title>
-                                                </v-list-item-content>
-                                            </v-list-item>
-                                        </template>
-                                    </v-list-item-group>
-                                </v-list>
-                            </div>
+                            <template v-if="task.from.front_tethers">
+                                <div
+                                    v-if="task.from.front_tethers.length > 1 && task.question_tasks.length ===0"
+                                >
+                                    <div class="font-weight-medium pb-1">Действия</div>
+                                    <!-- <v-list nav v-if="taskHasActions"> -->
+                                    <v-list nav>
+                                        <v-list-item-group color="primary">
+                                            <template
+                                                v-for="( tether, i ) in task.from.front_tethers"
+                                            >
+                                                <v-list-item
+                                                    :key="'list-item-'+i"
+                                                    class="mb-0"
+                                                    :href="appPath(`products/${task.products[0].id}/changeProcess/${tether.to_process_id}`)"
+                                                >
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>{{ tether.action_text }}</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </template>
+                                        </v-list-item-group>
+                                    </v-list>
+                                </div>
+                            </template>
 
                             <div v-if="task.forms.length != 0">
                                 <div class="font-weight-medium pb-1">Форма</div>
