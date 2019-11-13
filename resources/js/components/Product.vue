@@ -91,37 +91,19 @@
                       v-if="durObj(status.pivot.spent_time).seconds()"
                     >{{ durObj(status.pivot.spent_time).seconds() }} сек</span>
                   </td>
-                  <td v-else>
-                      <span
-                      v-if="durObj(moment().local().diff(moment(status.pivot.created_at).local())).days()"
-                    >{{ durObj(moment().local().diff(moment(status.pivot.created_at).local())).days() }} д</span>
-                    <span
-                      v-if="durObj(moment().local().diff(moment(status.pivot.created_at).local())).hours()"
-                    >{{ durObj(moment().local().diff(moment(status.pivot.created_at).local())).hours() }} ч</span>
-                    <span
-                      v-if="durObj(moment().local().diff(moment(status.pivot.created_at).local())).minutes()"
-                    >{{ durObj(moment().local().diff(moment(status.pivot.created_at).local())).minutes() }} мин</span>
-                    <span
-                      v-if="durObj(moment().local().diff(moment(status.pivot.created_at).local())).seconds()"
-                    >{{ durObj(moment().local().diff(moment(status.pivot.created_at).local())).seconds() }} сек</span>
-                </td>
                 </tr>
               </tbody>
             </template>
           </v-simple-table>
           <div class="mt-4 mx-3">
-             <span v-if="localProducts.processes.length > 1">Общее количество времени:</span> 
+            <span v-if="localProducts.processes.length > 1">Общее количество времени:</span>
+            <span v-if="durObj(overallSpentTime).days()">{{ durObj(overallSpentTime).days() }} д</span>
+            <span v-if="durObj(overallSpentTime).hours()">{{ durObj(overallSpentTime).hours() }} ч</span>
             <span
-                v-if="durObj(overallSpentTime).days()"
-            >{{ durObj(overallSpentTime).days() }} д</span>
-            <span
-                v-if="durObj(overallSpentTime).hours()"
-            >{{ durObj(overallSpentTime).hours() }} ч</span>
-            <span
-                v-if="durObj(overallSpentTime).minutes()"
+              v-if="durObj(overallSpentTime).minutes()"
             >{{ durObj(overallSpentTime).minutes() }} мин</span>
             <span
-                v-if="durObj(overallSpentTime).seconds()"
+              v-if="durObj(overallSpentTime).seconds()"
             >{{ durObj(overallSpentTime).seconds() }} сек</span>
           </div>
         </v-card-text>
@@ -150,40 +132,38 @@ export default {
     };
   },
   computed: {
-    getOverall() {
+    totalSpentTime() {
+      let sum = 0;
 
-        let len = this.localProducts.processes.length;
+      this.localProducts.processes.forEach(elem => {
+        if (elem.pivot.spent_time) {
+          sum += elem.pivot.spent_time;
+        } else {
+          sum += this.lastProcessSpentTime;
+        }
+      });
 
-        let elem = this.moment(this.localProducts.processes[len - 2].pivot.created_at).valueOf();
+      return sum;
+    },
+    lastProcessSpentTime() {
+      let len = this.localProducts.processes.length;
 
-        let lastElementSpentTime = this.moment().valueOf() - elem;
+      let elem = this.moment(
+        this.localProducts.processes[len - 2].pivot.created_at
+      ).valueOf();
 
-        let arr = [];
+      let lastElementSpentTime = this.moment().valueOf() - elem;
 
-        this.localProducts.processes.map(elem => {
-            arr.push(elem.pivot.spent_time);
-        });
-
-        arr.push(lastElementSpentTime);
-
-        console.log(arr);
-
-        // return arr.reduce((a ,b) => a + b);
-        let sum = 0;
-        arr.forEach(elem => {
-            if(elem !== null){
-                sum += elem;
-            }
-        });
-
-        return sum;
-
+      return lastElementSpentTime;
     }
   },
   created() {
-      this.overallSpentTime = this.getOverall;
-
-      console.log(this.getOverall);
+    // Calculate last process spent time
+    this.localProducts.processes[
+      this.localProducts.processes.length - 1
+    ].pivot.spent_time = this.lastProcessSpentTime;
+    // Calculate total spent time
+    this.overallSpentTime = this.totalSpentTime;
   }
 };
 </script>

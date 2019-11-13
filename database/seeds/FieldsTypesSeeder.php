@@ -24,6 +24,7 @@ class FieldsTypesSeeder extends Seeder
             ['name' => 'date'],
             ['name' => 'time'],
             ['name' => 'date-time'],
+            ['name' => 'year']
         ]);
     }
 }

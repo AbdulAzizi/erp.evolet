@@ -18,6 +18,7 @@ class FieldTableSeeder extends Seeder
 
         $manyToManyListFieldTypeID = FieldType::where('name', 'many-to-many-list')->first()->id;
         $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
+        $yearFieldTypeID = FieldType::where('name', 'year')->first()->id;
 
         $mnn = Field::create(['label' => 'МНН', 'name' => 'mnn', 'type_id' => $manyToManyListFieldTypeID]);
         $form = Field::create(['label' => 'Ф', 'name' => 'form', 'type_id' => $manyToManyListFieldTypeID]);
@@ -145,10 +146,12 @@ class FieldTableSeeder extends Seeder
 
         $forma_no_etap_1 = Form::where('name', 'Форма КП_ПК Этап 2')->first();
 
-        $sum2018 = Field::create(['label' => '2018 (сум)', 'name' => 'sum2018']);
-        $up2018 = Field::create(['label' => '2018 (Уп)', 'name' => 'up2018']);
-        $sum2017 = Field::create(['label' => '2017 (сум)', 'name' => 'sum2017']);
-        $uo2017 = Field::create(['label' => '2017 (Уп)', 'name' => 'uo2017']);
+        $currentYearSumUp = Field::create(['label' => 'Текущий год для сум и уп', 'name' => 'currentYearSumUp', 'type_id' => $yearFieldTypeID]);
+        $sum2018 = Field::create(['label' => 'Текущий сум', 'name' => 'sum2018']);
+        $up2018 = Field::create(['label' => 'Текущий Уп', 'name' => 'up2018']);
+        $previousYearSumUp = Field::create(['label' => 'Предыдущий год для сум и уп', 'name' => 'previousYearSumUp', 'type_id' => $yearFieldTypeID]);
+        $sum2017 = Field::create(['label' => 'Предыдущий сум', 'name' => 'sum2017']);
+        $uo2017 = Field::create(['label' => 'Предыдуший Уп', 'name' => 'uo2017']);
         $prip = Field::create(['label' => 'Прир', 'name' => 'prip']);
         $kppr = Field::create(['label' => 'КППР', 'name' => 'kppr']);
         $kprr = Field::create(['label' => 'КПРР', 'name' => 'kprr']);
@@ -182,8 +185,10 @@ class FieldTableSeeder extends Seeder
         $vivod = Field::create(['label' => 'Вывод', 'name' => 'vivod']);
 
         $forma_no_etap_1->fields()->attach([
+            $currentYearSumUp->id => ['required' => true],
             $sum2018->id => ['required' => true],
             $up2018->id => ['required' => true],
+            $previousYearSumUp->id => ['required' => true],
             $sum2017->id => ['required' => true],
             $uo2017->id => ['required' => true],
             $prip->id => ['required' => true],
