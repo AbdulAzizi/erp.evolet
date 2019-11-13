@@ -11,7 +11,7 @@
             item-key="id"
             hide-default-footer
             @click:row="displayTask"
-            
+            :items-per-page="-1"
         >
             <template v-slot:item.priority="{ item }">
                 <priority :id="item.priority" icon></priority>
