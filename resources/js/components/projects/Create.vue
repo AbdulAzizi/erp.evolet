@@ -93,6 +93,7 @@ export default {
       addCountry: false,
       localCountries: this.countries,
       localPcs: this.pcs,
+      curatorUsers: this.findCurators,
       dialogForm: {
         abbreviationField: {
           label: "Аббревиатура",
@@ -147,7 +148,7 @@ export default {
           label: "Куратор Портфеля ПК стран",
           rules: ["required"],
           icon: "mdi-account-tie",
-          users: this.users
+          users: this.findCuratorUsers()
         },
         {
           type: "users",
@@ -155,7 +156,7 @@ export default {
           label: "НО",
           rules: ["required"],
           icon: "mdi-account-tie",
-          users: this.users
+          users: this.findScienceDepUsers()
         },
         {
           type: "users",
@@ -163,7 +164,7 @@ export default {
           label: "ПК",
           rules: ["required"],
           icon: "mdi-account-tie",
-          users: this.users
+          users: this.findPcUsers()
         }
       ]
     };
@@ -172,8 +173,12 @@ export default {
     onSubmit() {
       let model = this.addPc ? this.localPcs : this.localCountries; // define the array where to push data after request
       let url = this.addPc ? "/api/pc" : "/api/country"; // define url for request
-      let name = this.addPc ? this.dialogForm.pc.name : this.dialogForm.country.name; // One 'name' field for both forms
-      let abbreviation = this.addPc ? this.dialogForm.pc.abbreviation : this.dialogForm.country.abbreviation; // One 'abbreviation' field for both forms
+      let name = this.addPc
+        ? this.dialogForm.pc.name
+        : this.dialogForm.country.name; // One 'name' field for both forms
+      let abbreviation = this.addPc
+        ? this.dialogForm.pc.abbreviation
+        : this.dialogForm.country.abbreviation; // One 'abbreviation' field for both forms
       let form = this.$refs.addCountryAndPcForm; // define the ref to the variable
       // send axios request if forms validated
       if (form.validate()) {
@@ -183,16 +188,54 @@ export default {
             abbreviation: abbreviation
           })
           .then(res => {
-            // push data to local array 
+            // push data to local array
             model.push(res.data);
             // Fire event for alert
-            this.addPc ? Event.fire("notify", ["Промо компания добавлена!"]) : Event.fire("notify", ["Страна добавлена!"]);
+            this.addPc
+              ? Event.fire("notify", ["Промо компания добавлена!"])
+              : Event.fire("notify", ["Страна добавлена!"]);
             // Clear forms
             this.dialog = this.addCountry = this.addPc = false;
             this.dialogForm.name = this.dialogForm.abbreviation = null;
           });
       }
+    },
+    findCuratorUsers() {
+      let curators = [];
+      this.users.forEach(element => {
+        element.responsibilities.forEach(el => {
+          if(el.id == 4){
+            curators.push(element);
+          }
+        })
+      });
+      return curators;
+    },
+    findScienceDepUsers(){
+      let scienceDep = [];
+      this.users.forEach(element => {
+        element.responsibilities.forEach(el => {
+          if(el.id == 10){
+            scienceDep.push(element);
+          }
+        })
+      });
+      return scienceDep;
+    },
+    findPcUsers(){
+      let pc = [];
+      this.users.forEach(element => {
+        element.responsibilities.forEach(el => {
+          if(el.id == 9){
+            pc.push(element);
+          }
+        })
+      });
+      return pc;
     }
+  },
+  created(){
+    console.log(this.findCurators())
   }
 };
 </script>
