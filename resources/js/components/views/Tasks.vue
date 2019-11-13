@@ -84,7 +84,7 @@ export default {
         return {
             currentView: null,
             selectedTags: [],
-            filteredTasks: []
+            filteredTasks: this.tasks
         };
     },
     mounted() {
@@ -152,6 +152,10 @@ export default {
                 if( unionTags.length )
                     this.filteredTasks.push( task );
             });
+            
+            if (this.filteredTasks.length == 0) {
+                this.filteredTasks = this.tasks
+            }
         },
         filteredTasks(val){
             console.log(val);
