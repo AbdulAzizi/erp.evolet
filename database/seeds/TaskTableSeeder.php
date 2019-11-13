@@ -17,7 +17,7 @@ class TaskTableSeeder extends Seeder
         $tags = Tag::all();
 
         foreach ($users as $user) {
-            $tasks = factory(App\Task::class, 10)->create([
+            $tasks = factory(App\Task::class, 30)->create([
                 'responsible_id' => $user->id,
             ]);
 

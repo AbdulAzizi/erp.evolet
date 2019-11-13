@@ -26,7 +26,7 @@ class ProductSeeder extends Seeder
         $opus = ["28","1x10","28","30","5 ML VIAL","20","20","1x7","20","20","#7","1x5,5ml","№30","№30","30 G","28","20","5 ML VIAL","#20","2x7","2x5","#7","3+3","30gx1"];
 
         foreach ($pcs as $pc) {
-            for ($i=0; $i < 50; $i++) { 
+            for ($i=0; $i < 30; $i++) { 
                 $product = \App\Product::create([
                     'process_id' => $this->getRandomId(Process::class),
                     'project_id' => $this->getRandomId(Project::class),
