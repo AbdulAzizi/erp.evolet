@@ -48,6 +48,6 @@ class Product extends Model
 
     public function processes()
     {
-        return $this->belongsToMany('App\Process')->withPivot('created_at');
+        return $this->belongsToMany('App\Process')->withPivot('spent_time')->withTimestamps();
     }
 }

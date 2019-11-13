@@ -17,7 +17,8 @@ class CreateProcessProductTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('process_id');
             $table->unsignedBigInteger('product_id');
-            $table->timestamp('created_at');
+            $table->timestamps();
+            $table->unsignedBigInteger('spent_time')->nullable();
         });
     }
 
