@@ -32,6 +32,19 @@
                         hide-details
                     />
                 </v-col>
+                <v-col>
+                    <v-select
+                        v-model="selectedProcess"
+                        :items="processes"
+                        item-text="name"
+                        item-value="id"
+                        dense
+                        label="Процесс"
+                        solo
+                        clearable
+                        hide-details
+                    ></v-select>
+                </v-col>
             </v-row>
         </v-container>
         <v-overlay :value="loading" color="white" opacity="0.7">
@@ -56,7 +69,7 @@
 
 <script>
 export default {
-    props: ["pcs", "countries"],
+    props: ["pcs", "countries", "processes"],
     data() {
         return {
             loading: false,
@@ -66,8 +79,9 @@ export default {
             items: [],
             preparedItems: [],
             headers: [],
-            page:1,
-            pageCount:0
+            page: 1,
+            pageCount: 0,
+            selectedProcess: null
         };
     },
     created() {},
@@ -84,6 +98,12 @@ export default {
         }
     },
     watch: {
+        selectedProcess(val) {
+            if (val) delete this.filters.process_id;
+            this.filters.process_id = val;
+
+            this.getData();
+        },
         pcObjects(val) {
             if (val.length == 0) delete this.filters.pc_ids;
             else this.filters.pc_ids = JSON.stringify(val.map(pc => pc.id));
@@ -101,7 +121,7 @@ export default {
         },
         items(val) {
             if (val.length != 0) {
-                let fieldsHeaders = this.items[0].fields.map(function(field) {                    
+                let fieldsHeaders = this.items[0].fields.map(function(field) {
                     return {
                         text: field.label,
                         value: field.label,

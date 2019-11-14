@@ -196,8 +196,9 @@ class ProductController extends Controller
     {
         $pcs = Division::withDepth()->having('depth', '=', 4)->get();
         $countries = Country::all();
+        $processes = Process::all();
 
-        return view('admin.products.index', compact('pcs', 'countries'));
+        return view('admin.products.index', compact('pcs', 'countries','processes'));
     }
 
     public function getProducts(Request $request, ProductFilters $filters)
