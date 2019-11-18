@@ -140,6 +140,11 @@ class ProductController extends Controller
         ]);
     }
 
+    public function edit(Request $request){
+        $product = Product::with(['fieldsWithLists'])->find($request->id);
+        return view('products.edit', compact('product'));
+    }
+
     public function nextStep($id, Request $request)
     {
         // return $request;

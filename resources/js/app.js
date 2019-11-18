@@ -304,6 +304,8 @@ Vue.component("chats-view", require("./components/views/Chats.vue").default);
 
 Vue.component("products-admin-view", require("./components/ProductsAdmin").default);
 
+Vue.component("edit-product-forms", require("./components/views/products/Edit.vue").default);
+
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);

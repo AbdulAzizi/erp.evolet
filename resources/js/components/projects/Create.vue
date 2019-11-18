@@ -148,7 +148,7 @@ export default {
           label: "Куратор Портфеля ПК стран",
           rules: ["required"],
           icon: "mdi-account-tie",
-          users: this.findCuratorUsers()
+          users: this.filterUsers("Куратор Портфеля ПК стран")
         },
         {
           type: "users",
@@ -156,7 +156,7 @@ export default {
           label: "НО",
           rules: ["required"],
           icon: "mdi-account-tie",
-          users: this.findScienceDepUsers()
+          users: this.filterUsers("НО")
         },
         {
           type: "users",
@@ -164,7 +164,7 @@ export default {
           label: "ПК",
           rules: ["required"],
           icon: "mdi-account-tie",
-          users: this.findPcUsers()
+          users: this.filterUsers("ПК")
         }
       ]
     };
@@ -200,42 +200,17 @@ export default {
           });
       }
     },
-    findCuratorUsers() {
+    filterUsers(name) {
       let curators = [];
       this.users.forEach(element => {
         element.responsibilities.forEach(el => {
-          if(el.id == 4){
+          if(el.name == name){
             curators.push(element);
           }
         })
       });
       return curators;
     },
-    findScienceDepUsers(){
-      let scienceDep = [];
-      this.users.forEach(element => {
-        element.responsibilities.forEach(el => {
-          if(el.id == 10){
-            scienceDep.push(element);
-          }
-        })
-      });
-      return scienceDep;
-    },
-    findPcUsers(){
-      let pc = [];
-      this.users.forEach(element => {
-        element.responsibilities.forEach(el => {
-          if(el.id == 9){
-            pc.push(element);
-          }
-        })
-      });
-      return pc;
-    }
-  },
-  created(){
-    console.log(this.findCurators())
   }
 };
 </script>
