@@ -134,11 +134,11 @@ class UserTableSeeder extends Seeder
         $this->userAsDivisionHead('anvar@admin.com');
         $this->userAsDivisionHead('mirzoeva@admin.com');
 
-        factory(User::class, 40)->create()->each(function ($user){
-            for($i = 1; $i <= random_int(1,4); $i++){
-                $user->responsibilities()->attach(Responsibility::inRandomOrder()->first()->id);
-            }
-        });
+        // factory(User::class, 40)->create()->each(function ($user){
+        //     for($i = 1; $i <= random_int(1,4); $i++){
+        //         $user->responsibilities()->attach(Responsibility::inRandomOrder()->first()->id);
+        //     }
+        // });
         
     }
 

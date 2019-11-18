@@ -1,5 +1,6 @@
 <?php
 
+use App\Tag;
 use Illuminate\Database\Seeder;
 use App\User;
 
@@ -13,11 +14,16 @@ class TaskTableSeeder extends Seeder
     public function run()
     {
         $users = User::all();
+        $tags = Tag::all();
 
         foreach ($users as $user) {
-            factory(App\Task::class, 10)->create([
+            $tasks = factory(App\Task::class, 30)->create([
                 'responsible_id' => $user->id,
             ]);
+
+            foreach ($tasks as $task) {
+                $task->tags()->attach($tags->random( rand(1,3) ));
+            }
         }
 
     }

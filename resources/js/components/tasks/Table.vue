@@ -11,7 +11,7 @@
             item-key="id"
             hide-default-footer
             @click:row="displayTask"
-            
+            :items-per-page="-1"
         >
             <template v-slot:item.priority="{ item }">
                 <priority :id="item.priority" icon></priority>
@@ -38,6 +38,11 @@
             <template v-slot:item.created_at="{ item }">{{ moment(item.created_at).fromNow() }}</template>
 
             <template v-slot:item.status="{ item }">{{ item.status.name }}</template>
+            <template v-slot:item.tags="{ item }">
+                <v-chip class="primary black--text mr-1" x-small v-for="(tag,index) in item.tags" :key="'tag-'+index">
+                    {{tag.name}}
+                </v-chip>
+            </template>
         </v-data-table>
     </div>
 </template>
@@ -58,7 +63,8 @@ export default {
                 { text: "Дедлайн", value: "deadline" },
                 { text: "От", value: "from", sort: false },
                 { text: "CreatedAt", value: "created_at" },
-                { text: "Статус", value: "status" }
+                { text: "Статус", value: "status" },
+                { text: "Таги", value: "tags" },
             ],
             selectedTask: null,
             taskDialog: false
@@ -85,6 +91,11 @@ export default {
             });            
             
         });
+    },
+    watch:{
+        tasks(val){
+            this.localTasks = val;
+        }
     }
 };
 </script>
