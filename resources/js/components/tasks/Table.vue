@@ -1,107 +1,130 @@
 <template>
-    <div>
-        <!-- <v-dialog v-model="taskDialog" max-width="1000">
+  <div>
+    <!-- <v-dialog v-model="taskDialog" max-width="1000">
             <task :item="selectedTask" :users="users"></task>
-        </v-dialog>-->
-
-        <v-data-table
-            :headers="headers"
-            :items="localTasks"
-            class="elevation-1 tasks-table"
-            item-key="id"
-            hide-default-footer
-            @click:row="displayTask"
-            :items-per-page="-1"
-        >
-            <template v-slot:item.priority="{ item }">
-                <priority :id="item.priority" icon></priority>
-            </template>
-
-            <template v-slot:item.planned_time="{ item }">
-                <span
-                    v-if="durObj(item.planned_time).days()"
-                >{{ durObj(item.planned_time).days() }}д</span>
-                <span
-                    v-if="durObj(item.planned_time).hours()"
-                >{{ durObj(item.planned_time).hours() }}ч</span>
-                <span
-                    v-if="durObj(item.planned_time).minutes()"
-                >{{ durObj(item.planned_time).minutes() }}м</span>
-            </template>
-
-            <template v-slot:item.deadline="{ item }">{{ moment(item.deadline).fromNow() }}</template>
-
-            <template v-slot:item.from="{ item }">
-                <avatar :user="item.from" />
-            </template>
-
-            <template v-slot:item.created_at="{ item }">{{ moment(item.created_at).fromNow() }}</template>
-
-            <template v-slot:item.status="{ item }">{{ item.status.name }}</template>
-            <template v-slot:item.tags="{ item }">
-                <v-chip class="primary black--text mr-1" x-small v-for="(tag,index) in item.tags" :key="'tag-'+index">
-                    {{tag.name}}
-                </v-chip>
-            </template>
-        </v-data-table>
-    </div>
+    </v-dialog>-->
+    <v-data-table
+      :headers="headers"
+      :items="localTasks"
+      class="elevation-1 tasks-table"
+      item-key="id"
+      hide-default-footer
+      :items-per-page="-1"
+      height="calc(100vh - 120px)"
+      fixed-header
+    >
+      <template v-slot:item="{ item }">
+        <tr :class="(item.readed == 0 ? 'grey lighten-3' : 'white')" @click="displayTask(item.id)">
+          <td @click.stop>
+            <v-menu offset-y>
+              <template v-slot:activator="{on}">
+                <v-btn icon v-on="on">
+                  <v-icon small>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+              <v-list dense>
+                <v-list-item @click="mark(item)">
+                  <v-list-item-title v-if="item.readed">Отметить как не прочитанное</v-list-item-title>
+                  <v-list-item-title v-if="!item.readed">Отметить как прочитанное</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </td>
+          <td>{{item.title}}</td>
+          <td>
+            <priority :id="item.priority" icon></priority>
+          </td>
+          <td>
+            <span v-if="durObj(item.planned_time).days()">{{ durObj(item.planned_time).days() }}д</span>
+            <span v-if="durObj(item.planned_time).hours()">{{ durObj(item.planned_time).hours() }}ч</span>
+            <span
+              v-if="durObj(item.planned_time).minutes()"
+            >{{ durObj(item.planned_time).minutes() }}м</span>
+          </td>
+          <td>{{ moment(item.deadline).fromNow() }}</td>
+          <td>
+            <avatar :user="item.from" />
+          </td>
+          <td>{{ moment(item.created_at).fromNow() }}</td>
+          <td>{{ item.status.name }}</td>
+          <td>
+            <v-chip
+              class="primary black--text mr-1"
+              x-small
+              v-for="(tag,index) in item.tags"
+              :key="'tag-'+index"
+            >{{tag.name}}</v-chip>
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
 export default {
-    props: {
-        tasks: Array,
-        users: Array
+  props: {
+    tasks: Array,
+    users: Array
+  },
+  data() {
+    return {
+      localTasks: this.tasks,
+      headers: [
+        { text: "" },
+        { text: "Задача", value: "title" },
+        { text: "Приоритет", value: "priority" },
+        { text: "Время на задачу", value: "planned_time" },
+        { text: "Дедлайн", value: "deadline" },
+        { text: "От", value: "from", sort: false },
+        { text: "CreatedAt", value: "created_at" },
+        { text: "Статус", value: "status" },
+        { text: "Теги", value: "tags", width: 100 }
+      ],
+      selectedTask: null,
+      taskDialog: false,
+      menu: false
+    };
+  },
+  methods: {
+    displayTask(id) {
+      window.location.href = "tasks/" + id;
     },
-    data() {
-        return {
-            localTasks: this.tasks,
-            headers: [
-                { text: "Задача", value: "title" },
-                { text: "Приоритет", value: "priority" },
-                { text: "Время на задачу", value: "planned_time" },
-                { text: "Дедлайн", value: "deadline" },
-                { text: "От", value: "from", sort: false },
-                { text: "CreatedAt", value: "created_at" },
-                { text: "Статус", value: "status" },
-                { text: "Таги", value: "tags" },
-            ],
-            selectedTask: null,
-            taskDialog: false
-        };
-    },
-    methods: {
-        displayTask(task) {
-            window.location.href = 'tasks/'+task.id;
-
-            // this.selectedTask = task;
-            // this.taskDialog = true;
-        },
-        duration() {}
-    },
-    created() {
-        Event.listen('taskStatusChanged', data => {
-
-            this.localTasks.forEach( ( task, index) => {
-
-                if (task.id == data.id){
-                    this.localTasks[index] = data;
-                }
-                
-            });            
-            
-        });
-    },
-    watch:{
-        tasks(val){
-            this.localTasks = val;
-        }
+    mark(task) {
+      let dataToSend = task.readed ? 0 : 1;
+      axios
+        .put(`/api/task/mark/${task.id}`, {
+          readed: dataToSend
+        })
+        .then(res => {
+          this.localTasks.forEach(elem => {
+            if (elem.id == res.data.id) {
+              elem.readed = res.data.readed;
+            }
+          });
+            console.log(this.localTasks)
+        }).catch(err => err.messages);
     }
+  },
+  created() {
+    Event.listen("taskStatusChanged", data => {
+      this.localTasks.forEach((task, index) => {
+        if (task.id == data.id) {
+          this.localTasks[index] = data;
+        }
+      });
+    });
+  },
+  watch: {
+    tasks(val) {
+      this.localTasks = val;
+    }
+  }
 };
 </script>
 
 <style>
 .tasks-table {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>

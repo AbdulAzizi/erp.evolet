@@ -147,7 +147,8 @@ class TaskController extends Controller
         // if ($task->from_type == "App\Process") {
         //     $task->from->load('frontTethers.form.fields', 'backTethers');
         // }
-
+        $task->readed = 1;
+        $task->save();
         $users = User::with(['division'])->get();
 
         return view('tasks.show', compact('task', 'users'));
@@ -359,5 +360,15 @@ class TaskController extends Controller
         }
 
         return $timeset;
+    }
+
+    public function mark(Request $request)
+    {
+        $task = Task::find($request->id);
+
+        $task->readed = $request->readed;
+        $task->save();
+
+        return $task;
     }
 }
