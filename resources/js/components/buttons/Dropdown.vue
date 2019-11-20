@@ -60,6 +60,16 @@
         </v-layout>
         <v-divider></v-divider>
       </div>
+      <v-toolbar dense style="position: sticky; bottom:0;">
+        <v-btn text small color="primary">отметить все как прочитанное</v-btn>
+      <v-spacer></v-spacer>
+      <v-btn text color="primary" v-if="muted == 0" @click="muteSound()">
+       <v-icon>mdi-volume-high</v-icon>
+      </v-btn>
+      <v-btn text color="primary" v-if="muted == 1" @click="muteSound()">
+       <v-icon>mdi-volume-off</v-icon>
+      </v-btn>
+    </v-toolbar>
     </v-card>
   </v-menu>
 </template>
@@ -92,7 +102,8 @@ export default {
       localItems: this.items,
       item: null,
       check: false,
-      sound: new Audio("/audio/q.mp3")
+      sound: new Audio("/audio/q.mp3"),
+      muted: 0
     };
   },
   created() {
@@ -103,20 +114,18 @@ export default {
 
       Event.fire("notify",["У вас новое уведомление!"]);
       
-
-      let promise = this.sound.play();
+      this.sound.muted = false;
+      let promise = this.muted == 1 ? this.sound.pause() : this.sound.play();
 
       if (promise !== undefined) {
-          promise.then(_ => {
-              // Autoplay started!
-              
-          }).catch(error => {
-              console.log("Sound did not not play");
-              // Autoplay was prevented.
-              // Show a "Play" button so that user can start playback.
-          });
+          promise.then(_ => {}).catch(error => error);
       }
     });
+  },
+  mounted() {
+    if(localStorage.muted){
+      this.muted = localStorage.muted;
+    }
   },
   methods: {
     notify() {
@@ -135,8 +144,15 @@ export default {
           this.check = false;
         })
         .catch(err => err.message);
+    },
+    muteSound(){
+      let notificationText = this.muted == 1 ? ['Звук уведомлений включен'] : ['Звук уведомлений отключен'];
+      this.muted = this.muted == 1 ? 0 : 1
+      localStorage.muted = this.muted;
+      Event.fire('notify', notificationText);
     }
   },
+  
   watch: {
     localItems(val) {
       this.item = val.filter(element => element.read_at == null);
