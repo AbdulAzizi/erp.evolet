@@ -11,6 +11,7 @@
         {{ product.current_process.name }}
       </p>
       <v-btn small depressed color="primary" class="mb-0" @click="window.back()">Назад</v-btn>
+      <v-btn small depressed color="primary" class="mb-0" :href="`/products/${product.id}/edit`">Редактировать</v-btn>
     </v-col>
 
     <v-col lg="6" md="6" sm="12">

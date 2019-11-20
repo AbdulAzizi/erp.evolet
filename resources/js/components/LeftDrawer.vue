@@ -9,6 +9,7 @@
         width="240"
         class="elevation-3"
         expand-on-hover
+        style="z-index:10"
     >
         <v-list dense nav>
             <div v-for="(item,key) in items" :key="'item'+key">

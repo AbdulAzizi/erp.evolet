@@ -26,6 +26,11 @@ class Product extends Model
         return $this->belongsToMany('App\Field','product_values')->using('App\ProductValue')->withPivot('value');
     }
 
+    public function fieldsWithLists()
+    {
+        return $this->belongsToMany(FormField::class, 'product_values',  'product_id', 'field_id')->withPivot('value');
+    }
+
     public function currentProcess()
     {
         return $this->belongsTo('App\Process','process_id');

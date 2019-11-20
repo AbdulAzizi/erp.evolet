@@ -26,6 +26,7 @@ class CreateTasksTable extends Migration
             $table->unsignedInteger('responsible_id');
             $table->unsignedInteger('from_id');
             $table->string('from_type');
+            $table->boolean('readed')->default(false);
             $table->timestamps();
         });
     }
