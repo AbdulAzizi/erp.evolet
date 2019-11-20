@@ -150,7 +150,7 @@ export default {
       let len = this.localProducts.processes.length;
 
       let elem = this.moment(
-        this.localProducts.processes[len - 2].pivot.created_at
+        this.localProducts.processes[len - 1].pivot.created_at
       ).valueOf();
 
       let lastElementSpentTime = this.moment().valueOf() - elem;
