@@ -21,24 +21,21 @@ class ProductFilters extends QueryFilters
     public function fields($term)
     {
         $fields = json_decode($term);
+
         foreach ($fields as $field) {
-            $field = json_decode($field);
-            $key = key($field);
-            $value = current($field);
-            if (is_numeric($value)) {
-                $this->builder->whereHas('values', function (Builder $query) use ($value, $key) {
-                    $query->where('field_id', $key)
-                        ->where('value', $value);
+            if (is_numeric( $field->value )) {
+                $this->builder->whereHas('values', function (Builder $query) use ($field) {
+                    $query->where('field_id', $field->field_id)
+                        ->where('value', $field->value);
                 });
             } else {
-                $this->builder->whereHas('values', function (Builder $query) use ($value, $key) {
-                    $query->where('field_id', $key)
-                        ->where('value', 'LIKE', "%$value%");
+                $this->builder->whereHas('values', function (Builder $query) use ($field) {
+                    $query->where('field_id',  $field->field_id)
+                        ->where('value', 'LIKE', "%$field->value%");
                 });
             }
         }
         return $this->builder;
-        // dd($localTerm);
     }
     public function process_id($term)
     {

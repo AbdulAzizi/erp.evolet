@@ -1,101 +1,119 @@
 <template>
     <div>
-        <v-container fluid class="py-0">
-            <v-row align="center" justify="center">
-                <v-combobox
-                    v-model="pcObjects"
-                    :items="pcs"
-                    item-text="name"
-                    item-value="id"
-                    dense
-                    solo
-                    label="Промо Компания"
-                    multiple
-                    small-chips
-                    deletable-chips
-                    hide-details
-                    class="mx-3 mt-3 mb-0"
-                />
-                <v-combobox
-                    v-model="countryObjects"
-                    :items="countries"
-                    item-text="name"
-                    item-value="id"
-                    dense
-                    solo
-                    label="Страна"
-                    multiple
-                    small-chips
-                    deletable-chips
-                    hide-details
-                    class="mx-3 mt-3 mb-0"
-                />
-                <v-select
-                    v-model="selectedProcess"
-                    :items="processes"
-                    item-text="name"
-                    item-value="id"
-                    dense
-                    label="Процесс"
-                    solo
-                    clearable
-                    hide-details
-                    class="mx-3 mt-3 mb-0"
-                ></v-select>
-                <v-row
-                    align="center"
-                    justify="center"
-                    :class="'mx-3 mt-3 mb-0 '+ (selectedField ? 'fields_group': '')"
-                >
-                    <v-select
-                        v-model="selectedField"
-                        :items="fields"
-                        item-text="label"
+        <v-fab-transition>
+            <v-btn
+                @click="displayRightDrawer = !displayRightDrawer"
+                color="primary"
+                fab
+                dark
+                bottom
+                right
+                fixed
+            >
+                <v-icon>mdi-filter</v-icon>
+            </v-btn>
+        </v-fab-transition>
+
+        <v-navigation-drawer v-model="displayRightDrawer" right fixed temporary>
+            <v-list-item>
+                <v-list-item-content>
+                    <v-list-item-title class="title">Фильтры</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-divider></v-divider>
+            <v-card tile flat>
+                <v-card-text>
+                    <v-combobox
+                        v-model="pcObjects"
+                        :items="pcs"
+                        item-text="name"
                         item-value="id"
                         dense
-                        label="Поле"
-                        solo
+                        outlined
+                        label="Промо Компания"
+                        multiple
+                        small-chips
+                        deletable-chips
+                    />
+                    <v-combobox
+                        v-model="countryObjects"
+                        :items="countries"
+                        item-text="name"
+                        item-value="id"
+                        dense
+                        outlined
+                        label="Страна"
+                        multiple
+                        small-chips
+                        deletable-chips
+                    />
+                    <v-select
+                        v-model="selectedProcess"
+                        :items="processes"
+                        item-text="name"
+                        item-value="id"
+                        dense
+                        label="Процесс"
+                        outlined
                         clearable
-                        hide-details
-                        return-object
                     ></v-select>
-
-                    <template v-if="selectedField">
-                        <v-text-field
-                            v-if="selectedField.type.name == 'string'"
-                            v-model="fieldValue"
-                            dense
-                            label="Значение"
-                            solo
-                            hide-details
-                        ></v-text-field>
-                    </template>
-
-                    <template v-if="selectedField">
-                        <v-autocomplete
-                            v-model="fieldValue"
-                            v-if="selectedField.type.name != 'string'"
-                            label="Components"
-                            :items="listItems"
-                            item-text="name"
+                    <template v-for="(field, index) in filterFields">
+                        <v-divider class="py-3" :key="'divider-'+index"></v-divider>
+                        <v-select
+                            v-model="field.selectedField"
+                            :items="fields"
+                            item-text="label"
                             item-value="id"
-                            solo
                             dense
-                            hide-details
-                        ></v-autocomplete>
+                            label="Поле"
+                            outlined
+                            clearable
+                            return-object
+                            :key="'field-'+index"
+                            @change="handleFieldChange(field)"
+                        ></v-select>
+                        <template v-if="field.selectedField">
+                            <v-text-field
+                                v-if="field.selectedField.type.name == 'string'"
+                                v-model="field.fieldValue"
+                                dense
+                                label="Значение"
+                                outlined
+                                :key="'fieldValue-'+index"
+                                @change="synchronizeFieldsAndFilters()"
+                            ></v-text-field>
+                        </template>
+
+                        <template v-if="field.selectedField">
+                            <v-autocomplete
+                                v-model="field.fieldValue"
+                                v-if="field.selectedField.type.name != 'string'"
+                                label="Components"
+                                :items="field.list"
+                                item-text="name"
+                                item-value="id"
+                                dense
+                                outlined
+                                :key="'field-list-'+index"
+                                @change="synchronizeFieldsAndFilters()"
+                            ></v-autocomplete>
+                        </template>
                     </template>
 
-                </v-row>
-                <div class="mx-3 mt-3 mb-0">
-                    <v-btn class @click="getData">Filter</v-btn>
-                </div>
-            </v-row>
-        </v-container>
+                    <v-btn outlined block color="primary" class="mb-5" @click="addNewFilterField">
+                        <v-icon left>mdi-plus</v-icon>Добавить поле
+                    </v-btn>
+                    <v-btn depressed block color="primary" class="mb-5" @click="getData">Filter</v-btn>
+                </v-card-text>
+            </v-card>
+        </v-navigation-drawer>
+
         <v-overlay :value="loading" color="white" opacity="0.7">
             <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
         </v-overlay>
+
         <v-data-table
-            class="mt-3"
             v-if="items.length"
             hide-default-footer
             :headers="headers"
@@ -104,7 +122,7 @@
             item-key="id"
             :items-per-page="100"
             :fixed-header="true"
-            height="calc(100vh - 202px)"
+            height="calc(100vh - 92px)"
             dense
             @page-count="pageCount = $event"
         />
@@ -117,7 +135,6 @@ export default {
     props: ["pcs", "countries", "processes", "fields"],
     data() {
         return {
-            fieldValue: null,
             loading: false,
             pcObjects: [],
             countryObjects: null,
@@ -128,40 +145,90 @@ export default {
             page: 1,
             pageCount: 0,
             selectedProcess: null,
-            selectedField: null,
-            listItems: []
+            listItems: [],
+            displayRightDrawer: false,
+            filterFields: [
+                { selectedField: null, fieldValue: null, list:[] }
+            ]
         };
     },
-    created() {},
     methods: {
         getData() {
-            console.log(this.filters);
-            
             this.loading = true;
             axios
-                .get(this.appPath("api/get/products"), { params: this.filters })
+                .get(this.appPath("api/get/products"), {
+                    params: {
+                        ...this.filters,
+                        fields: JSON.stringify(this.filters.fields)
+                    }
+                })
                 .then(response => {
                     this.loading = false;
                     this.items = response.data;
-                    console.log(response);
                 });
-        }
-    },
-    watch: {
-        selectedField(field) {
-            if (field != null) {
-                if (field.type.name != "string") {
+        },
+        handleFieldChange(field) {
+            // if selected field is not null
+            if (field.selectedField != null) {
+                // 
+                field.fieldValue = null;
+                // if selected type is not input text
+                if (field.selectedField.type.name != "string") {
                     axios
-                        .get(this.appPath(`api/lists/${field.id}/items`))
+                        .get(
+                            this.appPath(
+                                `api/lists/${field.selectedField.id}/items`
+                            )
+                        )
                         .then(response => {
-                            this.listItems = response.data;
-                            console.log(response.data);
+                            field.list = response.data;
                         });
                 }
-            }else{
+            }
+            // if selected field is null
+            else {
+                // loop through filterFields
+                this.filterFields.forEach((filterField, index) => {
+                    // if field is null and there is more than one field
+                    if (
+                        filterField.selectedField == null &&
+                        this.filterFields.length > 1
+                    ) {
+                        // delete field
+                        this.filterFields.splice(index, 1);
+                    } else {
+                        // remove field filter
+                        delete this.filters.fields;
+                    }
+                });
+            }
+            this.synchronizeFieldsAndFilters();
+        },
+        synchronizeFieldsAndFilters() {
+            // get filters that has value
+            let fields = this.filterFields.filter(
+                filterField => filterField.fieldValue != null
+            );
+            // if there are fields that has values
+            if (fields.length != 0) {
+                // restructure and initialize fields to filter
+                this.filters.fields = fields.map(field => {
+                    return {
+                        field_id: field.selectedField.id,
+                        value: field.fieldValue
+                    };
+                });
+            }
+            // no fields that has value
+            else{
                 delete this.filters.fields;
             }
         },
+        addNewFilterField() {
+            this.filterFields.push({ selectedField: null, fieldValue: null, list:[] });
+        }
+    },
+    watch: {
         selectedProcess(val) {
             if (val) delete this.filters.process_id;
             this.filters.process_id = val;
@@ -176,12 +243,6 @@ export default {
                 this.filters.country_ids = JSON.stringify(
                     val.map(country => country.id)
                 );
-        },
-        fieldValue(val) {
-            let fieldFilter = {};
-            fieldFilter[this.selectedField.id] = this.fieldValue;
-            this.filters.fields = JSON.stringify([JSON.stringify(fieldFilter)]);
-            console.log(this.filters);
         },
         items(val) {
             if (val.length != 0) {
