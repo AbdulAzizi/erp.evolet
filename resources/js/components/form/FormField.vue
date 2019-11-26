@@ -120,12 +120,12 @@ const getAutoCompleteField = field => {
     const baseSelectField = getSelectField(field);
 
     //Default props for autocomplete field
-    baseSelectField.component = "autocomplete";
+    baseSelectField.component = "v-autocomplete";
     baseSelectField.props = {
         ...baseSelectField.props,
 
         color: "primary",
-        multiple: field.multiple,
+        multiple: field.multiple ? true : false,
         hint: field.hint,
         "persistent-hint": true,
         "no-data-text": "Данные отсутствуют",
@@ -149,7 +149,6 @@ const getManyToManyField = field => {
     const baseAutoComplete = getAutoCompleteField(field);
 
     //Default props for userselector
-    baseAutoComplete.component = "many-to-many-select";
     baseAutoComplete.props = {
         ...baseAutoComplete.props,
         listName: field.listName,
