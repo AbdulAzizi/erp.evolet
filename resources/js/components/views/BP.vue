@@ -1,5 +1,47 @@
 <template>
   <div>
+    <v-dialog v-model="showProcess" width="400">
+      <v-card>
+        <v-form :action="`/deleteProcess/${processData.id}`" method="GET">
+          <v-toolbar color="primary" dense dark flat>
+            <v-toolbar-title>{{processData.name}}</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <span>id: {{processData.id}}</span>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" type="submit">delete process</v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="tetherNameDialog" width="400">
+      <v-card>
+        <v-toolbar color="primary" dense dark flat>
+          <v-toolbar-title>Название ветки</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-form ref="tetherNameForm">
+            <form-field
+              :field="{
+              label: 'Название ветки',
+              type: 'string',
+              name: 'tetherName',
+              rules: ['required'],
+              icon: 'mdi-axis-y-arrow'
+            }"
+              v-model="tetherName"
+            ></form-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="createTether()">Ok</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="dialog" width="400">
       <v-card>
         <v-toolbar color="primary" dense dark flat>
@@ -26,7 +68,13 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <div id="cyto"></div>
+    <div id="cyto">
+      <v-menu v-model="showMenu" offset-y style="max-width: 600px">
+        <v-list>
+          <v-list-item>hello</v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
     <v-btn color="primary" dark fab right bottom fixed @click="dialog = true">
       <v-icon>mdi-plus</v-icon>
     </v-btn>
@@ -51,8 +99,18 @@ export default {
       cytoScape: null,
       dialog: false,
       processName: null,
+      tetherName: null,
       localProcesses: this.processes,
-      nodes: null
+      nodes: null,
+      tetherNameDialog: false,
+      fromProcess: null,
+      toProcess: null,
+      showMenu: false,
+      showProcess: false,
+      processData: {
+        name: null,
+        id: null
+      }
     };
   },
   mounted() {
@@ -67,7 +125,7 @@ export default {
     extractEdgesNodesFromProcess() {
       let nodes = [];
 
-      for (const process of this.processes) {
+      for (const process of this.localProcesses) {
         const node = {
           group: "nodes",
           data: {
@@ -78,7 +136,7 @@ export default {
         let backEdges = process.back_tethers.map(bt => ({
           group: "edges",
           data: {
-            id: "t" + bt.id,
+            id: "f" + bt.id,
             source: bt.from_process_id,
             target: bt.to_process_id,
             label: bt.action_text
@@ -88,7 +146,7 @@ export default {
         let frontEdges = process.front_tethers.map(ft => ({
           group: "edges",
           data: {
-            id: "t" + ft.id,
+            id: "b" + ft.id,
             source: ft.from_process_id,
             target: ft.to_process_id,
             label: ft.action_text
@@ -100,13 +158,32 @@ export default {
 
       return nodes;
     },
-    createTether(fromProcess, toProcess) {
+    prepareTetherData(fromProcess, toProcess) {
+      this.fromProcess = fromProcess;
+      this.toProcess = toProcess;
+      this.tetherNameDialog = true;
+    },
+    createTether() {
       axios
         .post("/api/tether", {
-          from_process_id: fromProcess.id,
-          to_process_id: toProcess.id
+          from_process_id: this.fromProcess.id,
+          to_process_id: this.toProcess.id,
+          action_text: this.tetherName
         })
-        .then(res => res.data)
+        .then(res => {
+          this.tetherNameDialog = false;
+          this.$refs.tetherNameForm.reset();
+          this.localProcesses.forEach(elem => {
+            if (this.fromProcess.id == elem.id) {
+              elem.front_tethers.push(res.data);
+            }
+            if (this.toProcess.id == elem.id) {
+              elem.back_tethers.push(res.data);
+            }
+          });
+          this.nodes = this.extractEdgesNodesFromProcess();
+          this.drawNodes();
+        })
         .catch(err => err.messages);
     },
     createProcess() {
@@ -121,11 +198,29 @@ export default {
             this.nodes = this.extractEdgesNodesFromProcess();
             this.drawNodes();
             this.dialog = false;
-            console.log(this.nodes);
-            console.log(this.processes);
           })
           .catch(err => err.messages);
       }
+    },
+    showProcessData(name, id) {
+      this.processData.name = name;
+      this.processData.id = id;
+      this.showProcess = true;
+    },
+    deleteProcess(id) {
+      axios
+        .delete(`/api/deleteProcess/${id}`)
+        .then(res => {
+          this.showProcess = false;
+          this.localProcesses.forEach((elem, index) => {
+            if (elem.id == id) {
+              this.localProcesses.splice(index, 1);
+            }
+          });
+          this.nodes = this.extractEdgesNodesFromProcess();
+          this.drawNodes();
+        })
+        .catch(err => err.messages);
     },
     drawNodes() {
       const cytoData = {
@@ -168,8 +263,7 @@ export default {
               shape: "ellipse",
               "overlay-opacity": 0,
               "border-width": 12,
-              "border-opacity": 0,
-              label: ""
+              "border-opacity": 0
             }
           },
           {
@@ -212,20 +306,16 @@ export default {
           tpl: data => {
             return `
                 <div style="max-width: 80px; max-height: 50px; font-size: 0.5rem; overflow-wrap: break-word;overflow-y: hidden;">
-                    ${data.label}
+                    ${data.label ? data.label : ""}
                 </div>
                 `;
           }
         }
       ]);
-
       const options = {
         preview: true,
         hoverDelay: 150,
-        handleNodes: "node",
-        snap: false, // when enabled, the edge can be drawn by just moving close to a target node
-        snapThreshold: 50, // the target node must be less than or equal to this many pixels away from the cursor/finger
-        snapFrequency: 15, // the number of times per second (Hz) that snap checks done (lower is less expensive)
+        handleNodes: "node", // the number of times per second (Hz) that snap checks done (lower is less expensive)
         noEdgeEventsInDraw: false, // set events:no to edges during draws, prevents mouseouts on compounds
         disableBrowserGestures: true,
         handlePosition: function(node) {
@@ -239,18 +329,27 @@ export default {
       };
 
       window.cy.edgehandles(options);
-
       window.cy.on("ehcomplete", (event, sourceNode, targetNode, addedEles) => {
-        // console.log(sourceNode._private.data)
-        this.createTether(sourceNode._private.data, targetNode._private.data);
+        this.prepareTetherData(
+          sourceNode._private.data,
+          targetNode._private.data
+        );
+      });
+      cy.$("node").on("click", elem => {
+        this.showProcessData(
+          elem.target._private.data.label,
+          elem.target._private.data.id
+        );
       });
     }
-  },
-  watch: {
-    nodes(el) {
-      console.log(el);
-    }
   }
+  // watch: {
+  //   nodes(elem){
+  //   console.log(elem)
+  //     elem = this.extractEdgesNodesFromProcess();
+  //     this.drawNodes();
+  //   }
+  // }
 };
 </script>
 

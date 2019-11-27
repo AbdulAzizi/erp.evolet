@@ -78,6 +78,9 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/products/{id}/edit', 'ProductController@edit')->name('product.edit');
 
+    Route::get('/deleteProcess/{id}', 'ProcessController@delete')->name('process.delete');
+
+
     
 });
 
