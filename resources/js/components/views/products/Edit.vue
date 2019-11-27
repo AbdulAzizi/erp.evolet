@@ -19,8 +19,8 @@ export default {
         return {
           ...field,
           rules: field.pivot && field.pivot.required ? ["required"] : [true],
-          type: (field.type.name == "list" || field.type.name == "many-to-many-list") ? "autocomplete" : field.type.name,
-          value: field.pivot.value
+          type: field.type.name == "list" ? "autocomplete" : field.type.name,
+          value: (field.type.name == "list" || field.type.name == "many-to-many-list" ) ? +field.pivot.value : field.pivot.value, 
         };
       });
     }

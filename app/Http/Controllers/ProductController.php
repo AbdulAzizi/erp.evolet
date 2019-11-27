@@ -201,14 +201,15 @@ class ProductController extends Controller
     {
         $pcs = Division::withDepth()->having('depth', '=', 4)->get();
         $countries = Country::all();
+        $processes = Process::all();
+        $fields = Field::all();
 
-        return view('admin.products.index', compact('pcs', 'countries'));
+        return view('admin.products.index', compact('pcs', 'countries','processes','fields'));
     }
 
     public function getProducts(Request $request, ProductFilters $filters)
     {
         $products = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
-        
         $listFields = $this->getListFieldsFromProducts($products);
 
         $this->loadListFieldValues($listFields);

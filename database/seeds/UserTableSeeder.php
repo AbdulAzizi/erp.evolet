@@ -114,7 +114,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОЦМ',
                 'position' => 'Руководитель',
-                'responsibilities' => ['НО'],
+                'responsibilities' => [],
             ],
             [
                 'name' => 'Sayora',
@@ -169,7 +169,7 @@ class UserTableSeeder extends Seeder
             
             $user = User::create($userData);
             foreach ($credential['responsibilities'] as $responsibility) {
-                $user->responsibilities()->attach( Responsibility::firstOrCreate(['name' => $responsibility, 'division_id' => $divisionID ])->id );
+                $user->responsibilities()->attach( Responsibility::firstOrCreate(['name' => $responsibility ])->id );
             }
             
         }

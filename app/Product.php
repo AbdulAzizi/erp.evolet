@@ -16,6 +16,11 @@ class Product extends Model
         'project_id'
     ];
 
+    public function values()
+    {
+        return $this->hasMany('App\ProductValue');
+    }
+
     public function fields()
     {
         return $this->belongsToMany('App\Field','product_values')->using('App\ProductValue')->withPivot('value');
