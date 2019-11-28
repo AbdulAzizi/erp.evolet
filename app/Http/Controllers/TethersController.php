@@ -16,4 +16,13 @@ class TethersController extends Controller
             'action_text' => $request->action_text
         ]);
     }
+
+    public function delete(Request $request)
+    {
+        $tether = Tether::find($request->id);
+
+        $tether->delete();
+
+        return redirect()->back();
+    }
 }

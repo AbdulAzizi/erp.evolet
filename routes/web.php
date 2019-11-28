@@ -80,6 +80,8 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/deleteProcess/{id}', 'ProcessController@delete')->name('process.delete');
 
+    Route::get('/tether/delete/{id}', 'TethersController@delete')->name('tether.delete');
+
 
     
 });

@@ -24,4 +24,9 @@ class Responsibility extends Model
     {
         return $this->belongsTo('App\Division');
     }
+
+    public function processTask()
+    {
+        return $this->hasMany('App\ProcessTask');
+    }
 }
