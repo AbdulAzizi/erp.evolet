@@ -160,7 +160,10 @@ Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 Vue.component("priority", require("./components/Priority.vue").default);
 Vue.component("card", require("./components/Card.vue").default);
 Vue.component("user-card", require("./components/UserCard.vue").default);
-Vue.component("division-structure", require("./components/DivisionStructure.vue").default);
+Vue.component(
+    "division-structure",
+    require("./components/DivisionStructure.vue").default
+);
 Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
 Vue.component(
     "dropdown-btn",
@@ -282,7 +285,7 @@ Vue.component(
     require("./components/views/HumanResourcesResumes.vue").default
 );
 
-Vue.component("kanban-view", require('./components/Kanban.vue').default);
+Vue.component("kanban-view", require("./components/Kanban.vue").default);
 Vue.component(
     "resumes-head-view",
     require("./components/views/HeadResume.vue").default
@@ -296,16 +299,18 @@ Vue.component(
     "division-responsibilities",
     require("./components/views/DivisionResponsibilities.vue").default
 );
-Vue.component(
-    "division",
-    require("./components/views/Division.vue").default
-);
+Vue.component("division", require("./components/views/Division.vue").default);
 Vue.component("chats-view", require("./components/views/Chats.vue").default);
 
-Vue.component("products-admin-view", require("./components/ProductsAdmin").default);
+Vue.component(
+    "products-admin-view",
+    require("./components/ProductsAdmin").default
+);
 
-Vue.component("edit-product-forms", require("./components/views/products/Edit.vue").default);
-
+Vue.component(
+    "edit-product-forms",
+    require("./components/views/products/Edit.vue").default
+);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
@@ -321,21 +326,7 @@ Vue.component(
 Vue.component("tasks", require("./components/Tasks.vue").default);
 Vue.component("task", require("./components/Task.vue").default);
 Vue.component("form-field", require("./components/form/FormField.vue").default);
-Vue.component(
-    "user-selector",
-    require("./components/form/UserSelector.vue").default
-);
-Vue.component("picker", require("./components/form/Picker.vue").default);
-Vue.component(
-    "autocomplete",
-    require("./components/form/Autocomplete.vue").default
-);
-Vue.component("combobox", require("./components/form/Combobox.vue").default);
 Vue.component("dynamic-form", require("./components/form/Form.vue").default);
-Vue.component(
-    "many-to-many-select",
-    require("./components/form/ManyToManySelect.vue").default
-);
 Vue.component(
     "poll-create",
     require("./components/tasks/PollCreate.vue").default
@@ -345,13 +336,31 @@ Vue.component(
     require("./components/tasks/PollDisplay.vue").default
 );
 Vue.component("poll-form", require("./components/tasks/PollForm.vue").default);
-Vue.component("task-control-buttons", require("./components/tasks/ControlButtons.vue").default);
+Vue.component(
+    "task-control-buttons",
+    require("./components/tasks/ControlButtons.vue").default
+);
 
 /****************************HELPERS********************************/
 Vue.component(
     "helpers-offset",
     require("./components/helpers/Offset.vue").default
 );
+/***************************DYNAMIC FIELDS*******************************/
+Vue.component("picker", require("./components/form/Picker.vue").default);
+Vue.component(
+    "user-selector",
+    require("./components/form/UserSelector.vue").default
+);
+Vue.component(
+    "many-to-many-select",
+    require("./components/form/ManyToManySelect.vue").default
+);
+Vue.component(
+    "autocomplete",
+    require("./components/form/Autocomplete.vue").default
+);
+Vue.component("combobox", require("./components/form/Combobox.vue").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -361,5 +370,5 @@ Vue.component(
 
 const app = new Vue({
     el: "#app",
-    vuetify: new Vuetify(vuetifyOptions),
+    vuetify: new Vuetify(vuetifyOptions)
 });

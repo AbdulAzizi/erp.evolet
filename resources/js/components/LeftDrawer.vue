@@ -151,6 +151,7 @@ export default {
     },
     created() {
         this.items = [...this.getLinksOf(this.auth_user)];
+        Event.listen("toggleDrawer", () => (this.drawer = !this.drawer));
     }
 };
 </script>
