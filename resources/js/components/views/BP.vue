@@ -1,80 +1,87 @@
 <template>
   <div>
-    <v-dialog v-model="showProcess" width="600">
+    <v-dialog v-model="addProcessDialog" width="400">
+      <v-card>
+        <v-toolbar color="primary" dense dark flat>
+          <v-toolbar-title>Добавить процесс</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-form ref="createProcessForm" >
+            <form-field
+              :field="{
+                label: 'Название процесса',
+                type: 'string',
+                name: 'processName',
+                rules: ['required'],
+                icon: 'mdi-atom-variant'
+                }"
+              v-model="processName"
+              class="mt-5"
+            ></form-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="addProcessDialog = false">отмена</v-btn>
+          <v-btn color="primary" class="float-right" @click="createProcess()">отправить</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="processDialog" width="600">
       <v-card>
         <v-form :action="`/deleteProcess/${processData.id}`" method="GET">
-          <v-hover v-slot:default="{ hover }">
-            <v-toolbar color="primary" dark flat :height="updateProcess ? '100px' : '50px'">
-              <v-toolbar-title v-if="!updateProcess">
-                {{processData.name}} 
-              </v-toolbar-title>
-              <v-toolbar-title v-if="updateProcess" class="ma-2">
+          <v-toolbar color="primary" dark flat>
+            <v-toolbar-title v-if="!updateProcessField">{{processData.name}}</v-toolbar-title>
+            <v-toolbar-title v-else class="ma-2">
               <v-form>
                 <v-text-field
-                v-model="processData.name"
-                label="Название"
-                required
-                solo
-                flat
-                hide-details
-                background-color="primary darken-1"
-                class="mb-1"
-                :value="processData.name">
-                </v-text-field>
-              <v-btn
-                small
-                color="red lighten-1"
-                dark
-                text
-                class="float-left"
-                @click="updateProcess = false"
-              >отмена</v-btn>
-              <v-btn
-                small
-                dark
-                outlined
-                class="float-right"
-                @click="updateProcessName(processData.id)"
-              >изменить</v-btn>
+                  v-model="processData.name"
+                  label="Название"
+                  required
+                  solo
+                  flat
+                  hide-details
+                  background-color="primary darken-1"
+                  class="mb-1"
+                  append-icon="mdi-check"
+                  clear-icon="mdi-close"
+                  clearable
+                  @click:append="updateProcessName(processData.id)"
+                  @click:clear="updateProcessField = false"
+                  :value="processData.name"
+                ></v-text-field>
               </v-form>
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
-                <v-btn fab small text v-if="hover" @click="updateProcess = true">
-                  <v-icon small>
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
-                <v-btn fab small text v-if="hover" type="submit">
-                  <v-icon small>
-                    mdi-delete
-                  </v-icon>
-                </v-btn>
-            </v-toolbar>
-          </v-hover>
-          <v-card-text v-if="processData.len == 0">
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn fab small text @click="updateProcessField = true">
+              <v-icon small>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn fab small text type="submit">
+              <v-icon small>mdi-delete</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-card-text v-if="!processData.len">
             <h4 class="grey--text">В этом процессе нету полей</h4>
           </v-card-text>
-          <v-card-text v-if="processData.len > 0">
+          <v-card-text v-if="processData.len">
             <template v-for="(elem, index) in processData.tasks">
               <h4 :key="'title' + index" class="grey--text">Задача № {{index + 1}}. {{elem.title}}</h4>
-            <v-list :key="'list' + index" dense>
-              <v-list-group value="true" v-for="(form, index) in elem.forms" :key="index">
-                <template v-slot:activator >
-                  <v-list-item-title class="text-uppercase">
-                   Поля которые заполняет {{elem.responsibility.name}}
-                  </v-list-item-title>
-                </template>
+              <v-list :key="'list' + index" dense>
+                <v-list-group value="true" v-for="(form, index) in elem.forms" :key="index">
+                  <template v-slot:activator>
+                    <v-list-item-title
+                      class="text-uppercase"
+                    >Поля которые заполняет {{elem.responsibility.name}}</v-list-item-title>
+                  </template>
                   <v-simple-table dense>
                     <tbody>
                       <tr v-for="(field, index) in form.fields" :key="index">
-                        <td>
-                          {{field.label}}
-                        </td>
+                        <td>{{field.label}}</td>
                       </tr>
                     </tbody>
                   </v-simple-table>
-              </v-list-group>
-            </v-list>
+                </v-list-group>
+              </v-list>
             </template>
           </v-card-text>
         </v-form>
@@ -83,9 +90,7 @@
     <v-dialog v-model="deleteTether" width="400">
       <v-card>
         <v-form :action="`/tether/delete/${tetherData.id}`" method="get">
-          <v-card-title class="headline">
-            Вы хотите удалить связь?
-          </v-card-title>
+          <v-card-title class="headline">Вы хотите удалить связь?</v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="red lighten-2" text @click="deleteTether = false">Отмена</v-btn>
@@ -94,7 +99,7 @@
         </v-form>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="tetherNameDialog" width="400">
+    <v-dialog v-model="tetherNameDialog" width="400" persistent>
       <v-card>
         <v-toolbar color="primary" dense dark flat>
           <v-toolbar-title>Название ветки</v-toolbar-title>
@@ -110,51 +115,25 @@
               icon: 'mdi-axis-y-arrow'
             }"
               v-model="tetherName"
+              class="mt-5"
             ></form-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="createTether()">Ok</v-btn>
+          <v-btn color="primary" @click="createTether()">Добавить</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    <v-dialog v-model="dialog" width="400">
-      <v-card>
-        <v-toolbar color="primary" dense dark flat>
-          <v-toolbar-title>Добавить процесс</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text>
-          <v-form ref="createProcessForm">
-            <form-field
-              :field="{
-                label: 'Название процесса',
-                type: 'string',
-                name: 'processName',
-                rules: ['required'],
-                icon: 'mdi-atom-variant'
-                }"
-              v-model="processName"
-            ></form-field>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="dialog = false">отмена</v-btn>
-          <v-btn color="primary" class="float-right" @click="createProcess()">отправить</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <div id="cyto">
-    </div>
-    <v-btn color="primary" dark fab right bottom fixed @click="dialog = true">
+    <div id="cyto"></div>
+    <v-btn color="primary" dark fab right bottom fixed @click="addProcessDialog = true">
       <v-icon>mdi-plus</v-icon>
     </v-btn>
   </div>
 </template>
 
 <script>
+// Import packages for diagram
 import cytoscape from "cytoscape";
 import edgehandles from "cytoscape-edgehandles";
 import nodeHtmlLabel from "cytoscape-node-html-label";
@@ -170,7 +149,7 @@ export default {
   data() {
     return {
       cytoScape: null,
-      dialog: false,
+      addProcessDialog: false,
       processName: null,
       tetherName: null,
       localProcesses: this.processes,
@@ -178,9 +157,8 @@ export default {
       tetherNameDialog: false,
       fromProcess: null,
       toProcess: null,
-      showMenu: false,
-      showProcess: false,
-      updateProcess: false,
+      processDialog: false,
+      updateProcessField: false,
       deleteTether: false,
       processData: {
         name: null,
@@ -198,10 +176,6 @@ export default {
     this.drawNodes();
   },
   methods: {
-    /**
-     * Helpers
-     */
-
     extractEdgesNodesFromProcess() {
       let nodes = [];
 
@@ -216,7 +190,7 @@ export default {
         let backEdges = process.back_tethers.map(bt => ({
           group: "edges",
           data: {
-            id: "f" + bt.id,
+            id: "b" + bt.id,
             source: bt.from_process_id,
             target: bt.to_process_id,
             label: bt.action_text
@@ -226,7 +200,7 @@ export default {
         let frontEdges = process.front_tethers.map(ft => ({
           group: "edges",
           data: {
-            id: "b" + ft.id,
+            id: "f" + ft.id,
             source: ft.from_process_id,
             target: ft.to_process_id,
             label: ft.action_text
@@ -238,75 +212,81 @@ export default {
 
       return nodes;
     },
+
+    // When process card is clicked, data prepares to show in process dialog card
     prepareTetherData(fromProcess, toProcess) {
       this.fromProcess = fromProcess;
       this.toProcess = toProcess;
       this.tetherNameDialog = true;
     },
+
+    // Creating tether function
     createTether() {
-      axios
-        .post("/api/tether", {
-          from_process_id: this.fromProcess.id,
-          to_process_id: this.toProcess.id,
-          action_text: this.tetherName
-        })
-        .then(res => {
-          this.tetherNameDialog = false;
-          this.$refs.tetherNameForm.reset();
-          this.localProcesses.forEach(elem => {
-            if (this.fromProcess.id == elem.id) {
-              elem.front_tethers.push(res.data);
-            }
-            if (this.toProcess.id == elem.id) {
-              elem.back_tethers.push(res.data);
-            }
-          });
-          this.nodes = this.extractEdgesNodesFromProcess();
-          this.drawNodes();
-        })
-        .catch(err => err.messages);
+      const form = this.$refs.tetherNameForm;
+      if (form.validate()) {
+        axios
+          .post("/api/tether", {
+            from_process_id: this.fromProcess.id,
+            to_process_id: this.toProcess.id,
+            action_text: this.tetherName
+          })
+          .then(res => {
+            this.tetherNameDialog = false;
+            form.reset();
+            this.synch(res.data);
+          })
+          .catch(err => err.messages);
+      }
     },
     createProcess() {
-      let form = this.$refs.createProcessForm;
+      const form = this.$refs.createProcessForm;
       if (form.validate()) {
         axios
           .post("/api/process", {
             name: this.processName
           })
           .then(res => {
-            this.localProcesses.push(res.data);
-            this.nodes = this.extractEdgesNodesFromProcess();
-            this.drawNodes();
-            this.dialog = false;
+            this.synch(res.data);
+            this.addProcessDialog = false;
           })
           .catch(err => err.messages);
       }
     },
-    updateProcessName(id){
-      axios.put(`/api/process/update/${id}`, {
-        name: this.processData.name
-      }).then(res => {
-        this.updateProcess = false;
-        this.localProcesses.forEach(elem => {
-          if(elem.id == id){
-            elem.name = this.processData.name;
-          }
+    updateProcessName(id) {
+      axios
+        .put(`/api/process/update/${id}`, {
+          name: this.processData.name
         })
-        this.nodes = this.extractEdgesNodesFromProcess();
-        this.drawNodes();
-      }).catch(err => err.messages)
+        .then(res => {
+          this.updateProcessField = false;
+          this.synch(res.data);
+        })
+        .catch(err => err.messages);
     },
     showProcessData(name, id) {
       this.processData.name = name;
       this.processData.id = id;
-      this.showProcess = true;
+      this.processDialog = true;
 
       this.localProcesses.forEach(elem => {
-        if(elem.id == this.processData.id){
+        if (elem.id == this.processData.id) {
           this.processData.tasks = elem.process_tasks;
           this.processData.len = elem.process_tasks.length;
-          };
-        })
+        }
+      });
+    },
+
+    synch(data) {
+      this.localProcesses = data;
+      this.nodes = this.extractEdgesNodesFromProcess();
+      this.drawNodes();
+    },
+
+    // This function prepares data to send to the server to delete tether.
+    prepareDataBeforeTetherDelete(element) {
+      let edgeId = element.target._private.data.id.replace(/^\D+/g, "");
+      this.tetherData.id = +edgeId;
+      this.deleteTether = true;
     },
     drawNodes() {
       const cytoData = {
@@ -408,14 +388,12 @@ export default {
           return "middle top"; // sets the position of the handle in the format of "X-AXIS Y-AXIS" such as "left top", "middle top"
         },
         edgeType: function(sourceNode, targetNode) {
-          // can return 'flat' for flat edges between nodes or 'node' for intermediate node between them
-          // returning null/undefined means an edge can't be added between the two nodes
           return sourceNode;
         }
       };
 
-      window.cy.edgehandles(options);
-      window.cy.on("ehcomplete", (event, sourceNode, targetNode, addedEles) => {
+      cy.edgehandles(options);
+      cy.on("ehcomplete", (event, sourceNode, targetNode) => {
         this.prepareTetherData(
           sourceNode._private.data,
           targetNode._private.data
@@ -428,15 +406,12 @@ export default {
         );
       });
       cy.$("edge").on("click", elem => {
-        let id = elem.target._private.data.id.replace( /^\D+/g, '');
-        this.tetherData.id = +id;
-        this.deleteTether = true;
-      })
+        this.prepareDataBeforeTetherDelete(elem);
+      });
     }
   }
 };
 </script>
-
 <style>
 #cyto {
   width: 100%;

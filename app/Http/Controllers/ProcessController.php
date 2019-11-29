@@ -23,7 +23,7 @@ class ProcessController extends Controller
 
         $data = Process::find($process->id)->with(['frontTethers', 'backTethers'])->get();
 
-        return $data->last();
+        return $process->all();
     }
 
     public function update(Request $request)
@@ -34,7 +34,7 @@ class ProcessController extends Controller
 
         $process->save();
 
-        return $process;
+        return $process->all();
     }
 
     public function delete(Request $request)
