@@ -7,7 +7,7 @@
         :label="label"
         v-bind="$attrs"
     >
-        <template v-slot:selection="{ item, parent, selected }">
+        <template v-slot:selection="{ item, parent, selected }" v-if="$attrs.multiple">
             <v-chip color="primary" :input-value="selected" dark small>
                 <span class="pr-1">{{ item[itemText] }}</span>
                 <v-icon small @click="remove(item)">mdi-close</v-icon>
@@ -21,12 +21,12 @@ export default {
     props: ["name", "label", "items", "value", "itemText", "itemValue"], //All other props goes from form-field
     data() {
         return {
-            selectedItems: Array.isArray(this.value) ? this.value : []
+            selectedItems: Array.isArray(this.value) ? this.value : this.value
         };
     },
     watch: {
         selectedItems(value) {
-            console.log(value);
+            // console.log(value);
 
             this.$emit("input", value);
         }

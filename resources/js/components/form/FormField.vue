@@ -120,7 +120,7 @@ const getAutoCompleteField = field => {
     const baseSelectField = getSelectField(field);
 
     //Default props for autocomplete field
-    baseSelectField.component = "v-autocomplete";
+    baseSelectField.component = "autocomplete";
     baseSelectField.props = {
         ...baseSelectField.props,
 
@@ -129,9 +129,10 @@ const getAutoCompleteField = field => {
         hint: field.hint,
         "persistent-hint": true,
         "no-data-text": "Данные отсутствуют",
-        "hide-selected": true,
+        "hide-selected": true
     };
-
+    console.log(baseSelectField);
+    
     return baseSelectField;
 };
 
@@ -149,6 +150,7 @@ const getManyToManyField = field => {
     const baseAutoComplete = getAutoCompleteField(field);
 
     //Default props for userselector
+    baseAutoComplete.component = "many-to-many-select";
     baseAutoComplete.props = {
         ...baseAutoComplete.props,
         listName: field.listName,
@@ -194,7 +196,7 @@ const getYearField = field => {
     let years = [];
     let year = new Date().getFullYear();
 
-    for(let i = 1990; i <= year; i++){
+    for (let i = 1990; i <= year; i++) {
         years.push(i);
     }
 
@@ -211,7 +213,6 @@ const getYearField = field => {
     baseField["hasSeparateInput"] = true;
     return baseField;
 };
-
 
 export default {
     props: {
@@ -235,6 +236,9 @@ export default {
         if (fieldHasOldInputs) {
             this.fieldVar = this.oldInputs[this.formField.props.name]; //FIXME Fix old inputs for multiple fields
         }
+    },
+    mounted() {
+        // console.log(this.field.value);
     },
     computed: {
         formField() {
@@ -297,7 +301,7 @@ export default {
         fieldVar(value) {
             this.$emit("input", value);
         },
-        value(v){
+        value(v) {
             this.fieldVar = v;
         }
     },

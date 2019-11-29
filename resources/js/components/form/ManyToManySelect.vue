@@ -8,12 +8,12 @@ export default {
     props: {
         listName: String,
         relatedListName: String,
-        value: Array
+        value: {}
     },
     data() {
         return {
-            selectedItem: this.value || null,
-            localField: { ...this.$attrs, type: "autocomplete" },
+            selectedItem: this.value,
+            localField: { ...this.$attrs, type: "autocomplete" ,value: this.value},
             itemsHasFiltered: false
         };
     },
