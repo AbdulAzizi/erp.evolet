@@ -35,7 +35,7 @@
             <v-toolbar-title v-else class="ma-2">
               <v-form>
                 <v-text-field
-                  v-model="processData.name"
+                  v-model="processUpdateFieldName"
                   label="Название"
                   required
                   solo
@@ -44,11 +44,10 @@
                   background-color="primary darken-1"
                   class="mb-1"
                   append-icon="mdi-check"
-                  clear-icon="mdi-close"
-                  clearable
+                  append-outer-icon="mdi-close"
                   @click:append="updateProcessName(processData.id)"
-                  @click:clear="updateProcessField = false"
-                  :value="processData.name"
+                  @click:append-outer="cancelProcessUpdate()"
+                  :value="processUpdateFieldName"
                 ></v-text-field>
               </v-form>
             </v-toolbar-title>
@@ -121,6 +120,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="cancelTetherCreation()">отмена</v-btn>
           <v-btn color="primary" @click="createTether()">Добавить</v-btn>
         </v-card-actions>
       </v-card>
@@ -150,6 +150,7 @@ export default {
     return {
       cytoScape: null,
       addProcessDialog: false,
+      processUpdateFieldName: null,
       processName: null,
       tetherName: null,
       localProcesses: this.processes,
@@ -255,16 +256,18 @@ export default {
     updateProcessName(id) {
       axios
         .put(`/api/process/update/${id}`, {
-          name: this.processData.name
+          name: this.processUpdateFieldName
         })
         .then(res => {
           this.updateProcessField = false;
+          this.processData.name = this.processUpdateFieldName;
           this.synch(res.data);
         })
         .catch(err => err.messages);
     },
     showProcessData(name, id) {
       this.processData.name = name;
+      this.processUpdateFieldName = this.processData.name;
       this.processData.id = id;
       this.processDialog = true;
 
@@ -287,6 +290,15 @@ export default {
       let edgeId = element.target._private.data.id.replace(/^\D+/g, "");
       this.tetherData.id = +edgeId;
       this.deleteTether = true;
+    },
+
+    cancelProcessUpdate(){
+      this.updateProcessField = false;
+    },
+
+    cancelTetherCreation(){
+      this.tetherNameDialog = false;
+      this.drawNodes();
     },
     drawNodes() {
       const cytoData = {
