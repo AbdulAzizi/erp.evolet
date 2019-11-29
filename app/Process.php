@@ -17,6 +17,11 @@ class Process extends Model
         return $this->morphMany('App\Task', 'from');
     }
 
+    public function processTasks()
+    {
+        return $this->hasMany('App\ProcessTask');
+    }
+
     public function backTethers()
     {
         return $this->hasMany('App\Tether', 'to_process_id');

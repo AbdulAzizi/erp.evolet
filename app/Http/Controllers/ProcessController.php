@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Process;
+use App\Tether;
 
 class ProcessController extends Controller
 {
     public function index(Request $request)
     {
-        $processes = Process::with(['backTethers', 'frontTethers'])->get();
+        $processes = Process::with(['backTethers', 'frontTethers', 'processTasks', 'processTasks.responsibility', 'processTasks.forms.fields'])->get();
 
         return view('bp', compact('processes'));
     }
@@ -23,5 +24,43 @@ class ProcessController extends Controller
         $data = Process::find($process->id)->with(['frontTethers', 'backTethers'])->get();
 
         return $data->last();
+    }
+
+    public function update(Request $request)
+    {
+        $process = Process::find($request->id);
+
+        $process->name = $request->name;
+
+        $process->save();
+
+        return $process;
+    }
+
+    public function delete(Request $request)
+    {
+        $process = Process::find($request->id);
+
+        $front = $process->frontTethers;
+
+        $back = $process->backTethers;
+
+        if (count($front) > 0) {
+            foreach ($front as $value) {
+                $tether = Tether::find($value->id);
+                $tether->delete();
+            }
+        }
+
+        if (count($back) > 0) {
+            foreach ($back as $value) {
+                $tether = Tether::find($value->id);
+                $tether->delete();
+            }
+        }
+
+        $process->delete();
+
+        return redirect()->back();
     }
 }

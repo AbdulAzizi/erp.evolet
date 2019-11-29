@@ -13,7 +13,16 @@ class TethersController extends Controller
         return Tether::create([
             'from_process_id' => $request->from_process_id,
             'to_process_id' => $request->to_process_id,
-            'action_text' => null
+            'action_text' => $request->action_text
         ]);
+    }
+
+    public function delete(Request $request)
+    {
+        $tether = Tether::find($request->id);
+
+        $tether->delete();
+
+        return redirect()->back();
     }
 }

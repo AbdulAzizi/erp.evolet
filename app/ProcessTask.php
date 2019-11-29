@@ -10,7 +10,7 @@ class ProcessTask extends Model
 
     public function forms()
     {
-        return $this->belongsToMany('App\Form','process_task_form', 'process_task_id');
+        return $this->belongsToMany('App\Form', 'process_task_form', 'process_task_id');
     }
 
     public function watchers()
@@ -20,6 +20,16 @@ class ProcessTask extends Model
 
     public function polls()
     {
-        return $this->belongsToMany('App\Question','process_task_question','process_task_id','question_id');
+        return $this->belongsToMany('App\Question', 'process_task_question', 'process_task_id', 'question_id');
+    }
+
+    public function process()
+    {
+        return $this->belongsTo('App\Process');
+    }
+
+    public function responsibility()
+    {
+        return $this->belongsTo('App\Responsibility');
     }
 }
