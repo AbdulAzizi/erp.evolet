@@ -23,7 +23,8 @@ class ListsSeeder extends Seeder
             'pmt_list' => '/lists/pmt.php',
             'pnk1_list' => '/lists/pnk1.php',
             'pnk2_list' => '/lists/pnk2.php',
-            'pnk4_list' => '/lists/pnk4.php'
+            'pnk4_list' => '/lists/pnk4.php',
+            'strani_poiska' => '/lists/strani_poiska.php'
         ];
 
         foreach ($listsFromFiles as $listName => $listFilePath) {

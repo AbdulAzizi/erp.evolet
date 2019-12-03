@@ -182,7 +182,6 @@ class FieldTableSeeder extends Seeder
         $pzh_up_knk_4 = Field::create(['label' => 'Пж Уп Кнк 4 ', 'name' => 'pzh_up_knk_4']);
         $ko_str_knk_4 = Field::create(['label' => 'Ко_Стр_Кнк 4', 'name' => 'ko_str_knk_4']);
         $osn_kok = Field::create(['label' => 'Осн Кок', 'name' => 'osn_kok']);
-        $vivod = Field::create(['label' => 'Вывод', 'name' => 'vivod']);
 
         $forma_no_etap_1->fields()->attach([
             $currentYearSumUp->id => ['required' => true],
@@ -221,9 +220,27 @@ class FieldTableSeeder extends Seeder
             $pzh_up_knk_4->id => ['required' => true],
             $ko_str_knk_4->id => ['required' => true],
             $osn_kok->id => ['required' => true],
-            $vivod->id => ['required' => true],
         ]);
 
+        /*******************************************************/
+
+        $viborIstochnikov = Form::where('name', 'Выбор источников')->first();
+        $strani_poiska = Field::create(['label' => 'Страны источников', 'name' => 'strani', 'type_id' => $listFieldTypeID]);
+        DB::table('list_fields')->insertGetId(['field_id' => $strani_poiska->id, 'list_type' => 'strani_poiska']);
+        
+        $viborIstochnikov->fields()->attach([
+            $strani_poiska->id => ['required' => true],
+        ]);
+
+        /*******************************************************/
+        $formaOtkaza = Form::where('name', 'Форма коментарии при отказе')->first();
+
+        $kommentariyaOtkaza = Field::create(['label' => 'Коментарии', 'name' => 'kommentariyaOtkaza']);
+
+        $formaOtkaza->fields()->attach([
+            $kommentariyaOtkaza->id => ['required' => true],
+        ]);
+        /********************************************************/
 
     }
 }

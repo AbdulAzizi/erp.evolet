@@ -47,6 +47,10 @@ class CreateListsMigration extends Migration
         'pmt_list' => [
             'bigIncrements' => 'id',
             'longText' => 'name',
+        ],
+        'strani_poiska' => [
+            'bigIncrements' => 'id',
+            'longText' => 'name',
         ]
     ];
 
