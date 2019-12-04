@@ -1,17 +1,12 @@
 <template>
     <div>
-        <dynamic-form :fields="preparedFields" title="Forms" :fieldsPerRows="[2]"></dynamic-form>
-        <!-- <v-autocomplete
-            label="Components"
-            :items="[
-              {id:1,name:'first'},
-              {id:2,name:'second'},
-              {id:3,name:'third'},
-            ]"
-            itemText="name"
-            itemValue="id"
-            :value="2"
-        ></v-autocomplete>-->
+        <dynamic-form 
+            :fields="preparedFields" 
+            title="Forms" 
+            :fieldsPerRows="[2]"
+            :actionUrl="`/products/update/${product.id}`"
+            method="post">
+        </dynamic-form>
     </div>
 </template>
 
@@ -39,15 +34,13 @@ export default {
                             : field.type.name,
                     value:
                         field.type.name == "list" ||
-                        field.type.name == "many-to-many-list"
+                        field.type.name == "many-to-many-list" ||
+                        field.type.name == "year"
                             ? +field.pivot.value
                             : field.pivot.value
                 };
             });
         }
-    },
-    created() {
-        // console.log(this.preparedFields);
     }
 };
 </script>

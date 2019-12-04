@@ -193,10 +193,12 @@ const getPicker = field => {
 
 const getYearField = field => {
     const baseField = getBaseField(field);
-    let years = [];
-    let year = new Date().getFullYear();
 
-    for (let i = 1990; i <= year; i++) {
+
+    let years = [];
+    let currentYear = new Date().getFullYear();
+
+    for (let i = 1990; i <= currentYear; i++) {
         years.push(i);
     }
 
@@ -205,9 +207,7 @@ const getYearField = field => {
     baseField.props = {
         ...baseField.props,
 
-        items: years.reverse(),
-        "item-text": "name",
-        "item-value": "id"
+        items: years.reverse()
     };
 
     baseField["hasSeparateInput"] = true;
@@ -303,6 +303,12 @@ export default {
         },
         value(v) {
             this.fieldVar = v;
+        },
+        // change value when field prop is changed
+        field(val){
+            this.fieldVar = this.field.hasOwnProperty("value")
+                ? this.field.value
+                : null
         }
     },
     methods: {

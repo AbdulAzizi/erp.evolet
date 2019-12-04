@@ -14,7 +14,7 @@
       fixed-header
     >
       <template v-slot:item="{ item }">
-        <tr :class="(item.readed == 0 ? 'grey lighten-3' : 'white')" @click="displayTask(item.id)">
+        <tr :class="(item.readed == 0 ? 'grey lighten-2' : 'white')" @click="displayTask(item.id)">
           <td @click.stop>
             <v-menu offset-y>
               <template v-slot:activator="{on}">
