@@ -18,7 +18,7 @@ class Field extends Model
         return $this->belongsToMany(Form::class);
     }
 
-    public function fields()
+    public function products()
     {
         return $this->belongsToMany(Product::class, 'product_values')->using('App\ProductValue');
     }
@@ -28,4 +28,8 @@ class Field extends Model
         return $this->belongsTo(FieldType::class, 'type_id');
     }
 
+    public function files()
+    {
+        return $this->belongsToMany('App\File');
+    }
 }

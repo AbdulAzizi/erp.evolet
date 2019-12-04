@@ -143,10 +143,13 @@ class TaskController extends Controller
             $task->load('products.messages');
         else
             $task->load('messages');
+
         // if has front tether load it
-        // if ($task->from_type == "App\Process") {
-        //     $task->from->load('frontTethers.form.fields', 'backTethers');
-        // }
+        if ($task->from_type == "App\Process") {
+            $task->from->load('frontTethers.forms.fields');
+        }
+
+
         $task->readed = 1;
         $task->save();
         $users = User::with(['division'])->get();

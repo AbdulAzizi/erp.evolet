@@ -35,5 +35,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ResumeTableSeeder::class);
         $this->call(ChatSeeder::class);
         $this->call(MessageTableSeeder::class);
+        $this->call(FilesTableSeeder::class);
     }
 }

@@ -17,4 +17,9 @@ class Form extends Model
     {
         return $this->belongsToMany('App\Task');
     }
+
+    public function tethers()
+    {
+        return $this->belongsToMany('App\Tether');
+    }
 }

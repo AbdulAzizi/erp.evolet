@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateListsMigration extends Migration
 {
-    
+
     private $lists = [
         // 'mnns_list' => [
         //     'bigIncrements' => 'id',
@@ -48,10 +48,14 @@ class CreateListsMigration extends Migration
             'bigIncrements' => 'id',
             'longText' => 'name',
         ],
+        'strani_poiska' => [
+            'bigIncrements' => 'id',
+            'longText' => 'name',
+        ],
         'drug_classification_list' => [
             'bigIncrements' => 'id',
-            'longText' => 'name'
-        ]
+            'longText' => 'name',
+        ],
     ];
 
     /**

@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Form;
-use App\Task;
-use App\User;
-use App\Field;
-use App\Process;
 use App\Country;
-use App\Product;
-use App\Project;
 use App\Division;
-use Carbon\Carbon;
-use App\ProcessTask;
-use Illuminate\Http\Request;
-use App\Filters\ProductFilters;
-use Illuminate\Support\Facades\DB;
+use App\Events\AssignedToTaskProductEvent;
 use App\Events\ProductCreatedEvent;
 use App\Events\ProductStatusChangedEvent;
+use App\Field;
+use App\File;
+use App\Filters\ProductFilters;
+use App\Form;
+use App\Process;
+use App\ProcessTask;
+use App\Product;
+use App\Project;
+use App\Task;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use App\Events\AssignedToTaskProductEvent;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -140,7 +141,8 @@ class ProductController extends Controller
         ]);
     }
 
-    public function edit(Request $request){
+    public function edit(Request $request)
+    {
         $product = Product::with(['fieldsWithLists'])->find($request->id);
         return view('products.edit', compact('product'));
     }
@@ -188,7 +190,7 @@ class ProductController extends Controller
         //
         $product->save();
         //
-        event(new ProductStatusChangedEvent($product, $product->currentProcess ));
+        event(new ProductStatusChangedEvent($product, $product->currentProcess));
         //
         $projectID = $product->project_id;
         // Set tasks to responsible people of the Process
@@ -203,17 +205,23 @@ class ProductController extends Controller
         $countries = Country::all();
         $processes = Process::all();
         $fields = Field::all();
+        $files = File::with('fields')->get();
 
-        return view('admin.products.index', compact('pcs', 'countries','processes','fields'));
+        return view('admin.products.index', compact('pcs', 'countries', 'processes', 'fields', 'files'));
     }
 
     public function getProducts(Request $request, ProductFilters $filters)
     {
-        $products = Product::filter($filters)->with(['project.country', 'project.pc', 'fields', 'history.user'])->get();
+        $products = Product::filter($filters)->with([
+            'project.country',
+            'project.pc',
+            'history.user',
+        ])->get();
+
         $listFields = $this->getListFieldsFromProducts($products);
 
         $this->loadListFieldValues($listFields);
-    
+
         return $products;
     }
 

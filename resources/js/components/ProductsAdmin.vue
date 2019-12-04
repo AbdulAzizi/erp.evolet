@@ -25,6 +25,15 @@
             <v-card tile flat>
                 <v-card-text>
                     <v-combobox
+                        v-model="selectedFile"
+                        :items="files"
+                        item-text="name"
+                        item-value="id"
+                        dense
+                        outlined
+                        label="Файл"
+                    />
+                    <v-combobox
                         v-model="pcObjects"
                         :items="pcs"
                         item-text="name"
@@ -132,9 +141,10 @@
 
 <script>
 export default {
-    props: ["pcs", "countries", "processes", "fields"],
+    props: ["pcs", "countries", "processes", "fields", "files"],
     data() {
         return {
+            selectedFile: null,
             loading: false,
             pcObjects: [],
             countryObjects: null,
@@ -147,9 +157,7 @@ export default {
             selectedProcess: null,
             listItems: [],
             displayRightDrawer: false,
-            filterFields: [
-                { selectedField: null, fieldValue: null, list:[] }
-            ]
+            filterFields: [{ selectedField: null, fieldValue: null, list: [] }]
         };
     },
     methods: {
@@ -158,8 +166,8 @@ export default {
             axios
                 .get(this.appPath("api/get/products"), {
                     params: {
-                        ...this.filters,
-                        fields: JSON.stringify(this.filters.fields)
+                        ...this.filters
+                        // fields: JSON.stringify(this.filters.fields)
                     }
                 })
                 .then(response => {
@@ -170,7 +178,7 @@ export default {
         handleFieldChange(field) {
             // if selected field is not null
             if (field.selectedField != null) {
-                // 
+                //
                 field.fieldValue = null;
                 // if selected type is not input text
                 if (field.selectedField.type.name != "string") {
@@ -220,15 +228,23 @@ export default {
                 });
             }
             // no fields that has value
-            else{
+            else {
                 delete this.filters.fields;
             }
         },
         addNewFilterField() {
-            this.filterFields.push({ selectedField: null, fieldValue: null, list:[] });
+            this.filterFields.push({
+                selectedField: null,
+                fieldValue: null,
+                list: []
+            });
         }
     },
     watch: {
+        selectedFile(file) {
+            if (file) this.filters.file_id = file.id;
+            else delete this.filters.file_id;
+        },
         selectedProcess(val) {
             if (val) delete this.filters.process_id;
             this.filters.process_id = val;

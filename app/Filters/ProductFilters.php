@@ -4,6 +4,7 @@ namespace App\Filters;
 
 use App\Country;
 use App\Division;
+use App\File;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -23,14 +24,14 @@ class ProductFilters extends QueryFilters
         $fields = json_decode($term);
 
         foreach ($fields as $field) {
-            if (is_numeric( $field->value )) {
+            if (is_numeric($field->value)) {
                 $this->builder->whereHas('values', function (Builder $query) use ($field) {
                     $query->where('field_id', $field->field_id)
                         ->where('value', $field->value);
                 });
             } else {
                 $this->builder->whereHas('values', function (Builder $query) use ($field) {
-                    $query->where('field_id',  $field->field_id)
+                    $query->where('field_id', $field->field_id)
                         ->where('value', 'LIKE', "%$field->value%");
                 });
             }
@@ -94,5 +95,14 @@ class ProductFilters extends QueryFilters
     public function product_id($term)
     {
         return $this->builder->where('id', $term);
+    }
+
+    public function file_id($term)
+    {
+        $fieldsToDisplay = File::find($term)->fields->pluck('id');
+
+        return $this->builder->with(['fields' => function ($query) use ($fieldsToDisplay) {
+            $query->whereIn('fields.id', $fieldsToDisplay);
+        }]);
     }
 }
