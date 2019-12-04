@@ -47,6 +47,10 @@ class CreateListsMigration extends Migration
         'pmt_list' => [
             'bigIncrements' => 'id',
             'longText' => 'name',
+        ],
+        'drug_classification_list' => [
+            'bigIncrements' => 'id',
+            'longText' => 'name'
         ]
     ];
 
