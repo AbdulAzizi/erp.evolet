@@ -41,7 +41,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $data['product'] = Product::with(['messages','currentProcess', 'project.country', 'project.pc', 'fields', 'history.user', 'processes', 'fieldsWithLists'])->find($id);
+        $data['product'] = Product::with(['messages','currentProcess', 'project.country', 'project.pc', 'history.user', 'processes', 'fields'])->find($id);
 
         $listFields = $this->getListFieldsFromProduct($data['product']);
 
@@ -55,7 +55,7 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         // Get auth User
-        $authUser = \Auth::user();
+        $authUser = auth()->user();
         // Get responsibilitilies of that User
         $responsibilities = $authUser->responsibilities;
 

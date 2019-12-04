@@ -56,3 +56,4 @@ Route::post('/tether', 'TethersController@create')->name('tether.create');
 Route::post('/process', 'ProcessController@create')->name('process.create');
 Route::put('/task/mark/{id}', 'TaskController@mark')->name('task.mark');
 Route::put('/process/update/{id}', 'ProcessController@update')->name('process.update');
+Route::post('/fields/getFieldsList/{id}', 'FieldController@getFieldsList')->name('field.getFieldsList');

@@ -39,20 +39,15 @@
             </tr>
           </thead>
           <tbody>
-              <tr
-                
-                v-for="(field, index) in localProduct.fields_with_lists"
-                :key="index"
-              >
-                <td v-if="editAllowed">
-                  <v-btn text fab x-small color="grey" @click="displayEditForm(field)">
-                    <v-icon x-small>mdi-pencil</v-icon>
-                  </v-btn>
-                </td>
-                <td>{{ field.label }}</td>
-                <td>{{ showFieldFromItems(field) }}</td>
-            
-              </tr>
+            <tr v-for="(field, index) in localProduct.fields" :key="index">
+              <td v-if="editAllowed">
+                <v-btn text fab x-small color="grey" @click="displayEditForm(field)">
+                  <v-icon x-small>mdi-pencil</v-icon>
+                </v-btn>
+              </td>
+              <td>{{ field.label }}</td>
+              <td>{{ field.pivot.value }}</td>
+            </tr>
           </tbody>
         </v-simple-table>
       </v-card>
@@ -155,7 +150,6 @@ export default {
       selectedFields: null,
       fieldVal: null,
       editAllowed: false
-
     };
   },
   computed: {
@@ -187,22 +181,45 @@ export default {
 
   methods: {
     displayEditForm(selectedField) {
-      (this.selectedFields = {
-        ...selectedField,
-        rules:
-          selectedField.pivot && selectedField.pivot.required
-            ? ["required"]
-            : [true],
-        type: this.defineFieldType(selectedField),
-        value:
-          selectedField.type.name == "list" ||
-          selectedField.type.name == "many-to-many-list" ||
-          selectedField.type.name == "year"
-            ? +selectedField.pivot.value
-            : selectedField.pivot.value,
-        label: selectedField.label
-      }),
-        (this.dialog = true);
+      if(selectedField.type.name == 'list' || selectedField.type.name == 'many-to-many-list'){
+        axios
+          .post(`/api/fields/getFieldsList/${this.product.id}`, {
+            listId: selectedField.id
+          })
+          .then(res => {
+            (this.selectedFields = {
+              ...res.data,
+              rules:
+                res.data.pivot && res.data.pivot.required ? ["required"] : [true],
+              type: this.defineFieldType(res.data),
+              value:
+                res.data.type.name == "list" ||
+                res.data.type.name == "many-to-many-list" ||
+                res.data.type.name == "year"
+                  ? +res.data.pivot.value
+                  : res.data.pivot.value,
+              label: res.data.label
+            }),
+              this.dialog = true;
+          })
+          .catch(err => err.messages);
+      }
+      else {
+        this.selectedFields = {
+              ...selectedField,
+              rules:
+                selectedField.pivot && selectedField.pivot.required ? ["required"] : [true],
+              type: this.defineFieldType(selectedField),
+              value:
+                selectedField.type.name == "list" ||
+                selectedField.type.name == "many-to-many-list" ||
+                selectedField.type.name == "year"
+                  ? +selectedField.pivot.value
+                  : selectedField.pivot.value,
+              label: selectedField.label
+            }
+            this.dialog = true;
+      }
     },
     submitEditedField() {
       axios
@@ -211,7 +228,7 @@ export default {
           value: this.fieldVal
         })
         .then(response => {
-          this.localProduct.fields_with_lists.forEach(elem => {
+          this.localProduct.fields.forEach(elem => {
             if (response.data.field_id == elem.id) {
               elem.pivot = response.data;
             }
@@ -231,27 +248,11 @@ export default {
         return field.type.name;
       }
     },
-    showFieldFromItems(element) {
-      let itemValue = null;
-      if (
-        element.type.name == "many-to-many-list" ||
-        element.type.name == "list"
-      ) {
-        element.items.forEach(item => {
-          if (element.pivot.value == item.id) {
-            itemValue = item.name;
-          }
-        });
-        return itemValue;
-      } else {
-        return element.pivot.value;
-      }
-    },
-    defineAuthUserResponsibility(){
+    defineAuthUserResponsibility() {
       this.authuser.responsibilities.filter(elem => {
-        if(elem.name == 'Рук НАП'){
+        if (elem.name == "Рук НАП") {
           this.editAllowed = true;
-        }else{
+        } else {
           this.editAllowed = false;
         }
       });
@@ -264,7 +265,7 @@ export default {
     ].pivot.spent_time = this.lastProcessSpentTime;
     // Calculate total spent time
     this.overallSpentTime = this.totalSpentTime;
-    this.defineAuthUserResponsibility();    
+    this.defineAuthUserResponsibility();
   }
 };
 </script>
