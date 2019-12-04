@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class ProductValue extends Pivot
 {
     protected $table = 'product_values';
+
+    public $guarded = [];
     
     public function product()
     {

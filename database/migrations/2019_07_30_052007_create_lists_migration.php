@@ -51,6 +51,9 @@ class CreateListsMigration extends Migration
         'strani_poiska' => [
             'bigIncrements' => 'id',
             'longText' => 'name',
+        'drug_classification_list' => [
+            'bigIncrements' => 'id',
+            'longText' => 'name'
         ]
     ];
 

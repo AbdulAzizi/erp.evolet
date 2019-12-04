@@ -51,6 +51,7 @@ class FieldTableSeeder extends Seeder
         $pv_n = Field::create(['label' => 'ПВ/Н', 'name' => 'pv_n']);
         $vozrast_pol = Field::create(['label' => 'Возраст/Пол', 'name' => 'vozrast_pol', 'type_id' => $listFieldTypeID]);
         $komm = Field::create(['label' => 'Комм', 'name' => 'komm']);
+        $drug_classification = Field::create(['label' => 'Классификация', 'name' => 'classification', 'type_id' => $listFieldTypeID]);
         $nov_kriteriya = Field::create(['label' => 'Нов критерия ', 'name' => 'nov_kriteriya']);
 
         DB::table('list_fields')->insertGetId(['field_id' => $atx->id, 'list_type' => 'atx_list']);
@@ -61,6 +62,7 @@ class FieldTableSeeder extends Seeder
         DB::table('list_fields')->insertGetId(['field_id' => $gp_byu->id, 'list_type' => 'gp_bu_list']);
         DB::table('list_fields')->insertGetId(['field_id' => $p_mt->id, 'list_type' => 'pmt_list']);
         DB::table('list_fields')->insertGetId(['field_id' => $vozrast_pol->id, 'list_type' => 'age_gender_list']);
+        DB::table('list_fields')->insertGetId(['field_id' => $drug_classification->id, 'list_type' => 'drug_classification_list']);
         
         /********************************************************/
         
@@ -89,6 +91,7 @@ class FieldTableSeeder extends Seeder
             $pv_n->id => ['required' => true],
             $vozrast_pol->id => ['required' => true],
             $komm->id => ['required' => true],
+            $drug_classification->id => ['required' => true]
         ]);
 
         /********************************************************/
@@ -118,6 +121,7 @@ class FieldTableSeeder extends Seeder
             $pv_n->id => ['required' => true],
             $vozrast_pol->id => ['required' => true],
             $komm->id => ['required' => true],
+            $drug_classification->id => ['required' => true]
         ]);
 
         /********************************************************/
@@ -140,6 +144,7 @@ class FieldTableSeeder extends Seeder
             $pv_n->id => ['required' => true],
             $vozrast_pol->id => ['required' => true],
             $komm->id => ['required' => true],
+            $drug_classification->id => ['required' => true]
         ]);
 
         /*********************************************************/

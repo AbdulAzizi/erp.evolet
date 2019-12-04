@@ -235,6 +235,7 @@ export default {
             this.tetherNameDialog = false;
             form.reset();
             this.synch(res.data);
+            Event.fire('notify', [`Связь ${this.tetherName} создана`]);
           })
           .catch(err => err.messages);
       }
@@ -249,6 +250,7 @@ export default {
           .then(res => {
             this.synch(res.data);
             this.addProcessDialog = false;
+            Event.fire('notify', [`Процесс ${this.processName} создана`]);
           })
           .catch(err => err.messages);
       }
@@ -262,6 +264,7 @@ export default {
           this.updateProcessField = false;
           this.processData.name = this.processUpdateFieldName;
           this.synch(res.data);
+          Event.fire('notify', [`Процесс ${this.processUpdateFieldName} обновлен`]);
         })
         .catch(err => err.messages);
     },

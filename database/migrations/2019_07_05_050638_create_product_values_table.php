@@ -18,6 +18,7 @@ class CreateProductValuesTable extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('field_id');
             $table->string('value');
+            $table->timestamps();
         });
     }
 

@@ -11,6 +11,8 @@ class Field extends Model
 
     protected $with = ['type'];
 
+    public $guarded = [];
+
     public function forms()
     {
         return $this->belongsToMany(Form::class);

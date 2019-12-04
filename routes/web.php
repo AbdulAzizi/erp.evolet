@@ -96,4 +96,6 @@ Route::prefix('api')->group(function () {
     Route::get('/directs/{userID}', 'ChatController@getdirect')->name('api.getDirect');
     Route::get('/get/products', 'ProductController@getProducts')->name('get.products');
     Route::get('/lists/{id}/items', 'ListController@items')->name('api.lists.items');
+    Route::put('/fields/edit/{id}', 'FieldController@edit')->name('fields.edit');
+
 });

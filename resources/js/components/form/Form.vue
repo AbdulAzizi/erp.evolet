@@ -217,6 +217,11 @@ export default {
                 }
             };
         }
+    },
+    watch:{
+        fields(val){
+            this.localFields = this.extractFields(val, "shown")
+        }
     }
 };
 </script>
