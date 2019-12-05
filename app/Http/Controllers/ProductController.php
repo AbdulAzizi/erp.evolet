@@ -42,7 +42,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $data['product'] = Product::with(['messages','currentProcess', 'project.country', 'project.pc', 'history.user', 'processes', 'fields'])->find($id);
+        $data['product'] = Product::with(['messages', 'currentProcess', 'project.country', 'project.pc', 'history.user', 'processes', 'fields'])->find($id);
 
         $listFields = $this->getListFieldsFromProduct($data['product']);
 
@@ -147,51 +147,40 @@ class ProductController extends Controller
         return view('products.edit', compact('product'));
     }
 
-    public function nextStep($id, Request $request)
-    {
-        // return $request;
-        // All keys to array
-        $fieldKeys = array_keys($request->all());
-        // Retrive all Fields
-        $fields = Field::whereIn('name', $fieldKeys)->get();
-        // Prepare Fields for attachment with their values
-        $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
-            return [$field->id => ['value' => $request->input($field->name)]];
-        });
-        // Get product
-        $product = Product::find($id);
-        // Attach fields to Product with their value
-        $product->fields()->attach($preparedFields->toArray());
-        // Fetch current Process
-        $currentProcess = $product->currentProcess;
-        // find next process
-        $process = $currentProcess->frontTethers->first()->toProcess;
-        // set products process to next one
-        $product->currentProcess()->associate($process);
-        //
-        $product->save();
-        //
-        event(new ProductStatusChangedEvent($product, $process));
-        //
-        $projectID = $product->project_id;
-        // Set tasks to responsible people of the Process
-        $this->setTasks($process, $projectID, $product);
-
-        // Redirect to Tasks Index page
-        return redirect()->route('products.show', $product->id);
-    }
-
-    public function changeProcess($productID, $processID)
+    public function changeProcess(Request $request, $productID, $processID = null)
     {
         // Get product
         $product = Product::find($productID);
-        // set products process to next one
-        $product->currentProcess()->associate($processID);
-        //
+        // If there is form
+        if (count($request->toArray())) {
+            // All keys to array
+            $fieldKeys = array_keys($request->all());
+            // Retrive all Fields
+            $fields = Field::whereIn('name', $fieldKeys)->get();
+            // Prepare Fields for attachment with their values
+            $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
+                return [$field->id => ['value' => $request->input($field->name)]];
+            });
+            // Attach fields to Product with their value
+            $product->fields()->attach($preparedFields->toArray());
+        }
+        // If process ID exists
+        if ($processID) {
+            // connect 
+            $product->currentProcess()->associate($processID);
+        } else {
+            // Fetch current Process
+            $currentProcess = $product->currentProcess;
+            // find next process
+            $process = $currentProcess->frontTethers->first()->toProcess;
+            // set products process to next one
+            $product->currentProcess()->associate($process);
+        }
+        // save
         $product->save();
-        //
+        // notify
         event(new ProductStatusChangedEvent($product, $product->currentProcess));
-        //
+        // initialize project id
         $projectID = $product->project_id;
         // Set tasks to responsible people of the Process
         $this->setTasks($product->currentProcess, $projectID, $product);

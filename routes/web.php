@@ -40,8 +40,11 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/products', 'ProductController@index')->name('products.index');
     Route::get('/products/create', 'ProductController@create')->name('products.create');
     Route::post('/products', 'ProductController@store')->name('products.store');
-    Route::post('/products/{id}/nextstep', 'ProductController@nextStep')->name('products.nextStep');
-    Route::get('/products/{id}/changeProcess/{processID}', 'ProductController@changeProcess')->name('products.changeProcess');
+    
+    Route::post('/products/{productID}/changeToNext', 'ProductController@changeProcess')->name('products.changeToNext');
+    Route::post('/products/{productID}/changeTo/{processID}', 'ProductController@changeProcess')->name('products.changeTo.post');
+    Route::get('/products/{productID}/changeTo/{processID}', 'ProductController@changeProcess')->name('products.changeTo.get');
+    
     Route::get('/products/{id}', 'ProductController@show')->name('products.show');
     
     // Route::get('/processes/{id}', 'ProcessController@show')->name('processes.show');

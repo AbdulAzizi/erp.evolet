@@ -65,7 +65,7 @@
                                             <v-list-item
                                                 v-for="( tether, index ) in task.from.front_tethers"
                                                 :key="'list-item-'+index"
-                                                :href="tether.forms.length == 0 ? appPath(`products/${task.products[0].id}/changeProcess/${tether.to_process_id}`) : null"
+                                                :href="tether.forms.length == 0 ? appPath(`/products/${task.products[0].id}/changeTo/${tether.to_process_id}`) : null"
                                             >
                                                 <v-list-item-content v-if="tether.forms.length != 0">
                                                     <v-list-item-title
@@ -78,7 +78,7 @@
                                                         :fieldsPerRows="tether.forms[0].fields.length > 1 ? [2] : [1]"
                                                         :fields="preparedFields(tether.forms[0])"
                                                         :title="tether.forms[0].label"
-                                                        :actionUrl="`/products/${task.products[0].id}/nextstep`"
+                                                        :actionUrl=" appPath(`products/${task.products[0].id}/changeTo/${tether.to_process_id}`)"
                                                         :activatorEventName="`display_form_${index}`"
                                                         method="post"
                                                     ></dynamic-form>
@@ -99,7 +99,7 @@
                                     :fieldsPerRows="[2]"
                                     :fields="preparedFields(task.forms[0])"
                                     :title="task.forms[0].label"
-                                    :actionUrl="`/products/${task.products[0].id}/nextstep`"
+                                    :actionUrl="appPath(`products/${task.products[0].id}/changeToNext`)"
                                     method="post"
                                 ></dynamic-form>
                             </div>
