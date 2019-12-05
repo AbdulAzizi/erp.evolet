@@ -15,6 +15,7 @@ use App\Process;
 use App\ProcessTask;
 use App\Product;
 use App\Project;
+use App\ProductValue;
 use App\Task;
 use App\User;
 use Carbon\Carbon;
@@ -131,6 +132,10 @@ class ProductController extends Controller
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project, $product);
 
+        $field = Field::where(['name' => 'product_status'])->first()->id;
+
+        $productStatus = ProductValue::create(['product_id' => $product->id, 'field_id' => $field, 'value' => $product->currentProcess->name]);
+
         //Add product creation to history
 
         // Redirect to Tasks Index page
@@ -184,6 +189,10 @@ class ProductController extends Controller
         $projectID = $product->project_id;
         // Set tasks to responsible people of the Process
         $this->setTasks($product->currentProcess, $projectID, $product);
+        // Get product status field
+        $fieldID = Field::where('name', 'product_status')->first()->id;
+        // Attach product status field to product with a new value
+        $product->fields()->attach([$fieldID => ['value' => $product->currentProcess->name ]]);
         // Redirect to Tasks Index page
         return redirect()->route('products.show', $product->id);
     }
