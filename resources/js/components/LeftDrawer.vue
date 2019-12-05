@@ -109,7 +109,7 @@ export default {
                     divisions: ["ОРПО", "ДЧ"]
                 },
                 {
-                    icon: "mdi-file",
+                    icon: "mdi-account-box-multiple",
                     text: "Резерв кандидатов",
                     url: "/head-resumes",
                     responsibilities: [],
@@ -120,7 +120,14 @@ export default {
                     text: "Фильтры",
                     url: "/admin/products",
                     responsibilities: ["РВЗ"],
-                    divisions: []
+                    divisions: ["НАП"]
+                },
+                {
+                    icon: "mdi-file-document-box-multiple",
+                    text: "Файлы",
+                    url: "/admin/files",
+                    responsibilities: ["РВЗ"],
+                    divisions: ["НАП"]
                 }
             ]
         };

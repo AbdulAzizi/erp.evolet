@@ -306,9 +306,8 @@ export default {
         },
         // change value when field prop is changed
         field(val){
-            this.fieldVar = this.field.hasOwnProperty("value")
-                ? this.field.value
-                : null
+            if(this.field.hasOwnProperty("value"))
+                this.fieldVar = this.field.value
         }
     },
     methods: {

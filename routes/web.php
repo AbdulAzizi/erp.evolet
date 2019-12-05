@@ -43,7 +43,6 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::post('/products/{id}/nextstep', 'ProductController@nextStep')->name('products.nextStep');
     Route::get('/products/{id}/changeProcess/{processID}', 'ProductController@changeProcess')->name('products.changeProcess');
     Route::get('/products/{id}', 'ProductController@show')->name('products.show');
-    Route::get('/admin/products', 'ProductController@adminIndex')->name('admin.products');
     
     // Route::get('/processes/{id}', 'ProcessController@show')->name('processes.show');
     
@@ -82,7 +81,10 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/tether/delete/{id}', 'TethersController@delete')->name('tether.delete');
 
-
+    Route::prefix('admin')->group(function () {
+        Route::get('/products', 'ProductController@adminIndex')->name('admin.products');
+        Route::get('/files', 'FileController@index')->name('admin.files.index');
+    });
     
 });
 

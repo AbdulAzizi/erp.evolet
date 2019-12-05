@@ -311,6 +311,14 @@ Vue.component(
     "edit-product-forms",
     require("./components/views/products/Edit.vue").default
 );
+Vue.component(
+    "file-card",
+    require("./components/files/Card.vue").default
+);
+Vue.component(
+    "file-cards",
+    require("./components/files/Cards.vue").default
+);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
