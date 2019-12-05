@@ -31,6 +31,7 @@ class FieldTableSeeder extends Seeder
             'foreign_list_field_id' => $formListId
         ]);
 
+        $product_status = Field::create(['label' => 'Статус продукта', 'name' => 'product_status']);
         $doza = Field::create(['label' => 'Д', 'name' => 'doza']);
         $opu = Field::create(['label' => 'ОПУ', 'name' => 'opu']);
         $thchp = Field::create(['label' => 'ТХЧП', 'name' => 'thchp']);
