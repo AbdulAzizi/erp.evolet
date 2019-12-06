@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\PollOptionChosenEvent;
 use App\PollAnswer;
-use App\Question;
 use App\QuestionTask;
 use Illuminate\Http\Request;
 
@@ -18,20 +17,28 @@ class PollController extends Controller
         $selectedOptionID = $request['selected_option_id'];
         // return $selectedOptionID;
         $answer = PollAnswer::where('user_id', $user->id)
-                        ->where('question_task_id', $questionTaskID)->first();
-
-        if ($answer === null)
+            ->where('question_task_id', $questionTaskID)->first();
+        // check if already have answer
+        if ($answer === null) {
+            // if not make new answer
             $user->questionTask()->attach($questionTaskID, ['option_id' => $selectedOptionID]);
-        else{
-            $answer->option_id = $selectedOptionID;
-            $answer->save();
+            // get question task for notification
+            $questionTask = QuestionTask::with('answers', 'question.options')->find($questionTaskID);
+            // notify
+            event(new PollOptionChosenEvent($questionTask, $user, $selectedOptionID));
+        } else {
+            if ($answer->option_id != $selectedOptionID) {
+                // update existing one
+                $answer->option_id = $selectedOptionID;
+                // save changes
+                $answer->save();
+                // get question task for notification
+                $questionTask = QuestionTask::with('answers', 'question.options')->find($questionTaskID);
+                // notify
+                event(new PollOptionChosenEvent($questionTask, $user, $selectedOptionID));
+            }
         }
-        
-        $questionTask = QuestionTask::with('answers','question.options')->find($questionTaskID);
-        event(new PollOptionChosenEvent($questionTask, $user, $selectedOptionID));
-        
-        return QuestionTask::with('question.options','answers')->find($questionTaskID);
-        // $poll = Question::with('options.users')->find($request['questionTask']['question']['id']);
-        // return $poll;
+
+        return QuestionTask::with('question.options', 'answers')->find($questionTaskID);
     }
 }

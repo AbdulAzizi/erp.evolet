@@ -166,8 +166,8 @@ export default {
             axios
                 .get(this.appPath("api/get/products"), {
                     params: {
-                        ...this.filters
-                        // fields: JSON.stringify(this.filters.fields)
+                        ...this.filters,
+                        fields: JSON.stringify(this.filters.fields)
                     }
                 })
                 .then(response => {

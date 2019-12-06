@@ -146,8 +146,8 @@ export default {
 </script>
 
 <style>
-.products .table-header,
+/* .products .table-header,
 tr {
     white-space: nowrap;
-}
+} */
 </style>

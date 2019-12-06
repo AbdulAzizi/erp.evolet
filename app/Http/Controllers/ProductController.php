@@ -43,7 +43,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $data['product'] = Product::with(['messages','currentProcess', 'project.country', 'project.pc', 'history.user', 'processes', 'fields'])->find($id);
+        $data['product'] = Product::with(['messages', 'currentProcess', 'project.country', 'project.pc', 'history.user', 'processes', 'fields'])->find($id);
 
         $listFields = $this->getListFieldsFromProduct($data['product']);
 
@@ -126,14 +126,14 @@ class ProductController extends Controller
         $product->fields()->attach($preparedFields->toArray());
         // Fetch current Process
         $process = Process::find($product->currentProcess->id);
-        //
+        // Notify
         event(new ProductCreatedEvent($product));
 
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project, $product);
-
+        // Get status field
         $field = Field::where(['name' => 'product_status'])->first()->id;
-
+        // Add status field to product
         $productStatus = ProductValue::create(['product_id' => $product->id, 'field_id' => $field, 'value' => $product->currentProcess->name]);
 
         //Add product creation to history
@@ -152,62 +152,51 @@ class ProductController extends Controller
         return view('products.edit', compact('product'));
     }
 
-    public function nextStep($id, Request $request)
-    {
-        // return $request;
-        // All keys to array
-        $fieldKeys = array_keys($request->all());
-        // Retrive all Fields
-        $fields = Field::whereIn('name', $fieldKeys)->get();
-        // Prepare Fields for attachment with their values
-        $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
-            return [$field->id => ['value' => $request->input($field->name)]];
-        });
-        // Get product
-        $product = Product::find($id);
-        // Attach fields to Product with their value
-        $product->fields()->attach($preparedFields->toArray());
-        // Fetch current Process
-        $currentProcess = $product->currentProcess;
-        // find next process
-        $process = $currentProcess->frontTethers->first()->toProcess;
-        // set products process to next one
-        $product->currentProcess()->associate($process);
-        //
-        $product->save();
-        //
-        event(new ProductStatusChangedEvent($product, $process));
-        //
-        $projectID = $product->project_id;
-        // Set tasks to responsible people of the Process
-        $this->setTasks($process, $projectID, $product);
-
-        $field = Field::where('name', 'product_status')->first()->id;
-
-        $productValue = ProductValue::where(['product_id' => $product->id, 'field_id' => $field])->first();
-
-        $productValue->value = $product->currentProcess->name;
-
-        $productValue->save();
-
-        // Redirect to Tasks Index page
-        return redirect()->route('products.show', $product->id);
-    }
-
-    public function changeProcess($productID, $processID)
+    public function changeProcess(Request $request, $productID, $processID = null)
     {
         // Get product
         $product = Product::find($productID);
-        // set products process to next one
-        $product->currentProcess()->associate($processID);
-        //
+        // If there is form
+        if (count($request->toArray())) {
+            // All keys to array
+            $fieldKeys = array_keys($request->all());
+            // Retrive all Fields
+            $fields = Field::whereIn('name', $fieldKeys)->get();
+            // Prepare Fields for attachment with their values
+            $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
+                return [$field->id => ['value' => $request->input($field->name)]];
+            });
+            // Attach fields to Product with their value
+            $product->fields()->attach($preparedFields->toArray());
+        }
+        // If process ID exists
+        if ($processID) {
+            // connect 
+            $product->currentProcess()->associate($processID);
+        } else {
+            // Fetch current Process
+            $currentProcess = $product->currentProcess;
+            // find next process
+            $process = $currentProcess->frontTethers->first()->toProcess;
+            // set products process to next one
+            $product->currentProcess()->associate($process);
+        }
+        // save
         $product->save();
-        //
+        // notify
         event(new ProductStatusChangedEvent($product, $product->currentProcess));
-        //
+        // initialize project id
         $projectID = $product->project_id;
         // Set tasks to responsible people of the Process
         $this->setTasks($product->currentProcess, $projectID, $product);
+        // Get product status field
+        $fieldID = Field::where('name', 'product_status')->first()->id;
+        // Get the Product Value field
+        $productValue = ProductValue::where(['product_id' => $product->id, 'field_id' => $fieldID])->first();
+        // Change to current status
+        $productValue->value = $product->currentProcess->name;
+        // Save changes
+        $productValue->save();
         // Redirect to Tasks Index page
         return redirect()->route('products.show', $product->id);
     }
