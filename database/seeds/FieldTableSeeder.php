@@ -52,7 +52,7 @@ class FieldTableSeeder extends Seeder
         $pv_n = Field::create(['label' => 'ПВ/Н', 'name' => 'pv_n']);
         $vozrast_pol = Field::create(['label' => 'Возраст/Пол', 'name' => 'vozrast_pol', 'type_id' => $listFieldTypeID]);
         $komm = Field::create(['label' => 'Комм', 'name' => 'komm']);
-        $drug_classification = Field::create(['label' => 'Классификация', 'name' => 'classification', 'type_id' => $listFieldTypeID]);
+        $drug_classification = Field::create(['label' => 'Направление', 'name' => 'classification', 'type_id' => $listFieldTypeID]);
         $nov_kriteriya = Field::create(['label' => 'Нов критерия ', 'name' => 'nov_kriteriya']);
 
         DB::table('list_fields')->insertGetId(['field_id' => $atx->id, 'list_type' => 'atx_list']);
