@@ -45,4 +45,11 @@ class FieldController extends Controller
 
         return $product->fieldsWithLists->where('id', $request->listId)->first();
     }
+
+    public function getFields()
+    {
+        $fields = Field::all();
+
+        return $fields;
+    }
 }

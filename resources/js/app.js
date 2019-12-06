@@ -320,6 +320,8 @@ Vue.component(
     require("./components/files/Cards.vue").default
 );
 
+Vue.component("file-add", require("./components/files/Add.vue").default);
+
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
 Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
