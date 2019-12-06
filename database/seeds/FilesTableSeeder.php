@@ -21,6 +21,7 @@ class FilesTableSeeder extends Seeder
             'ОПУ',
             'Класс Пд',
             'АТХ',
+            'Статус продукта'
 
         ])->get();
 
