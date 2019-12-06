@@ -126,14 +126,14 @@ class ProductController extends Controller
         $product->fields()->attach($preparedFields->toArray());
         // Fetch current Process
         $process = Process::find($product->currentProcess->id);
-        //
+        // Notify
         event(new ProductCreatedEvent($product));
 
         // Set tasks to responsible people of the Process
         $this->setTasks($process, $request->project, $product);
-
+        // Get status field
         $field = Field::where(['name' => 'product_status'])->first()->id;
-
+        // Add status field to product
         $productStatus = ProductValue::create(['product_id' => $product->id, 'field_id' => $field, 'value' => $product->currentProcess->name]);
 
         //Add product creation to history
@@ -191,8 +191,12 @@ class ProductController extends Controller
         $this->setTasks($product->currentProcess, $projectID, $product);
         // Get product status field
         $fieldID = Field::where('name', 'product_status')->first()->id;
-        // Attach product status field to product with a new value
-        $product->fields()->attach([$fieldID => ['value' => $product->currentProcess->name ]]);
+        // Get the Product Value field
+        $productValue = ProductValue::where(['product_id' => $product->id, 'field_id' => $fieldID])->first();
+        // Change to current status
+        $productValue->value = $product->currentProcess->name;
+        // Save changes
+        $productValue->save();
         // Redirect to Tasks Index page
         return redirect()->route('products.show', $product->id);
     }
