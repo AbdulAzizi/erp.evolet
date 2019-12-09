@@ -321,6 +321,7 @@ Vue.component(
 );
 
 Vue.component("file-add", require("./components/files/Add.vue").default);
+Vue.component("add-field", require("./components/files/AddField.vue").default);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);

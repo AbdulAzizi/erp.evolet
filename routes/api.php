@@ -59,3 +59,7 @@ Route::put('/process/update/{id}', 'ProcessController@update')->name('process.up
 Route::post('/fields/getFieldsList/{id}', 'FieldController@getFieldsList')->name('field.getFieldsList');
 Route::get('/files/fields', 'FieldController@getFields')->name('field.getFields');
 Route::post('/file/create', 'FileController@create')->name('file.create');
+Route::delete('/files/delete/{id}', 'FileController@delete')->name('file.delte');
+Route::post('/files/field/delete/{id}', 'FileController@deleteFieldFromFile')->name('file.deleteFieldFromFile');
+Route::post('/files/fields/create', 'FileController@attachFields')->name('file.attachFields');
+Route::post('/files/update/{id}', 'FileController@update')->name('file.update');

@@ -1,26 +1,11 @@
 <template>
-  <div>
-    <v-btn fab fixed bottom right color="primary" @click="getFields()">
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
-    <v-dialog v-model="createFormDialog" width="600">
-      <v-card>
+<div>
+    <v-dialog width="600" v-model="dialog">
+        <v-card>
         <v-toolbar dense flat dark color="primary">
-          <v-toolbar-title>Создать файл</v-toolbar-title>
+          <v-toolbar-title>Добавить поля</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-form ref="form">
-          <form-field
-            :field="{
-               label: 'Название файла',
-               name: 'fileName',
-               type: 'string',
-               rules: ['required']                   
-           }"
-            v-model="fileName"
-            class="mt-5"
-          ></form-field>
-          </v-form>
           <v-row>
             <v-col cols="6">
               <v-checkbox
@@ -51,31 +36,33 @@
         <v-toolbar dense style="position: sticky; bottom:0;">
           <v-spacer></v-spacer>
           <v-btn text color="red lighten-2" @click="cancelFileCreate()">Отмена</v-btn>
-          <v-btn dark color="primary" @click="submitFile()">Добавить</v-btn>
+          <v-btn dark color="primary" @click="submitField()">Добавить</v-btn>
         </v-toolbar>
       </v-card>
     </v-dialog>
-  </div>
+  <v-btn small outlined color="primary" @click="getFields()" class="ma-2">
+    Добавить поля
+  </v-btn>
+</div>
 </template>
-
 <script>
 export default {
-  data() {
-    return {
-      fields: null,
-      oddFields: null,
-      evenFields: null,
-      createFormDialog: false,
-      selectedFieldIds: [],
-      fileName: null
-    };
-  },
-  methods: {
+    props: ['file'],
+    data(){
+        return {
+            dialog: false,
+            fields: null,
+            oddFields: null,
+            evenFields: null,
+            selectedFieldIds: []
+        }
+    },
+    methods: {
     getFields() {
       axios
         .get("/api/files/fields")
         .then(res => {
-          this.createFormDialog = true;
+          this.dialog = true;
           this.fields = res.data;
           this.oddFields = this.fields.filter(elem => elem.id % 2 == 0);
           this.evenFields = this.fields.filter(elem => elem.id % 2 !== 0);
@@ -84,27 +71,22 @@ export default {
     },
     cancelFileCreate() {
       this.selectedFieldIds = [];
-      this.fileName;
-      this.createFormDialog = false;
+      this.dialog = false;
     },
-    submitFile() {
-      let form = this.$refs.form;
-      if(form.validate()){
-        axios
-          .post("/api/file/create", {
-            name: this.fileName,
-            fields: this.selectedFieldIds
-          })
-          .then(res => {
-              this.createFormDialog = false;
-              Event.fire('fileCreated', res.data)
-              Event.fire('notify', [`Файл ${res.data[res.data.length - 1].name} создан`]);
-              this.selectedFieldIds = [];
-              this.fileName = null;
-          })
-         .catch(err => err.messages);
-      }
+    submitField() {
+      axios
+        .post("/api/files/fields/create", {
+          id: this.file,
+          fields: this.selectedFieldIds
+        })
+        .then(res => {
+            this.dialog = false;
+            Event.fire('fieldsCreated', {fileId: this.file, fields: res.data})
+            Event.fire('notify', ['Поля созданы']);
+            this.selectedFieldIds = [];
+        })
+        .catch(err => err.messages);
     }
   }
-};
+}
 </script>
