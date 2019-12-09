@@ -49,8 +49,8 @@
           <td>{{ item.status.name }}</td>
           <td>
             <v-chip
-              class="primary black--text mr-1"
-              x-small
+              class="primary mr-1"
+              small
               v-for="(tag,index) in item.tags"
               :key="'tag-'+index"
             >{{tag.name}}</v-chip>
