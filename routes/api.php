@@ -58,6 +58,7 @@ Route::put('/task/mark/{id}', 'TaskController@mark')->name('task.mark');
 Route::put('/process/update/{id}', 'ProcessController@update')->name('process.update');
 Route::post('/fields/getFieldsList/{id}', 'FieldController@getFieldsList')->name('field.getFieldsList');
 Route::get('/files/fields', 'FieldController@getFields')->name('field.getFields');
+Route::get('/files/fields/notExisitng/{id}', 'FieldController@getOnlyNotExistingFields')->name('field.getOnlyNotExistingFields');
 Route::post('/file/create', 'FileController@create')->name('file.create');
 Route::delete('/files/delete/{id}', 'FileController@delete')->name('file.delte');
 Route::post('/files/field/delete/{id}', 'FileController@deleteFieldFromFile')->name('file.deleteFieldFromFile');

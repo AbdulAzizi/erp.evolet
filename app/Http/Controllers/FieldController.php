@@ -7,6 +7,7 @@ use App\Product;
 use App\ProductValue;
 use Illuminate\Http\Request;
 use App\Events\ProductEditEvent;
+use App\File;
 use Illuminate\Support\Facades\DB;
 
 class FieldController extends Controller
@@ -51,5 +52,23 @@ class FieldController extends Controller
         $fields = Field::all();
 
         return $fields;
+    }
+
+    public function getOnlyNotExistingFields(Request $request)
+    {
+        $file = File::find($request->id)->fields;
+
+        $data = [];
+
+        foreach ($file as $value) {
+
+            $data[] = $value->id;
+        }
+
+        $fields = Field::whereNotIn('id', $data)->get();
+
+        return $fields;
+
+
     }
 }

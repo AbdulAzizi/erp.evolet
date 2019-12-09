@@ -60,12 +60,13 @@ export default {
     methods: {
     getFields() {
       axios
-        .get("/api/files/fields")
+        .get(`/api/files/fields/notExisitng/${this.file}`)
         .then(res => {
           this.dialog = true;
           this.fields = res.data;
-          this.oddFields = this.fields.filter(elem => elem.id % 2 == 0);
-          this.evenFields = this.fields.filter(elem => elem.id % 2 !== 0);
+          this.oddFields = this.fields.filter((elem, index) => index % 2 == 0);
+          this.evenFields = this.fields.filter((elem, index) => index % 2 !== 0);
+          this.selectedFieldIds = [];
         })
         .catch(err => err.messages);
     },
