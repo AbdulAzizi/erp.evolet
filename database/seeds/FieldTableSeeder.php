@@ -241,7 +241,7 @@ class FieldTableSeeder extends Seeder
         /*******************************************************/
         $formaOtkaza = Form::where('name', 'Форма коментарии при отказе')->first();
 
-        $kommentariyaOtkaza = Field::create(['label' => 'Коментарии', 'name' => 'kommentariyaOtkaza']);
+        $kommentariyaOtkaza = Field::create(['label' => 'Коментарии отказа', 'name' => 'kommentariyaOtkaza']);
 
         $formaOtkaza->fields()->attach([
             $kommentariyaOtkaza->id => ['required' => true],

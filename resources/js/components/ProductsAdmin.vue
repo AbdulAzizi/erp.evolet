@@ -32,6 +32,7 @@
                         dense
                         outlined
                         label="Файл"
+                        clearable
                     />
                     <v-combobox
                         v-model="pcObjects"

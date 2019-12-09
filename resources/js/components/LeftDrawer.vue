@@ -80,7 +80,7 @@ export default {
                     icon: "mdi-attachment",
                     text: "ЭП",
                     url: "/projects?sortBy=country",
-                    responsibilities: ["Куратор Портфеля ПК стран", "НО", "ПК"],
+                    responsibilities: ["Программист", "Куратор Портфеля ПК стран", "НО", "ПК"],
                     divisions: ["Evolet", "НАП"]
                 },
                 // {
@@ -112,21 +112,21 @@ export default {
                     icon: "mdi-account-box-multiple",
                     text: "Резерв кандидатов",
                     url: "/head-resumes",
-                    responsibilities: [],
+                    responsibilities: ["Программист"],
                     divisions: ["*"]
                 },
                 {
                     icon: "mdi-sort-variant",
                     text: "Фильтры",
                     url: "/admin/products",
-                    responsibilities: ["РВЗ"],
+                    responsibilities: ["Программист","РВЗ"],
                     divisions: ["НАП"]
                 },
                 {
                     icon: "mdi-file-document-box-multiple",
                     text: "Файлы",
                     url: "/admin/files",
-                    responsibilities: ["РВЗ"],
+                    responsibilities: ["Программист","РВЗ"],
                     divisions: ["НАП"]
                 }
             ]

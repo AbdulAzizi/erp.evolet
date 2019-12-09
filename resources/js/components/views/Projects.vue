@@ -8,7 +8,7 @@
 
         <v-flex xs12 sm6 class="pb-3">
             <span class="mr-3">Сортировать по</span>
-            <v-btn-toggle active-class="primary" rounded v-model="sortBy" mandatory>
+            <v-btn-toggle active-class="primary white--text" rounded v-model="sortBy" mandatory>
                 <v-btn text small>Странам</v-btn>
                 <v-btn text small>ПК</v-btn>
             </v-btn-toggle>
