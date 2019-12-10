@@ -10,8 +10,10 @@ use App\Observers\TaskObserver;
 use App\Observers\HistoryObserver;
 use App\History;
 use App\Observers\ProductObserver;
+use App\Observers\MessageObserver;
 use App\Product;
 use App\Task;
+use App\Message;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -37,5 +39,6 @@ class EventServiceProvider extends ServiceProvider
         Task::observe(TaskObserver::class);
         History::observe(HistoryObserver::class);
         Product::observe(ProductObserver::class);
+        Message::observe(MessageObserver::class);
     }
 }
