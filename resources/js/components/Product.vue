@@ -29,6 +29,7 @@
     </v-col>
 
     <v-col lg="6" md="6" sm="12">
+      <h4 class="mx-2 mb-2 font-weight-bold grey--text text--darken-2">Данные продукта</h4>
       <v-card flat class="pt-0">
         <v-simple-table fixed-header dense height="calc(100vh - 180px)">
           <thead>
@@ -54,84 +55,107 @@
     </v-col>
 
     <v-col lg="6" md="6" sm="12">
+      <h4 class="mx-2 mb-2 font-weight-bold grey--text text--darken-2">Комментарии</h4>
+
       <messages :messageable="product" type="App\Product" />
     </v-col>
-
     <v-col lg="6" md="6" sm="12" class="pt-0">
+      <h4 class="mx-2 mb-2 font-weight-bold grey--text text--darken-2">Участники продукта</h4>
       <v-card class="mx-auto mb-2" outlined>
-        <v-card-text>
-          <div class="text-center">Участники продукта</div>
-        </v-card-text>
-        <v-list disabled class="py-0">
-          <v-list-item-group color="primary">
-            <template v-for="(participant, i) in participants.project_participant">
-              <v-divider :key="'divider-'+i"></v-divider>
-              <v-list-item :key="'participant-'+i">
-                <v-list-item-avatar>
-                  <v-img :src="photo(participant.participant.img)"></v-img>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{participant.role.name}}</v-list-item-title>
-                  <v-list-item-subtitle>{{participant.participant.name}} {{participant.participant.surname}}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-          </v-list-item-group>
-        </v-list>
+        <div class="scrollable">
+          <v-list disabled class="py-0">
+            <v-list-item-group color="primary">
+              <template v-for="(participant, i) in participants.project_participant">
+                <v-divider :key="'divider-'+i"></v-divider>
+                <v-list-item :key="'participant-'+i">
+                  <v-list-item-avatar>
+                    <v-img :src="photo(participant.participant.img)"></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{participant.role.name}}</v-list-item-title>
+                    <v-list-item-subtitle>{{participant.participant.name}} {{participant.participant.surname}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list-item-group>
+          </v-list>
+        </div>
       </v-card>
-      <v-card outlined>
-        <v-card-text class="px-0">
-          <div class="text-center">История статуса</div>
-          <p v-if="!product.processes.length">Нет событий</p>
-          <v-simple-table dense class="mt-3">
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left">Статус</th>
-                  <th class="text-left">Дата</th>
-                  <th class="text-left">Потраченное время</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="status in localProduct.processes" :key="status.id">
-                  <td>{{status.name}}</td>
-                  <td>{{moment(status.pivot.created_at).local().format('DD-M-YY HH:mm')}}</td>
-                  <td v-if="status.pivot.spent_time !== null">
-                    <span
-                      v-if="durObj(status.pivot.spent_time).days()"
-                    >{{ durObj(status.pivot.spent_time).days() }} д</span>
-                    <span
-                      v-if="durObj(status.pivot.spent_time).hours()"
-                    >{{ durObj(status.pivot.spent_time).hours() }} ч</span>
-                    <span
-                      v-if="durObj(status.pivot.spent_time).minutes()"
-                    >{{ durObj(status.pivot.spent_time).minutes() }} мин</span>
-                    <span
-                      v-if="durObj(status.pivot.spent_time).seconds()"
-                    >{{ durObj(status.pivot.spent_time).seconds() }} сек</span>
-                  </td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-          <div class="mt-4 mx-3">
-            <span v-if="localProduct.processes.length > 1">Общее количество времени:</span>
-            <span v-if="durObj(overallSpentTime).days()">{{ durObj(overallSpentTime).days() }} д</span>
-            <span v-if="durObj(overallSpentTime).hours()">{{ durObj(overallSpentTime).hours() }} ч</span>
-            <span
-              v-if="durObj(overallSpentTime).minutes()"
-            >{{ durObj(overallSpentTime).minutes() }} мин</span>
-            <span
-              v-if="durObj(overallSpentTime).seconds()"
-            >{{ durObj(overallSpentTime).seconds() }} сек</span>
+      <h4 class="mx-2 mb-2 font-weight-bold grey--text text--darken-2">История статуса</h4>
+      <v-card outlined class="mb-2">
+        <div class="scrollable">
+          <v-card-text class="px-0">
+            <p v-if="!product.processes.length">Нет событий</p>
+            <v-simple-table dense class="mt-3">
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">Статус</th>
+                    <th class="text-left">Дата</th>
+                    <th class="text-left">Потраченное время</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="status in localProduct.processes" :key="status.id">
+                    <td>{{status.name}}</td>
+                    <td>{{moment(status.pivot.created_at).local().format('DD-M-YY HH:mm')}}</td>
+                    <td v-if="status.pivot.spent_time !== null">
+                      <span
+                        v-if="durObj(status.pivot.spent_time).days()"
+                      >{{ durObj(status.pivot.spent_time).days() }} д</span>
+                      <span
+                        v-if="durObj(status.pivot.spent_time).hours()"
+                      >{{ durObj(status.pivot.spent_time).hours() }} ч</span>
+                      <span
+                        v-if="durObj(status.pivot.spent_time).minutes()"
+                      >{{ durObj(status.pivot.spent_time).minutes() }} мин</span>
+                      <span
+                        v-if="durObj(status.pivot.spent_time).seconds()"
+                      >{{ durObj(status.pivot.spent_time).seconds() }} сек</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+            <div class="mt-4 mx-3">
+              <span v-if="localProduct.processes.length > 1">Общее количество времени:</span>
+              <span v-if="durObj(overallSpentTime).days()">{{ durObj(overallSpentTime).days() }} д</span>
+              <span v-if="durObj(overallSpentTime).hours()">{{ durObj(overallSpentTime).hours() }} ч</span>
+              <span
+                v-if="durObj(overallSpentTime).minutes()"
+              >{{ durObj(overallSpentTime).minutes() }} мин</span>
+              <span
+                v-if="durObj(overallSpentTime).seconds()"
+              >{{ durObj(overallSpentTime).seconds() }} сек</span>
+            </div>
+          </v-card-text>
+        </div>
+      </v-card>
+      <div v-if="polls.length">
+        <h4
+          class="mx-2 mb-2 font-weight-bold grey--text text--darken-2"
+        >Опросы продукта</h4>
+        <v-card outlined color="grey lighten-2">
+          <div class="scrollable">
+            <poll-form
+              v-for="(poll, index) in polls"
+              :key="index"
+              :questionTask="poll"
+              :disabled="true"
+              class="mb-2"
+            ></poll-form>
           </div>
-        </v-card-text>
-      </v-card>
+        </v-card>
+      </div>
     </v-col>
     <v-col lg="6" md="6" sm="12" class="pt-0">
-      <div class="text-center">Журнал действий продукта</div>
-      <p v-if="!product.history.length">Нет событий</p>
-      <history :history="product.history" v-if="product.history.length" />
+      <h4 class="mx-2 mb-2 font-weight-bold grey--text text--darken-2">Журнал действий продукта</h4>
+      <v-card outlined color="grey lighten-2" class="pa-2">
+        <div class="scrollable">
+          <p v-if="!product.history.length">Нет событий</p>
+          <history :history="product.history" v-if="product.history.length" />
+        </div>
+      </v-card>
     </v-col>
 
     <v-col lg="6" md="6" sm="12"></v-col>
@@ -149,7 +173,8 @@ export default {
       dialog: false,
       selectedFields: null,
       fieldVal: null,
-      editAllowed: false
+      editAllowed: false,
+      polls: []
     };
   },
   computed: {
@@ -181,7 +206,10 @@ export default {
 
   methods: {
     displayEditForm(selectedField) {
-      if(selectedField.type.name == 'list' || selectedField.type.name == 'many-to-many-list'){
+      if (
+        selectedField.type.name == "list" ||
+        selectedField.type.name == "many-to-many-list"
+      ) {
         axios
           .post(`/api/fields/getFieldsList/${this.product.id}`, {
             listId: selectedField.id
@@ -190,7 +218,9 @@ export default {
             (this.selectedFields = {
               ...res.data,
               rules:
-                res.data.pivot && res.data.pivot.required ? ["required"] : [true],
+                res.data.pivot && res.data.pivot.required
+                  ? ["required"]
+                  : [true],
               type: this.defineFieldType(res.data),
               value:
                 res.data.type.name == "list" ||
@@ -200,25 +230,26 @@ export default {
                   : res.data.pivot.value,
               label: res.data.label
             }),
-              this.dialog = true;
+              (this.dialog = true);
           })
           .catch(err => err.messages);
-      }
-      else {
+      } else {
         this.selectedFields = {
-              ...selectedField,
-              rules:
-                selectedField.pivot && selectedField.pivot.required ? ["required"] : [true],
-              type: this.defineFieldType(selectedField),
-              value:
-                selectedField.type.name == "list" ||
-                selectedField.type.name == "many-to-many-list" ||
-                selectedField.type.name == "year"
-                  ? +selectedField.pivot.value
-                  : selectedField.pivot.value,
-              label: selectedField.label
-            }
-            this.dialog = true;
+          ...selectedField,
+          rules:
+            selectedField.pivot && selectedField.pivot.required
+              ? ["required"]
+              : [true],
+          type: this.defineFieldType(selectedField),
+          value:
+            selectedField.type.name == "list" ||
+            selectedField.type.name == "many-to-many-list" ||
+            selectedField.type.name == "year"
+              ? +selectedField.pivot.value
+              : selectedField.pivot.value,
+          label: selectedField.label
+        };
+        this.dialog = true;
       }
     },
     submitEditedField() {
@@ -256,6 +287,13 @@ export default {
           this.editAllowed = false;
         }
       });
+    },
+    getPoll() {
+      this.localProduct.tasks.forEach(elem => {
+        if (elem.question_tasks.length > 0) {
+          this.polls.push(...elem.question_tasks);
+        }
+      });
     }
   },
   created() {
@@ -266,6 +304,14 @@ export default {
     // Calculate total spent time
     this.overallSpentTime = this.totalSpentTime;
     this.defineAuthUserResponsibility();
+    this.getPoll();
   }
 };
 </script>
+
+<style>
+.scrollable {
+  max-height: 550px;
+  overflow: auto;
+}
+</style>

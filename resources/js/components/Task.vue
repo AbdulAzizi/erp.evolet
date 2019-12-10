@@ -52,7 +52,7 @@
                             </div>
                             <div v-if="task.question_tasks.length" class="pb-3">
                                 <div class="font-weight-medium pb-1">Опрос</div>
-                                <poll-form :questionTask="task.question_tasks[0]" />
+                                <poll-form :questionTask="task.question_tasks[0]" :disabled="false"/>
                             </div>
                             <template v-if="task.from.front_tethers">
                                 <div
