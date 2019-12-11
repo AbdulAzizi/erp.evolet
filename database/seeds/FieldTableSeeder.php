@@ -20,8 +20,8 @@ class FieldTableSeeder extends Seeder
         $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
         $yearFieldTypeID = FieldType::where('name', 'year')->first()->id;
 
-        $mnn = Field::create(['label' => 'МНН', 'name' => 'mnn', 'type_id' => $manyToManyListFieldTypeID]);
-        $form = Field::create(['label' => 'Ф', 'name' => 'form', 'type_id' => $manyToManyListFieldTypeID]);
+        $mnn = Field::create(['label'=>'Международные непатентованные  наименования','abbreviation' => 'МНН', 'type_id' => $manyToManyListFieldTypeID]);
+        $form = Field::create(['label'=>'Лекарственная форма','abbreviation' => 'Ф', 'type_id' => $manyToManyListFieldTypeID]);
         
         $mnnListId = DB::table('list_fields')->insertGetId(['field_id' => $mnn->id, 'list_type' => 'mnns_list']);
         $formListId = DB::table('list_fields')->insertGetId(['field_id' => $form->id, 'list_type' => 'drug_forms_list']);
@@ -31,29 +31,29 @@ class FieldTableSeeder extends Seeder
             'foreign_list_field_id' => $formListId
         ]);
 
-        $product_status = Field::create(['label' => 'Статус продукта', 'name' => 'product_status']);
-        $doza = Field::create(['label' => 'Д', 'name' => 'doza']);
-        $opu = Field::create(['label' => 'ОПУ', 'name' => 'opu']);
-        $thchp = Field::create(['label' => 'ТХЧП', 'name' => 'thchp']);
-        $class_pd = Field::create(['label' => 'Класс Пд', 'name' => 'class_pd']);
-        $atx = Field::create(['label' => 'АТХ', 'name' => 'atx', 'type_id' => $listFieldTypeID]);
-        $prognoz_s = Field::create(['label' => 'Прогноз Ц', 'name' => 'prognoz_s']);
-        $ideya = Field::create(['label' => 'ТМ/Идея', 'name' => 'tm/ideya']);
-        $ich_pd_op = Field::create(['label' => 'Ич Пд/Ор', 'name' => 'ich_pd_op']);
-        $pnk_1 = Field::create(['label' => 'ПНК 1', 'name' => 'pnk_1', 'type_id' => $listFieldTypeID]);
-        $nozologiya = Field::create(['label' => 'Нозология', 'name' => 'nozologiya']);
-        $pnk_2_3 = Field::create(['label' => 'ПНК 2/3', 'name' => 'pnk_2_3', 'type_id' => $listFieldTypeID]);
-        $pnk_4_5 = Field::create(['label' => 'ПНК 4/5', 'name' => 'pnk_4_5', 'type_id' => $listFieldTypeID]);
-        $gp_stk_pk = Field::create(['label' => 'Гп/Стк ПК', 'name' => 'gp_stk_pk', 'type_id' => $listFieldTypeID]);
-        $gp_byu = Field::create(['label' => 'Гп/Бю', 'name' => 'gp_byu', 'type_id' => $listFieldTypeID]);
-        $p_mt = Field::create(['label' => 'П/Мт ', 'name' => 'p_mt', 'type_id' => $listFieldTypeID]);
-        $prognoz_pzh = Field::create(['label' => 'Прогноз Пж', 'name' => 'prognoz_pzh']);
-        $top_analogi = Field::create(['label' => 'Топ Аналоги', 'name' => 'top_analogi']);
-        $pv_n = Field::create(['label' => 'ПВ/Н', 'name' => 'pv_n']);
-        $vozrast_pol = Field::create(['label' => 'Возраст/Пол', 'name' => 'vozrast_pol', 'type_id' => $listFieldTypeID]);
-        $komm = Field::create(['label' => 'Комм', 'name' => 'komm']);
-        $drug_classification = Field::create(['label' => 'Направление', 'name' => 'classification', 'type_id' => $listFieldTypeID]);
-        $nov_kriteriya = Field::create(['label' => 'Нов критерия ', 'name' => 'nov_kriteriya']);
+        $product_status = Field::create(['label'=>'Статус продукта','abbreviation' => 'Статус Пд']);
+        $doza = Field::create(['label'=>'Доза','abbreviation' => 'Д']);
+        $opu = Field::create(['label'=>'Обьем продукта в упаковке','abbreviation' => 'ОПУ']);
+        $thchp = Field::create(['label'=>'Технические химические часть продукта','abbreviation' => 'ТХЧП']);
+        $class_pd = Field::create(['label'=>'Класс Продукта','abbreviation' => 'Класс Пд']);
+        $atx = Field::create(['label'=>'Анатомо-Терапевтически-Химическая классификация','abbreviation' => 'АТХ', 'type_id' => $listFieldTypeID]);
+        $prognoz_s = Field::create(['label'=>'Прогноз Цены','abbreviation' => 'Прогноз Ц']);
+        $ideya = Field::create(['label'=>'Торговая марка/Идея','abbreviation' => 'ТМ/Идея']);
+        $ich_pd_op = Field::create(['label'=>'Источник Продукта/Ориентир','abbreviation' => 'Ич Пд/Ор']);
+        $pnk_1 = Field::create(['label'=>'Покупатель нашего класса 1','abbreviation' => 'ПНК 1', 'type_id' => $listFieldTypeID]);
+        $nozologiya = Field::create(['label'=>'Нозология','abbreviation' => 'Нозология']);
+        $pnk_2_3 = Field::create(['label'=>'Покупатель нашего класса 2/3','abbreviation' => 'ПНК 2/3', 'type_id' => $listFieldTypeID]);
+        $pnk_4_5 = Field::create(['label'=>'Покупатель нашего класса 4/5','abbreviation' => 'ПНК 4/5', 'type_id' => $listFieldTypeID]);
+        $gp_stk_pk = Field::create(['label'=>'Группа/Структура Промо компания','abbreviation' => 'Гп/Стк ПК', 'type_id' => $listFieldTypeID]);
+        $gp_byu = Field::create(['label'=>'Группа/Бюджет','abbreviation' => 'Гп/Бю', 'type_id' => $listFieldTypeID]);
+        $p_mt = Field::create(['label'=>'Промоция(продвижение)/Материал','abbreviation' => 'П/Мт ', 'type_id' => $listFieldTypeID]);
+        $prognoz_pzh = Field::create(['label'=>'Прогноз Продажа','abbreviation' => 'Прогноз Пж']);
+        $top_analogi = Field::create(['label'=>'Топ Аналоги','abbreviation' => 'Топ Аналоги']);
+        $pv_n = Field::create(['label'=>'Препарат выбора по нозология','abbreviation' => 'ПВ/Н']);
+        $vozrast_pol = Field::create(['label'=>'Возраст/Пол','abbreviation' => 'Возраст/Пол', 'type_id' => $listFieldTypeID]);
+        $komm = Field::create(['label'=>'Комментарии','abbreviation' => 'Комм']);
+        $drug_classification = Field::create(['label'=>'Направление','abbreviation' => 'Напр', 'type_id' => $listFieldTypeID]);
+        $nov_kriteriya = Field::create(['label'=>'Новая критерия','abbreviation' => 'Нов критерия ']);
 
         DB::table('list_fields')->insertGetId(['field_id' => $atx->id, 'list_type' => 'atx_list']);
         DB::table('list_fields')->insertGetId(['field_id' => $pnk_1->id, 'list_type' => 'pnk1_list']);
@@ -152,42 +152,42 @@ class FieldTableSeeder extends Seeder
 
         $forma_no_etap_1 = Form::where('name', 'Форма КП_ПК Этап 2')->first();
 
-        $currentYearSumUp = Field::create(['label' => 'Текущий год для сум и уп', 'name' => 'currentYearSumUp', 'type_id' => $yearFieldTypeID]);
-        $sum2018 = Field::create(['label' => 'Текущий сум', 'name' => 'sum2018']);
-        $up2018 = Field::create(['label' => 'Текущий Уп', 'name' => 'up2018']);
-        $previousYearSumUp = Field::create(['label' => 'Предыдущий год для сум и уп', 'name' => 'previousYearSumUp', 'type_id' => $yearFieldTypeID]);
-        $sum2017 = Field::create(['label' => 'Предыдущий сум', 'name' => 'sum2017']);
-        $uo2017 = Field::create(['label' => 'Предыдуший Уп', 'name' => 'uo2017']);
-        $prip = Field::create(['label' => 'Прир', 'name' => 'prip']);
-        $kppr = Field::create(['label' => 'КППР', 'name' => 'kppr']);
-        $kprr = Field::create(['label' => 'КПРР', 'name' => 'kprr']);
-        $bgG = Field::create(['label' => 'БГ/Г', 'name' => 'bgG']);
-        $dolya_bg = Field::create(['label' => 'Доля БГ', 'name' => 'dolya_bg']);
-        $dolya_mst = Field::create(['label' => 'Доля Мст', 'name' => 'dolya_mst']);
-        $dolya_in = Field::create(['label' => 'Доля Ин', 'name' => 'dolya_in']);
-        $prir_mst = Field::create(['label' => 'Прир Мст', 'name' => 'prir_mst']);
-        $nkpf = Field::create(['label' => 'НКПФ', 'name' => 'nkpf']);
-        $s_knk1dl = Field::create(['label' => 'Ц_Кнк 1 ($)', 'name' => 's_knk1dl']);
-        $s_knk1ns = Field::create(['label' => 'Ц_Кнк 1 (Нц)', 'name' => 's_knk1ns']);
-        $be_knk_1 = Field::create(['label' => 'Бр_Кнк 1 ', 'name' => 'be_knk_1']);
-        $pzh_up_knk_1 = Field::create(['label' => 'Пж Уп Кнк 1 ', 'name' => 'pzh_up_knk_1']);
-        $ko_str_knk_1 = Field::create(['label' => 'Ко_Стр_Кнк 1', 'name' => 'ko_str_knk_1']);
-        $s_knk_2_dl = Field::create(['label' => 'Ц_Кнк 2 ($)', 'name' => 's_knk_2_dl']);
-        $s_knk_2_ns = Field::create(['label' => 'Ц_Кнк 2 (Нц)', 'name' => 's_knk_2_ns']);
-        $br_knk_2 = Field::create(['label' => 'Бр_Кнк 2 ', 'name' => 'br_knk_2']);
-        $pzh_up_knk2 = Field::create(['label' => 'Пж Уп Кнк 2 ', 'name' => 'pzh_up_knk2']);
-        $ko_str_knk2 = Field::create(['label' => 'Ко_Стр_Кнк 2', 'name' => 'ko_str_knk2']);
-        $s_knk_3_dl = Field::create(['label' => 'Ц_Кнк 3 ($)', 'name' => 's_knk_3_dl']);
-        $s_knk_3_ns = Field::create(['label' => 'Ц_Кнк 3 (Нц)', 'name' => 's_knk_3_ns']);
-        $br_knk_3 = Field::create(['label' => 'Бр_Кнк 3 ', 'name' => 'br_knk_3']);
-        $pzh_up_knk_3 = Field::create(['label' => 'Пж Уп Кнк 3 ', 'name' => 'pzh_up_knk_3']);
-        $ko_str_knk_3 = Field::create(['label' => 'Ко_Стр_Кнк 3', 'name' => 'ko_str_knk_3']);
-        $s_knk_4_dl = Field::create(['label' => 'Ц_Кнк 4 ($)', 'name' => 's_knk_4_dl']);
-        $s_knk_4_ns = Field::create(['label' => 'Ц_Кнк 4 (Нц)', 'name' => 's_knk_4_ns']);
-        $br_knk_4 = Field::create(['label' => 'Бр_Кнк 4 ', 'name' => 'br_knk_4']);
-        $pzh_up_knk_4 = Field::create(['label' => 'Пж Уп Кнк 4 ', 'name' => 'pzh_up_knk_4']);
-        $ko_str_knk_4 = Field::create(['label' => 'Ко_Стр_Кнк 4', 'name' => 'ko_str_knk_4']);
-        $osn_kok = Field::create(['label' => 'Осн Кок', 'name' => 'osn_kok']);
+        $currentYearSumUp = Field::create(['label'=>'Текущий год','abbreviation' => 'Текущий год', 'type_id' => $yearFieldTypeID]);
+        $sum2018 = Field::create(['label'=>'Сумма продаж за текущий год','abbreviation' => 'Текущая сум']);
+        $up2018 = Field::create(['label'=>'Сумма проданных упоковок за текущий год','abbreviation' => 'Текущий Уп']);
+        $previousYearSumUp = Field::create(['label'=>'Предыдущий год','abbreviation' => 'Предыдущий год', 'type_id' => $yearFieldTypeID]);
+        $sum2017 = Field::create(['label'=>'Сумма продаж за предыдущий года','abbreviation' => 'Предыдущий сум']);
+        $uo2017 = Field::create(['label'=>'Сумма проданных упоковок за предыдущий год','abbreviation' => 'Предыдуший Уп']);
+        $prip = Field::create(['label'=>'Прирост','abbreviation' => 'Прир']);
+        $kppr = Field::create(['label'=>'Количество продуктов, которые продаются на рынке','abbreviation' => 'КППР']);
+        $kprr = Field::create(['label'=>'Количество зарегистрированных продуктов на рынке','abbreviation' => 'КПРР']);
+        $bgG = Field::create(['label'=>'Бренд генерик/Генерик','abbreviation' => 'БГ/Г']);
+        $dolya_bg = Field::create(['label'=>'Доля Бренда генерика','abbreviation' => 'Доля БГ']);
+        $dolya_mst = Field::create(['label'=>'Доля местных производителей','abbreviation' => 'Доля Мст']);
+        $dolya_in = Field::create(['label'=>'Доля индийских производителей','abbreviation' => 'Доля Ин']);
+        $prir_mst = Field::create(['label'=>'Прирост местных производителей','abbreviation' => 'Прир Мст']);
+        $nkpf = Field::create(['label'=>'Наш класс продукт по факту на рыноке','abbreviation' => 'НКПФ']);
+        $s_knk1dl = Field::create(['label'=>'Цена продукта Конкурента №1 в USD','abbreviation' => 'Ц_Кнк 1 ($)']);
+        $s_knk1ns = Field::create(['label'=>'Цена продукта Конкурента №1 в национальной валюте','abbreviation' => 'Ц_Кнк 1 (Нц)']);
+        $be_knk_1 = Field::create(['label'=>'Бренда конкурента №1','abbreviation' => 'Бр_Кнк 1 ']);
+        $pzh_up_knk_1 = Field::create(['label'=>'Продажа продукта Конкурента №1 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 1 ']);
+        $ko_str_knk_1 = Field::create(['label'=>'Компания - страна Производитель Конкурент №1','abbreviation' => 'Ко_Стр_Кнк 1']);
+        $s_knk_2_dl = Field::create(['label'=>'Цена продукта Конкурента №2 в USD','abbreviation' => 'Ц_Кнк 2 ($)']);
+        $s_knk_2_ns = Field::create(['label'=>'Цена продукта Конкурента №2 в национальной валюте','abbreviation' => 'Ц_Кнк 2 (Нц)']);
+        $br_knk_2 = Field::create(['label'=>'Бренда конкурента №2','abbreviation' => 'Бр_Кнк 2 ']);
+        $pzh_up_knk2 = Field::create(['label'=>'Продажа продукта Конкурента №2 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 2 ']);
+        $ko_str_knk2 = Field::create(['label'=>'Компания - страна Производитель Конкурент №2','abbreviation' => 'Ко_Стр_Кнк 2']);
+        $s_knk_3_dl = Field::create(['label'=>'Цена продукта Конкурента №3 в USD','abbreviation' => 'Ц_Кнк 3 ($)']);
+        $s_knk_3_ns = Field::create(['label'=>'Цена продукта Конкурента №3 в национальной валюте','abbreviation' => 'Ц_Кнк 3 (Нц)']);
+        $br_knk_3 = Field::create(['label'=>'Бренда конкурента №3','abbreviation' => 'Бр_Кнк 3 ']);
+        $pzh_up_knk_3 = Field::create(['label'=>'Продажа продукта Конкурента №3 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 3 ']);
+        $ko_str_knk_3 = Field::create(['label'=>'Компания - страна Производитель Конкурент №3','abbreviation' => 'Ко_Стр_Кнк 3']);
+        $s_knk_4_dl = Field::create(['label'=>'Цена продукта Конкурента №4 в USD','abbreviation' => 'Ц_Кнк 4 ($)']);
+        $s_knk_4_ns = Field::create(['label'=>'Цена продукта Конкурента №4 в национальной валюте','abbreviation' => 'Ц_Кнк 4 (Нц)']);
+        $br_knk_4 = Field::create(['label'=>'Бренда конкурента №4','abbreviation' => 'Бр_Кнк 4 ']);
+        $pzh_up_knk_4 = Field::create(['label'=>'Продажа продукта Конкурента №4 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 4 ']);
+        $ko_str_knk_4 = Field::create(['label'=>'Компания - страна Производитель Конкурент №4','abbreviation' => 'Ко_Стр_Кнк 4']);
+        $osn_kok = Field::create(['label'=>'Основной конкурент','abbreviation' => 'Осн Кок']);
 
         $forma_no_etap_1->fields()->attach([
             $currentYearSumUp->id => ['required' => true],
@@ -231,7 +231,7 @@ class FieldTableSeeder extends Seeder
         /*******************************************************/
 
         $viborIstochnikov = Form::where('name', 'Выбор источников')->first();
-        $strani_poiska = Field::create(['label' => 'Страны источников', 'name' => 'strani', 'type_id' => $listFieldTypeID]);
+        $strani_poiska = Field::create(['label'=>'Страны источников','abbreviation' => 'Стр ист', 'type_id' => $listFieldTypeID]);
         DB::table('list_fields')->insertGetId(['field_id' => $strani_poiska->id, 'list_type' => 'strani_poiska']);
         
         $viborIstochnikov->fields()->attach([
@@ -241,12 +241,68 @@ class FieldTableSeeder extends Seeder
         /*******************************************************/
         $formaOtkaza = Form::where('name', 'Форма коментарии при отказе')->first();
 
-        $kommentariyaOtkaza = Field::create(['label' => 'Коментарии отказа', 'name' => 'kommentariyaOtkaza']);
+        $kommentariyaOtkaza = Field::create(['label'=>'Коментарии отказа','abbreviation' => 'Кмт Откз']);
 
         $formaOtkaza->fields()->attach([
             $kommentariyaOtkaza->id => ['required' => true],
         ]);
         /********************************************************/
+        $formaNovogoZavoda = Form::where('name', 'Форма нового завода')->first();
+
+        $pr = Field::create(['label'=>'Производитель','abbreviation' => 'Пр*']);
+        $strPr = Field::create(['label'=>'Страна Производителя','abbreviation' => 'Стр Пр*']);
+        $znStab = Field::create(['label'=>'Зона Стабильности','abbreviation' => 'Зона Стб']);
+        $tmPr = Field::create(['label'=>'Торговая Марка Производителя','abbreviation' => 'ТМ Пр*']);
+        $strDlyaVb = Field::create(['label'=>'Страна для Выбора','abbreviation' => 'Стр для Вб']);
+        $dosye = Field::create(['label'=>'Досье','abbreviation' => 'Досье']);
+        $sg = Field::create(['label'=>'Срок годности','abbreviation' => 'СГ']);
+        $MOK = Field::create(['label'=>'МОК','abbreviation' => 'МОК']);
+        $prognoz1 = Field::create(['label'=>'Прогноз (1 год)','abbreviation' => 'Прогноз (1 год)']);
+        $prognoz2 = Field::create(['label'=>'Прогноз (2 год)','abbreviation' => 'Прогноз (2 год)']);
+        $prognoz3 = Field::create(['label'=>'Прогноз (3 год)','abbreviation' => 'Прогноз (3 год)']);
+        $vyu = Field::create(['label'=>'Валюта','abbreviation' => 'Вю']);
+        $sPr = Field::create(['label'=>'Цена Производителя','abbreviation' => 'Ц Пр*']);
+        $dpPr = Field::create(['label'=>'Даун пеймент Производителя','abbreviation' => 'ДП Пр*']);
+        $klinika = Field::create(['label'=>'Клиника','abbreviation' => 'Клиника']);
+        $sorr = Field::create(['label'=>'Certificate of Pharmaceutical Product','abbreviation' => 'COPP']);
+        $ruVStrPr = Field::create(['label'=>'Регистрационное удостоврение в Странах Производителя','abbreviation' => 'РУ в Стр Пр*']);
+        $sst = Field::create(['label'=>'ССТ','abbreviation' => 'ССТ']);
+        $torgS = Field::create(['label'=>'Торг Цены','abbreviation' => 'Торг Ц']);
+        $soglS = Field::create(['label'=>'Согласованная Цена','abbreviation' => 'Согл Ц']);
+        $dpKo = Field::create(['label'=>'Департамент Компании','abbreviation' => 'ДП Ко']);
+        $kk = Field::create(['label'=>'Контракт','abbreviation' => 'Кк']);
+
+        $formaNovogoZavoda->fields()->attach([
+            $pr->id => ['required' => true],
+            $strPr->id => ['required' => true],
+            $znStab->id => ['required' => true],
+            $form->id => ['required' => true],
+            $class_pd->id => ['required' => true],
+            $mnn->id => ['required' => true],
+            $form->id => ['required' => true],
+            $doza->id => ['required' => true],
+            $opu->id => ['required' => true],
+            $thchp->id => ['required' => true],
+            $tmPr->id => ['required' => true],
+            $strDlyaVb->id => ['required' => true],
+            $dosye->id => ['required' => true],
+            $sg->id => ['required' => true],
+            $MOK->id => ['required' => true],
+            $prognoz1->id => ['required' => true],
+            $prognoz2->id => ['required' => true],
+            $prognoz3->id => ['required' => true],
+            $vyu->id => ['required' => true],
+            $sPr->id => ['required' => true],
+            $dpPr->id => ['required' => true],
+            $klinika->id => ['required' => true],
+            $sorr->id => ['required' => true],
+            $ruVStrPr->id => ['required' => true],
+            $sst->id => ['required' => true],
+            $torgS->id => ['required' => true],
+            $soglS->id => ['required' => true],
+            $dpKo->id => ['required' => true],
+            $kk->id => ['required' => true],
+        ]);
 
     }
 }
