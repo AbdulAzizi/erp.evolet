@@ -19,7 +19,6 @@ class CreateProcessTasksTable extends Migration
             $table->string('title');
             $table->string('description')->nullable();
             $table->string('planned_time');
-            $table->timestamp('deadline');
             $table->unsignedInteger('responsibility_id');
         });
     }

@@ -6,7 +6,7 @@
           <v-toolbar-title>Добавить процесс</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-form ref="createProcessForm" >
+          <v-form ref="createProcessForm">
             <form-field
               :field="{
                 label: 'Название процесса',
@@ -60,17 +60,41 @@
             </v-btn>
           </v-toolbar>
           <v-card-text v-if="!processData.len">
-            <h4 class="grey--text">В этом процессе нету полей</h4>
+            <h4 class="grey--text">В этом процессе нету задач</h4>
           </v-card-text>
           <v-card-text v-if="processData.len">
             <template v-for="(elem, index) in processData.tasks">
-              <h4 :key="'title' + index" class="grey--text">Задача № {{index + 1}}. {{elem.title}}</h4>
-              <v-list :key="'list' + index" dense>
-                <v-list-group value="true" v-for="(form, index) in elem.forms" :key="index">
+              <div :key="'info' + index">
+                <edit-delete-task :task="elem" />
+                <h5 class="font-weight-medium grey--text text--darken-1">Задача</h5>
+                <h4 class="font-weight-medium grey--text text--darken-3">{{elem.title}}</h4>
+                <h5 class="font-weight-medium grey--text text--darken-1">Исполнитель</h5>
+                <h4
+                  class="font-weight-medium grey--text text--darken-3"
+                >{{elem.responsibility.name}}</h4>
+                <h5 class="font-weight-medium grey--text text--darken-1">Запланированное время</h5>
+                <h4 class="font-weight-medium grey--text text--darken-3">
+                  <span
+                    v-if="durObj(elem.planned_time).days()"
+                  >{{durObj(elem.planned_time).days()}}д</span>
+                  <span
+                    v-if="durObj(elem.planned_time).hours()"
+                  >{{durObj(elem.planned_time).hours()}}ч</span>
+                  <span
+                    v-if="durObj(elem.planned_time).minutes()"
+                  >{{durObj(elem.planned_time).minutes()}}м</span>
+                </h4>
+                <h5 class="font-weight-medium grey--text text--darken-1">Описание</h5>
+                <h4
+                  class="font-weight-medium grey--text text--darken-3"
+                >{{!elem.description ? 'Описания нет' : elem.description}}</h4>
+              </div>
+              <v-list :key="'list' + index" dense class="pa-0 mb-2">
+                <v-list-group v-for="(form, index) in elem.forms" :key="index">
                   <template v-slot:activator>
-                    <v-list-item-title
-                      class="text-uppercase"
-                    >Поля которые заполняет {{elem.responsibility.name}}</v-list-item-title>
+                    <h4
+                      class="font-weight-medium grey--text text--darken-1"
+                    >Поля которые заполняет {{elem.responsibility.name}}</h4>
                   </template>
                   <v-simple-table dense>
                     <tbody>
@@ -81,9 +105,14 @@
                   </v-simple-table>
                 </v-list-group>
               </v-list>
+              <v-divider v-if="index !== processData.len - 1" :key="'divider' + index" class="mb-2"></v-divider>
             </template>
           </v-card-text>
         </v-form>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <add-process-task :processId="processData.id"></add-process-task>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-dialog v-model="deleteTether" width="400">
@@ -161,6 +190,7 @@ export default {
       processDialog: false,
       updateProcessField: false,
       deleteTether: false,
+      singleTask: null,
       processData: {
         name: null,
         id: null,
@@ -235,7 +265,7 @@ export default {
             this.tetherNameDialog = false;
             form.reset();
             this.synch(res.data);
-            Event.fire('notify', [`Связь ${this.tetherName} создана`]);
+            Event.fire("notify", [`Связь ${this.tetherName} создана`]);
           })
           .catch(err => err.messages);
       }
@@ -250,7 +280,7 @@ export default {
           .then(res => {
             this.synch(res.data);
             this.addProcessDialog = false;
-            Event.fire('notify', [`Процесс ${this.processName} создана`]);
+            Event.fire("notify", [`Процесс ${this.processName} создана`]);
           })
           .catch(err => err.messages);
       }
@@ -264,7 +294,9 @@ export default {
           this.updateProcessField = false;
           this.processData.name = this.processUpdateFieldName;
           this.synch(res.data);
-          Event.fire('notify', [`Процесс ${this.processUpdateFieldName} обновлен`]);
+          Event.fire("notify", [
+            `Процесс ${this.processUpdateFieldName} обновлен`
+          ]);
         })
         .catch(err => err.messages);
     },
@@ -295,11 +327,10 @@ export default {
       this.deleteTether = true;
     },
 
-    cancelProcessUpdate(){
+    cancelProcessUpdate() {
       this.updateProcessField = false;
     },
-
-    cancelTetherCreation(){
+    cancelTetherCreation() {
       this.tetherNameDialog = false;
       this.drawNodes();
     },
@@ -424,6 +455,35 @@ export default {
         this.prepareDataBeforeTetherDelete(elem);
       });
     }
+  },
+  created() {
+    Event.listen("processTaskCreated", data => {
+      this.localProcesses.forEach(process => {
+        if (process.id == data.process_id) {
+          process.process_tasks.push(data);
+        }
+      });
+      this.processData.len += 1;
+      Event.fire("notify", [
+        `Задача ${data.title} создана для процесса ${this.processData.name}`
+      ]);
+    });
+    Event.listen('processTaskDeleted', data => {
+      this.processData.tasks.forEach((task, index) => {
+        if(task.id == data){
+          this.processData.tasks.splice(index, 1);
+        }
+      });
+      this.processData.len -= 1;
+    });
+    Event.listen('processTaskUpdated', data => {
+      this.processData.tasks.forEach((task, index) => {
+        if(task.id == data.id){
+          this.processData.tasks.splice(index, 1);
+          this.processData.tasks.push(data);
+        }
+      })
+    })
   }
 };
 </script>
@@ -432,5 +492,8 @@ export default {
   width: 100%;
   height: 80vh;
   display: block;
+}
+.v-list-group__header {
+  padding: 0 !important;
 }
 </style>

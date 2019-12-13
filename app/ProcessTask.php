@@ -8,6 +8,8 @@ class ProcessTask extends Model
 {
     public $timestamps = false;
 
+    public $guarded = [];
+
     public function forms()
     {
         return $this->belongsToMany('App\Form', 'process_task_form', 'process_task_id');

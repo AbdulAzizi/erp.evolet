@@ -64,3 +64,7 @@ Route::delete('/files/delete/{id}', 'FileController@delete')->name('file.delte')
 Route::post('/files/field/delete/{id}', 'FileController@deleteFieldFromFile')->name('file.deleteFieldFromFile');
 Route::post('/files/fields/create', 'FileController@attachFields')->name('file.attachFields');
 Route::post('/files/update/{id}', 'FileController@update')->name('file.update');
+Route::post('/process/tasks/create', 'ProcessTaskController@create')->name('processTask.create');
+Route::get('/responsibilities', 'ResponsibilityController@getResponsibilities')->name('responsibilities.get');
+Route::delete('/process/task/delete/{id}', 'ProcessTaskController@delete')->name('processTask.delete');
+Route::put('/process/task/edit/{id}', 'ProcessTaskController@edit')->name('processTask.edit');

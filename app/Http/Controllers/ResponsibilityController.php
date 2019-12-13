@@ -44,4 +44,11 @@ class ResponsibilityController extends Controller
 
         return  redirect()->back();
     }
+
+    public function getResponsibilities()
+    {
+        $responsibilites = Responsibility::all();
+
+        return $responsibilites;
+    }
 }

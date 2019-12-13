@@ -19,7 +19,7 @@ const vuetifyOptions = {
     theme: {
         themes: {
             light: {
-                // primary: "#b8cf41",
+                primary: "#6897f5",
                 // secondary: "#21353f"
                 // accent: "#689F38",
                 // success: "#4caf50",
@@ -206,6 +206,9 @@ Vue.component(
 Vue.component("history", require("./components/History.vue").default);
 Vue.component("messages", require("./components/Messages.vue").default);
 Vue.component("kanban-view", require("./components/Kanban.vue").default);
+Vue.component("add-process-task", require("./components/processTask/Add.vue").default);
+Vue.component("edit-delete-task", require("./components/processTask/EditDelete.vue").default);
+
 
 /****************************VIEWS********************************/
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
