@@ -132,7 +132,7 @@ export default {
                 {
                     icon: "mdi-factory",
                     text: "Заводы",
-                    url: "/factories/create",
+                    url: "/factories",
                     responsibilities: ["Программист","МРБ"],
                     divisions: ["ОМАР"]
                 }
