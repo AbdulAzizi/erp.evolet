@@ -28,7 +28,7 @@
 export default {
   props: ["processId"],
   data() {
-    const items = this.getResponsibilities(); // Variable to store responsibilites array
+    const items = this.loadResponsibilities(); // Variable to store responsibilites array
 
     return {
       dialog: false,
@@ -109,9 +109,6 @@ export default {
       form.reset();
       this.dialog = false
     },
-    dataToMilliseconds(days, hours, minutes) {
-      this.milliseconds = days * 86400000 + hours * 3600000 + minutes * 60000;
-    },
     prepareData() {
       // Variables to store days, hours, minutes
 
@@ -132,25 +129,9 @@ export default {
           this.processTask[elem.name] = elem.value; // If value is not days, hours or minutes, store data in object
         }
       });
-
       // Convert days, hours and minutes to milliseconds
       this.dataToMilliseconds(days, hours, minutes);
     },
-    getResponsibilities() {
-      let items = []; // Arrat to push response data
-
-      axios
-        .get("/api/responsibilities")
-        .then(res => {
-          res.data.forEach(item => {
-            items.push({ name: item.name, id: item.id }); // collect data and store in array
-          });
-        })
-        .catch(err => err.messages);
-
-      // return collected items for field
-      return items;
-    }
   }
 };
 </script>

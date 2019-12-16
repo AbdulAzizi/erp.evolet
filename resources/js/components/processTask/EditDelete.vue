@@ -44,7 +44,7 @@
 export default {
   props: ["task"],
   data() {
-    const items = this.getResponsibilities();
+    const items = this.loadResponsibilities();
     return {
       dialog: false,
       deleteTaskDialog: false,
@@ -128,9 +128,6 @@ export default {
           .catch(err => err.messages);
       }
     },
-    dataToMilliseconds(days, hours, minutes) {
-      this.milliseconds = days * 86400000 + hours * 3600000 + minutes * 60000;
-    },
     prepareData() {
       // Variables to store days, hours, minutes
 
@@ -155,21 +152,6 @@ export default {
       // Convert days, hours and minutes to milliseconds
       this.dataToMilliseconds(days, hours, minutes);
     },
-    getResponsibilities() {
-      let items = []; // Arrat to push response data
-
-      axios
-        .get("/api/responsibilities")
-        .then(res => {
-          res.data.forEach(item => {
-            items.push({ name: item.name, id: item.id }); // collect data and store in array
-          });
-        })
-        .catch(err => err.messages);
-
-      // return collected items for field
-      return items;
-    }
   }
 };
 </script>
