@@ -284,48 +284,6 @@ class ProductController extends Controller
         }
     }
 
-    private function loadListFieldValues($listFields)
-    {
-        $listFieldIDs = $listFields->pluck('id');
-
-        $listFieldTables = DB::table('list_fields')
-            ->whereIn('field_id', $listFieldIDs)
-            ->select('field_id', 'list_type')
-            ->get()
-            ->groupBy('list_type');
-
-        foreach ($listFieldTables as $tableName => $listField) {
-
-            $fieldsToEager = $listFields->whereIn('id', collect($listField)->pluck('field_id'));
-
-            $toEagerFieldValues = $fieldsToEager->pluck('pivot');
-
-            $values = DB::table($tableName)
-                ->whereIn('id', $toEagerFieldValues->pluck('value'))
-                ->get();
-
-            foreach ($toEagerFieldValues as $fieldValue) {
-                $realValue = $values->firstWhere('id', $fieldValue->value);
-                $fieldValue->value = $realValue ? $realValue->name : null;
-            }
-        }
-    }
-
-    private function getListFieldsFromProducts($products)
-    {
-        $listFields = [];
-
-        foreach ($products as $product) {
-            foreach ($product->fields as $field) {
-                if ($field->type->name == "list" || $field->type->name == "many-to-many-list") {
-                    $listFields[] = $field;
-                }
-            }
-        }
-
-        return collect($listFields);
-    }
-
     private function getListFieldsFromProduct($product)
     {
         $listField = [];
