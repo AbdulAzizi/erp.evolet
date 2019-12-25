@@ -12,4 +12,9 @@ class Factory extends Model
     {
         return $this->belongsTo('App\Country');
     }
+
+    public function products()
+    {
+        return $this->belongsToMany('App\Product');
+    }
 }

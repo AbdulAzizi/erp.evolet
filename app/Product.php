@@ -60,4 +60,9 @@ class Product extends Model
     {
         return $this->belongsToMany('App\Process')->withPivot('spent_time')->withTimestamps();
     }
+
+    public function factories()
+    {
+        return $this->belongsToMany('App\Factory');
+    }
 }
