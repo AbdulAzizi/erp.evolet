@@ -17,6 +17,7 @@ class CreateFieldsTable extends Migration
 
         Schema::create('fields', function (Blueprint $table) use($stringFieldTypeID) {
             $table->bigIncrements('id');
+            $table->string('name');
             $table->string('label');
             $table->string('abbreviation');
             $table->integer('type_id')->default($stringFieldTypeID);
