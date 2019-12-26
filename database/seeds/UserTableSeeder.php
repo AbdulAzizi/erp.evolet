@@ -125,6 +125,15 @@ class UserTableSeeder extends Seeder
                 'position' => 'Руководитель',
                 'responsibilities' => ['РВЗ'],
             ],
+            [
+                'name' => 'Jovidon',
+                'surname' => 'Rahmonov',
+                'email' => 'jovidon@admin.com',
+                'password' => 'admin',
+                'division' => 'ОЗк',
+                'position' => 'Специалист',
+                'responsibilities' => ['МРБ'],
+            ],
         ]);
 
         $this->userAsDivisionHead('nozim@admin.com');

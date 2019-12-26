@@ -81,7 +81,7 @@ export default {
                     text: "ЭП",
                     url: "/projects?sortBy=country",
                     responsibilities: ["Программист", "Куратор Портфеля ПК стран", "НО", "ПК"],
-                    divisions: ["Evolet", "НАП"]
+                    divisions: ["Evolet", "НАП","ОМАР"]
                 },
                 // {
                 //     icon: "mdi-attachment",
@@ -99,35 +99,42 @@ export default {
                     text: "Бизнес процессы",
                     url: "/bp",
                     responsibilities: ["Программист"],
-                    divisions: ["ОРПО"]
+                    divisions: ["ОРПО","ОМАР"]
                 },
                 {
                     icon: "mdi-account-tie",
                     text: "HR",
                     url: "/human-resources",
                     responsibilities: ["Программист"],
-                    divisions: ["ОРПО", "ДЧ"]
+                    divisions: ["ОРПО", "ДЧ","ОМАР"]
                 },
                 {
                     icon: "mdi-account-box-multiple",
                     text: "Резерв кандидатов",
                     url: "/head-resumes",
                     responsibilities: ["Программист"],
-                    divisions: ["*"]
+                    divisions: ["*","ОМАР"]
                 },
                 {
                     icon: "mdi-sort-variant",
                     text: "Фильтры",
                     url: "/admin/products",
                     responsibilities: ["Программист","РВЗ"],
-                    divisions: ["НАП"]
+                    divisions: ["НАП","ОМАР"]
                 },
                 {
                     icon: "mdi-file-document-box-multiple",
                     text: "Файлы",
                     url: "/admin/files",
                     responsibilities: ["Программист","РВЗ"],
-                    divisions: ["НАП"]
+                    divisions: ["НАП","ОМАР"]
+                },
+                {
+                    icon: "mdi-factory",
+                    text: "Заводы",
+                    url: "/factories",
+                    responsibilities: ["Программист","МРБ"],
+                    divisions: ["ОМАР"]
                 }
             ]
         };

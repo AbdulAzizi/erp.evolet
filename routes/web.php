@@ -16,8 +16,6 @@ Auth::routes();
 
 
 Route::group(['middleware' => ['auth', 'data.default']], function () {
-
-    Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/', function () {
         return redirect('/tasks');
     });
@@ -86,12 +84,16 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/forms/{id}', 'FormController@show')->name('forms.show');
 
     Route::get('/tether/delete/{id}', 'TethersController@delete')->name('tether.delete');
-
+    
     Route::prefix('admin')->group(function () {
         Route::get('/products', 'ProductController@adminIndex')->name('admin.products');
         Route::get('/files', 'FileController@index')->name('admin.files.index');
     });
     
+    Route::get('/factories/create', 'FactoryController@create')->name('factories.create');
+    Route::get('/factories', 'FactoryController@index')->name('factories.index');
+    Route::get('/factories/{id}', 'FactoryController@show')->name('factories.show');
+    Route::post('/factories', 'FactoryController@store')->name('factories.store');
 });
 
 

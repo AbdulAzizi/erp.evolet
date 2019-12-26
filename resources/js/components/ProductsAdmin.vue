@@ -265,7 +265,7 @@ export default {
             if (val.length != 0) {
                 let fieldsHeaders = this.items[0].fields.map(function(field) {
                     return {
-                        text: field.label,
+                        text: field.abbreviation,
                         value: field.label,
                         class: ["primary", "table-header"]
                     };

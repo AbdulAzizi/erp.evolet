@@ -179,7 +179,6 @@ export default {
             items: [
                 // { title: "CV", link: "/cv/create" }
             ],
-            csrf: window.Laravel.csrf_token,
             assetPath: window.Laravel.asset_path
         };
     },

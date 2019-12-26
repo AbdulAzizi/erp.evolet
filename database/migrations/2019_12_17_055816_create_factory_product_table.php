@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFieldsTable extends Migration
+class CreateFactoryProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateFieldsTable extends Migration
      */
     public function up()
     {
-        $stringFieldTypeID = 1;
-
-        Schema::create('fields', function (Blueprint $table) use($stringFieldTypeID) {
+        Schema::create('factory_product', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('label');
-            $table->string('abbreviation');
-            $table->integer('type_id')->default($stringFieldTypeID);
+            $table->unsignedBigInteger('factory_id');
+            $table->unsignedBigInteger('product_id');
         });
     }
 
@@ -31,6 +27,6 @@ class CreateFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fields');
+        Schema::dropIfExists('factory_product');
     }
 }

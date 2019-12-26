@@ -162,6 +162,9 @@ Vue.mixin({
     computed: {
         auth() {
             return window.Laravel.auth;
+        },
+        csrf(){
+            return window.Laravel.csrf_token;
         }
     }
 });
@@ -170,7 +173,6 @@ Vue.mixin({
 Vue.component("alert", require("./components/Alert.vue").default);
 Vue.component("alerts", require("./components/Alerts.vue").default);
 Vue.component("navbar", require("./components/Navbar.vue").default);
-Vue.component("myform", require("./components/Form.vue").default);
 Vue.component("right-drawer", require("./components/RightDrawer.vue").default);
 Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
 Vue.component("priority", require("./components/Priority.vue").default);
@@ -192,6 +194,11 @@ Vue.component("projects-create", require("./components/projects/Create.vue").def
 Vue.component("history", require("./components/History.vue").default);
 Vue.component("messages", require("./components/Messages.vue").default);
 Vue.component("kanban-view", require("./components/Kanban.vue").default);
+Vue.component("factories-form", require("./components/factories/Form.vue").default);
+Vue.component("factories-vertical-card", require("./components/factories/VerticalCard.vue").default);
+Vue.component("factories-card", require("./components/factories/Card.vue").default);
+Vue.component("factories-product-form", require("./components/factories/ProductForm.vue").default);
+Vue.component("factories-product-table", require("./components/factories/ProductTable.vue").default);
 Vue.component("process-task-add", require("./components/processTask/Add.vue").default);
 Vue.component("process-task-actions", require("./components/processTask/Actions.vue").default);
 Vue.component("process-task-delete", require("./components/processTask/Delete.vue").default);
@@ -202,6 +209,10 @@ Vue.component("process-task-add-form", require("./components/processTask/AddForm
 
 
 /****************************VIEWS********************************/
+Vue.component("factories", require("./components/views/factories/Index.vue").default);
+Vue.component("views-factories-create", require("./components/views/factories/Create.vue").default);
+Vue.component("views-factories-show", require("./components/views/factories/Show.vue").default);
+
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
 Vue.component("profile-banner", require("./components/profile/Banner.vue").default);
 Vue.component("products-view", require("./components/views/Products.vue").default);
