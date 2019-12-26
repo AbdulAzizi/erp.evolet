@@ -13,7 +13,7 @@
         <v-radio-group v-model="selectedOption" style="width:100% !important;" hide-details class="mt-0 pt-4 pb-2">
           <template v-for="(option, index) in this.localQuestionTask.question.options">
             <v-col cols="12 py-0 pb-4" :key="'progress-text-'+index">
-              <v-radio :value="option.id" color="primary" class="mr-0">
+              <v-radio :value="option.id" color="primary" class="mr-0" v-if="!disabled">
                 <template v-slot:label>
                   <v-row style="width:100% !important;">
                     <v-col cols="12 pt-0 pb-0">{{option.body}}</v-col>
@@ -44,6 +44,33 @@
                   </v-row>
                 </template>
               </v-radio>
+              <v-row style="width:100% !important;" v-if="disabled">
+                    <v-col cols="12 pt-0 pb-0">{{option.body}}</v-col>
+                    <v-col cols="12 py-0" style="height:100%;">
+                      <v-menu offset-y open-on-hover>
+                        <template v-slot:activator="{ on:menu }">
+                          <v-progress-linear
+                            v-on="{ ...menu }"
+                            rounded
+                            height="12"
+                            :value="Math.round(( 100 / localQuestionTask.answers.length ) * getAnswersFor(option.id).length )"
+                          >
+                            <template v-slot="{ value }">
+                              <span
+                                class="grey--text text--darken-2 caption"
+                                style="font-size:10px !important;"
+                              >{{ value }}%</span>
+                            </template>
+                          </v-progress-linear>
+                        </template>
+                        <v-card max-width="auto" v-if="getAnswersFor(option.id).length">
+                          <v-card-text>
+                            <avatars-set :items="getUsersFor(option.id)" />
+                          </v-card-text>
+                        </v-card>
+                      </v-menu>
+                    </v-col>
+                  </v-row>
             </v-col>
           </template>
         </v-radio-group>
@@ -57,6 +84,9 @@ export default {
   props: {
     questionTask: {
       required: true
+    },
+    disabled: {
+      required: false
     }
   },
   data() {

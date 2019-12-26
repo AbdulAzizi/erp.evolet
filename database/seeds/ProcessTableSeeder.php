@@ -45,7 +45,6 @@ class ProcessTableSeeder extends Seeder
             'process_id' => $bp1->id,
             'title' => 'Заполните следующие поля',
             'planned_time' => '180120000',
-            'deadline' => date('Y-m-d H:i:s'),
             'responsibility_id' => App\Responsibility::where('name', 'Куратор Портфеля ПК стран')->first()->id,
         ]);
 
@@ -55,7 +54,6 @@ class ProcessTableSeeder extends Seeder
             'process_id' => $bp2->id,
             'title' => 'Пройдите опрос',
             'planned_time' => '180120000',
-            'deadline' => date('Y-m-d H:i:s'),
             'responsibility_id' => App\Responsibility::where('name', 'ПК')->first()->id,
         ]);
 
@@ -71,7 +69,6 @@ class ProcessTableSeeder extends Seeder
             'process_id' => $bp2->id,
             'title' => 'Сделайте выбор',
             'planned_time' => '180120000',
-            'deadline' => date('Y-m-d H:i:s'),
             'responsibility_id' => App\Responsibility::where('name', 'Куратор Портфеля ПК стран')->first()->id,
         ]);
 

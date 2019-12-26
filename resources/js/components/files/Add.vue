@@ -73,7 +73,7 @@ export default {
   methods: {
     getFields() {
       axios
-        .get("/api/files/fields")
+        .get("/api/fields")
         .then(res => {
           this.createFormDialog = true;
           this.fields = res.data;

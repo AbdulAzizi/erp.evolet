@@ -80,6 +80,9 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/deleteProcess/{id}', 'ProcessController@delete')->name('process.delete');
 
+    Route::get('/forms', 'FormController@index')->name('forms.index');
+    Route::get('/forms/{id}', 'FormController@show')->name('forms.show');
+
     Route::get('/tether/delete/{id}', 'TethersController@delete')->name('tether.delete');
     
     Route::prefix('admin')->group(function () {
