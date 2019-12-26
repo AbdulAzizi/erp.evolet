@@ -6,6 +6,7 @@ use App\Country;
 use App\Factory;
 use App\Form;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Image;
 
@@ -46,5 +47,16 @@ class FactoryController extends Controller
         ]);
 
         return redirect()->route('factories.index');
+    }
+
+    public function show($id)
+    {
+        $factory = Factory::with('country','products.fields')->find($id);
+        
+        $listFields = $this->getListFieldsFromProducts($factory->products);
+
+        $this->loadListFieldValues($listFields);
+        
+        return view('factories.show', compact('factory'));
     }
 }

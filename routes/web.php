@@ -89,6 +89,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     
     Route::get('/factories/create', 'FactoryController@create')->name('factories.create');
     Route::get('/factories', 'FactoryController@index')->name('factories.index');
+    Route::get('/factories/{id}', 'FactoryController@show')->name('factories.show');
     Route::post('/factories', 'FactoryController@store')->name('factories.store');
 });
 

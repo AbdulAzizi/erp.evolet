@@ -1,5 +1,5 @@
 @extends('layouts.default')
 
 @section('content')
-    <views-factories-create :countries="{{$countries}}" />
+    <views-factories-show :item="{{$factory}}" />
 @endsection

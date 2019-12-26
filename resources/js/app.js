@@ -209,9 +209,14 @@ Vue.component("history", require("./components/History.vue").default);
 Vue.component("messages", require("./components/Messages.vue").default);
 Vue.component("kanban-view", require("./components/Kanban.vue").default);
 Vue.component("factories-form", require("./components/factories/Form.vue").default);
+Vue.component("factories-vertical-card", require("./components/factories/VerticalCard.vue").default);
+Vue.component("factories-card", require("./components/factories/Card.vue").default);
+Vue.component("factories-product-form", require("./components/factories/ProductForm.vue").default);
+Vue.component("factories-product-table", require("./components/factories/ProductTable.vue").default);
 /****************************VIEWS********************************/
 Vue.component("factories", require("./components/views/factories/Index.vue").default);
-Vue.component("factories-create", require("./components/views/factories/Create.vue").default);
+Vue.component("views-factories-create", require("./components/views/factories/Create.vue").default);
+Vue.component("views-factories-show", require("./components/views/factories/Show.vue").default);
 
 Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
 Vue.component(
