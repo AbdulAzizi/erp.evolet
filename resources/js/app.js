@@ -113,7 +113,16 @@ Vue.mixin({
                 } !important`};
         },
         durObj(milliseconds) {
-            return this.moment.duration(moment(parseInt(milliseconds)).valueOf());
+            let days, hours, minutes, total_hours, total_minutes;
+
+            total_minutes = parseInt(Math.floor(milliseconds / 60000));
+            total_hours = parseInt(Math.floor(total_minutes / 60));
+            days = parseInt(Math.floor(total_hours / 24));
+
+            minutes = parseInt(total_minutes % 60);
+            hours = parseInt(total_hours % 24);
+
+            return `${days}д ${hours}ч ${minutes}м`;
         },
         prepareFields(fields) {
             let fieldsClone = [...fields];
@@ -148,9 +157,6 @@ Vue.mixin({
 
             // return collected items for field
             return items;
-        },
-        dataToMilliseconds(days, hours, minutes) {
-            this.milliseconds = days * 86400000 + hours * 3600000 + minutes * 60000;
         }
     },
     computed: {
@@ -186,8 +192,13 @@ Vue.component("projects-create", require("./components/projects/Create.vue").def
 Vue.component("history", require("./components/History.vue").default);
 Vue.component("messages", require("./components/Messages.vue").default);
 Vue.component("kanban-view", require("./components/Kanban.vue").default);
-Vue.component("add-process-task", require("./components/processTask/Add.vue").default);
-Vue.component("edit-delete-task", require("./components/processTask/EditDelete.vue").default);
+Vue.component("process-task-add", require("./components/processTask/Add.vue").default);
+Vue.component("process-task-actions", require("./components/processTask/Actions.vue").default);
+Vue.component("process-task-delete", require("./components/processTask/Delete.vue").default);
+Vue.component("process-task-edit", require("./components/processTask/Edit.vue").default);
+Vue.component("process-task-add-form", require("./components/processTask/AddForm.vue").default);
+
+
 
 
 /****************************VIEWS********************************/
@@ -239,6 +250,8 @@ Vue.component("file-cards", require("./components/files/Cards.vue").default);
 
 Vue.component("file-add", require("./components/files/Add.vue").default);
 Vue.component("add-field", require("./components/files/AddField.vue").default);
+Vue.component("bp-forms", require('./components/BP/BPForms.vue').default);
+Vue.component("bp-form", require('./components/BP/BPForm.vue').default);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);

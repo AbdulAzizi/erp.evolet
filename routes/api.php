@@ -57,7 +57,7 @@ Route::post('/process', 'ProcessController@create')->name('process.create');
 Route::put('/task/mark/{id}', 'TaskController@mark')->name('task.mark');
 Route::put('/process/update/{id}', 'ProcessController@update')->name('process.update');
 Route::post('/fields/getFieldsList/{id}', 'FieldController@getFieldsList')->name('field.getFieldsList');
-Route::get('/files/fields', 'FieldController@getFields')->name('field.getFields');
+Route::get('/fields', 'FieldController@getFields')->name('field.getFields');
 Route::get('/files/fields/notExisitng/{id}', 'FieldController@getOnlyNotExistingFields')->name('field.getOnlyNotExistingFields');
 Route::post('/file/create', 'FileController@create')->name('file.create');
 Route::delete('/files/delete/{id}', 'FileController@delete')->name('file.delte');
@@ -68,3 +68,9 @@ Route::post('/process/tasks/create', 'ProcessTaskController@create')->name('proc
 Route::get('/responsibilities', 'ResponsibilityController@getResponsibilities')->name('responsibilities.get');
 Route::delete('/process/task/delete/{id}', 'ProcessTaskController@delete')->name('processTask.delete');
 Route::put('/process/task/edit/{id}', 'ProcessTaskController@edit')->name('processTask.edit');
+Route::post('/forms/create', 'FormController@create')->name('form.create');
+Route::get('/get/forms', 'FormController@getForms')->name('forms.index');
+Route::delete('/forms/delete/{id}', 'FormController@delete')->name('form.delete');
+Route::post('/process/task/add/form', 'ProcessTaskController@addForm')->name('processTask.addForm');
+Route::get('/field/type', 'FieldTypeController@index')->name('fieldType.index');
+Route::post('/field/create', 'FieldController@create')->name('field.create');
