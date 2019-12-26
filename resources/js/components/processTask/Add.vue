@@ -14,8 +14,8 @@
             </v-row>
             <v-card-actions>
               <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="cancelSubmit()">отмена</v-btn>
-            <v-btn color="primary" @click="submit(processId)">добавить</v-btn>
+              <v-btn text color="primary" @click="clearField()">отмена</v-btn>
+              <v-btn color="primary" @click="submit(processId)">добавить</v-btn>
             </v-card-actions>
           </v-form>
         </v-card-text>
@@ -33,6 +33,9 @@ export default {
     return {
       dialog: false,
       processTask: {},
+      days: 0,
+      hours: 0,
+      minutes: 0,
       milliseconds: null,
       fields: [
         {
@@ -94,44 +97,33 @@ export default {
         axios
           .post("/api/process/tasks/create", {
             processId: id,
-            data: this.processTask,
-            planned_time: this.milliseconds
+            data: this.processTask
           })
           .then(res => {
             this.dialog = false; //close dialog
             Event.fire("processTaskCreated", res.data); //Fire event for adding ProcessTas without page reload
-            form.reset(); // Clear fields after task create
+            this.clearField() // Clear fields after task create
           });
       }
     },
-    cancelSubmit(){
-      const form = this.$refs.createProcessTaskForm;
-      form.reset();
-      this.dialog = false
-    },
     prepareData() {
-      // Variables to store days, hours, minutes
-
-      let days = 0;
-      let hours = 0;
-      let minutes = 0;
-
       // Assigning field value to the variable
 
       this.fields.forEach(elem => {
-        if (elem.name == "processTaskDays") {
-          days = elem.value;
-        } else if (elem.name == "processTaskHours") {
-          hours = elem.value;
-        } else if (elem.name == "processTaskMinutes") {
-          minutes = elem.value;
-        } else {
+       
           this.processTask[elem.name] = elem.value; // If value is not days, hours or minutes, store data in object
-        }
+        
       });
       // Convert days, hours and minutes to milliseconds
-      this.dataToMilliseconds(days, hours, minutes);
     },
+    dataToMilliseconds(days, hours, minutes) {
+      return days * 86400000 + hours * 3600000 + minutes * 60000;
+    },
+    clearField(){
+      const form = this.$refs.createProcessTaskForm;
+      form.resetValidation();
+      this.fields.forEach(elem => elem.value = null)
+    }
   }
 };
 </script>
