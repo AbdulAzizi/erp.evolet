@@ -35,11 +35,7 @@
             <priority :id="item.priority" icon></priority>
           </td>
           <td>
-            <span v-if="durObj(item.planned_time).days()">{{ durObj(item.planned_time).days() }}д</span>
-            <span v-if="durObj(item.planned_time).hours()">{{ durObj(item.planned_time).hours() }}ч</span>
-            <span
-              v-if="durObj(item.planned_time).minutes()"
-            >{{ durObj(item.planned_time).minutes() }}м</span>
+           <span>{{durObj(item.planned_time)}}</span>
           </td>
           <td>{{ moment(item.deadline).fromNow() }}</td>
           <td>

@@ -162,15 +162,7 @@
                         </v-list-item-avatar>
                         <v-list-item-content>
                             <v-list-item-title>
-                                <span
-                                    v-if="durObj(task.planned_time).days()"
-                                >{{ durObj(task.planned_time).days() }}д</span>
-                                <span
-                                    v-if="durObj(task.planned_time).hours()"
-                                >{{ durObj(task.planned_time).hours() }}ч</span>
-                                <span
-                                    v-if="durObj(task.planned_time).minutes()"
-                                >{{ durObj(task.planned_time).minutes() }}м</span>
+                                <span>{{durObj(task.planned_time)}}</span>
                             </v-list-item-title>
                             <v-list-item-subtitle>Время на задачу</v-list-item-subtitle>
                         </v-list-item-content>

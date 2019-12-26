@@ -100,18 +100,7 @@
                     <td>{{status.name}}</td>
                     <td>{{moment(status.pivot.created_at).local().format('DD-M-YY HH:mm')}}</td>
                     <td v-if="status.pivot.spent_time !== null">
-                      <span
-                        v-if="durObj(status.pivot.spent_time).days()"
-                      >{{ durObj(status.pivot.spent_time).days() }} д</span>
-                      <span
-                        v-if="durObj(status.pivot.spent_time).hours()"
-                      >{{ durObj(status.pivot.spent_time).hours() }} ч</span>
-                      <span
-                        v-if="durObj(status.pivot.spent_time).minutes()"
-                      >{{ durObj(status.pivot.spent_time).minutes() }} мин</span>
-                      <span
-                        v-if="durObj(status.pivot.spent_time).seconds()"
-                      >{{ durObj(status.pivot.spent_time).seconds() }} сек</span>
+                      <span>{{durObj(status.pivot.spent_time)}}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -119,14 +108,7 @@
             </v-simple-table>
             <div class="mt-4 mx-3">
               <span v-if="localProduct.processes.length > 1">Общее количество времени:</span>
-              <span v-if="durObj(overallSpentTime).days()">{{ durObj(overallSpentTime).days() }} д</span>
-              <span v-if="durObj(overallSpentTime).hours()">{{ durObj(overallSpentTime).hours() }} ч</span>
-              <span
-                v-if="durObj(overallSpentTime).minutes()"
-              >{{ durObj(overallSpentTime).minutes() }} мин</span>
-              <span
-                v-if="durObj(overallSpentTime).seconds()"
-              >{{ durObj(overallSpentTime).seconds() }} сек</span>
+             <span>{{durObj(overallSpentTime)}}</span>
             </div>
           </v-card-text>
         </div>
