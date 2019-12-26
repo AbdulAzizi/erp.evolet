@@ -1,5 +1,7 @@
 <template>
-  <div>
+<div>
+  <div> 
+    <right-drawer/>
     <v-dialog v-model="addProcessDialog" width="400">
       <v-card>
         <v-toolbar color="primary" dense dark flat>
@@ -65,7 +67,7 @@
           <v-card-text v-if="processData.len">
             <template v-for="(elem, index) in processData.tasks">
               <div :key="'info' + index">
-                <edit-delete-task :task="elem" />
+                <process-task-actions :task="elem" />
                 <h5 class="font-weight-medium grey--text text--darken-1">Задача</h5>
                 <h4 class="font-weight-medium grey--text text--darken-3">{{elem.title}}</h4>
                 <h5 class="font-weight-medium grey--text text--darken-1">Исполнитель</h5>
@@ -74,15 +76,7 @@
                 >{{elem.responsibility.name}}</h4>
                 <h5 class="font-weight-medium grey--text text--darken-1">Запланированное время</h5>
                 <h4 class="font-weight-medium grey--text text--darken-3">
-                  <span
-                    v-if="durObj(elem.planned_time).days()"
-                  >{{durObj(elem.planned_time).days()}}д</span>
-                  <span
-                    v-if="durObj(elem.planned_time).hours()"
-                  >{{durObj(elem.planned_time).hours()}}ч</span>
-                  <span
-                    v-if="durObj(elem.planned_time).minutes()"
-                  >{{durObj(elem.planned_time).minutes()}}м</span>
+                  <span>{{durObj(elem.planned_time)}}</span>
                 </h4>
                 <h5 class="font-weight-medium grey--text text--darken-1">Описание</h5>
                 <h4
@@ -111,7 +105,7 @@
         </v-form>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <add-process-task :processId="processData.id"></add-process-task>
+          <process-task-add :processId="processData.id" />
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -154,11 +148,14 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    </div>
+    <div>
     <div id="cyto"></div>
     <v-btn color="primary" dark fab right bottom fixed @click="addProcessDialog = true">
       <v-icon>mdi-plus</v-icon>
     </v-btn>
-  </div>
+    </div>
+    </div>
 </template>
 
 <script>
@@ -177,6 +174,7 @@ export default {
   },
   data() {
     return {
+      drawer: null,
       cytoScape: null,
       addProcessDialog: false,
       processUpdateFieldName: null,
@@ -458,32 +456,32 @@ export default {
   },
   created() {
     Event.listen("processTaskCreated", data => {
-      this.localProcesses.forEach(process => {
-        if (process.id == data.process_id) {
-          process.process_tasks.push(data);
-        }
-      });
+      this.processData.tasks.push(data);
       this.processData.len += 1;
       Event.fire("notify", [
         `Задача ${data.title} создана для процесса ${this.processData.name}`
       ]);
     });
-    Event.listen('processTaskDeleted', data => {
+
+    Event.listen("processTaskDeleted", data => {
       this.processData.tasks.forEach((task, index) => {
-        if(task.id == data){
+        if (task.id == data) {
           this.processData.tasks.splice(index, 1);
         }
       });
       this.processData.len -= 1;
     });
-    Event.listen('processTaskUpdated', data => {
-      this.processData.tasks.forEach((task, index) => {
-        if(task.id == data.id){
-          this.processData.tasks.splice(index, 1);
-          this.processData.tasks.push(data);
+    Event.listen("processTaskUpdated", data => {
+      this.processData.tasks = data;
+    });
+
+    Event.listen("formAdded", data => {
+      this.processData.tasks.forEach(elem => {
+        if (elem.id == data.taskId) {
+          elem.forms.push(data.data);
         }
-      })
-    })
+      });
+    });
   }
 };
 </script>
