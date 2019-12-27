@@ -57,7 +57,8 @@ class FieldController extends Controller
                 $field = Field::create([
                     'label' => $value['label'],
                     'name' => $value['name'],
-                    'type_id' => $value['type']
+                    'type_id' => $value['type'],
+                    'abbreviation' => $value['abbreviation']
                 ]);
                 $fields[] = $field;
 
@@ -74,7 +75,8 @@ class FieldController extends Controller
                 $field =  Field::create([
                     'label' => $value['label'],
                     'name' => $value['name'],
-                    'type_id' => $value['type']
+                    'type_id' => $value['type'],
+                    'abbreviation' => $value['abbreviation']
                 ]);
 
                 $fields[] = $field;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" width="600">
+    <v-dialog v-model="dialog" width="600" persistent>
       <v-card>
         <v-toolbar dense flat dark color="primary">
           <v-toolbar-title>Добавить задачу</v-toolbar-title>
@@ -114,15 +114,18 @@ export default {
           this.processTask[elem.name] = elem.value; // If value is not days, hours or minutes, store data in object
         
       });
-      // Convert days, hours and minutes to milliseconds
     },
+      // Convert days, hours and minutes to milliseconds
+
     dataToMilliseconds(days, hours, minutes) {
       return days * 86400000 + hours * 3600000 + minutes * 60000;
     },
     clearField(){
       const form = this.$refs.createProcessTaskForm;
       form.resetValidation();
-      this.fields.forEach(elem => elem.value = null)
+      this.fields.forEach(elem => elem.value = null);
+      this.dialog = false;
+
     }
   }
 };

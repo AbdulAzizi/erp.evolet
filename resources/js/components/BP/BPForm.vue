@@ -26,18 +26,25 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="createFieldDialog" width="600">
+    <v-dialog v-model="createFieldDialog" width="600" persistent>
       <v-card>
         <v-toolbar dense flat dark color="primary">
           <v-toolbar-title>Добавить поле</v-toolbar-title>
         </v-toolbar>
-        <v-form>
+        <v-form ref="addField">
           <v-card-text v-for="(field, index) in formFields" :key="index">
             <v-row>
               <v-col cols="12" class="ma-0">
                 <v-text-field v-model="field.name" :name="index" label="Поле" outlined rounded />
                 <v-text-field
                   v-model="field.label"
+                  :name="index"
+                  label="Название для отображения"
+                  outlined
+                  rounded
+                />
+                 <v-text-field
+                  v-model="field.abbreviation"
                   :name="index"
                   label="Аббревиатура"
                   outlined
@@ -110,6 +117,7 @@
         </v-form>
         <v-card-actions>
           <v-spacer />
+          <v-btn text color="primary" @click="cancelFieldCreate()">Отмена</v-btn>
           <v-btn dark color="primary" @click="submit()">Создать</v-btn>
         </v-card-actions>
       </v-card>
@@ -130,7 +138,8 @@ export default {
           listItems: [],
           manyToManyItems: [],
           id: 1,
-          label: null
+          label: null,
+          abbreviation: null
         }
       ],
       items: this.getFieldType(),
@@ -194,6 +203,11 @@ export default {
         items.push(...res.data);
       });
       return items;
+    },
+    cancelFieldCreate(){
+      const form = this.$refs.addField;
+      form.reset();
+      this.createFieldDialog = false;
     }
   }
 };
