@@ -19,6 +19,7 @@ class FieldTableSeeder extends Seeder
         $manyToManyListFieldTypeID = FieldType::where('name', 'many-to-many-list')->first()->id;
         $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
         $yearFieldTypeID = FieldType::where('name', 'year')->first()->id;
+        $numberFieldTypeId = FieldType::where('name', 'number')->first()->id;
 
         $mnn = Field::create(['name' => 'mnn','label'=>'Международные непатентованные  наименования','abbreviation' => 'МНН', 'type_id' => $manyToManyListFieldTypeID]);
         $form = Field::create(['name' => 'form', 'label'=>'Лекарственная форма','abbreviation' => 'Ф', 'type_id' => $manyToManyListFieldTypeID]);
@@ -33,7 +34,7 @@ class FieldTableSeeder extends Seeder
 
         $product_status = Field::create(['name' => 'product_status', 'label'=>'Статус продукта','abbreviation' => 'Статус Пд']);
         $doza = Field::create(['name' => 'doza','label'=>'Доза','abbreviation' => 'Д']);
-        $opu = Field::create(['name' => 'opu','label'=>'Обьем продукта в упаковке','abbreviation' => 'ОПУ']);
+        $opu = Field::create(['name' => 'opu','label'=>'Обьем продукта в упаковке','abbreviation' => 'ОПУ', 'type_id' => $numberFieldTypeId]);
         $thchp = Field::create(['name' => 'thchp','label'=>'Технические химические часть продукта','abbreviation' => 'ТХЧП']);
         $class_pd = Field::create(['name' => 'class_pd','label'=>'Класс Продукта','abbreviation' => 'Класс Пд']);
         $atx = Field::create(['name' => 'atx','label'=>'Анатомо-Терапевтически-Химическая классификация','abbreviation' => 'АТХ', 'type_id' => $listFieldTypeID]);
@@ -166,25 +167,25 @@ class FieldTableSeeder extends Seeder
         $dolya_in = Field::create(['name'=>'dolya_in', 'label'=>'Доля индийских производителей','abbreviation' => 'Доля Ин']);
         $prir_mst = Field::create(['name'=>'prir_mst', 'label'=>'Прирост местных производителей','abbreviation' => 'Прир Мст']);
         $nkpf = Field::create(['name'=>'nkpf', 'label'=>'Наш класс продукт по факту на рыноке','abbreviation' => 'НКПФ']);
-        $s_knk1dl = Field::create(['name'=>'s_knk1dl', 'label'=>'Цена продукта Конкурента №1 в USD','abbreviation' => 'Ц_Кнк 1 ($)']);
-        $s_knk1ns = Field::create(['name'=>'s_knk1ns', 'label'=>'Цена продукта Конкурента №1 в национальной валюте','abbreviation' => 'Ц_Кнк 1 (Нц)']);
+        $s_knk1dl = Field::create(['name'=>'s_knk1dl', 'label'=>'Цена продукта Конкурента №1 в USD','abbreviation' => 'Ц_Кнк 1 ($)', 'type_id' => $numberFieldTypeId]);
+        $s_knk1ns = Field::create(['name'=>'s_knk1ns', 'label'=>'Цена продукта Конкурента №1 в национальной валюте','abbreviation' => 'Ц_Кнк 1 (Нц)', 'type_id' => $numberFieldTypeId]);
         $be_knk_1 = Field::create(['name'=>'be_knk_1', 'label'=>'Бренда конкурента №1','abbreviation' => 'Бр_Кнк 1 ']);
-        $pzh_up_knk_1 = Field::create(['name'=>'pzh_up_knk_1', 'label'=>'Продажа продукта Конкурента №1 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 1 ']);
+        $pzh_up_knk_1 = Field::create(['name'=>'pzh_up_knk_1', 'label'=>'Продажа продукта Конкурента №1 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 1 ' , 'type_id' => $numberFieldTypeId]);
         $ko_str_knk_1 = Field::create(['name'=>'ko_str_knk_1', 'label'=>'Компания - страна Производитель Конкурент №1','abbreviation' => 'Ко_Стр_Кнк 1']);
-        $s_knk_2_dl = Field::create(['name'=>'s_knk_2_dl', 'label'=>'Цена продукта Конкурента №2 в USD','abbreviation' => 'Ц_Кнк 2 ($)']);
-        $s_knk_2_ns = Field::create(['name'=>'s_knk_2_ns', 'label'=>'Цена продукта Конкурента №2 в национальной валюте','abbreviation' => 'Ц_Кнк 2 (Нц)']);
+        $s_knk_2_dl = Field::create(['name'=>'s_knk_2_dl', 'label'=>'Цена продукта Конкурента №2 в USD','abbreviation' => 'Ц_Кнк 2 ($)' , 'type_id' => $numberFieldTypeId]);
+        $s_knk_2_ns = Field::create(['name'=>'s_knk_2_ns', 'label'=>'Цена продукта Конкурента №2 в национальной валюте','abbreviation' => 'Ц_Кнк 2 (Нц)' , 'type_id' => $numberFieldTypeId]);
         $br_knk_2 = Field::create(['name'=>'br_knk_2', 'label'=>'Бренда конкурента №2','abbreviation' => 'Бр_Кнк 2 ']);
-        $pzh_up_knk2 = Field::create(['name'=>'pzh_up_knk2', 'label'=>'Продажа продукта Конкурента №2 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 2 ']);
-        $ko_str_knk2 = Field::create(['name'=>'ko_str_knk2', 'label'=>'Компания - страна Производитель Конкурент №2','abbreviation' => 'Ко_Стр_Кнк 2']);
-        $s_knk_3_dl = Field::create(['name'=>'s_knk_3_dl', 'label'=>'Цена продукта Конкурента №3 в USD','abbreviation' => 'Ц_Кнк 3 ($)']);
-        $s_knk_3_ns = Field::create(['name'=>'s_knk_3_ns', 'label'=>'Цена продукта Конкурента №3 в национальной валюте','abbreviation' => 'Ц_Кнк 3 (Нц)']);
+        $pzh_up_knk2 = Field::create(['name'=>'pzh_up_knk2', 'label'=>'Продажа продукта Конкурента №2 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 2 ' , 'type_id' => $numberFieldTypeId]);
+        $ko_str_knk2 = Field::create(['name'=>'ko_str_knk2', 'label'=>'Компания - страна Производитель Конкурент №2','abbreviation' => 'Ко_Стр_Кнк 2' ]);
+        $s_knk_3_dl = Field::create(['name'=>'s_knk_3_dl', 'label'=>'Цена продукта Конкурента №3 в USD','abbreviation' => 'Ц_Кнк 3 ($)' , 'type_id' => $numberFieldTypeId] );
+        $s_knk_3_ns = Field::create(['name'=>'s_knk_3_ns', 'label'=>'Цена продукта Конкурента №3 в национальной валюте','abbreviation' => 'Ц_Кнк 3 (Нц)' , 'type_id' => $numberFieldTypeId]);
         $br_knk_3 = Field::create(['name'=>'br_knk_3', 'label'=>'Бренда конкурента №3','abbreviation' => 'Бр_Кнк 3 ']);
-        $pzh_up_knk_3 = Field::create(['name'=>'pzh_up_knk_3', 'label'=>'Продажа продукта Конкурента №3 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 3 ']);
+        $pzh_up_knk_3 = Field::create(['name'=>'pzh_up_knk_3', 'label'=>'Продажа продукта Конкурента №3 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 3 ' , 'type_id' => $numberFieldTypeId]);
         $ko_str_knk_3 = Field::create(['name'=>'ko_str_knk_3', 'label'=>'Компания - страна Производитель Конкурент №3','abbreviation' => 'Ко_Стр_Кнк 3']);
         $s_knk_4_dl = Field::create(['name'=>'s_knk_4_dl', 'label'=>'Цена продукта Конкурента №4 в USD','abbreviation' => 'Ц_Кнк 4 ($)']);
-        $s_knk_4_ns = Field::create(['name'=>'s_knk_4_ns', 'label'=>'Цена продукта Конкурента №4 в национальной валюте','abbreviation' => 'Ц_Кнк 4 (Нц)']);
+        $s_knk_4_ns = Field::create(['name'=>'s_knk_4_ns', 'label'=>'Цена продукта Конкурента №4 в национальной валюте','abbreviation' => 'Ц_Кнк 4 (Нц)' , 'type_id' => $numberFieldTypeId]);
         $br_knk_4 = Field::create(['name'=>'br_knk_4', 'label'=>'Бренда конкурента №4','abbreviation' => 'Бр_Кнк 4 ']);
-        $pzh_up_knk_4 = Field::create(['name'=>'pzh_up_knk_4', 'label'=>'Продажа продукта Конкурента №4 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 4 ']);
+        $pzh_up_knk_4 = Field::create(['name'=>'pzh_up_knk_4', 'label'=>'Продажа продукта Конкурента №4 по упаковкам в год','abbreviation' => 'Пж Уп Кнк 4 ' , 'type_id' => $numberFieldTypeId]);
         $ko_str_knk_4 = Field::create(['name'=>'ko_str_knk_4', 'label'=>'Компания - страна Производитель Конкурент №4','abbreviation' => 'Ко_Стр_Кнк 4']);
         $osn_kok = Field::create(['name'=>'osn_kok', 'label'=>'Основной конкурент','abbreviation' => 'Осн Кок']);
 
