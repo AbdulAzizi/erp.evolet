@@ -1,10 +1,10 @@
 <template>
     <div class="products">
         <v-tabs v-model="tab" background-color="secondary" color="primary" dark>
-            <p class="pa-4 white--text">{{project.country.name}} · {{project.pc.name}}</p>
+            <p class="pa-4 white--text" v-if="project">{{project.country.name}} · {{project.pc.name}}</p>
             <v-spacer></v-spacer>
             <v-tab href="#products">Продукты</v-tab>
-            <v-tab href="#participants">Участники</v-tab>
+            <v-tab href="#participants" v-if="participants">Участники</v-tab>
             <v-btn
                 v-if="canCreate()"
                 small
@@ -27,7 +27,7 @@
                     @click:row="showProduct"
                 />
             </v-tab-item>
-            <v-tab-item value="participants">
+            <v-tab-item value="participants" v-if="participants">
                 <v-container>
                     <v-layout justify-center>
                         <v-card class="mx-auto" max-width="300" tile>
@@ -62,10 +62,10 @@ export default {
             required: true
         },
         participants: {
-            required: true
+            required: false
         },
         project: {
-            required: true
+            required: false
         }
     },
     data() {
@@ -136,8 +136,8 @@ export default {
 
             return {
                 id: item.id,
-                country: item.project.country.name,
-                pc: item.project.pc.name,
+                country: item.project ? item.project.country.name : null,
+                pc: item.project ? item.project.pc.name : null,
                 ...preparedFields
             };
         });

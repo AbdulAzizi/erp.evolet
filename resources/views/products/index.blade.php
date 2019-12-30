@@ -6,8 +6,8 @@
     @endphp
         <products-view
         :items="{{$products}}"
-        :participants="{{$participants}}"
-        :project="{{$project}}"
+        :participants="{{$participants ? $participants : json_encode(null)}}"
+        :project="{{$project ? $project : json_encode(null)}}"
         ></products-view>
 
 @endsection
