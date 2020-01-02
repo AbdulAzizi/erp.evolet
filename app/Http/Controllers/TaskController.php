@@ -30,8 +30,6 @@ class TaskController extends Controller
                 'watchers',
                 'status',
                 'tags'
-                //     'history.user',
-                //     'polls.options.users'
             )
             ->get();
 
@@ -296,12 +294,21 @@ class TaskController extends Controller
             'history.user',
             'polls.options.users',
             'timeSets',
-            'messages.sender'
+            'messages.sender',
+            'questionTasks.answers',
+            'questionTasks.question.options',
+            'forms.fields'
         )->find($id);
 
         // if has front tether load it
+        if ($task->from_type == "App\Process")
+            $task->load('products.messages');
+        else
+            $task->load('messages');
+
+        // if has front tether load it
         if ($task->from_type == "App\Process") {
-            $task->from->load('frontTethers.form.fields', 'backTethers');
+            $task->from->load('frontTethers.forms.fields');
         }
 
         return $task;

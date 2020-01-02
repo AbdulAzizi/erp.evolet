@@ -259,8 +259,6 @@ export default {
               this.tasks.find(task => {
                 if (task.id == id) {
                   elem.items.push(task);
-                  elem.count = elem.items.length
-                  console.log(elem.count)
                 }
               });
             }
@@ -275,8 +273,6 @@ export default {
         elem.items.forEach((item, index) => {
           if (item.id == id) {
             elem.items.splice(index, 1);
-            elem.count = elem.items.length;
-            console.log(elem.count)
           }
         });
       });
