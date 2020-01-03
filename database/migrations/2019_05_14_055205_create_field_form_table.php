@@ -18,6 +18,7 @@ class CreateFieldFormTable extends Migration
             $table->unsignedInteger('field_id');
             $table->unsignedInteger('form_id');
             $table->boolean('required');
+            $table->boolean('multiple');
         });
     }
 

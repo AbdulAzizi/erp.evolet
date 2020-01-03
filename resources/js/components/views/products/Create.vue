@@ -23,14 +23,19 @@ export default {
                     rules:
                         field.pivot && field.pivot.required
                             ? ["required"]
-                            : [true],
+                            : [],
                     type:
                         field.type.name == "list"
                             ? "autocomplete"
-                            : field.type.name
+                            : field.type.name,
+                    multiple: field.pivot && field.pivot.multiple ? true : false
                 };
             });
         }
+    },
+    created(){
+        // console.log(this.preparedFields);
+        
     }
 };
 </script>

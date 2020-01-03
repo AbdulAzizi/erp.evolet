@@ -14,14 +14,13 @@ use App\Form;
 use App\Process;
 use App\ProcessTask;
 use App\Product;
-use App\Project;
 use App\ProductValue;
+use App\Project;
 use App\Task;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -109,21 +108,44 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
         $fieldKeys = array_keys($request->all());
         // Retrive all Fields
         $fields = Field::whereIn('name', $fieldKeys)->get();
-        // Prepare Fields for attachment with their values
-        $preparedFields = $fields->mapWithKeys(function ($field) use ($request) {
-            return [$field->id => ['value' => $request->input($field->name)]];
-        });
         // Make new Product
         $product = Product::create([
             'process_id' => 1,
             'project_id' => $request->project,
         ]);
+        // Prepare Fields for attachment with their values
+        $preparedFields = [];
+
+        foreach ($fields as $field) {
+            $arrayValues = json_decode($request[$field->name]);
+
+            if ( is_array ($arrayValues) ) {
+                foreach ($arrayValues as $value) {
+                    $preparedFields[] = [
+                        'product_id' => $product->id,
+                        'field_id' => $field->id,
+                        'value' => $value,
+                        'created_at' => date(now()),
+                        'updated_at' => date(now())
+                    ];
+                }
+            } else {
+                $preparedFields[] = [
+                    'product_id' => $product->id,
+                    'field_id' => $field->id,
+                    'value' => $request->input($field->name),
+                    'created_at' => date(now()),
+                    'updated_at' => date(now())
+                ];
+            }
+
+        }
+
         // Attach fields to Product with their value
-        $product->fields()->attach($preparedFields->toArray());
+        ProductValue::insert($preparedFields);
         // Fetch current Process
         $process = Process::find($product->currentProcess->id);
         // Notify
@@ -171,7 +193,7 @@ class ProductController extends Controller
         }
         // If process ID exists
         if ($processID) {
-            // connect 
+            // connect
             $product->currentProcess()->associate($processID);
         } else {
             // Fetch current Process
