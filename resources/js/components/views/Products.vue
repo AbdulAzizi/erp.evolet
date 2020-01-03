@@ -105,7 +105,7 @@ export default {
             let canCreate = false;
 
             this.auth.responsibilities.forEach(responsibility => {
-                if (this.usersThatCanCreate.includes(responsibility.name))
+                if (this.usersThatCanCreate.includes(responsibility.name) && this.project)
                     canCreate = true;
             });
 
