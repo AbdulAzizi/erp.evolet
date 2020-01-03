@@ -41,8 +41,6 @@ class FormController extends Controller
         $form = Form::find($request->id);
 
         $form->delete();
-
-        return 'ok';
     }
 
     public function getForms()
@@ -50,5 +48,13 @@ class FormController extends Controller
         $forms = Form::all();
 
         return $forms;
+    }
+
+    public function deleteField(Request $request)
+    {
+        $form = Form::find($request->id);
+
+        $form->fields()->detach($request->field);
+        
     }
 }
