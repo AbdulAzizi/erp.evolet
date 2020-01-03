@@ -19,6 +19,7 @@ class FieldTableSeeder extends Seeder
         $manyToManyListFieldTypeID = FieldType::where('name', 'many-to-many-list')->first()->id;
         $listFieldTypeID = FieldType::where('name', 'list')->first()->id;
         $yearFieldTypeID = FieldType::where('name', 'year')->first()->id;
+        $numberFieldTypeId = FieldType::where('name', 'number')->first()->id;
 
         $mnn = Field::create(['name' => 'mnn', 'label' => 'Международные непатентованные  наименования', 'abbreviation' => 'МНН', 'type_id' => $manyToManyListFieldTypeID]);
         $form = Field::create(['name' => 'form', 'label' => 'Лекарственная форма', 'abbreviation' => 'Ф', 'type_id' => $manyToManyListFieldTypeID]);

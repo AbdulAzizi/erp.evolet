@@ -68,7 +68,7 @@
         <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar>
         <kanban-view
             v-show="isKanban"
-            :tasks="tasks"
+            :tasks="filteredTasks"
             :users="users"
             :taskStatuses="statuses"
             :authuser="authuser"

@@ -56,7 +56,7 @@
                             </div>
                             <template v-if="task.from.front_tethers">
                                 <div
-                                    v-if="task.from.front_tethers.length > 1 && task.question_tasks.length ===0"
+                                    v-if="task.from.front_tethers.length > 1 && task.question_tasks.length === 0"
                                 >
                                     <div class="font-weight-medium pb-1">Действия</div>
                                     <!-- <v-list nav v-if="taskHasActions"> -->

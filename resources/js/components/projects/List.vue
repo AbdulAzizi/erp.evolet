@@ -5,6 +5,12 @@
       <v-expansion-panel-content>
         <template v-for="(subItem,i) in item">
           <v-btn
+            :key="'all' + i"
+            v-if="(item.length - 1) >= i + (item.length - 1)"
+            class="mr-3 primary mt-3"
+            :href="`/products?country_id=${subItem.country_id}`"
+          >Все</v-btn>
+          <v-btn
             :key="i"
             class="mr-3 primary mt-3"
             :href="`/products?pc_id=${subItem.pc_id}&country_id=${subItem.country_id}&project_id=${subItem.id}`"
@@ -12,7 +18,6 @@
             <span v-if="key == subItem.pc.name">{{subItem.country.name}}</span>
             <span v-else>{{subItem.pc.name}}</span>
           </v-btn>
-            <v-btn :key="'all' + i" v-if="i >= item.length - 1" class="mr-3 primary mt-3" :href="`/products?country_id=${subItem.country_id}`">Все</v-btn>
         </template>
       </v-expansion-panel-content>
     </v-expansion-panel>
