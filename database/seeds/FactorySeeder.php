@@ -104,8 +104,8 @@ class FactorySeeder extends Seeder
         foreach ($factories as $factory) {
             for ($i = 0; $i < rand(7, 15); $i++) {
                 $product = \App\Product::create([
-                    'process_id' => 0,
-                    'project_id' => 0,
+                    'process_id' => 1,
+                    'project_id' => 1,
                 ]);
 
                 $preparedFields = $fields->mapWithKeys(function ($field) use ($faker, $dozas, $opus) {
