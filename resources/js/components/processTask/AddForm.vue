@@ -4,7 +4,7 @@
       <v-toolbar dense flat dark color="primary">
         <v-toolbar-title>Добавить форму</v-toolbar-title>
       </v-toolbar>
-      <v-form>
+      <v-form ref="form">
         <v-card-text>
           <v-row>
             <v-col :cols="field.col">
@@ -14,7 +14,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn text small color="primary">Отмена</v-btn>
+          <v-btn text small color="primary" @click="cancelSubmit()">Отмена</v-btn>
           <v-btn small color="primary" @click="submit()">Добавить</v-btn>
         </v-card-actions>
       </v-form>
@@ -58,6 +58,11 @@ export default {
         items.push(...res.data);
       });
       return items;
+    },
+    cancelSubmit(){
+      const form = this.$refs.form;
+      form.reset();
+      Event.fire('cancelSubmit');
     }
   }
 };
