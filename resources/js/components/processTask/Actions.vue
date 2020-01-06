@@ -18,7 +18,7 @@
     <v-dialog v-model="editDialog" width="600">
       <process-task-edit :task="localTask" />
     </v-dialog>
-    <v-dialog width="600" v-model="addFormDialog">
+    <v-dialog width="600" v-model="addFormDialog" persistent>
       <process-task-add-form :taskId="localTask.id" />
     </v-dialog>
   </div>
@@ -49,6 +49,9 @@ export default {
     Event.listen("formAdded", data => {
       this.addFormDialog = false;
     });
+    Event.listen("cancelSubmit", data => {
+      this.addFormDialog = false;
+    })
   }
 };
 </script>

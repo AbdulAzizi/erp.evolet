@@ -14,11 +14,17 @@
           <v-simple-table dense v-if="form.fields.length">
             <thead>
               <tr>
+                <th></th>
                 <th class="text-left">Поля</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(field, index) in localForm.fields" :key="index">
+                <td>
+                  <v-btn icon small @click="deleteField(field)">
+                    <v-icon small>mdi-delete</v-icon>
+                  </v-btn>
+                </td>
                 <td>{{field.label}}</td>
               </tr>
             </tbody>
@@ -43,10 +49,20 @@
                   outlined
                   rounded
                 />
-                 <v-text-field
+                <v-text-field
                   v-model="field.abbreviation"
                   :name="index"
                   label="Аббревиатура"
+                  outlined
+                  rounded
+                />
+                <v-select
+                  v-model="field.required"
+                  :name="index"
+                  :items="[{id: 1, name: 'Да'}, {id: 0, name: 'Нет'}]"
+                  item-value="id"
+                  item-text="name"
+                  label="Обязательное поле"
                   outlined
                   rounded
                 />
@@ -59,17 +75,17 @@
                   label="Тип"
                   outlined
                   rounded
-                  @change="(field.type == 4 ? addList(field.id) : field.type == 5 ? addManyToManyList(field.id) : null)"
+                  @change="field.type == 4 ? addList(field.id) : null"
                 />
                 <v-select
-                  v-if="field.type == 5"
-                  v-model="field.foreignListId"
-                  :key="'list' + index"
+                  v-if="field.type == 4"
+                  v-model="field.isMultiple"
+                  :key="'multiple' + index"
                   :name="index"
-                  :items="manyToManyListItems"
+                  :items="[{id: 1, name: 'Да'}, {id: 0, name: 'Нет'}]"
                   item-value="id"
-                  item-text="label"
-                  label="Связанная форма"
+                  item-text="name"
+                  label="Мультивыбор"
                   outlined
                   rounded
                 />
@@ -85,22 +101,6 @@
                     @keydown.once="addList(field.id)"
                     :key="'list' + index"
                     :name="index"
-                    label="Лист"
-                    outlined
-                    rounded
-                  />
-                </v-col>
-                <v-col
-                  v-for="(item, index) in field.manyToManyItems"
-                  :key="'manyToMany' + index"
-                  cols="11"
-                  class="float-right pa-0 ma-0"
-                >
-                  <v-text-field
-                    v-model="item.listName"
-                    :key="'list' + index"
-                    :name="index"
-                    @keydown.once="addManyToManyList(field.id)"
                     label="Лист"
                     outlined
                     rounded
@@ -135,9 +135,10 @@ export default {
         {
           name: null,
           type: null,
+          required: null,
           listItems: [],
-          manyToManyItems: [],
           id: 1,
+          required: null,
           label: null,
           abbreviation: null
         }
@@ -155,8 +156,7 @@ export default {
         type: null,
         id: this.formId,
         listItems: [],
-        manyToManyItems: [],
-        foreignListId: null
+        isMultiple: null
       });
     },
     submit() {
@@ -168,7 +168,7 @@ export default {
         .then(res => {
           this.createFieldDialog = false;
           this.localForm.fields.push(...res.data);
-          Event.fire('notify', ['Добавлены поля к форме']);
+          Event.fire("notify", ["Добавлены поля к форме"]);
         })
         .catch(err => err.messages);
     },
@@ -177,15 +177,6 @@ export default {
         if (elem.id == id) {
           elem.listItems.push({
             name: null
-          });
-        }
-      });
-    },
-    addManyToManyList(id) {
-      this.formFields.forEach(elem => {
-        if (elem.id == id) {
-          elem.manyToManyItems.push({
-            listName: null
           });
         }
       });
@@ -204,10 +195,23 @@ export default {
       });
       return items;
     },
-    cancelFieldCreate(){
+    cancelFieldCreate() {
       const form = this.$refs.addField;
       form.reset();
       this.createFieldDialog = false;
+    },
+    deleteField(item) {
+      axios
+        .post(`/api/field/delete/${this.form.id}`, { field: item })
+        .then(res => {
+          this.form.fields.forEach((elem, index) => {
+            if(elem.id == item.id){
+              this.form.fields.splice(index, 1);
+            }
+          })
+          Event.fire('notify', [`Поле "${item.label}" удален`]);
+         })
+        .catch(err => err.messages);
     }
   }
 };

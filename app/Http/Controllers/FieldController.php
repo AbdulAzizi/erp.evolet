@@ -68,7 +68,7 @@ class FieldController extends Controller
 
                 $this->createListTable($value['name'], $field);
 
-                $form->fields()->attach($field, ['form_id' => $form->id, 'field_id' => $field->id, 'required' => 0]);
+                $form->fields()->attach($field, ['form_id' => $form->id, 'field_id' => $field->id, 'required' => $value['required'], 'multiple' => $value['isMultiple']]);
 
             } else {
 

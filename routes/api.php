@@ -74,3 +74,4 @@ Route::delete('/forms/delete/{id}', 'FormController@delete')->name('form.delete'
 Route::post('/process/task/add/form', 'ProcessTaskController@addForm')->name('processTask.addForm');
 Route::get('/field/type', 'FieldTypeController@index')->name('fieldType.index');
 Route::post('/field/create', 'FieldController@create')->name('field.create');
+Route::post('/field/delete/{id}', 'FormController@deleteField')->name('field.deleteField');
