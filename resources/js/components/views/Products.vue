@@ -1,7 +1,10 @@
 <template>
     <div class="products">
         <v-tabs v-model="tab" background-color="secondary" color="primary" dark>
-            <p class="pa-4 white--text" v-if="project">{{project.country.name}} · {{project.pc.name}}</p>
+            <p
+                class="pa-4 white--text"
+                v-if="project"
+            >{{project.country.name}} · {{project.pc.name}}</p>
             <v-spacer></v-spacer>
             <v-tab href="#products">Продукты</v-tab>
             <v-tab href="#participants" v-if="participants">Участники</v-tab>
@@ -24,8 +27,25 @@
                     :fixed-header="true"
                     height="calc(100vh - 96px)"
                     dense
-                    @click:row="showProduct"
-                />
+                >
+                    <template v-slot:item="{ item }">
+                        <tr @click="showProduct(item)">
+                            <template v-for="(values,index) in item">
+                                <td v-if="index!='id'" :key="index">
+                                    <span v-if="values.length < 2">{{values[0]}}</span>
+                                    <v-chip
+                                        outlined
+                                        class="primary mr-1"
+                                        small
+                                        v-else
+                                        v-for="(value,valueIndex) in values"
+                                        :key="valueIndex"
+                                    >{{value}}</v-chip>
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+                </v-data-table>
             </v-tab-item>
             <v-tab-item value="participants" v-if="participants">
                 <v-container>
@@ -73,13 +93,13 @@ export default {
             tab: null,
             headers: [
                 {
-                    text: "Промо Компания",
-                    value: "pc",
+                    text: "Страна",
+                    value: "country",
                     class: ["primary", "table-header"]
                 },
                 {
-                    text: "Страна",
-                    value: "country",
+                    text: "Промо Компания",
+                    value: "pc",
                     class: ["primary", "table-header"]
                 }
             ],
@@ -127,19 +147,23 @@ export default {
         this.headers = [...this.headers, ...fieldsHeaders];
 
         // change the structure of items
-        this.preparedItems = this.items.map(function(item) {
+        this.items.forEach(item => {
             let preparedFields = {};
 
             for (const field of item.fields) {
-                preparedFields[field.label] = field.pivot.value;
+                if (preparedFields[field.label]) {
+                    preparedFields[field.label].push(field.pivot.value);
+                } else {
+                    preparedFields[field.label] = [field.pivot.value];
+                }
             }
 
-            return {
+            this.preparedItems.push({
                 id: item.id,
-                country: item.project ? item.project.country.name : null,
-                pc: item.project ? item.project.pc.name : null,
+                country: item.project ? [item.project.country.name] : [],
+                pc: item.project ? [item.project.pc.name] : [],
                 ...preparedFields
-            };
+            });
         });
     }
 };
