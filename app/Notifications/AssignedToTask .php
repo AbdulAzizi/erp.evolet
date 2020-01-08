@@ -61,16 +61,20 @@ class AssignedToTask extends Notification
             return [
                 'avatar' => $this->from->img,
                 'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                    ' поставил(a) вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' .
-                    $this->task->title . '</a>',
+                    ' поставил(a) вам новую задачу',
+                'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                            $this->task->title . '</a>',
+                'task' => $this->task->id
             ];
         // if procces
         else
             return [
                 'avatar' => null,
                 'title' =>  'Процесс <a href="#">' . $this->from->name . '</a>' .
-                    ' поставил вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' .
-                    $this->task->title . '</a>',
+                    ' поставил вам новую задачу',
+                'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                            $this->task->title . '</a>',
+                'task' => $this->task->id
             ];
     }
 
@@ -80,18 +84,22 @@ class AssignedToTask extends Notification
             return new BroadcastMessage([
                 'avatar' => $this->from->img,
                 'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                    ' поставил(a) вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' .
-                    $this->task->title . '</a>',
-                'notification' => $notifiable->notifications()->find($this->id)
+                            ' поставил(a) вам новую задачу',
+                'notification' => $notifiable->notifications()->find($this->id),
+                'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                            $this->task->title . '</a>',
+                'task' => $this->task->id
             ]);
         // if procces
         else
             return new BroadcastMessage([
                 'avatar' => null,
                 'title' =>  'Процесс <a href="#">' . $this->from->name . '</a>' .
-                    ' поставил вам новую задачу <a href="' . route("tasks.show", $this->task->id) . '">' .
-                    $this->task->title . '</a>',
-                'notification' => $notifiable->notifications()->find($this->id)
+                    ' поставил вам новую задачу',
+                'notification' => $notifiable->notifications()->find($this->id),
+                'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                            $this->task->title . '</a>',
+                'task' => $this->task->id
             ]);
     }
 }

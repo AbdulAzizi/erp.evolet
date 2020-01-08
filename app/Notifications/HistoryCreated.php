@@ -49,6 +49,7 @@ class HistoryCreated extends Notification
         return [
             'avatar' => $this->history->user->img,
             'title' =>  $this->history->description,
+            'link' => $this->history->link,
         ];
     }
 
@@ -57,6 +58,7 @@ class HistoryCreated extends Notification
         return new BroadcastMessage([
             'avatar' => $this->history->user->img,
             'title' => $this->history->description,
+            'link' => $this->history->link,
             'notification' => $notifiable->notifications()->find($this->id)
         ]);
     }

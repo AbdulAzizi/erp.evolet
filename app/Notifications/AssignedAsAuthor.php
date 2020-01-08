@@ -42,7 +42,9 @@ class AssignedAsAuthor extends Notification
     {
         return [
             'avatar' => $this->task->responsible->img,
-            'title' =>  'Вы автор задачи: <a href="' . route("tasks.show", $this->task->id) . '">' . $this->task->title . '</a>'
+            'title' =>  'Вы автор задачи:',
+            'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' . $this->task->title . '</a>',
+            'task' => $this->task->id
         ];
     }
     

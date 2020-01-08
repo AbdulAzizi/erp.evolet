@@ -14,7 +14,7 @@
       fixed-header
     >
       <template v-slot:item="{ item }">
-        <tr :class="(item.readed == 0 ? 'grey lighten-2' : 'white')" @click="displayTask(item.id)">
+        <tr :class="(item.readed == 0 ? 'grey lighten-2' : 'white')" @click="displayTask(item)">
           <td @click.stop>
             <v-menu offset-y>
               <template v-slot:activator="{on}">
@@ -83,8 +83,8 @@ export default {
     };
   },
   methods: {
-    displayTask(id) {
-      window.location.href = "tasks/" + id;
+    displayTask(item) {
+      window.location.href = "tasks/" + item.id;
     },
     mark(task) {
       let dataToSend = task.readed ? 0 : 1;
@@ -98,7 +98,6 @@ export default {
               elem.readed = res.data.readed;
             }
           });
-            console.log(this.localTasks)
         }).catch(err => err.messages);
     }
   },

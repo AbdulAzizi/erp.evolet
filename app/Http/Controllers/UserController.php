@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Resume;
+use App\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Validator;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Validator as ValidationValidator;
 
 class UserController extends Controller
 {
@@ -25,7 +27,7 @@ class UserController extends Controller
     {
 
         $user = User::find($request->id);
-        
+
         return view('profile.tasks', compact('user'));
     }
 
@@ -62,12 +64,40 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function notification(Request $request)
+    public function markAsRead(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        $notification = $user->notifications->find($request->notification['id']);
+
+        if($request->toggle == true){
+            
+            $notification->read_at !== null ? $notification->markAsUnread() : $notification->markAsRead();
+        }
+        else if($request->toggle == false) {
+
+            $notification->markAsRead();
+        }
+
+        return $notification;
+    }
+
+    public function mark(Request $request)
+    {
+        $task = Task::find($request->task_id);
+
+        $task->readed = 1;
+        $task->save();
+
+        return 'success';
+    }
+
+    public function markAllNotificationsAsRead(Request $request)
     {
         $user = User::find($request->id);
 
-        $user->unreadNotifications->markAsRead();
+        $notifications = $user->notifications->markAsRead();
 
-        return $user->unreadNotifications;
+        return $notifications;
     }
 }
