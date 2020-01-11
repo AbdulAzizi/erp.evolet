@@ -1,6 +1,6 @@
 <template>
     <component :is="formWrapper.component" v-bind="formWrapper.props" v-model="show">
-        <v-form :action="actionUrl" method="POST" ref="form" autocomplete="off">
+        <v-form :action="actionUrl" method="POST" ref="form" autocomplete="off" enctype="multipart/form-data">
             <v-card>
                 <v-toolbar flat color="primary" dark>
                     <v-toolbar-title class="font-weight-regular">{{title}}</v-toolbar-title>

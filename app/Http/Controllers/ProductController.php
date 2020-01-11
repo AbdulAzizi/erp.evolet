@@ -21,6 +21,8 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Image;
 
 class ProductController extends Controller
 {
@@ -42,7 +44,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $data['product'] = Product::with(['messages', 'currentProcess', 'project.country', 'project.pc', 'history.user', 'processes', 'fields', 'tasks.questionTasks.answers', 'tasks.questionTasks.question.options'])->find($id);
+        $data['product'] = Product::with(['messages', 'currentProcess', 'project.country', 'project.pc', 'history.user', 'processes', 'fields.type', 'tasks.questionTasks.answers', 'tasks.questionTasks.question.options'])->find($id);
 
         $listFields = $this->getListFieldsFromProduct($data['product']);
 
@@ -132,7 +134,20 @@ class ProductController extends Controller
                         'updated_at' => date(now())
                     ];
                 }
-            } else {
+            }else if($field->type->name == 'image'){
+                $file = $request->file($field->name);
+                $fileName = Str::random(10) . '.' . $file->getClientOriginalExtension();
+                $image = Image::make($file);
+                $image->save(public_path('img/' . $fileName));
+                $preparedFields[] = [
+                    'product_id' => $product->id,
+                    'field_id' => $field->id,
+                    'value' => $fileName,
+                    'created_at' => date(now()),
+                    'updated_at' => date(now())
+                ];
+            }
+             else {
                 $preparedFields[] = [
                     'product_id' => $product->id,
                     'field_id' => $field->id,

@@ -214,6 +214,21 @@ const getYearField = field => {
     return baseField;
 };
 
+const getImagePicker = field => {
+    return {
+        ...field,
+        component: "v-file-input",
+        props: {
+            name: field.name,
+            multiple: true,
+            filled: true,
+            rounded: true,
+            label: field.label,
+            "prepend-icon": "mdi-camera",
+        }
+    }
+};
+
 export default {
     props: {
         field: Object,
@@ -279,6 +294,9 @@ export default {
                 case "time":
                 case "date-time":
                     fieldData = getPicker(this.field);
+                    break;
+                case "image":
+                    fieldData = getImagePicker(this.field);
                     break;
             }
 

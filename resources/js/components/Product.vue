@@ -53,7 +53,12 @@
                                 </v-btn>
                             </td>
                             <td>{{ field.label }}</td>
-                            <td>{{ field.pivot.value }}</td>
+                            <td v-if="field.type.name == 'image'">
+                                <v-img contain :src="photo(field.pivot.value)" max-height="80" max-width="120" class="my-2" />
+                            </td>
+                            <td v-else>
+                                {{ field.pivot.value }}
+                            </td>
                         </tr>
                     </tbody>
                 </v-simple-table>
