@@ -16,6 +16,18 @@ class CreateListsMigration extends Migration
         //     'bigIncrements' => 'id',
         //     'longText' => 'name',
         // ],
+        'countries_list' => [
+            'bigIncrements' => 'id',
+            'longText' => 'name',
+        ],
+        'stability_zone_list' => [
+            'bigIncrements' => 'id',
+            'longText' => 'name',
+        ],
+        'product_class_list' => [
+            'bigIncrements' => 'id',
+            'longText' => 'name',
+        ],
         'pnk1_list' => [
             'bigIncrements' => 'id',
             'longText' => 'name',
