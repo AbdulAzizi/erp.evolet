@@ -186,7 +186,7 @@ class CountryTableSeeder extends Seeder
             ],
             [
                 "abbreviation" => "CN",
-                "name" => "PEOPLE'S REPUBLIC OF CHINA",
+                "name" => "CHINA",
             ],
             [
                 "abbreviation" => "CX",
@@ -210,7 +210,7 @@ class CountryTableSeeder extends Seeder
             ],
             [
                 "abbreviation" => "CD",
-                "name" => "CONGO, THE DEMOCRATIC REPUBLIC OF",
+                "name" => "CONGO",
             ],
             [
                 "abbreviation" => "CK",
@@ -414,7 +414,7 @@ class CountryTableSeeder extends Seeder
             ],
             [
                 "abbreviation" => "IR",
-                "name" => "IRAN, ISLAMIC REPUBLIC OF",
+                "name" => "IRAN",
             ],
             [
                 "abbreviation" => "IQ",
@@ -458,11 +458,11 @@ class CountryTableSeeder extends Seeder
             ],
             [
                 "abbreviation" => "KP",
-                "name" => "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF",
+                "name" => "DEMOCRATIC PEOPLE'S REPUBLIC OF KOREA",
             ],
             [
                 "abbreviation" => "KR",
-                "name" => "KOREA, REPUBLIC OF",
+                "name" => "REPUBLIC OF KOREA",
             ],
             [
                 "abbreviation" => "KW",
@@ -514,7 +514,7 @@ class CountryTableSeeder extends Seeder
             ],
             [
                 "abbreviation" => "MK",
-                "name" => "MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF",
+                "name" => "MACEDONIA",
             ],
             [
                 "abbreviation" => "MG",
@@ -566,11 +566,11 @@ class CountryTableSeeder extends Seeder
             ],
             [
                 "abbreviation" => "FM",
-                "name" => "MICRONESIA, FEDERATED STATES OF",
+                "name" => "MICRONESIA",
             ],
             [
                 "abbreviation" => "MD",
-                "name" => "MOLDOVA, REPUBLIC OF",
+                "name" => "MOLDOVA",
             ],
             [
                 "abbreviation" => "MC",
@@ -842,7 +842,7 @@ class CountryTableSeeder extends Seeder
             ],
             [
                 "abbreviation" => "TW",
-                "name" => "TAIWAN, REPUBLIC OF CHINA",
+                "name" => "TAIWAN",
             ],
             [
                 "abbreviation" => "TJ",
@@ -850,7 +850,7 @@ class CountryTableSeeder extends Seeder
             ],
             [
                 "abbreviation" => "TZ",
-                "name" => "TANZANIA, UNITED REPUBLIC OF",
+                "name" => "TANZANIA",
             ],
             [
                 "abbreviation" => "TH",

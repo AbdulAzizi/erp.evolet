@@ -20,6 +20,59 @@
                                     :old-inputs="oldInputs"
                                 />
                             </v-flex>
+                            <v-flex v-bind="colCount()" v-if="newField">
+                                <v-dialog width="500">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn
+                                            v-on="on"
+                                            color="primary"
+                                            outlined
+                                            rounded
+                                            height="56"
+                                            block
+                                        >
+                                            <v-icon left>mdi-plus</v-icon>Добавить новое поле
+                                        </v-btn>
+                                    </template>
+                                    <v-card>
+                                        <v-toolbar flat color="primary" dark>
+                                            <v-toolbar-title class="font-weight-regular">Новое Поле</v-toolbar-title>
+                                        </v-toolbar>
+                                        <v-card-text class="py-6">
+                                            <form-field
+                                                :field="{
+                                                    type: 'string',
+                                                    name: 'name',
+                                                    label: 'Название',
+                                                }"
+                                            />
+                                            <form-field
+                                                :field="{
+                                                    type: 'string',
+                                                    name: 'abbreviation',
+                                                    label: 'Аббревиатура',
+                                                }"
+                                            />
+                                            <form-field
+                                                :field="{
+                                                    type: 'select',
+                                                    name: 'type_id',
+                                                    label: 'Тип поля',
+                                                    items: fieldTypes,
+                                                    itemText: 'label'
+                                                }"
+                                            />
+                                            <form-field
+                                                :field="{
+                                                    type: 'boolean',
+                                                    name: 'required',
+                                                    label: 'Обязательное поле',
+                                                }"
+                                            />
+                                        </v-card-text>
+                                    </v-card>
+                                </v-dialog>
+                            </v-flex>
                         </v-layout>
                     </v-container>
                 </v-card-text>
@@ -60,6 +113,10 @@ function* colCountIterator(colCount) {
 }
 export default {
     props: {
+        newField: {
+            required: false,
+            default: false
+        },
         title: {
             type: String,
             required: true
@@ -85,6 +142,7 @@ export default {
     },
     data() {
         return {
+            fieldTypes: [],
             show: this.formHasErrors() ? true : false,
 
             hiddenLocalFields: [
@@ -102,6 +160,14 @@ export default {
         };
     },
     created() {
+        if (this.newField) {
+            axios.get(this.appPath("/api/fieldtypes")).then(res => {
+                console.log(res.data);
+
+                this.fieldTypes = res.data;
+            });
+        }
+
         this.addFormsEventActivator();
 
         this.processLaravelOldInputs();
@@ -218,9 +284,9 @@ export default {
             };
         }
     },
-    watch:{
-        fields(val){
-            this.localFields = this.extractFields(val, "shown")
+    watch: {
+        fields(val) {
+            this.localFields = this.extractFields(val, "shown");
         }
     }
 };

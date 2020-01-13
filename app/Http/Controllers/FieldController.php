@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Field;
-use App\Product;
-use App\ProductValue;
-use Illuminate\Http\Request;
 use App\Events\ProductEditEvent;
+use App\Field;
+use App\FieldType;
 use App\File;
 use App\Form;
+use App\Product;
+use App\ProductValue;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Expr\Cast\String_;
 
 class FieldController extends Controller
 {
@@ -32,7 +32,7 @@ class FieldController extends Controller
         event(new ProductEditEvent($product, $field->label));
 
         if ($field->type->name !== 'string') {
-            $table_name =  DB::table('list_fields')
+            $table_name = DB::table('list_fields')
                 ->where('field_id', $field->id)
                 ->first()
                 ->list_type;
@@ -58,7 +58,7 @@ class FieldController extends Controller
                     'label' => $value['label'],
                     'name' => $value['name'],
                     'type_id' => $value['type'],
-                    'abbreviation' => $value['abbreviation']
+                    'abbreviation' => $value['abbreviation'],
                 ]);
                 $fields[] = $field;
 
@@ -72,11 +72,11 @@ class FieldController extends Controller
 
             } else {
 
-                $field =  Field::create([
+                $field = Field::create([
                     'label' => $value['label'],
                     'name' => $value['name'],
                     'type_id' => $value['type'],
-                    'abbreviation' => $value['abbreviation']
+                    'abbreviation' => $value['abbreviation'],
                 ]);
 
                 $fields[] = $field;
@@ -104,6 +104,11 @@ class FieldController extends Controller
         $fields = Field::all();
 
         return $fields;
+    }
+
+    public function getFieldTypes()
+    {
+        return FieldType::all();
     }
 
     public function getOnlyNotExistingFields(Request $request)
@@ -139,7 +144,7 @@ class FieldController extends Controller
                 ->flatten()
                 ->filter(function ($val) {
                     return $val !== null;
-        })));
+                })));
 
         Storage::append($value . '.php', ';');
     }
