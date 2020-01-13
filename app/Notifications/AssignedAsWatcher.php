@@ -61,16 +61,20 @@ class AssignedAsWatcher extends Notification
             return [
                 'avatar' => $this->from->img,
                 'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                    ' Назначил(а) вас наблюдателем в задаче <a href="' . route("tasks.show", $this->task->id) . '">' .
-                    $this->task->title . '</a>' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                    ' Назначил(а) вас наблюдателем ' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                $this->task->title . '</a>',
+                'task' => $this->task->id
             ];
         // if procces
         else
             return [
                 'avatar' => null,
                 'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
-                    ' назначил(а) вас наблюдателем в задаче <a href="' . route("tasks.show", $this->task->id) . '">' .
-                    $this->task->title . '</a>' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                    ' назначил(а) вас наблюдателем ' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                            $this->task->title . '</a>',
+                'task' => $this->task->id
             ];
     }
 
@@ -80,16 +84,21 @@ class AssignedAsWatcher extends Notification
             return new BroadcastMessage([
                 'avatar' => $this->from->img,
                 'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                    ' Назначил(а) вас наблюдателем в задаче <a href="' . route("tasks.show", $this->task->id) . '">' .
-                    $this->task->title . '</a>' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                    ' Назначил(а) вас наблюдателем '. '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                        $this->task->title . '</a>',
+                'task' => $this->task->id
             ]);
         // if procces
         else
             return new BroadcastMessage([
                 'avatar' => null,
                 'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
-                    ' назначил(а) вас наблюдателем в задаче <a href="' . route("tasks.show", $this->task->id) . '">' .
+                    ' назначил(а) вас наблюдателем ' .
                     $this->task->title . '</a>' . '<a href="' . route("users.show", $this->responsible->id) . '">' . ' исполнитель: ' . $this->responsible->name . '</a>',
+                'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                    $this->task->title . '</a>',
+                'task' => $this->task->id
             ]);
     }
 }

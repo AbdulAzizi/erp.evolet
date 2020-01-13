@@ -16,15 +16,14 @@ class FieldsTypesSeeder extends Seeder
             ['name' => 'string', 'label' => 'Текст'],
             ['name' => 'text', 'label' => 'Параграф'],
             ['name' => 'number', 'label' => 'Число'],
-
             ['name' => 'list', 'label' => 'Список'],
             ['name' => 'many-to-many-list', 'label' => 'Относительный Список'],
-
             ['name' => 'users', 'label' => 'Пользователи'],
             ['name' => 'date', 'label' => 'Дата'],
             ['name' => 'time', 'label' => 'Время'],
             ['name' => 'date-time', 'label' => 'Дата и Время'],
             ['name' => 'year', 'label' => 'Год'],
+            ['name' => 'image', 'label' => 'Картинка']
         ]);
     }
 }

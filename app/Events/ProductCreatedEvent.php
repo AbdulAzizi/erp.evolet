@@ -18,10 +18,12 @@ class ProductCreatedEvent
         History::create([
             'user_id' => $user->id,
             'description' => 
-                'Пользователь <a href="' . route('users.show', $user->id) . '">' . $user->fullname . '</a> добавил новый 
-                <a href="' . route("products.show", $product->id) . '">продукт</a> в проекте 
-                <a href="' . route('products.index',['project_id'=>$project->id]) . '">' . $project->country->name . ' · ' . $project->pc->name . '</a>',
+                'Пользователь <a href="' . route('users.show', $user->id) . '">' . $user->fullname . '</a> 
+                в проекте 
+                <a href="' . route('products.index',['project_id'=>$project->id]) . '">' . $project->country->name . ' · ' . $project->pc->name . '</a>'
+                . ' добавил',
             'historyable_id' => $product->id,
+            'link' => '<a href="' . route("products.show", $product->id) . '"> продукт</a>',
             'historyable_type' => 'App\Product',
             'created_at' => date(now())
         ]);

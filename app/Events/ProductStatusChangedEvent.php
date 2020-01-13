@@ -18,8 +18,9 @@ class ProductStatusChangedEvent
         History::create([
             'user_id' => $user->id,
             'description' => 
-                $user->fullname . ' закрыл задачу. Статус процесса изменен на <a href="#">' .  $process->name . '</a>',
+                $user->fullname . ' закрыл задачу. Статус процесса изменен на ',
             'historyable_id' => $product->id,
+            'link' => '<a href="#">' .  $process->name . '</a>',
             'historyable_type' => 'App\Product',
             'created_at' => date(now())
         ]);

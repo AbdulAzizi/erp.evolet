@@ -16,9 +16,9 @@ class AssignedToTaskProductEvent
         History::create([
             'user_id' => $responsible->id,
             'description' => 
-                    "Процесс <a href='#'> $process->name </a> поставил задачу
-                    <a href=" . route("tasks.show", $task->id) . "> $task->title </a> пользователю
-                    <a href=" . route("users.show", $responsible->id) . "> $responsible->fullname </a>",
+                    "Процесс <a href='#'> $process->name </a> поставил пользователю
+                    <a href=" . route("users.show", $responsible->id) . "> $responsible->fullname </a> задачу ",
+            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->title </a>",
             'historyable_id' => $product->id,
             'historyable_type' => 'App\Product',
             'created_at' => date(now())

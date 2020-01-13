@@ -39,7 +39,8 @@ Route::post('/language', 'LanguageController@create')->name('language.create');
 Route::delete('/deleteLanguage/{id}', 'LanguageController@delete')->name('language.delete');
 Route::post('/achievment', 'AchievmentController@create')->name('achievment.create');
 Route::delete('/deleteAchievment/{id}', 'AchievmentController@delete')->name('achievment.delete');
-Route::post('/notifications', 'UserController@notification')->name('user.notification');
+Route::post('/notifications', 'UserController@markAsRead')->name('user.markAsRead');
+Route::post('/notifications/mark', 'UserController@mark')->name('user.mark');
 Route::put('/change-task-status/{id}', 'TaskController@changeStatus')->name('change.task.status');
 Route::post('/addStatus', 'TaskController@addStatus')->name('add.status');
 Route::put('/change-status-name/{id}', 'TaskController@changeStatusName')->name('change.status.name');
@@ -75,3 +76,4 @@ Route::post('/process/task/add/form', 'ProcessTaskController@addForm')->name('pr
 Route::get('/field/type', 'FieldTypeController@index')->name('fieldType.index');
 Route::post('/field/create', 'FieldController@create')->name('field.create');
 Route::post('/field/delete/{id}', 'FormController@deleteField')->name('field.deleteField');
+Route::post('/mark/all/notifications/{id}', 'UserController@markAllNotificationsAsRead')->name('user.markAllNotificationsAsRead');

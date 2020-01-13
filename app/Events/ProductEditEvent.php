@@ -30,9 +30,10 @@ class ProductEditEvent
             'user_id' => $user->id,
             'description' => 
                 'Пользователь <a href="' . route('users.show', $user->id) . '">' . $user->fullname . '</a> изменил поле ' . " \"$val\" " .
-                ' <a href="' . route("products.show", $product->id) . '">' . " в продукте "  . " $product->name " .  "</a> проекта " . 
+                "</a> проекта " . 
                 ' <a href="' . route('products.index',['project_id' => $project->id]) . '">' . $project->country->name . ' · ' . $project->pc->name . '</a>',
             'historyable_id' => $product->id,
+            'link' => ' <a href="' . route("products.show", $product->id) . '">' . " в продукте "  . " $product->name " .  "</a>",
             'historyable_type' => 'App\Product',
             'created_at' => date(now())
         ]);

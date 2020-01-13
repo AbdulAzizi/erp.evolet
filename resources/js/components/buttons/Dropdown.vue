@@ -1,18 +1,23 @@
 <template>
-  <v-menu offset-y left :max-width="maxWidth" :max-height="maxHeight">
+  <v-menu
+    offset-y
+    left
+    :max-width="maxWidth"
+    :max-height="maxHeight"
+    :close-on-content-click="false"
+  >
     <template v-slot:activator="{ on:menu }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on:tooltip }">
-          <v-btn icon v-on="{ ...tooltip, ...menu }" @click="notify">
+          <v-btn icon v-on="{ ...tooltip, ...menu }">
             <v-badge left overlap v-model="localItems.length">
-              <template v-slot:badge>
-                <span v-if="check">{{ item.length}}</span>
+              <template v-slot:badge v-if="unreadItems() > 0">
+                <span>{{ unreadItems()}}</span>
               </template>
               <v-icon color="grey darken-1">{{ icon }}</v-icon>
             </v-badge>
           </v-btn>
         </template>
-
         <span>{{tooltip}}</span>
       </v-tooltip>
     </template>
@@ -47,29 +52,49 @@
         </v-layout>
       </div>
       <div v-for="(item, key) in localItems" :key="'item-'+key">
-        <v-layout py-2 px-3>
+        <v-layout py-2 px-3 :class="item.read_at == null ? 'grey lighten-3' : 'white'">
           <v-flex xs1>
             <v-avatar size="40">
               <img :src="photo(item.data.avatar)" />
             </v-avatar>
           </v-flex>
           <v-flex xs11>
-            <h6 class="ml-4 caption" v-html="item.data.title"></h6>
+            <div class="ml-4 caption">
+              <span v-html="item.data.title"></span>
+              <span v-html="item.data.link" @click="markAsRead(item, false)"></span>
+            </div>
             <h6 class="ml-4 caption grey--text">{{ moment(item.created_at).fromNow() }}</h6>
+          </v-flex>
+          <v-flex>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon x-small class="float-right" @click="markAsRead(item, true)" v-on="on">
+                      <v-icon x-small v-if="item.read_at">mdi-checkbox-blank-circle-outline</v-icon>
+                      <v-icon x-small v-else>mdi-checkbox-blank-circle</v-icon>
+                  </v-btn>
+                </template>
+                <span v-if="item.read_at">Отметить как непрочитанное</span>
+                <span v-else>Отметить как прочитанное</span>
+              </v-tooltip>
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
       </div>
       <v-toolbar dense style="position: sticky; bottom:0;">
-        <v-btn text small color="primary">отметить все как прочитанное</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn text color="primary" v-if="muted == 0" @click="muteSound()">
-       <v-icon>mdi-volume-high</v-icon>
-      </v-btn>
-      <v-btn text color="primary" v-if="muted == 1" @click="muteSound()">
-       <v-icon>mdi-volume-off</v-icon>
-      </v-btn>
-    </v-toolbar>
+        <v-btn
+          text
+          small
+          color="primary"
+          @click="markAllNotificationsAsRead()"
+        >отметить все как прочитанное</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn text color="primary" v-if="muted == 0" @click="muteSound()">
+          <v-icon>mdi-volume-high</v-icon>
+        </v-btn>
+        <v-btn text color="primary" v-if="muted == 1" @click="muteSound()">
+          <v-icon>mdi-volume-off</v-icon>
+        </v-btn>
+      </v-toolbar>
     </v-card>
   </v-menu>
 </template>
@@ -100,63 +125,74 @@ export default {
   data() {
     return {
       localItems: this.items,
-      item: null,
       check: false,
       sound: new Audio("/audio/q.mp3"),
       muted: 0
     };
   },
   created() {
-    this.item = this.localItems.filter(element => element.read_at == null);
-    this.check = this.item.length > 0;
     Echo.private("App.User." + this.auth.id).notification(notification => {
       this.localItems.unshift(notification.notification);
 
-      Event.fire("notify",["У вас новое уведомление!"]);
-      
+      Event.fire("notify", ["У вас новое уведомление!"]);
+
       this.sound.muted = false;
       let promise = this.muted == 1 ? this.sound.pause() : this.sound.play();
 
       if (promise !== undefined) {
-          promise.then(_ => {}).catch(error => error);
+        promise.then(_ => {}).catch(error => error);
       }
     });
   },
   mounted() {
-    if(localStorage.muted){
+    if (localStorage.muted) {
       this.muted = localStorage.muted;
     }
   },
   methods: {
-    notify() {
+    markAsRead(item, toggle) {
       axios
         .post("/api/notifications", {
-          id: this.user.id
+          user_id: this.user.id,
+          notification: item,
+          toggle: toggle
         })
         .then(res => {
           this.localItems.forEach(element => {
-            res.data.forEach(notification => {
-              if (element.id === notification.id) {
-                element.read_at = notification.read_at;
+            if (element.id == item.id) {
+              if(toggle){
+                element.read_at !== null ? element.read_at = null : element.read_at = res.data.read_at;
+              } else {
+                element.read_at = res.data.read_at;
               }
-            });
+            }
           });
-          this.check = false;
         })
         .catch(err => err.message);
     },
-    muteSound(){
-      let notificationText = this.muted == 1 ? ['Звук уведомлений включен'] : ['Звук уведомлений отключен'];
-      this.muted = this.muted == 1 ? 0 : 1
+    muteSound() {
+      let notificationText =
+        this.muted == 1
+          ? ["Звук уведомлений включен"]
+          : ["Звук уведомлений отключен"];
+      this.muted = this.muted == 1 ? 0 : 1;
       localStorage.muted = this.muted;
-      Event.fire('notify', notificationText);
-    }
-  },
-  
-  watch: {
-    localItems(val) {
-      this.item = val.filter(element => element.read_at == null);
-      this.check = this.item.length > 0;
+      Event.fire("notify", notificationText);
+    },
+    markAllNotificationsAsRead() {
+      axios
+        .post(`/api/mark/all/notifications/${this.user.id}`)
+        .then(res => {
+          this.localItems.forEach(item => {
+            item.read_at = this.moment()
+              .local()
+              .format();
+          });
+        })
+        .catch(err => err.messages);
+    },
+    unreadItems() {
+      return this.localItems.filter(elem => elem.read_at == null).length;
     }
   }
 };
