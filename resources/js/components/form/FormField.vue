@@ -89,6 +89,15 @@ const getNumberField = field => {
     return baseField;
 };
 
+const getBooleanField = field => {
+    const baseField = getBaseField(field);
+
+    // //Default props for textarea
+    baseField.component = "v-switch";
+    
+    return baseField;
+};
+
 const getTextField = field => {
     const baseField = getBaseField(field);
 
@@ -101,14 +110,15 @@ const getTextField = field => {
 
 const getSelectField = field => {
     const baseField = getBaseField(field);
-
+    console.log(field);
+    
     //Default props for select field
     baseField.component = "v-select";
     baseField.props = {
         ...baseField.props,
 
         items: field.items,
-        "item-text": "name",
+        "item-text": field.itemText ? field.itemText : "name",
         "item-value": "id"
     };
 
@@ -256,6 +266,9 @@ export default {
                     break;
                 case "number":
                     fieldData = getNumberField(this.field);
+                    break;
+                case "boolean":
+                    fieldData = getBooleanField(this.field);
                     break;
                 case "select":
                     fieldData = getSelectField(this.field);
