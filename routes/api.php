@@ -77,3 +77,5 @@ Route::get('/field/type', 'FieldTypeController@index')->name('fieldType.index');
 Route::post('/field/create', 'FieldController@create')->name('field.create');
 Route::post('/field/delete/{id}', 'FormController@deleteField')->name('field.deleteField');
 Route::post('/mark/all/notifications/{id}', 'UserController@markAllNotificationsAsRead')->name('user.markAllNotificationsAsRead');
+Route::post('/add/responsibility/{id}', 'ResponsibilityController@store')->name('responsibility.store');
+Route::post('/add/single/responsibility/{id}', 'ResponsibilityController@addResponsibility')->name('responsibility.add');

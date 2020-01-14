@@ -21,19 +21,31 @@ class ResponsibilityController extends Controller
         return view('profile.responsibility', compact('user', 'division'));
     }
 
-    public function store()
+    public function store(Request $request)
     {
+        $data = [];
+
         $responsibility = Responsibility::create([
-            'name' => request('name'),
-            'division_id' => \Auth::user()->division_id
+            'name' => $request->name,
+            'division_id' => $request->id
         ]);
 
-        JobDescription::create([
-            'responsibility_id' => $responsibility->id,
-            'text' => request('text'),
-        ]);
 
-        return redirect()->back();
+        foreach ($request->descriptions as $description) {
+            if ($description['level'] !== null && $description['text'] !== null) {
+                $data[] = [
+                    'responsibility_id' => $responsibility->id,
+                    'text' => $description['text'],
+                    'level' => $description['level'],
+                    'planned_time' => $description['days'] * 86400000 + $description['hours'] * 3600000 + $description['minutes'] * 60000
+                ];
+            }
+        }
+        $jobDescription = JobDescription::insert($data);
+
+        $responsibilityWithDescriptions = Responsibility::with('descriptions')->find($responsibility->id);
+
+        return $responsibilityWithDescriptions;
     }
     public function createJobDescription()
     {
@@ -50,5 +62,27 @@ class ResponsibilityController extends Controller
         $responsibilites = Responsibility::all();
 
         return $responsibilites;
+    }
+
+    public function addResponsibility(Request $request)
+    {
+        $data = [];
+
+        foreach ($request->descriptions as $description) {
+            if ($description['level'] !== null && $description['text'] !== null) {
+            $data[] = [
+                'responsibility_id' => $request->id,
+                'text' => $description['text'],
+                'level' => $description['level'],
+                'planned_time' => $description['days'] * 86400000 + $description['hours'] * 3600000 + $description['minutes'] * 60000
+            ];
+        }
+        }
+
+        $jobdescription = JobDescription::insert($data);
+
+        $responsibility = Responsibility::with('descriptions')->find($request->id);
+
+        return $responsibility;
     }
 }

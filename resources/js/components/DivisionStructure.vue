@@ -60,7 +60,7 @@
           <div class="mt-2">
             <v-expansion-panels>
               <division-structure
-                v-for="subDivision in division.children"
+                v-for="( subDivision ) in division.children"
                 :key="subDivision.id"
                 :division="subDivision"
                 :is-user-head="isUserHead"

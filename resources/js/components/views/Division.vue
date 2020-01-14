@@ -1,6 +1,11 @@
 <template>
-  <v-flex>
-    <v-tabs v-model="currentView" background-color="white" class="d-inline-flex justify-end my-4" grow>
+  <div>
+    <v-tabs
+      v-model="currentView"
+      background-color="white"
+      class="d-inline-flex justify-start my-4"
+      grow
+    >
       <v-tab :value="activeBtn.STRUCTURE">Структура</v-tab>
       <v-tab :value="activeBtn.RESPONSIBILITY">Объязанности</v-tab>
     </v-tabs>
@@ -8,13 +13,13 @@
     <v-tabs-items v-model="currentView" class="transparent">
       <!-- <v-tabs-items v-model="currentView" class="transparent"> -->
       <v-tab-item>
-        <division-structure :division="division" :is-user-head="isUserHead" :is-root="true" />
+        <division-structure :division="localDivision" :is-user-head="isUserHead" :is-root="true" />
       </v-tab-item>
       <v-tab-item>
-        <division-responsibilities :division="division" :user="user" />
+        <division-responsibilities :division="localDivision" :user="user" />
       </v-tab-item>
     </v-tabs-items>
-  </v-flex>
+  </div>
 </template>
 
 <script>
@@ -22,10 +27,9 @@ export default {
   props: ["division", "isUserHead", "isRoot", "oldInputs", "errors", "user"],
   data() {
     return {
-      // isDivision: true,
       tab: null,
-      // items: [],
-      currentView: null
+      currentView: null,
+      localDivision: this.division
     };
   },
 
@@ -70,6 +74,18 @@ export default {
         }
       ]);
     }
+  },
+  created() {
+    Event.listen("responsibilityAdded", data => {
+      this.localDivision.responsibilities.push(data);
+    });
+    Event.listen("descriptionAdded", data => {
+      this.localDivision.responsibilities.forEach(element => {
+        if (element.id == data.id) {
+          element.descriptions = data.descriptions;
+        }
+      });
+    });
   }
 };
 </script>

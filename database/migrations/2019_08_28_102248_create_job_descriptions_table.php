@@ -16,7 +16,9 @@ class CreateJobDescriptionsTable extends Migration
         Schema::create('job_descriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('text');
+            $table->integer('level');
             $table->unsignedInteger('responsibility_id');
+            $table->string('planned_time')->nullable();
         });
     }
 

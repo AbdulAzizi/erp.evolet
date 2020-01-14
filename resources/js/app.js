@@ -204,7 +204,7 @@ Vue.component("process-task-actions", require("./components/processTask/Actions.
 Vue.component("process-task-delete", require("./components/processTask/Delete.vue").default);
 Vue.component("process-task-edit", require("./components/processTask/Edit.vue").default);
 Vue.component("process-task-add-form", require("./components/processTask/AddForm.vue").default);
-
+Vue.component("edit-add-actions", require("./components/division/EditAddActions.vue").default);
 
 
 

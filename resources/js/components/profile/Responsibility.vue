@@ -1,41 +1,54 @@
 <template>
-  <v-row justify="center">
-    <v-col md="6">
-      <v-card>
-        <v-toolbar color="primary" dark dense flat>
-          <v-toolbar-title>Должностные обязанности</v-toolbar-title>
-        </v-toolbar>
-
-        <v-list class="py-0" subheader>
-          <template v-for="(responsibility, index) in user.responsibilities">
-            <v-subheader class="text-uppercase" :key="'subheader-'+index">{{ responsibility.name }}</v-subheader>
+  <div>
+    <v-row>
+      <v-col
+        cols="6"
+        v-for="(responsibility, index ) in localDivision.responsibilities"
+        :key="index"
+      >
+        <v-card>
+          <v-toolbar color="primary" dark dense flat>
+            <v-toolbar-title>{{responsibility.name}}</v-toolbar-title>
+            <v-spacer />
+            <edit-add-actions :responsibility="responsibility" />
+          </v-toolbar>
+          <div>
             <template v-for="(description, subIndex) in responsibility.descriptions">
-              <v-list-item :key="'list-item-'+index+subIndex">
-                <v-list-item-icon>
-                  <v-icon color="primary">mdi-check</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>{{ description.text }}</v-list-item-content>
-              </v-list-item>
+              <p :key="'list-item-'+index+subIndex" class="ma-4">
+                {{ description.text }}
+                <span class="float-right mr-3 grey--text">
+                  <v-icon small>mdi-timer-sand-full</v-icon>
+                  {{ durObj(description.planned_time) }}
+                </span>
+                <span class="float-right mr-3 grey--text">
+                  <v-icon small>mdi-seal</v-icon>
+                  {{ description.level }}
+                </span>
+              </p>
               <v-divider :key="'divider-'+index+subIndex"></v-divider>
             </template>
-            <v-list-item two-line :key="'noData-'+index" v-if="!responsibility.descriptions.length">
-              <v-list-item-content>
-                <v-list-item-title>{{ responsibility.name }} - не имеет должностных обязанностей</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-list>
-      </v-card>
-    </v-col>
-  </v-row>
+          </div>
+        </v-card>
+        <v-card v-if="responsibility.descriptions.length == 0">
+          <v-card-text>
+            <p class="mt-2">
+              Нету инструкций
+              <a href="#">добавить?</a>
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
 export default {
-  props: ["user"],
+  props: ["division"],
   data() {
-    return {};
+    return {
+      localDivision: this.division
+    };
   }
 };
 </script>
