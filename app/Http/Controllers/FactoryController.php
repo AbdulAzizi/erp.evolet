@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Country;
 use App\Factory;
+use App\FieldType;
 use App\Form;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Image;
 
@@ -20,15 +19,16 @@ class FactoryController extends Controller
 
     public function create()
     {
-        $countries = Country::all();
+        $form = Form::where('name', 'Новый завод')->first();
+        $form->load('fields');
 
-        return view('factories.create', compact('countries'));
+        return view('factories.create', compact('form'));
     }
 
     public function store(Request $request)
     {
         $newFileName = '';
-        
+
         if ($request->file('logo')) {
             $originalImage = $request->file('logo');
             $newFileName = Str::random(10) . '.' . $originalImage->getClientOriginalExtension();
@@ -51,12 +51,12 @@ class FactoryController extends Controller
 
     public function show($id)
     {
-        $factory = Factory::with('country','products.fields')->find($id);
-        
+        $factory = Factory::with('country', 'products.fields')->find($id);
+
         $listFields = $this->getListFieldsFromProducts($factory->products);
 
         $this->loadListFieldValues($listFields);
-        
+
         return view('factories.show', compact('factory'));
     }
 }

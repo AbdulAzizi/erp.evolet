@@ -81,6 +81,8 @@ Vue.mixin({
              else 
                 return window.Laravel.asset_path + "img/green-solo-logo.png";
             
+
+
         },
         isCssColor(color) {
             return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/);
@@ -98,6 +100,7 @@ Vue.mixin({
                 return this.$vuetify.theme.currentTheme[preparedColor];
             
 
+
             if (modifier) {
                 modifier = modifier.replace("-", "");
                 return colors[preparedColor][modifier];
@@ -113,7 +116,11 @@ Vue.mixin({
                 } !important`};
         },
         durObj(milliseconds) {
-            let days, hours, minutes, total_hours, total_minutes;
+            let days,
+                hours,
+                minutes,
+                total_hours,
+                total_minutes;
 
             total_minutes = parseInt(Math.floor(milliseconds / 60000));
             total_hours = parseInt(Math.floor(total_minutes / 60));
@@ -163,7 +170,7 @@ Vue.mixin({
         auth() {
             return window.Laravel.auth;
         },
-        csrf(){
+        csrf() {
             return window.Laravel.csrf_token;
         }
     }
@@ -194,7 +201,6 @@ Vue.component("projects-create", require("./components/projects/Create.vue").def
 Vue.component("history", require("./components/History.vue").default);
 Vue.component("messages", require("./components/Messages.vue").default);
 Vue.component("kanban-view", require("./components/Kanban.vue").default);
-Vue.component("factories-form", require("./components/factories/Form.vue").default);
 Vue.component("factories-vertical-card", require("./components/factories/VerticalCard.vue").default);
 Vue.component("factories-card", require("./components/factories/Card.vue").default);
 Vue.component("factories-product-form", require("./components/factories/ProductForm.vue").default);
@@ -205,8 +211,6 @@ Vue.component("process-task-delete", require("./components/processTask/Delete.vu
 Vue.component("process-task-edit", require("./components/processTask/Edit.vue").default);
 Vue.component("process-task-add-form", require("./components/processTask/AddForm.vue").default);
 Vue.component("edit-add-actions", require("./components/division/EditAddActions.vue").default);
-
-
 
 /****************************VIEWS********************************/
 Vue.component("factories", require("./components/views/factories/Index.vue").default);

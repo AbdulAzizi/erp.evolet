@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Field;
 use App\Form;
-use App\ProcessTask;
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class FormController extends Controller
 {
@@ -30,7 +27,7 @@ class FormController extends Controller
 
         $form = Form::create([
             'name' => $request->name,
-            'label' => $request->label
+            'label' => $request->label,
         ]);
 
         return $form;
@@ -55,6 +52,6 @@ class FormController extends Controller
         $form = Form::find($request->id);
 
         $form->fields()->detach($request->field);
-        
+
     }
 }

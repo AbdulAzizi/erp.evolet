@@ -13,19 +13,17 @@ class FieldsTypesSeeder extends Seeder
     public function run()
     {
         FieldType::insert([
-            ['name' => 'string'],
-            ['name' => 'text'],
-            ['name' => 'number'],
-
-            ['name' => 'list'],
-            ['name' => 'many-to-many-list'],
-            
-            ['name' => 'users'],
-            ['name' => 'date'],
-            ['name' => 'time'],
-            ['name' => 'date-time'],
-            ['name' => 'year'],
-            ['name' => 'image']
+            ['name' => 'string', 'label' => 'Текст'],
+            ['name' => 'text', 'label' => 'Параграф'],
+            ['name' => 'number', 'label' => 'Число'],
+            ['name' => 'list', 'label' => 'Список'],
+            ['name' => 'many-to-many-list', 'label' => 'Относительный Список'],
+            ['name' => 'users', 'label' => 'Пользователи'],
+            ['name' => 'date', 'label' => 'Дата'],
+            ['name' => 'time', 'label' => 'Время'],
+            ['name' => 'date-time', 'label' => 'Дата и Время'],
+            ['name' => 'year', 'label' => 'Год'],
+            ['name' => 'image', 'label' => 'Картинка']
         ]);
     }
 }

@@ -297,6 +297,30 @@ class FieldTableSeeder extends Seeder
             // $dpKo->id => ['required' => true, 'multiple'=> false],
             // $kk->id => ['required' => true, 'multiple'=> false],
         ]);
+        /********************************************************/
+        $formaNovogoZavoda = Form::where('name', 'Новый завод')->first();
+
+        $name = Field::create(['name' => 'name', 'label' => 'Название', 'abbreviation' => 'Название']);
+        $about = Field::create(['name' => 'about', 'label' => 'Об', 'abbreviation' => 'Об']);
+        $country = Field::create(['name' => 'country_id', 'label' => 'Country', 'abbreviation' => 'Country', 'type_id' => $listFieldTypeID]);
+        $stability_zone = Field::create(['name' => 'stability_zone', 'label' => 'Stability Zone', 'abbreviation' => 'Stability Zone', 'type_id' => $listFieldTypeID]);
+        $website = Field::create(['name' => 'website', 'label' => 'Website', 'abbreviation' => 'Website']);
+        $product_class = Field::create(['name' => 'product_class', 'label' => 'Product Class', 'abbreviation' => 'Product Class', 'type_id' => $listFieldTypeID]);
+        $logo = Field::create(['name' => 'logo', 'label' => 'Лого', 'abbreviation' => 'Лого']);
+        
+        DB::table('list_fields')->insertGetId(['field_id' => $country->id, 'list_type' => 'countries_list']);
+        DB::table('list_fields')->insertGetId(['field_id' => $stability_zone->id, 'list_type' => 'stability_zone_list']);
+        DB::table('list_fields')->insertGetId(['field_id' => $product_class->id, 'list_type' => 'product_class_list']);
+
+        $formaNovogoZavoda->fields()->attach([
+            $name->id => ['required' => true, 'multiple' => false],
+            $about->id => ['required' => true, 'multiple' => false],
+            $country->id => ['required' => true, 'multiple' => false],
+            $stability_zone->id => ['required' => true, 'multiple' => false],
+            $website->id => ['required' => true, 'multiple' => false],
+            $product_class->id => ['required' => true, 'multiple' => false],
+            $logo->id => ['required' => true, 'multiple' => false],
+        ]);
 
     }
 }

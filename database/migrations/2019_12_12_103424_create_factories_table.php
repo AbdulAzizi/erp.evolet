@@ -16,12 +16,12 @@ class CreateFactoriesTable extends Migration
         Schema::create('factories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('logo')->nullable();
             $table->string('about');
             $table->unsignedBigInteger('country_id');
             $table->string('stability_zone')->nullable();
             $table->string('website')->nullable();
             $table->string('product_class')->nullable();
-            $table->string('logo')->nullable();
             $table->timestamps();
         });
     }

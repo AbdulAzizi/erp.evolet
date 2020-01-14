@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use App\Form;
 use Illuminate\Database\Seeder;
@@ -39,6 +39,10 @@ class FormTableSeeder extends Seeder
         Form::create([
             'name' => 'Форма нового продукта завода',
             'label' => 'Форма нового продукта завода'
+        ]);
+        Form::create([
+            'name' => 'Новый завод',
+            'label' => 'Новый завод'
         ]);
         
     }
