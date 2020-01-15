@@ -1,6 +1,6 @@
 <template>
   <div>
-    <profile-responsibility-show :division="localDivision" />
+    <responsibilities :division="localDivision" />
     <add-responsibilities :division="localDivision" v-if="user.position.name == 'Руководитель'" />
   </div>
 </template>

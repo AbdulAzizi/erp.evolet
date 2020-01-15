@@ -1,7 +1,7 @@
 <template>
   <div>
     <profile-banner :user="user" />
-    <profile-responsibility-show :user="user" />
+    <responsibilities :user="user" />
   </div>
 </template>
 
