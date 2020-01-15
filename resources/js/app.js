@@ -253,7 +253,7 @@ Vue.component("kanban-view", require("./components/Kanban.vue").default);
 Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
 
 Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
-Vue.component("division-responsibilities", require("./components/views/DivisionResponsibilities.vue").default);
+Vue.component("views-responsibilities", require("./components/views/Responsibilities.vue").default);
 Vue.component("views-division", require("./components/views/Division.vue").default);
 Vue.component("chats-view", require("./components/views/Chats.vue").default);
 

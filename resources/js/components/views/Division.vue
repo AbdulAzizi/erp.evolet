@@ -16,7 +16,7 @@
         <division-structure :division="localDivision" :is-user-head="isUserHead" :is-root="true" />
       </v-tab-item>
       <v-tab-item>
-        <division-responsibilities :division="localDivision" :user="user" />
+        <views-responsibilities :division="localDivision" :user="user" />
       </v-tab-item>
     </v-tabs-items>
   </div>
