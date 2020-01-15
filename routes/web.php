@@ -24,16 +24,23 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/tasks', 'TaskController@index')->name('tasks.index');
     Route::post('/tasks', 'TaskController@store')->name('tasks.store');
-    Route::get('/tasks/{id}', 'TaskController@show')->name('tasks.show');
+    Route::get('/tasks/{id}', 'TaskController@show')->name('tasks.show')->middleware('task.ownership');
     Route::put('/tasks/{id}', 'TaskController@update')->name('tasks.update');
 
-    Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
     Route::post('/divisions', 'DivisionController@store')->name('division.store');
     
+    Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/users', 'UserController@index')->name('users.index');
     Route::post('/users', 'UserController@store')->name('users.store');
     Route::get('/users/{id}', 'UserController@show')->name('users.show');
+    Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume.show');
+    Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume.store');
+    Route::get('/users/{id}/responsibility', 'ResponsibilityController@show')->name('responsibility.show');
+    Route::post('/users/{id}/responsibility', 'ResponsibilityController@store')->name('responsibility.store');
+    Route::post('/users/{id}/create-job-description', 'ResponsibilityController@createJobDescription')->name('responsibility.create.job.description');
+    Route::get('/users/{id}/cv/edit', 'ResumeController@showEdit')->name('resume.show.edit');
+    Route::get('/profile/tasks', 'UserController@tasks')->name('profile.tasks');
     
     Route::get('/products', 'ProductController@index')->name('products.index');
     Route::get('/products/create', 'ProductController@create')->name('products.create');
@@ -54,16 +61,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/relation-data', 'ListRelationsController@getRelatedData')->name('web-utils.relationFilter');
     
     Route::get('/bp', 'ProcessController@index')->name('bp');
-    Route::get('/profile/tasks', 'UserController@tasks')->name('profile.tasks');
-    
-    Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume.show');
-    Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume.store');
 
-    Route::get('/users/{id}/responsibility', 'ResponsibilityController@show')->name('responsibility.show');
-    Route::post('/users/{id}/responsibility', 'ResponsibilityController@store')->name('responsibility.store');
-    Route::post('/users/{id}/create-job-description', 'ResponsibilityController@createJobDescription')->name('responsibility.create.job.description');
-
-    Route::get('/users/{id}/cv/edit', 'ResumeController@showEdit')->name('resume.show.edit');
     Route::post('/resume', 'ResumeController@create')->name('resume.create');
     Route::get('/resume/index', 'ResumeController@index')->name('resume.index');
     Route::get('/resume/{id}', 'ResumeController@showSingle')->name('show.single');
