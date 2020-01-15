@@ -254,7 +254,7 @@ Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").
 
 Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
 Vue.component("division-responsibilities", require("./components/views/DivisionResponsibilities.vue").default);
-Vue.component("division", require("./components/views/Division.vue").default);
+Vue.component("views-division", require("./components/views/Division.vue").default);
 Vue.component("chats-view", require("./components/views/Chats.vue").default);
 
 Vue.component("products-admin-view", require("./components/ProductsAdmin").default);

@@ -2,15 +2,14 @@
 
 @section('content')
 
-<division
+    <views-division
     :division="{{$division}}" 
     :is-user-head="{{$isUserHead}}" 
     :is-root="true"
     :jsonResponsibilities="{{$jsonResponsibilities}}"
     :ildInputs="{{$oldInputs}}"
     :errors="{{ $errors }}"
-    :user="{{$authUser}}"
-    ></division>
+    :user="{{$authUser}}" />
 
 <dynamic-form title="Новый сотрудник" dialog activator-event-name="addUser" action-url="/users" method="POST"
     :errors="{{$errors}}" :old-inputs="{{$oldInputs}}" :fields="[
