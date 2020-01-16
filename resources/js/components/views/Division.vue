@@ -20,7 +20,8 @@
                 />
             </v-tab-item>
             <v-tab-item>
-                <views-responsibilities :division="localDivision" :user="user" />
+                <responsibilities :responsibilities="localDivision.responsibilities" />
+                <add-responsibilities :division="localDivision" v-if="user.position.name == 'Руководитель'" />
             </v-tab-item>
         </v-tabs-items>
     </div>
