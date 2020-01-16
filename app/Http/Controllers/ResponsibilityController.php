@@ -18,7 +18,7 @@ class ResponsibilityController extends Controller
 
         if (\Auth::user()->position->name = "Руководитель" && \Auth::user()->division->id == $user->division->id)
             $division = Division::with('responsibilities')->find($user->division_id);
-        return view('profile.responsibility', compact('user', 'division'));
+        return view('profile.responsibilities', compact('user', 'division'));
     }
 
     public function store(Request $request)
