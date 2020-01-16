@@ -3,6 +3,6 @@
 @section('content')
     <profile-responsibility 
         :user="{{ $user }}"
-        :responsibilities="{{ $division ? $division->responsibilities : null }}"
+        :responsibilities="{{ $user->responsibilities }}"
     ></profile-responsibility>
 @endsection

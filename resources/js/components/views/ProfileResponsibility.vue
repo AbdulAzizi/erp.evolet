@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <profile-banner :user="user" />
-    <responsibilities :user="user" />
-  </div>
+    <div>
+        <profile-banner :user="user" />
+        <responsibilities :responsibilities="responsibilities" />
+    </div>
 </template>
 
 <script>
 export default {
-  props: ["user", "responsibilities"],
-  data() {
-    return {
-      thisUserPosition: this.user.position.name
-    };
-  }
+    props: {
+        user: {},
+        responsibilities: {}
+    }
 };
 </script>
