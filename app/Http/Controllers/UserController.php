@@ -59,7 +59,7 @@ class UserController extends Controller
         $responsibilityIds = json_decode($request->responsibilityId);
         $newUser->responsibilities()->attach($responsibilityIds);
 
-        Password::broker()->sendResetLink(['email' => $newUser->email]);
+        // Password::broker()->sendResetLink(['email' => $newUser->email]);
 
         return redirect()->back();
     }
