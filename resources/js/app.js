@@ -230,6 +230,7 @@ Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vu
 Vue.component("profile-responsibility", require("./components/views/ProfileResponsibility.vue").default);
 
 Vue.component("responsibilities", require("./components/Responsibilities.vue").default);
+Vue.component("responsibility-card", require("./components/responsibilities/Card.vue").default);
 
 Vue.component("add-job-description", require("./components/form/AddJobDescription.vue").default);
 
