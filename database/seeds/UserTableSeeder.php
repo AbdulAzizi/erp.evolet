@@ -137,7 +137,7 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'Shuhrat',
                 'surname' => 'Safarov',
-                'email' => 'shihrat@admin.com',
+                'email' => 'shuhrat@admin.com',
                 'password' => 'admin',
                 'division' => 'ДЧ',
                 'position' => 'Специалист',
