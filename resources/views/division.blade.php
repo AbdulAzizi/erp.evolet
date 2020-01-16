@@ -9,7 +9,8 @@
     :jsonResponsibilities="{{$jsonResponsibilities}}"
     :ildInputs="{{$oldInputs}}"
     :errors="{{ $errors }}"
-    :user="{{$authUser}}" />
+    :user="{{$authUser}}">
+    </views-division>
 
 <dynamic-form title="Новый сотрудник" dialog activator-event-name="addUser" action-url="/users" method="POST"
     :errors="{{$errors}}" :old-inputs="{{$oldInputs}}" :fields="[
