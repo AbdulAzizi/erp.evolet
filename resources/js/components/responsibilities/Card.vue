@@ -6,7 +6,7 @@
                 <v-spacer />
                 <edit-add-actions :responsibility="responsibility" />
             </v-toolbar>
-            <div v-if="responsibility.descriptions.length">
+            <div v-if="responsibility.descriptions && responsibility.descriptions.length">
                 <template v-for="(description, subIndex) in responsibility.descriptions">
                     <p :key="'list-item-'+subIndex" class="ma-4">
                         {{ description.text }}

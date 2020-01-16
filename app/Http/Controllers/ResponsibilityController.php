@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class ResponsibilityController extends Controller
 {
+    public function index()
+    {
+        $responsibilities = Responsibility::with('descriptions')->get();
+        return view('responsibilites', compact('responsibilities'));
+    }
 
     public function show(Request $request, $id)
     {

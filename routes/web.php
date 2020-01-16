@@ -29,6 +29,8 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
     Route::post('/divisions', 'DivisionController@store')->name('division.store');
+
+    Route::get('/responsibilities', 'ResponsibilityController@index')->name('responsibility.index');
     
     Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/users', 'UserController@index')->name('users.index');

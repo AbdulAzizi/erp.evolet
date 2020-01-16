@@ -135,6 +135,13 @@ export default {
                     url: "/factories",
                     responsibilities: ["Программист","МРБ"],
                     divisions: ["ОМАР"]
+                },
+                {
+                    icon: "mdi-script-text",
+                    text: "ДО",
+                    url: "/responsibilities",
+                    responsibilities: ["РВЗ","HR"],
+                    divisions: []
                 }
             ]
         };
