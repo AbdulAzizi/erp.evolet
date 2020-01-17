@@ -3,21 +3,21 @@
     <v-menu bottom left>
       <template v-slot:activator="{ on }">
         <v-btn v-on="on" dark icon small>
-          <v-icon small>mdi-dots-vertical</v-icon>
+          <v-icon >mdi-dots-vertical</v-icon>
         </v-btn>
       </template>
       <v-list>
-        <v-list-item @click="formDialog = !formDialog">Добавить ДИ</v-list-item>
-        <v-list-item>Изменить</v-list-item>
+        <v-list-item @click="formDialog = !formDialog" dense>Добавить ДИ</v-list-item>
+        <v-list-item dense>Изменить</v-list-item>
       </v-list>
     </v-menu>
-    <v-dialog v-model="formDialog" width="600">
+    <v-dialog v-model="formDialog" width="600" persistent>
       <v-card>
         <v-toolbar dense flat dark color="primary">
           <v-toolbar-title>Добавить должностные инструкции</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-form ref="form">
+          <v-form ref="form" class="mt-3">
             <v-row>
               <template v-for="(description, index) in responsibilityForms">
                 <v-col cols="12" :key="'desc' + index">

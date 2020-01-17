@@ -13,7 +13,7 @@
     <v-dialog persistent width="600" v-model="addResponsibilityDialog">
       <v-card>
         <v-toolbar flat dense dark color="primary">
-          <v-toolbar-title>Добавить ДО</v-toolbar-title>
+          <v-toolbar-title>Добавить должностную объязанность</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
           <v-form class="my-5" ref="addResponsibilityForm">
@@ -21,7 +21,7 @@
               name="responsibility"
               rounded
               filled
-              label="Должностная обязанность"
+              label="Должностная объязанность"
               v-model="responsibilityName"
               :rules="rules"
             ></v-text-field>
@@ -56,7 +56,7 @@
                 <v-col cols="4" :key="'day' + index">
                   <v-text-field
                   v-model="description.days"
-                  label="д"
+                  label="Дни"
                   :name="'day' + index"
                   rounded
                   type="number"
@@ -66,7 +66,7 @@
                  <v-col cols="4" :key="'hour' + index">
                   <v-text-field
                   v-model="description.hours"
-                  label="ч"
+                  label="Часы"
                   :name="'hour' + index"
                   type="number"
                   rounded
@@ -76,7 +76,7 @@
                  <v-col cols="4" :key="'minute' + index">
                   <v-text-field
                   v-model="description.minutes"
-                  label="м"
+                  label="Минуты"
                   :name="'minute' + index"
                   type="number"
                   rounded
@@ -146,9 +146,6 @@ export default {
       this.addResponsibilityDialog = !this.addResponsibilityDialog;
       form.reset();
       this.responsibilityDescriptions.length = 0;
-    },
-    dataToMilliseconds(days, hours, minutes) {
-      return days * 86400000 + hours * 3600000 + minutes * 60000;
     }
   }
 };
