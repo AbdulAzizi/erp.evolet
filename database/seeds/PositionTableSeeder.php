@@ -12,10 +12,11 @@ class PositionTableSeeder extends Seeder
     public function run()
     {
         $positions = App\Position::insert([
-            ['name'=>'Руководитель'],
-            ['name'=>'Ведущий Специалист'],
-            ['name'=>'Специалист'],
-            ['name'=>'Стажёр'],
+            ['name' => 'Руководитель'],
+            ['name' => 'Главный специалист'],
+            ['name' => 'Ведущий специалист'],
+            ['name' => 'Младший специалист'],
+            ['name' => 'Стажёр'],
         ]);
     }
 }

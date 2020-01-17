@@ -15,7 +15,7 @@
           <div>
             <template v-for="(description, subIndex) in responsibility.descriptions">
               <p :key="'list-item-'+index+subIndex" class="ma-4">
-                {{ description.text }}
+                {{subIndex + 1}}. {{ description.text }}
                 <span class="float-right mr-3 grey--text">
                   <v-icon small>mdi-timer-sand-full</v-icon>
                   {{ durObj(description.planned_time) }}

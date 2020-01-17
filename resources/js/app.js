@@ -164,6 +164,28 @@ Vue.mixin({
 
             // return collected items for field
             return items;
+        },
+        loadDivisionResponsibilities(divisionId) {
+            let items = [];
+
+            axios.get(`/api/division/responsibilities/${divisionId}`).then(res => {
+                res.data.forEach(item => {
+                    items.push({name: item.name, id: item.id});
+                });
+            }).catch(err => err.messages);
+
+            return items;
+        },
+        loadPositions(){
+            let items = [];
+
+            axios.get("/api/positions").then(res => {
+                res.data.forEach(item => {
+                    items.push({name: item.name, id: item.id});
+                });
+            }).catch(err => err.messages);
+
+            return items;
         }
     },
     computed: {
@@ -211,6 +233,7 @@ Vue.component("process-task-delete", require("./components/processTask/Delete.vu
 Vue.component("process-task-edit", require("./components/processTask/Edit.vue").default);
 Vue.component("process-task-add-form", require("./components/processTask/AddForm.vue").default);
 Vue.component("edit-add-actions", require("./components/division/EditAddActions.vue").default);
+Vue.component("add-employee", require("./components/division/AddEmployee.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("factories", require("./components/views/factories/Index.vue").default);

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Division;
+use App\Position;
 use App\User;
 use App\Resume;
 use App\Task;
@@ -33,19 +35,10 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'surname' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'positionId' => 'required',
-            'responsibilityId' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         $randomPassword = Str::random(10);
+
+        $position = Position::find($request->positionId);
+
 
         $newUser = User::create([
             'name' => $request->name,
@@ -56,12 +49,26 @@ class UserController extends Controller
             'division_id' => $request->divisionId,
         ]);
 
-        $responsibilityIds = json_decode($request->responsibilityId);
-        $newUser->responsibilities()->attach($responsibilityIds);
+        $newUser->responsibilities()->attach($request->responsibilities);
 
-        Password::broker()->sendResetLink(['email' => $newUser->email]);
+        if ($position->name == 'Руководитель') {
 
-        return redirect()->back();
+            $secondaryPositionId = Position::where('name', 'Главный специалист')->first()->id;
+
+            $division = Division::find($request->divisionId);
+
+            $headUser = User::find($division->head_id);
+
+            $headUser->position_id = $secondaryPositionId;
+            $headUser->save();
+
+            $division->head_id = $newUser->id;
+            $division->save();
+        }
+        // Password::broker()->sendResetLink(['email' => $newUser->email]);
+
+        $user = User::with('position', 'responsibilities')->find($newUser->id);
+        return $user;
     }
 
     public function markAsRead(Request $request)
@@ -70,11 +77,10 @@ class UserController extends Controller
 
         $notification = $user->notifications->find($request->notification['id']);
 
-        if($request->toggle == true){
-            
+        if ($request->toggle == true) {
+
             $notification->read_at !== null ? $notification->markAsUnread() : $notification->markAsRead();
-        }
-        else if($request->toggle == false) {
+        } else if ($request->toggle == false) {
 
             $notification->markAsRead();
         }

@@ -1,5 +1,8 @@
 <template>
   <v-expansion-panels accordion class="d-inline-flex justify-end">
+    <v-dialog width="600" v-model="addEmployeeDialog">
+      <add-employee :division="division" />
+    </v-dialog>
     <v-expansion-panel class="transparent" v-if="isDivision">
       <v-expansion-panel-header class="white">
         <h1 class="title">{{ division.name }}</h1>
@@ -47,11 +50,11 @@
           </v-layout>
 
           <v-layout row wrap>
-            <v-flex xs12 md6 lg4 xl3 v-for="user in divisionWithoutHead" :key="user.id">
+            <v-flex xs12 md6 lg4 xl3 v-for="user in divisionEmployees" :key="user.id">
               <user-card :user="user" />
             </v-flex>
             <v-flex xs12 md6 lg4 xl3 v-if="isUserHead && departmentDepth">
-              <v-card @click="addUser()" hover height="100%">
+              <v-card @click="addEmployeeDialog = !addEmployeeDialog" hover height="100%">
                 <div class="display-4 text-sm-center align-center">+</div>
               </v-card>
             </v-flex>
@@ -88,8 +91,10 @@ export default {
   data() {
     return {
       isDivision: true,
+      localDivision: this.division,
       tab: null,
-      items: []
+      items: [],
+      addEmployeeDialog: false
     };
   },
 
@@ -111,13 +116,9 @@ export default {
   },
 
   computed: {
-    dump: function() {},
-    divisionWithoutHead: function() {
-      if (this.division.head)
-        return this.division.users.filter(
-          user => user.id !== this.division.head.id
-        );
-      return this.division.users;
+    divisionEmployees: function() {
+     const headOfDivisionId = this.localDivision.head_id;
+      return this.localDivision.users.filter(user => user.id !== headOfDivisionId)
     },
     usersCount: function() {
       return divisionUsersRecursiveCount(this.division);
@@ -125,6 +126,15 @@ export default {
     departmentDepth: function() {
       return this.division.depth > 2;
     }
+  },
+  created() {
+    console.log(this.localDivision);
+    
+    Event.listen("userAdded", data => {
+      this.addEmployeeDialog = false;
+      this.localDivision.users.push(data);
+      Event.fire('notify', [`Создан сотрудник ${data.name} ${data.surname}`]);
+    });
   }
 };
 </script>
@@ -135,7 +145,7 @@ export default {
   border-radius: 0;
 }
 
-.v-expansion-panel-header{
+.v-expansion-panel-header {
   border-radius: 0;
 }
 </style>

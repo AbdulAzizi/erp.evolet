@@ -57,11 +57,18 @@ class ResponsibilityController extends Controller
         return  redirect()->back();
     }
 
-    public function getResponsibilities()
+    public function loadResponsibilities()
     {
         $responsibilites = Responsibility::all();
 
         return $responsibilites;
+    }
+
+    public function loadDivisionResponsibilities(Request $request)
+    {
+        $divisionResponsibilities = Responsibility::where('division_id', $request->id)->get();
+
+        return $divisionResponsibilities;
     }
 
     public function addResponsibility(Request $request)

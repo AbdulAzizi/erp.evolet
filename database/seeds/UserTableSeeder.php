@@ -54,7 +54,7 @@ class UserTableSeeder extends Seeder
                 'email' => 'inoyat@admin.com',
                 'password' => 'admin',
                 'division' => 'ПК',
-                'position' => 'Специалист',
+                'position' => 'Главный специалист',
                 'responsibilities' => ['ПК'],
             ],
             [
@@ -64,7 +64,7 @@ class UserTableSeeder extends Seeder
                 'email' => 'azimjon@admin.com',
                 'password' => 'admin',
                 'division' => 'ПК',
-                'position' => 'Специалист',
+                'position' => 'Главный специалист',
                 'responsibilities' => ['ПК'],
             ],
             [
@@ -74,7 +74,7 @@ class UserTableSeeder extends Seeder
                 'email' => 'behruz@admin.com',
                 'password' => 'admin',
                 'division' => 'НО',
-                'position' => 'Специалист',
+                'position' => 'Главный специалист',
                 'responsibilities' => ['НО'],
             ],
             [
@@ -84,7 +84,7 @@ class UserTableSeeder extends Seeder
                 'email' => 'alisher@admin.com',
                 'password' => 'admin',
                 'division' => 'ОМАР',
-                'position' => 'Специалист',
+                'position' => 'Главный специалист',
                 'responsibilities' => ['Куратор Портфеля ПК стран'],
             ],
             [
@@ -93,7 +93,7 @@ class UserTableSeeder extends Seeder
                 'email' => 'ergashev.akb@admin.com',
                 'password' => 'admin',
                 'division' => 'ОЦМ',
-                'position' => 'Специалист',
+                'position' => 'Главный специалист',
                 'responsibilities' => ['ПК'],
             ],
             [
@@ -131,7 +131,7 @@ class UserTableSeeder extends Seeder
                 'email' => 'jovidon@admin.com',
                 'password' => 'admin',
                 'division' => 'ОЗк',
-                'position' => 'Специалист',
+                'position' => 'Главный специалист',
                 'responsibilities' => ['МРБ'],
             ],
         ]);

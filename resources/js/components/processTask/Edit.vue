@@ -81,7 +81,6 @@ export default {
   },
   methods: {
     submit() {
-        console.log(this.task);
         
       const form = this.$refs.editProcessTaskForm;
       this.prepareData();

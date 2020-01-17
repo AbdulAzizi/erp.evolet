@@ -66,7 +66,9 @@ Route::post('/files/field/delete/{id}', 'FileController@deleteFieldFromFile')->n
 Route::post('/files/fields/create', 'FileController@attachFields')->name('file.attachFields');
 Route::post('/files/update/{id}', 'FileController@update')->name('file.update');
 Route::post('/process/tasks/create', 'ProcessTaskController@create')->name('processTask.create');
-Route::get('/responsibilities', 'ResponsibilityController@getResponsibilities')->name('responsibilities.get');
+Route::get('/responsibilities', 'ResponsibilityController@loadResponsibilities')->name('responsibility.loadResponsibilities');
+Route::get('/division/responsibilities/{id}', 'ResponsibilityController@loadDivisionResponsibilities')->name('responsibility.loadDivisionResponsibilities');
+Route::get('/positions', 'PositionController@loadPositions')->name('position.loadPositions');
 Route::delete('/process/task/delete/{id}', 'ProcessTaskController@delete')->name('processTask.delete');
 Route::put('/process/task/edit/{id}', 'ProcessTaskController@edit')->name('processTask.edit');
 Route::post('/forms/create', 'FormController@create')->name('form.create');
@@ -79,3 +81,5 @@ Route::post('/field/delete/{id}', 'FormController@deleteField')->name('field.del
 Route::post('/mark/all/notifications/{id}', 'UserController@markAllNotificationsAsRead')->name('user.markAllNotificationsAsRead');
 Route::post('/add/responsibility/{id}', 'ResponsibilityController@store')->name('responsibility.store');
 Route::post('/add/single/responsibility/{id}', 'ResponsibilityController@addResponsibility')->name('responsibility.add');
+Route::post('/users', 'UserController@store')->name('users.store');
+
