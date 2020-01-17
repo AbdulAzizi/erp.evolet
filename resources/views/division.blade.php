@@ -2,15 +2,15 @@
 
 @section('content')
 
-<division
+    <views-division
     :division="{{$division}}" 
     :is-user-head="{{$isUserHead}}" 
     :is-root="true"
     :jsonResponsibilities="{{$jsonResponsibilities}}"
     :ildInputs="{{$oldInputs}}"
     :errors="{{ $errors }}"
-    :user="{{$authUser}}"
-    ></division>
+    :user="{{$authUser}}">
+    </views-division>
 
 
 

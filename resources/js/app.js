@@ -252,7 +252,8 @@ Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vu
 
 Vue.component("profile-responsibility", require("./components/views/ProfileResponsibility.vue").default);
 
-Vue.component("profile-responsibility-show", require("./components/profile/Responsibility.vue").default);
+Vue.component("responsibilities", require("./components/Responsibilities.vue").default);
+Vue.component("responsibility-card", require("./components/responsibilities/Card.vue").default);
 
 Vue.component("add-job-description", require("./components/form/AddJobDescription.vue").default);
 
@@ -276,8 +277,7 @@ Vue.component("kanban-view", require("./components/Kanban.vue").default);
 Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
 
 Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
-Vue.component("division-responsibilities", require("./components/views/DivisionResponsibilities.vue").default);
-Vue.component("division", require("./components/views/Division.vue").default);
+Vue.component("views-division", require("./components/views/Division.vue").default);
 Vue.component("chats-view", require("./components/views/Chats.vue").default);
 
 Vue.component("products-admin-view", require("./components/ProductsAdmin").default);

@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class ResponsibilityController extends Controller
 {
+    public function index()
+    {
+        $responsibilities = Responsibility::with('descriptions')->get();
+        return view('responsibilites', compact('responsibilities'));
+    }
 
     public function show(Request $request, $id)
     {
@@ -18,7 +23,7 @@ class ResponsibilityController extends Controller
 
         if (\Auth::user()->position->name = "Руководитель" && \Auth::user()->division->id == $user->division->id)
             $division = Division::with('responsibilities')->find($user->division_id);
-        return view('profile.responsibility', compact('user', 'division'));
+        return view('profile.responsibilities', compact('user', 'division'));
     }
 
     public function store(Request $request)

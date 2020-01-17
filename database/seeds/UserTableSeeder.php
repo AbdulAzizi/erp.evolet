@@ -108,7 +108,7 @@ class UserTableSeeder extends Seeder
             ],
             [
                 'name' => 'Anvar',
-                'surname' => 'Jabarov',
+                'surname' => 'Jabarrov',
                 'img' => 'anvar.jpg',
                 'email' => 'anvar@admin.com',
                 'password' => 'admin',
@@ -133,6 +133,15 @@ class UserTableSeeder extends Seeder
                 'division' => 'ОЗк',
                 'position' => 'Главный специалист',
                 'responsibilities' => ['МРБ'],
+            ],
+            [
+                'name' => 'Shuhrat',
+                'surname' => 'Safarov',
+                'email' => 'shuhrat@admin.com',
+                'password' => 'admin',
+                'division' => 'ДЧ',
+                'position' => 'Специалист',
+                'responsibilities' => ['HR'],
             ],
         ]);
 
