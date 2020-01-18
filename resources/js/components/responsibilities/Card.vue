@@ -8,8 +8,8 @@
             </v-toolbar>
             <div v-if="responsibility.descriptions && responsibility.descriptions.length">
                 <template v-for="(description, subIndex) in responsibility.descriptions">
-                    <p :key="'list-item-'+subIndex" class="ma-4">
-                        {{ description.text }}
+                    <p :key="'list-item-' + subIndex" class="ma-4">
+                       {{subIndex + 1}}. {{ description.text }}
                         <span class="float-right mr-3 grey--text">
                             <v-icon small>mdi-timer-sand-full</v-icon>
                             {{ durObj(description.planned_time) }}
