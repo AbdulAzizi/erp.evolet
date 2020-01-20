@@ -127,14 +127,15 @@ export default {
       return this.division.depth > 2;
     }
   },
-  created() {
-    console.log(this.localDivision);
-    
+  created() {    
     Event.listen("userAdded", data => {
       this.addEmployeeDialog = false;
       this.localDivision.users.push(data);
       Event.fire('notify', [`Создан сотрудник ${data.name} ${data.surname}`]);
     });
+    Event.listen('cancelEmployeeSubmition', data => {
+      this.addEmployeeDialog = false;
+    })
   }
 };
 </script>
