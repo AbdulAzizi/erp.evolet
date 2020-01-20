@@ -1,5 +1,17 @@
 <template>
   <div>
+    <v-dialog width="440" v-model="warningDialog">
+      <v-card>
+        <v-card-title class="headline">
+          Вы действительно хотите удалить полномочие?
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text color="red lightne-2" @click="warningDialog = !warningDialog">отмена</v-btn>
+          <v-btn text color="primary" @click="deleteResponsibility()">удалить</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-menu bottom left>
       <template v-slot:activator="{ on }">
         <v-btn v-on="on" dark icon small>
@@ -8,7 +20,8 @@
       </template>
       <v-list>
         <v-list-item @click="formDialog = !formDialog" dense>Добавить ДИ</v-list-item>
-        <v-list-item dense>Изменить</v-list-item>
+        <v-list-item dense @click="editResponsibility()">Изменить</v-list-item>
+        <v-list-item dense @click="warningDialog = !warningDialog">Удалить</v-list-item>
       </v-list>
     </v-menu>
     <v-dialog v-model="formDialog" width="600" persistent>
@@ -99,6 +112,7 @@ export default {
   data() {
     return {
       formDialog: false,
+      warningDialog: false,
       disabled: true,
       responsibilityForms: [
         {
@@ -129,6 +143,17 @@ export default {
           minutes: null
       });
       this.disabled = false;
+    },
+    editResponsibility(){
+      Event.fire('editResponsibility', this.responsibility.id);
+    },
+    displayDeleteWarning(){
+      this.deleteWarningDialog = true;
+    },
+    deleteResponsibility(){
+      axios.delete(`/api/delete/responsibility/${this.responsibility.id}`).then(res => {
+        Event.fire('deleteResponsibility', this.responsibility.id);
+      }).catch(err => err.messages);
     },
     resetForm(){
       const form = this.$refs.form;

@@ -52,6 +52,27 @@ class ResponsibilityController extends Controller
 
         return $responsibilityWithDescriptions;
     }
+
+    public function edit(Request $request)
+    {
+        $responsibility = Responsibility::find($request->id);
+
+        $responsibility->name = $request->name;
+
+        $responsibility->save();
+
+        return $responsibility;
+    }
+
+    public function delete(Request $request){
+
+        $responsibility = Responsibility::find($request->id);
+
+        $responsibility->descriptions()->delete();
+
+        $responsibility->delete();
+    }
+    
     public function createJobDescription()
     {
         JobDescription::create([
@@ -82,13 +103,13 @@ class ResponsibilityController extends Controller
 
         foreach ($request->descriptions as $description) {
             if ($description['level'] !== null && $description['text'] !== null) {
-            $data[] = [
-                'responsibility_id' => $request->id,
-                'text' => $description['text'],
-                'level' => $description['level'],
-                'planned_time' => $description['days'] * 86400000 + $description['hours'] * 3600000 + $description['minutes'] * 60000
-            ];
-        }
+                $data[] = [
+                    'responsibility_id' => $request->id,
+                    'text' => $description['text'],
+                    'level' => $description['level'],
+                    'planned_time' => $description['days'] * 86400000 + $description['hours'] * 3600000 + $description['minutes'] * 60000
+                ];
+            }
         }
 
         $jobdescription = JobDescription::insert($data);

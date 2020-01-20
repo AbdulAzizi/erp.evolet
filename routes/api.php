@@ -82,4 +82,9 @@ Route::post('/mark/all/notifications/{id}', 'UserController@markAllNotifications
 Route::post('/add/responsibility/{id}', 'ResponsibilityController@store')->name('responsibility.store');
 Route::post('/add/single/responsibility/{id}', 'ResponsibilityController@addResponsibility')->name('responsibility.add');
 Route::post('/users', 'UserController@store')->name('users.store');
+Route::post('/edit/responsibility/{id}', 'ResponsibilityController@edit')->name('responsibility.edit');
+Route::delete('/delete/responsibility/{id}', 'ResponsibilityController@delete')->name('responsibility.delete');
+Route::delete('/delete/description/{id}', 'JobDescriptionController@delete')->name('jobDescription.delete');
+Route::post('/edit/description/{id}', 'JobDescriptionController@edit')->name('jobDescription.edit');
+
 

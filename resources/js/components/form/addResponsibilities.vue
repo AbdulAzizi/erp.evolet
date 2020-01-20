@@ -36,7 +36,6 @@
                     label="Должностные инструкции"
                     rounded
                     filled
-                    @keypress.once="addResponsibilityDescription()"
                   ></v-textarea>
                 </v-col>
                  <v-col cols="12" :key="'weight' + index">
@@ -91,9 +90,8 @@
               outlined
               block
               color="primary"
-              v-if="responsibilityDescriptions.length == 0"
               @click="addResponsibilityDescription()"
-            >Добавить ДИ</v-btn>
+            >Добавить интсрукцию</v-btn>
           </v-form>
         </v-card-text>
         <v-card-actions>
