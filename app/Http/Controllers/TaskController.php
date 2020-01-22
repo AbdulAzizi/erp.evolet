@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Division;
 use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
 use App\Notifications\AssignedAsWatcher;
@@ -44,7 +45,8 @@ class TaskController extends Controller
 
         $tags = Tag::all();
         // All Users needed while choosing user assignee
-        $users = User::with(['division'])->get();
+        // $users = User::with(['division'])->get();
+        $divisions = Division::withDepth()->having('depth', '=', 3)->with('users')->whereHas('users')->get();
         // $notifications = $authUser->notifications;
 
         return view('tasks.index', compact(
@@ -52,7 +54,8 @@ class TaskController extends Controller
             'users',
             'tags',
             'statuses',
-            'authUser'
+            'authUser',
+            'divisions'
         ));
     }
 

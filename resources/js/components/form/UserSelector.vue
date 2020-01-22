@@ -2,7 +2,7 @@
     <div>
         <v-autocomplete
             v-model="selectedUsers"
-            :items="preparedUsers"
+            :items="preparedDivisions"
             item-text="fullname"
             item-value="id"
             no-data-text="Данные отсутствуют"
@@ -25,17 +25,18 @@
                     @click:close="remove(data.item)"
                 >
                     <v-avatar left>
-                        <img :src="photo(data.item.img)">
+                        <img :src="photo(data.item.img)" />
                     </v-avatar>
                     {{ data.item.name }} {{data.item.surname}}
                 </v-chip>
             </template>
 
-            <template slot="item" slot-scope="data">
-                <template>
+            <template slot="item" slot-scope="data" @click="damn">
+                <template v-if="'surname' in data.item">
                     <v-list-item-avatar>
-                        <img v-if="data.item.img" :src="photo(data.item.img)">
+                        <img v-if="data.item.img" :src="photo(data.item.img)" />
                     </v-list-item-avatar>
+
                     <v-list-item-content>
                         <v-list-item-title>{{data.item.name}} {{data.item.surname}}</v-list-item-title>
                         <v-list-item-subtitle>
@@ -48,52 +49,82 @@
                                     v-if="key != data.item.responsibilities.length-1"
                                 >|</span>
                             </span>
-                            - {{data.item.division.abbreviation}}
+                            <!-- - {{data.item.division.abbreviation}} -->
                         </v-list-item-subtitle>
                     </v-list-item-content>
                 </template>
+                <v-list-item-content v-else @click="handleDivisionSelection(data.item)">
+                    <v-list-item-title>{{data.item.name}}</v-list-item-title>
+                </v-list-item-content>
             </template>
         </v-autocomplete>
-        <input type="hidden" :name="name" :value="JSON.stringify(selectedUsers)">
+        <input type="hidden" :name="name" :value="JSON.stringify(selectedUsers)" />
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        users: Array,
+        users: {
+            required: false,
+            type: Array
+        },
+        divisions: {
+            required: false
+        },
         label: String,
         icon: String,
         name: String,
         hint: String,
         value: null
     },
-    data(){
+    data() {
         console.log(this.value);
         return {
             selectedUsers: this.value || [],
             searchText: null
-        }
+        };
     },
     methods: {
-        remove(user) {            
+        handleDivisionSelection(el) {
+            console.log(this.selectedUsers);
+            
+            // this.selectedUsers.pop();
+            this.divisions.forEach(division => {
+                if (division.id == el.id) {
+                    this.selectedUsers.push(...division.users.map(user=>user.id));
+                }
+            });
+        },
+        remove(user) {
             this.selectedUsers = this.selectedUsers.filter(
                 userId => userId !== user.id
             );
+        },
+        damn() {
+            console.log("damn");
         }
     },
-    created() {},
+    created() {
+        console.log(this.preparedDivisions);
+    },
     watch: {
         selectedUsers(selectedUsersId) {
             this.$emit("input", selectedUsersId);
         }
     },
     computed: {
-        preparedUsers() {
-            return this.users.map(user => {
-                user["fullname"] = user.name + " " + user.surname;
-                return user;
+        preparedDivisions() {
+            let divisionWithUsers = [];
+            this.divisions.forEach(division => {
+                divisionWithUsers.push(division);
+                if (division.users.length) {
+                    division.users.forEach(user => {
+                        divisionWithUsers.push(user);
+                    });
+                }
             });
+            return divisionWithUsers;
         }
     }
 };

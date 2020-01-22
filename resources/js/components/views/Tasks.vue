@@ -73,13 +73,13 @@
             :taskStatuses="statuses"
             :authuser="authuser"
         />
-        <tasks-add :users="users" :errors="errors" :tags="tags" />
+        <tasks-add :divisions="divisions" :errors="errors" :tags="tags" />
     </div>
 </template>
 
 <script>
 export default {
-    props: ["tasks", "users", "tags", "errors", "statuses", "authuser"],
+    props: ["tasks", "divisions", "tags", "errors", "statuses", "authuser"],
     data() {
         return {
             currentView: null,
