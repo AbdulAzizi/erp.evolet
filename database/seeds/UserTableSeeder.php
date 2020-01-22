@@ -18,6 +18,26 @@ class UserTableSeeder extends Seeder
         // TODO fix many to many responsibilities seed code
         $this->seedUsers([
             [
+                'img' => 'parviz.jpg',
+                'name' => 'Parviz',
+                'surname' => 'Jabborov',
+                'email' => 'parviz@admin.com',
+                'password' => 'admin',
+                'division' => 'ОД',
+                'position' => 'Руководитель',
+                'responsibilities' => [],
+            ],
+            [
+                'img' => 'bezhan.jpg',
+                'name' => 'Bezhan',
+                'surname' => 'Sufiev',
+                'email' => 'bezhan@admin.com',
+                'password' => 'admin',
+                'division' => 'ОР',
+                'position' => 'Руководитель',
+                'responsibilities' => [],
+            ],
+            [
                 'img' => 'nozim.jpg',
                 'name' => 'Nozim',
                 'surname' => 'Khakimov',
@@ -63,8 +83,8 @@ class UserTableSeeder extends Seeder
                 'surname' => 'Vohidi',
                 'email' => 'azimjon@admin.com',
                 'password' => 'admin',
-                'division' => 'ПК',
-                'position' => 'Главный специалист',
+                'division' => 'ОМАП',
+                'position' => 'Руководитель',
                 'responsibilities' => ['ПК'],
             ],
             [
