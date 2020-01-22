@@ -158,8 +158,8 @@ export default {
                     link.divisions.includes(user.division.abbreviation) ||
                     link.divisions.includes("*")
                 )
-                    if (user.position.name == "Руководитель")
-                        // if user has the position of "Руководитель"
+                    if (user.position_level.name == "Руководитель")
+                        // if user has the positionLevel of "Руководитель"
                         return link;
                 // get union elements of two arrays (link.responsibilities,userResps)
                 let unionLinks = link.responsibilities.filter(resp =>

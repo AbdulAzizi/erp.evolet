@@ -4,7 +4,7 @@
 use App\User;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
-use App\Position;
+use App\PositionLevel;
 use App\Responsibility;
 use App\Division;
 
@@ -24,7 +24,7 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->firstName,
         'surname' => $surname,
-        'position_id' => getRandomId(Position::all(), [1]),
+        'position_level_id' => getRandomId(PositionLevel::all(), [1]),
         'division_id' => getRandomId(Division::all(), Division::withDepth()->having('depth','!=', 3)->pluck('id')->toArray()),
         'email' =>  $surname . '@admin.com',
         'email_verified_at' => now(),

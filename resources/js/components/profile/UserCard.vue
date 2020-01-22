@@ -17,7 +17,7 @@
     <v-card-text>
       <v-card-title class="justify-center pa-0">
         <div class="subtitle-1 black--text">
-          <span class="font-weight-regular text-sm-left">{{ user.position.name }}</span>
+          <span class="font-weight-regular text-sm-left">{{ user.position_level.name }}</span>
         </div>
       </v-card-title>
       <h3

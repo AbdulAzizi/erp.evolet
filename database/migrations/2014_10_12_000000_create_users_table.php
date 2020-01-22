@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('surname');
             $table->string('img')->nullable()->default('default-user.jpg');
-            $table->unsignedInteger('position_id');
+            $table->unsignedInteger('position_level_id');
             $table->unsignedInteger('division_id');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

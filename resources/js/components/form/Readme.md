@@ -36,8 +36,8 @@ So this component contains a basic set of props for every field component that p
 <form-field :field="{
     type: 'select',
     name: 'positionId',
-    label: 'Position',
-    items: positions,
+    label: 'PositionLevel',
+    items: positionLevels,
 }"/>
 ```
 
@@ -58,8 +58,8 @@ For situations that field has some unique **prop** or **prop value** you can ove
 <form-field :field="{
     type: 'select',
     name: 'positionId',
-    label: 'Position',
-    items: positions,
+    label: 'PositionLevel',
+    items: positionLevels,
     props:{
         outline: true
     }
@@ -235,7 +235,7 @@ It will submit two input one with original name that was passed through JSON, an
 
 #### *users*
 
-Field with list of persons with avatar, name and position, serves for selecting users
+Field with list of persons with avatar, name and positionLevel, serves for selecting users
 
 ##### Default component
 

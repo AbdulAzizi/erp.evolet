@@ -46,7 +46,7 @@
         <h4>Опыт работы</h4>
         @foreach ($resume->jobs as $key => $job)
             <p>Название компании: {{$job->company_name}}</p>
-            <p>Позиция: {{$job->position}}</p>
+            <p>Позиция: {{$job->positionLevel}}</p>
             <p>Местоположение: {{$job->location}}</p>
             <p>Период работы: {{date('d.m.Y', strtotime($job->start_at))}} - {{date('d.m.Y', strtotime($job->end_at))}}</p>
             @if ($resume->jobs->count() > $key + 1)

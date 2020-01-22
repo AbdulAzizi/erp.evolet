@@ -11,7 +11,7 @@ class PositionTableSeeder extends Seeder
      */
     public function run()
     {
-        $positions = App\Position::insert([
+        $positionLevels = App\PositionLevel::insert([
             ['name' => 'Руководитель'],
             ['name' => 'Главный специалист'],
             ['name' => 'Ведущий специалист'],

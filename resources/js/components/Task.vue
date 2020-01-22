@@ -183,7 +183,7 @@
 </template>
 
 <script>
-const DIVISION_HEAD_POSITION_ID = 1;
+const DIVISION_HEAD_POSITION__LEVEL_ID = 1;
 
 export default {
   props: {
@@ -313,7 +313,7 @@ export default {
       return this.task.from.front_tethers;
     },
     userCanForward() {
-      return this.task.responsible.position.id === DIVISION_HEAD_POSITION_ID;
+      return this.task.responsible.positionLevel.id === DIVISION_HEAD_POSITION__LEVEL_ID;
     },
     usersForAvatar() {
       let users = this.task.watchers.map(watcher => {

@@ -176,10 +176,10 @@ Vue.mixin({
 
             return items;
         },
-        loadPositions(){
+        loadPositionLevels() {
             let items = [];
 
-            axios.get("/api/positions").then(res => {
+            axios.get("/api/positionLevels").then(res => {
                 res.data.forEach(item => {
                     items.push({name: item.name, id: item.id});
                 });
@@ -195,6 +195,9 @@ Vue.mixin({
         csrf() {
             return window.Laravel.csrf_token;
         }
+    },
+    created() {
+        // console.log(this.auth);
     }
 });
 

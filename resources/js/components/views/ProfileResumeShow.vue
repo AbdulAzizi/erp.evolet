@@ -72,7 +72,7 @@
           deleteUrl="/api/deleteJob/"
           firstMainLine="company_name"
           firstSecondaryLine="location"
-          :secondLineItems="['position', 'start_at', 'end_at']"
+          :secondLineItems="['positionLevel', 'start_at', 'end_at']"
         >
           <resume-add-item
             :user="user"
@@ -246,7 +246,7 @@ export default {
           {
             label: "Позиция",
             type: "string",
-            name: "position",
+            name: "positionLevel",
             rules: ["required"]
           },
           {

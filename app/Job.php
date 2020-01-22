@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-    protected $fillable = ['position', 'start_at', 'end_at', 'location', 'resume_id', 'company_name'];
+    protected $fillable = ['positionLevel', 'start_at', 'end_at', 'location', 'resume_id', 'company_name'];
 
     public $timestamps = false;
 

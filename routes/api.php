@@ -68,7 +68,7 @@ Route::post('/files/update/{id}', 'FileController@update')->name('file.update');
 Route::post('/process/tasks/create', 'ProcessTaskController@create')->name('processTask.create');
 Route::get('/responsibilities', 'ResponsibilityController@loadResponsibilities')->name('responsibility.loadResponsibilities');
 Route::get('/division/responsibilities/{id}', 'ResponsibilityController@loadDivisionResponsibilities')->name('responsibility.loadDivisionResponsibilities');
-Route::get('/positions', 'PositionController@loadPositions')->name('position.loadPositions');
+Route::get('/positionLevels', 'PositionController@loadPositionLevels')->name('positionLevel.loadPositionLevels');
 Route::delete('/process/task/delete/{id}', 'ProcessTaskController@delete')->name('processTask.delete');
 Route::put('/process/task/edit/{id}', 'ProcessTaskController@edit')->name('processTask.edit');
 Route::post('/forms/create', 'FormController@create')->name('form.create');

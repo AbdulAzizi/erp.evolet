@@ -41,7 +41,7 @@
           items: positionItems,
           rules: ['required']
           }"
-            v-model="position"
+            v-model="positionLevel"
           ></form-field>
           <form-field
             :field="{
@@ -73,10 +73,10 @@ export default {
       name: null,
       surname: null,
       email: null,
-      position: null,
+      positionLevel: null,
       responsibilities: [],
       responsibilityItems: this.loadDivisionResponsibilities(this.division.id),
-      positionItems: this.loadPositions()
+      positionItems: this.loadPositionLevels()
     };
   },
   methods: {
@@ -88,7 +88,7 @@ export default {
             name: this.name,
             surname: this.surname,
             email: this.email,
-            positionId: this.position,
+            positionId: this.positionLevel,
             responsibilities: this.responsibilities,
             divisionId: this.division.id
           })

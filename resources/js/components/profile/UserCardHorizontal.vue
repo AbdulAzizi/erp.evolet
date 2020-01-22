@@ -9,7 +9,7 @@
         </v-col>
         <v-col cols="9">
           <h4 class="primary--text pb-1">{{ user.name }} {{ user.surname }}</h4>
-          <span style="font-size:12px">{{ user.position.name }}</span> <br>
+          <span style="font-size:12px">{{ user.position_level.name }}</span> <br>
           <span style="font-size:12px">{{user.division.name}}</span> <br>
           <span style="font-size: 12px;" class="grey--text" v-for="(responsibility, key) in user.responsibilities" :key="'responsibility-'+key">
           {{responsibility.name}}

@@ -9,7 +9,7 @@
                 <v-list-item-content>
                     <v-list-item-title>{{`${user.name} ${user.surname}`}}</v-list-item-title>
                     <v-list-item-subtitle>
-                        {{user.position.name}}
+                        {{user.position_level.name}}
                         <br>
                         <span
                             v-for="(responsibility,key) in user.responsibilities"

@@ -21,7 +21,7 @@
             </v-tab-item>
             <v-tab-item>
                 <responsibilities :responsibilities="localDivision.responsibilities" />
-                <add-responsibilities :division="localDivision" v-if="user.position.name == 'Руководитель'" />
+                <add-responsibilities :division="localDivision" v-if="user.position_level.name == 'Руководитель'" />
             </v-tab-item>
         </v-tabs-items>
     </div>

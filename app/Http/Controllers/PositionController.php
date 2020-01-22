@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Position;
+use App\PositionLevel;
 use Illuminate\Http\Request;
 
 class PositionController extends Controller
 {
-    public function loadPositions()
+    public function loadPositionLevels()
     {
-        $positions = Position::all();
+        $positionLevels = PositionLevel::all();
 
-        return $positions;
+        return $positionLevels;
     }
 }

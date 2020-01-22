@@ -54,7 +54,7 @@
                                     </v-list-item-avatar>
                                     <v-list-item-content>
                                         <v-list-item-title>{{ chat.from.name }} {{ chat.from.surname }}</v-list-item-title>
-                                        <v-list-item-subtitle>{{ chat.from.position.name }} {{ chat.from.division.abbreviation }}</v-list-item-subtitle>
+                                        <v-list-item-subtitle>{{ chat.from.positionLevel.name }} {{ chat.from.division.abbreviation }}</v-list-item-subtitle>
                                     </v-list-item-content>
                                 </template>
                                 <template v-if="typeof chat.to === 'object'">
@@ -63,7 +63,7 @@
                                     </v-list-item-avatar>
                                     <v-list-item-content>
                                         <v-list-item-title>{{ chat.to.name }} {{ chat.to.surname }}</v-list-item-title>
-                                        <v-list-item-subtitle>{{ chat.to.position.name }} {{ chat.to.division.abbreviation }}</v-list-item-subtitle>
+                                        <v-list-item-subtitle>{{ chat.to.positionLevel.name }} {{ chat.to.division.abbreviation }}</v-list-item-subtitle>
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
@@ -143,7 +143,7 @@
 
                                 <v-list-item-content>
                                     <v-list-item-title>{{ user.name }} {{ user.surname }}</v-list-item-title>
-                                    <v-list-item-subtitle>{{ user.position.name }} {{ user.division.abbreviation }}</v-list-item-subtitle>
+                                    <v-list-item-subtitle>{{ user.position_level.name }} {{ user.division.abbreviation }}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                         </v-list-item-group>
@@ -206,7 +206,7 @@
                             {{participant.name}}
                             {{participant.surname}}
                         </v-list-item-title>
-                        <v-list-item-subtitle>{{participant.position.name}} {{participant.division.abbreviation}}</v-list-item-subtitle>
+                        <v-list-item-subtitle>{{participant.positionLevel.name}} {{participant.division.abbreviation}}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
