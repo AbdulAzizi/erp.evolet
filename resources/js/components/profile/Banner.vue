@@ -18,16 +18,16 @@
                   class="primary--text display-1 font-weight-regular"
                 >{{user.name}} {{user.surname}}</h2>
                 <span
-                  v-for="(responsibility,key) in user.responsibilities"
-                  :key="'responsibility-'+key"
+                  v-for="(position,key) in user.positions"
+                  :key="'position-'+key"
                   class="headline font-weight-regular text-sm-left"
                 >
-                  {{responsibility.name}}
-                  <template v-if="key != user.responsibilities.length-1">|</template>
+                  {{position.name}}
+                  <template v-if="key != user.positions.length-1">|</template>
                 </span>
                 <!-- <h4
                                     class="headline font-weight-regular text-sm-left"
-                >{{user.responsibility.name}}</h4>-->
+                >{{user.position.name}}</h4>-->
               </div>
             </v-flex>
           </v-layout>
@@ -93,7 +93,7 @@ export default {
         { title: "Задачи", path: `/users/${this.user.id}`, icon: "mdi-phone" },
         {
           title: "ДО",
-          path: `/users/${this.user.id}/responsibility`,
+          path: `/users/${this.user.id}/position`,
           icon: "mdi-ballot-outline"
         },
         {

@@ -15,14 +15,14 @@ class DatabaseSeeder extends Seeder
         
         $this->call(PollSeeder::class);
         $this->call(DivisionTableSeeder::class);
-        $this->call(ResponsibilityTableSeeder::class);
+        $this->call(PositionTableSeeder::class);
         $this->call(JobDescriptionSeeder::class);
         $this->call(FieldsTypesSeeder::class);
         $this->call(TagTableSeeder::class);
         $this->call(FormTableSeeder::class);
         $this->call(FieldTableSeeder::class);
         $this->call(ProcessTableSeeder::class);
-        $this->call(PositionTableSeeder::class);
+        $this->call(PositionLevelTableSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(CountryTableSeeder::class);
         $this->call(StatusTableSeeder::class);

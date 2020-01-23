@@ -203,7 +203,7 @@ export default {
     filterUsers(name) {
       let curators = [];
       this.users.forEach(element => {
-        element.responsibilities.forEach(el => {
+        element.positions.forEach(el => {
           if(el.name == name){
             curators.push(element);
           }

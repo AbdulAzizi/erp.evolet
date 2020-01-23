@@ -9,11 +9,11 @@
         </v-col>
         <v-col cols="9">
           <h4 class="primary--text pb-1">{{ user.name }} {{ user.surname }}</h4>
-          <span style="font-size:12px">{{ user.position.name }}</span> <br>
+          <span style="font-size:12px">{{ user.position_level.name }}</span> <br>
           <span style="font-size:12px">{{user.division.name}}</span> <br>
-          <span style="font-size: 12px;" class="grey--text" v-for="(responsibility, key) in user.responsibilities" :key="'responsibility-'+key">
-          {{responsibility.name}}
-          <span v-if="key != user.responsibilities.length-1"> &#183;  </span>
+          <span style="font-size: 12px;" class="grey--text" v-for="(position, key) in user.positions" :key="'position-'+key">
+          {{position.name}}
+          <span v-if="key != user.positions.length-1"> &#183;  </span>
           </span>
         </v-col>
       </v-row>

@@ -13,7 +13,7 @@ class JobController extends Controller
             'company_name' => $request->company_name,
             'start_at' => $request->start_at,
             'end_at' => $request->end_at,
-            'position' => $request->position,
+            'positionLevel' => $request->positionLevel,
             'location' => $request->location,
             'resume_id' => $request->resume_id
         ]);

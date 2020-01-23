@@ -9,14 +9,14 @@
       v-show="true"
       dialog
       method="post"
-      action-url="/users/{id}/responsibility"
+      action-url="/users/{id}/position"
       activatorEventName="showForm"
       :fields="[
             {
               type: 'select',
-              name: 'responsibility_id',
+              name: 'position_id',
               label: 'Полномочия',
-              items:  this.responsibilities,
+              items:  this.positions,
               rules: ['required']
             },
             {
@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  props: ["user", "responsibilities"],
+  props: ["user", "positions"],
   data() {
     return {};
   },

@@ -91,10 +91,10 @@
                                     >{{user.name}} {{user.surname}}</h2>
                                 </a>
                                 <h4
-                                    v-for="(responsibility,index) in user.responsibilities"
-                                    :key="'responsibility-'+index"
+                                    v-for="(position,index) in user.positions"
+                                    :key="'position-'+index"
                                     class="subtheader font-weight-regular grey--text text-sm-left"
-                                >{{responsibility.name}}</h4>
+                                >{{position.name}}</h4>
                             </v-list>
                         </v-flex>
                     </v-layout>

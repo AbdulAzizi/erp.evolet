@@ -16,7 +16,7 @@ class CreateProcessTaskWatchers extends Migration
         Schema::create('process_task_watchers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('process_task_id');
-            $table->unsignedBigInteger('responsibility_id');
+            $table->unsignedBigInteger('position_id');
         });
     }
 

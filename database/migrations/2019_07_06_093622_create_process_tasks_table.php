@@ -19,7 +19,7 @@ class CreateProcessTasksTable extends Migration
             $table->string('title');
             $table->string('description')->nullable();
             $table->string('planned_time');
-            $table->unsignedInteger('responsibility_id');
+            $table->unsignedInteger('position_id');
         });
     }
 

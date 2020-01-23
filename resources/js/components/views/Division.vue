@@ -7,7 +7,7 @@
             grow
         >
             <v-tab :value="activeBtn.STRUCTURE">Структура</v-tab>
-            <v-tab :value="activeBtn.RESPONSIBILITY">Объязанности</v-tab>
+            <v-tab :value="activeBtn.POSITION">Объязанности</v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="currentView" class="transparent">
@@ -20,8 +20,8 @@
                 />
             </v-tab-item>
             <v-tab-item>
-                <responsibilities :responsibilities="localDivision.responsibilities" />
-                <add-responsibilities :division="localDivision" v-if="user.position.name == 'Руководитель'" />
+                <positions :positions="localDivision.positions" />
+                <add-positions :division="localDivision" v-if="user.position_level.name == 'Руководитель'" />
             </v-tab-item>
         </v-tabs-items>
     </div>
@@ -46,7 +46,7 @@ export default {
         activeBtn() {
             return Object.freeze({
                 STRUCTURE: 1,
-                RESPONSIBILITY: 2
+                POSITION: 2
             });
         },
         localCurrentView() {
@@ -58,8 +58,8 @@ export default {
         isStructure() {
             return this.currentView === this.activeBtn.STRUCTURE;
         },
-        isResponsibility() {
-            return this.currentView === this.activeBtn.RESPONSIBILITY;
+        isPosition() {
+            return this.currentView === this.activeBtn.POSITION;
         }
     },
 
@@ -81,11 +81,11 @@ export default {
         }
     },
     created() {
-        Event.listen("responsibilityAdded", data => {
-            this.localDivision.responsibilities.push(data);
+        Event.listen("positionAdded", data => {
+            this.localDivision.positions.push(data);
         });
         Event.listen("descriptionAdded", data => {
-            this.localDivision.responsibilities.forEach(element => {
+            this.localDivision.positions.forEach(element => {
                 if (element.id == data.id) {
                     element.descriptions = data.descriptions;
                 }

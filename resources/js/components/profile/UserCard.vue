@@ -17,7 +17,7 @@
     <v-card-text>
       <v-card-title class="justify-center pa-0">
         <div class="subtitle-1 black--text">
-          <span class="font-weight-regular text-sm-left">{{ user.position.name }}</span>
+          <span class="font-weight-regular text-sm-left">{{ user.position_level.name }}</span>
         </div>
       </v-card-title>
       <h3
@@ -25,9 +25,9 @@
       >{{ user.name }} {{ user.surname }}</h3>
 
       <div class="subtitle-1 black--text">
-        <span v-for="(responsibility, key) in user.responsibilities" :key="'responsibility-'+key">
-          {{responsibility.name}}
-          <span v-if="key != user.responsibilities.length-1">|</span>
+        <span v-for="(position, key) in user.positions" :key="'position-'+key">
+          {{position.name}}
+          <span v-if="key != user.positions.length-1">|</span>
         </span>
       </div>
     </v-card-text>

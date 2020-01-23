@@ -180,10 +180,10 @@ Vue.mixin({
         appPath(url) {
             return window.Laravel.asset_path + url;
         },
-        loadResponsibilities() {
+        loadPositions() {
             let items = []; // Arrat to push response data
 
-            axios.get("/api/responsibilities").then(res => {
+            axios.get("/api/positions").then(res => {
                 res.data.forEach(item => {
                     items.push({name: item.name, id: item.id}); // collect data and store in array
                 });
@@ -192,10 +192,10 @@ Vue.mixin({
             // return collected items for field
             return items;
         },
-        loadDivisionResponsibilities(divisionId) {
+        loadDivisionPositions(divisionId) {
             let items = [];
 
-            axios.get(`/api/division/responsibilities/${divisionId}`).then(res => {
+            axios.get(`/api/division/positions/${divisionId}`).then(res => {
                 res.data.forEach(item => {
                     items.push({name: item.name, id: item.id});
                 });
@@ -203,10 +203,10 @@ Vue.mixin({
 
             return items;
         },
-        loadPositions(){
+        loadPositionLevels() {
             let items = [];
 
-            axios.get("/api/positions").then(res => {
+            axios.get("/api/positionLevels").then(res => {
                 res.data.forEach(item => {
                     items.push({name: item.name, id: item.id});
                 });
@@ -222,6 +222,9 @@ Vue.mixin({
         csrf() {
             return window.Laravel.csrf_token;
         }
+    },
+    created() {
+        // console.log(this.auth);
     }
 });
 
@@ -277,14 +280,14 @@ Vue.component("bp", require("./components/views/BP.vue").default);
 Vue.component("profile-tasks", require("./components/views/ProfileTasks.vue").default);
 Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vue").default);
 
-Vue.component("profile-responsibility", require("./components/views/ProfileResponsibility.vue").default);
+Vue.component("profile-position", require("./components/views/ProfilePosition.vue").default);
 
-Vue.component("responsibilities", require("./components/Responsibilities.vue").default);
-Vue.component("responsibility-card", require("./components/responsibilities/Card.vue").default);
+Vue.component("positions", require("./components/Positions.vue").default);
+Vue.component("position-card", require("./components/positions/Card.vue").default);
 
 Vue.component("add-job-description", require("./components/form/AddJobDescription.vue").default);
 
-Vue.component("add-responsibilities", require("./components/form/addResponsibilities.vue").default);
+Vue.component("add-positions", require("./components/form/addPositions.vue").default);
 
 Vue.component("user-card-vertical", require("./components/profile/UserCard.vue").default);
 

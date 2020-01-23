@@ -10,7 +10,7 @@ class ProcessController extends Controller
 {
     public function index(Request $request)
     {
-        $processes = Process::with(['backTethers', 'frontTethers', 'processTasks', 'processTasks.responsibility', 'processTasks.forms.fields'])->get();
+        $processes = Process::with(['backTethers', 'frontTethers', 'processTasks', 'processTasks.position', 'processTasks.forms.fields'])->get();
 
         return view('bp', compact('processes'));
     }

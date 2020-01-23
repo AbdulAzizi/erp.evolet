@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateResponsibilityUserTable extends Migration
+class CreatePositionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateResponsibilityUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('responsibility_user', function (Blueprint $table) {
+        Schema::create('positions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('responsibility_id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('division_id');
+            $table->string('name');
         });
     }
 
@@ -27,6 +27,6 @@ class CreateResponsibilityUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('responsibility_user');
+        Schema::dropIfExists('positions');
     }
 }

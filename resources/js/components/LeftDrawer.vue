@@ -69,7 +69,7 @@ export default {
                 //     icon: "mdi-attachment",
                 //     text: "АСИ",
                 //     url: "/#",
-                //     responsibilities: [
+                //     positions: [
                 //         "Куратор Портфел ПК стран",
                 //         "Руководитель ЭН",
                 //         "ПК"
@@ -80,14 +80,14 @@ export default {
                     icon: "mdi-attachment",
                     text: "ЭП",
                     url: "/projects?sortBy=country",
-                    responsibilities: ["Программист", "Куратор Портфеля ПК стран", "НО", "ПК"],
+                    positions: ["Программист", "Куратор Портфеля ПК стран", "НО", "ПК"],
                     divisions: ["Evolet", "НАП","ОМАР"]
                 },
                 // {
                 //     icon: "mdi-attachment",
                 //     text: "ЭН",
                 //     url: "/#",
-                //     responsibilities: [
+                //     positions: [
                 //         "Куратор Портфел ПК стран",
                 //         "Руководитель ЭН",
                 //         "ПК"
@@ -98,49 +98,49 @@ export default {
                     icon: "mdi-sitemap",
                     text: "Бизнес процессы",
                     url: "/bp",
-                    responsibilities: ["Программист"],
+                    positions: ["Программист"],
                     divisions: ["ОРПО","ОМАР"]
                 },
                 {
                     icon: "mdi-account-tie",
                     text: "HR",
                     url: "/human-resources",
-                    responsibilities: ["Программист"],
+                    positions: ["Программист"],
                     divisions: ["ОРПО", "ДЧ","ОМАР"]
                 },
                 {
                     icon: "mdi-account-box-multiple",
                     text: "Резерв кандидатов",
                     url: "/head-resumes",
-                    responsibilities: ["Программист"],
+                    positions: ["Программист"],
                     divisions: ["*","ОМАР"]
                 },
                 {
                     icon: "mdi-sort-variant",
                     text: "Фильтры",
                     url: "/admin/products",
-                    responsibilities: ["Программист","РВЗ"],
+                    positions: ["Программист","РВЗ"],
                     divisions: ["НАП","ОМАР"]
                 },
                 {
                     icon: "mdi-file-document-box-multiple",
                     text: "Файлы",
                     url: "/admin/files",
-                    responsibilities: ["Программист","РВЗ"],
+                    positions: ["Программист","РВЗ"],
                     divisions: ["НАП","ОМАР"]
                 },
                 {
                     icon: "mdi-factory",
                     text: "Заводы",
                     url: "/factories",
-                    responsibilities: ["Программист","МРБ"],
+                    positions: ["Программист","МРБ"],
                     divisions: ["ОМАР"]
                 },
                 {
                     icon: "mdi-script-text",
                     text: "ДО",
-                    url: "/responsibilities",
-                    responsibilities: ["РВЗ","HR"],
+                    url: "/positions",
+                    positions: ["РВЗ","HR"],
                     divisions: []
                 }
             ]
@@ -149,8 +149,8 @@ export default {
     methods: {
         // return links that belong to this User
         getLinksOf(user) {
-            // get user responsibilities as array
-            let userResps = user.responsibilities.map(resp => resp.name);
+            // get user positions as array
+            let userResps = user.positions.map(resp => resp.name);
             // loop through dynamicLinks
             return this.dynamicLinks.filter(link => {
                 // if link division has users division or *
@@ -158,11 +158,11 @@ export default {
                     link.divisions.includes(user.division.abbreviation) ||
                     link.divisions.includes("*")
                 )
-                    if (user.position.name == "Руководитель")
-                        // if user has the position of "Руководитель"
+                    if (user.position_level.name == "Руководитель")
+                        // if user has the positionLevel of "Руководитель"
                         return link;
-                // get union elements of two arrays (link.responsibilities,userResps)
-                let unionLinks = link.responsibilities.filter(resp =>
+                // get union elements of two arrays (link.positions,userResps)
+                let unionLinks = link.positions.filter(resp =>
                     userResps.includes(resp)
                 );
                 // return if there is union element

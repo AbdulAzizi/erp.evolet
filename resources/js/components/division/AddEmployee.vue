@@ -41,18 +41,18 @@
           items: positionItems,
           rules: ['required']
           }"
-            v-model="position"
+            v-model="positionLevel"
           ></form-field>
           <form-field
             :field="{
           type: 'autocomplete',
-          name: 'responsibilityId',
+          name: 'positionId',
           label: 'Полномочия',
-          items: responsibilityItems,
+          items: positionItems,
           multiple: true,
           rules: ['required']
           }"
-            v-model="responsibilities"
+            v-model="positions"
           ></form-field>
         </v-form>
       </v-card-text>
@@ -73,10 +73,10 @@ export default {
       name: null,
       surname: null,
       email: null,
-      position: null,
-      responsibilities: [],
-      responsibilityItems: this.loadDivisionResponsibilities(this.division.id),
-      positionItems: this.loadPositions()
+      positionLevel: null,
+      positions: [],
+      positionItems: this.loadDivisionPositions(this.division.id),
+      positionItems: this.loadPositionLevels()
     };
   },
   methods: {
@@ -88,8 +88,8 @@ export default {
             name: this.name,
             surname: this.surname,
             email: this.email,
-            positionId: this.position,
-            responsibilities: this.responsibilities,
+            positionId: this.positionLevel,
+            positions: this.positions,
             divisionId: this.division.id
           })
           .then(res => {
@@ -106,8 +106,8 @@ export default {
     }
   },
   created() {
-    Event.listen("responsibilityAdded", data => {
-      this.responsibilityItems = this.loadDivisionResponsibilities(
+    Event.listen("positionAdded", data => {
+      this.positionItems = this.loadDivisionPositions(
         this.division.id
       );
     });

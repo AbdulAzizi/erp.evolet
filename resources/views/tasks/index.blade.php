@@ -3,7 +3,7 @@
 @section('content')
     <tasks-view 
     :tasks="{{ $tasks }}" 
-    :users="{{ $users }}"
+    :divisions="{{ $divisions }}"
     :errors="{{ $errors }}"
     :tags="{{ $tags }}"
     :statuses="{{ $statuses }}"

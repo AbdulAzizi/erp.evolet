@@ -72,7 +72,7 @@ class ResumeTableSeeder extends Seeder
             'start_at' => new Carbon('2017-09-01'),
             'end_at' => new Carbon('2018-09-01'),
             'company_name' => 'Alif',
-            'position' => 'Dev',
+            'positionLevel' => 'Dev',
             'location' => 'Dushanbe',
             'resume_id' => $abdulazizResume->id
 

@@ -18,7 +18,7 @@ class CreateJobsTable extends Migration
             $table->date('start_at');
             $table->date('end_at');
             $table->string('company_name');
-            $table->string('position');
+            $table->string('positionLevel');
             $table->string('location');
             $table->unsignedInteger('resume_id');
         });

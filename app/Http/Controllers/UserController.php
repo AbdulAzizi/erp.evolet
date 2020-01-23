@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Division;
-use App\Position;
+use App\PositionLevel;
 use App\User;
 use App\Resume;
 use App\Task;
@@ -37,7 +37,7 @@ class UserController extends Controller
     {
         $randomPassword = Str::random(10);
 
-        $position = Position::find($request->positionId);
+        $positionLevel = PositionLevel::find($request->positionId);
 
 
         $newUser = User::create([
@@ -45,21 +45,21 @@ class UserController extends Controller
             'surname' => $request->surname,
             'email' => $request->email,
             'password' => $randomPassword,
-            'position_id' => $request->positionId,
+            'position_level_id' => $request->positionId,
             'division_id' => $request->divisionId,
         ]);
 
-        $newUser->responsibilities()->attach($request->responsibilities);
+        $newUser->positions()->attach($request->positions);
 
-        if ($position->name == 'Руководитель') {
+        if ($positionLevel->name == 'Руководитель') {
 
-            $secondaryPositionId = Position::where('name', 'Главный специалист')->first()->id;
+            $secondaryPositionId = PositionLevel::where('name', 'Главный специалист')->first()->id;
 
             $division = Division::find($request->divisionId);
 
             $headUser = User::find($division->head_id);
 
-            $headUser->position_id = $secondaryPositionId;
+            $headUser->position_level_id = $secondaryPositionId;
             $headUser->save();
 
             $division->head_id = $newUser->id;
@@ -67,7 +67,7 @@ class UserController extends Controller
         }
         // Password::broker()->sendResetLink(['email' => $newUser->email]);
 
-        $user = User::with('position', 'responsibilities')->find($newUser->id);
+        $user = User::with('positionLevel', 'positions')->find($newUser->id);
         return $user;
     }
 

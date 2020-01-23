@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'password', 'position_id', 'division_id',
+        'name', 'surname', 'email', 'password', 'position_level_id', 'division_id',
     ];
 
     /**
@@ -37,7 +37,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public $with = ['position', 'responsibilities'];
+    public $with = ['positionLevel', 'positions'];
 
     // protected $appends = ['fullname', 'last_message_date'];
 
@@ -55,16 +55,17 @@ class User extends Authenticatable
     public function division()
     {
         return $this->belongsTo('App\Division');
+        
     }
 
-    public function position()
+    public function positionLevel()
     {
-        return $this->belongsTo('App\Position');
+        return $this->belongsTo('App\PositionLevel');
     }
 
-    public function responsibilities()
+    public function positions()
     {
-        return $this->belongsToMany('App\Responsibility');
+        return $this->belongsToMany('App\Position');
     }
 
     public function givenTasks()
@@ -118,7 +119,7 @@ class User extends Authenticatable
 
     public static function alone()
     {
-        return self::without(['position', 'responsibilities']);
+        return self::without(['positionLevel', 'positions']);
     }
 
     /**

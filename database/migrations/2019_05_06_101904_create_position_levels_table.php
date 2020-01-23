@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateResponsibilitiesTable extends Migration
+class CreatePositionLevelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateResponsibilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('responsibilities', function (Blueprint $table) {
+        Schema::create('position_levels', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('division_id');
             $table->string('name');
         });
     }
@@ -27,6 +26,6 @@ class CreateResponsibilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('responsibilities');
+        Schema::dropIfExists('position_levels');
     }
 }

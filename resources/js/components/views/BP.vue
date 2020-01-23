@@ -73,7 +73,7 @@
                 <h5 class="font-weight-medium grey--text text--darken-1">Исполнитель</h5>
                 <h4
                   class="font-weight-medium grey--text text--darken-3"
-                >{{elem.responsibility.name}}</h4>
+                >{{elem.position.name}}</h4>
                 <h5 class="font-weight-medium grey--text text--darken-1">Запланированное время</h5>
                 <h4 class="font-weight-medium grey--text text--darken-3">
                   <span>{{durObj(elem.planned_time)}}</span>
@@ -88,7 +88,7 @@
                   <template v-slot:activator>
                     <h4
                       class="font-weight-medium grey--text text--darken-1"
-                    >Поля которые заполняет {{elem.responsibility.name}}</h4>
+                    >Поля которые заполняет {{elem.position.name}}</h4>
                   </template>
                   <v-simple-table dense>
                     <tbody>
