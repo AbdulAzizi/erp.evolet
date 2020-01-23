@@ -131,6 +131,33 @@ Vue.mixin({
 
             return `${days}д ${hours}ч ${minutes}м`;
         },
+        days(milliseconds){
+            let days, total_minutes, total_hours;
+            total_minutes = parseInt(Math.floor(milliseconds / 60000));
+            total_hours = parseInt(Math.floor(total_minutes / 60));
+            days = parseInt(Math.floor(total_hours / 24));
+
+            return days !== 0 ? `${days}д` : null;
+
+        },
+
+        hours(milliseconds){
+            let hours, total_minutes, total_hours;
+            total_minutes = parseInt(Math.floor(milliseconds / 60000));
+            total_hours = parseInt(Math.floor(total_minutes / 60));
+            hours = parseInt(total_hours % 24);
+
+            return hours !== 0 ? `${hours}ч` : null;
+            
+        },
+        minutes(milliseconds){
+            let minutes, total_minutes, total_hours;
+            total_minutes = parseInt(Math.floor(milliseconds / 60000));
+            total_hours = parseInt(Math.floor(total_minutes / 60));
+            minutes = parseInt(total_minutes % 60);
+            
+            return minutes !== 0 ? `${minutes}м` : null
+        },
         prepareFields(fields) {
             let fieldsClone = [...fields];
 

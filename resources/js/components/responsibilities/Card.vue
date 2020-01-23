@@ -29,7 +29,7 @@
               <span>{{subIndex + 1}}. {{ description.text }}</span>
               <span class="float-right mr-3 grey--text" v-if="!hover">
                 <v-icon small>mdi-timer-sand-full</v-icon>
-                {{ durObj(description.planned_time) }}
+                {{ days(description.planned_time) }} {{ hours(description.planned_time) }} {{ minutes(description.planned_time) }}
               </span>
               <span class="float-right mr-3 grey--text" v-if="!hover">
                 <v-icon small>mdi-seal</v-icon>
@@ -41,8 +41,8 @@
                 </v-btn>
               </span>
               <span class="float-right" v-if="hover">
-                <v-btn x-small icon @click="getDataBeforeEdit(description)">
-                  <v-icon small>mdi-pencil</v-icon>
+                <v-btn x-small icon>
+                  <v-icon small @click="getDataBeforeEdit(description)">mdi-pencil</v-icon>
                 </v-btn>
               </span>
             </div>
@@ -69,6 +69,7 @@
                   label="Должностные инструкции"
                   rounded
                   filled
+                  :rules="simpleRules"
                 ></v-textarea>
               </v-col>
               <v-col cols="12">
@@ -83,43 +84,51 @@
                   :thumb-size="24"
                   name="level"
                   label="Уровень"
+                  :rules="simpleRules"
                 ></v-slider>
               </v-col>
               <v-col cols="4">
-                <v-text-field
-                  v-model="days"
-                  name="days"
-                  label="Дни"
-                  rounded
-                  type="number"
-                  filled
-                ></v-text-field>
+                <v-form ref="estimateDays">
+                  <v-text-field
+                    v-model="estimateDays"
+                    name="days"
+                    label="Дни"
+                    rounded
+                    type="number"
+                    filled
+                    :rules="rules"
+                  ></v-text-field>
+                </v-form>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model="hours"
+                  v-model="estimateHours"
                   label="Часы"
                   name="hours"
                   type="number"
                   rounded
                   filled
+                  ref="estimateHours"
+                  :rules="rules"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model="minutes"
+                  v-model="estimateMinutes"
                   label="Минуты"
                   name="minutes"
                   type="number"
                   rounded
                   filled
+                  ref="estimateMinutes"
+                  :rules="rules"
                 ></v-text-field>
               </v-col>
             </v-row>
           </v-form>
           <v-card-actions>
             <v-spacer />
-            <v-btn text color="primary">отмена</v-btn>
+            <v-btn text color="primary" @click="descriptionDialog = false">отмена</v-btn>
             <v-btn dark color="primary" @click="editDescription()">изменить</v-btn>
           </v-card-actions>
         </v-card-text>
@@ -140,12 +149,17 @@ export default {
       descriptionDialog: false,
       description: {
         text: null,
-        level: null,
+        level: null
       },
-      days: null,
-      hours: null,
-      minutes: null,
-      rules: [v => !!v || "Обязательное поле"]
+      estimateDays: null,
+      estimateHours: null,
+      estimateMinutes: null,
+      estimateTime: null,
+      estimateDaysValid: null,
+      estimateHoursValid: null,
+      estimateMinutesValid: null,
+      rules: [v => !!this.estimateTime || "Обязательное поле"],
+      simpleRules: [v => !!v || "Обязательное поле"]
     };
   },
   methods: {
@@ -182,26 +196,59 @@ export default {
     },
     editDescription() {
       const form = this.$refs.form;
+      this.estimateTime = this.estimateDays || this.estimateHours || this.estimateMinutes;
+      this.estimateDaysValid = this.$refs.estimateDays.validate(true);
+      this.estimateHoursValid = this.$refs.estimateHours.validate(true);
+      this.estimateMinutesValid = this.$refs.estimateMinutes.validate(true);
+
       if (form.validate()) {
-        axios.post(`/api/edit/description/${this.description.id}`, {
-         text: this.description.text,
-         level: this.description.level,
-         days: this.days,
-         hours: this.hours,
-         minutes: this.minutes
-        }).then(res => {
-          this.descriptionDialog = false;
-          this.localResponsibility.descriptions.forEach(description => {
-            if(description.id == this.description.id){
-              description.planned_time = res.data;
-            }
+        axios
+          .post(`/api/edit/description/${this.description.id}`, {
+            description: this.description,
+            days: this.estimateDays,
+            hours: this.estimateHours,
+            minutes: this.estimateMinutes
           })
-        }).catch(err => err.messages);
+          .then(res => {
+            this.descriptionDialog = false;
+            this.localResponsibility.descriptions.forEach(description => {
+              if (description.id == this.description.id) {
+                description.text = res.data.text;
+                description.level = res.data.level;
+                description.planned_time = res.data.planned_time;
+              }
+            });
+          })
+          .catch(err => err.messages);
       }
     },
-    getDataBeforeEdit(item){
+    getDataBeforeEdit(item) {
       this.descriptionDialog = true;
-      this.description = item;
+      this.description = {
+        id: item.id,
+        text: item.text,
+        level: item.level
+      };
+
+      (this.estimateDays = parseInt(this.days(item.planned_time))),
+        (this.estimateHours = parseInt(this.hours(item.planned_time))),
+        (this.estimateMinutes = parseInt(this.minutes(item.planned_time)));
+    }
+  },
+  watch: {
+    estimateTime(val) {
+      this.estimateDaysValid;
+      this.estimateHoursValid;
+      this.estimateMinutesValid;
+    },
+    estimateDays(val) {
+      this.estimateTime = val;
+    },
+    estimateHours(val) {
+      this.estimateTime = val;
+    },
+    estimateMinutes(val) {
+      this.estimateTime = val;
     }
   },
   created() {

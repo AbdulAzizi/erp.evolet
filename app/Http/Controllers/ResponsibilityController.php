@@ -112,7 +112,7 @@ class ResponsibilityController extends Controller
             }
         }
 
-        $jobdescription = JobDescription::insert($data);
+        $jobDescription = JobDescription::insert($data);
 
         $responsibility = Responsibility::with('descriptions')->find($request->id);
 

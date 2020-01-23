@@ -23,7 +23,6 @@
               filled
               label="Должностная объязанность"
               v-model="responsibilityName"
-              :rules="rules"
             ></v-text-field>
             <v-divider v-if="responsibilityDescriptions.length > 0" class="ma-2"/>
             <v-row>
@@ -59,7 +58,9 @@
                   :name="'day' + index"
                   rounded
                   type="number"
-                  filled>
+                  filled
+                  :rules="rules"
+                  ref="estimateDays">
                   </v-text-field>
                 </v-col>
                  <v-col cols="4" :key="'hour' + index">
@@ -69,7 +70,9 @@
                   :name="'hour' + index"
                   type="number"
                   rounded
-                  filled>
+                  filled
+                  :rules="rules"
+                  ref="estimateHours">
                   </v-text-field>
                 </v-col>
                  <v-col cols="4" :key="'minute' + index">
@@ -79,7 +82,9 @@
                   :name="'minute' + index"
                   type="number"
                   rounded
-                  filled>
+                  filled
+                  :rules="rules"
+                  ref="estimateMinutes">
                   </v-text-field>
                 </v-col>
                <v-divider :key="'divider' + index" v-if="index < responsibilityDescriptions.length" class="ma-2"/>
@@ -91,7 +96,7 @@
               block
               color="primary"
               @click="addResponsibilityDescription()"
-            >Добавить интсрукцию</v-btn>
+            >Добавить инструкцию</v-btn>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -111,7 +116,11 @@ export default {
       addResponsibilityDialog: false,
       responsibilityName: null,
       responsibilityDescriptions: [],
-      rules: [v => !!v || "Обязательное поле"],
+      rules: [v => !!this.isValid || "Обязательное поле"],
+      isValid: false,
+      daysValid: null,
+      hoursValid: null,
+      minutesValid: null
     };
   },
   methods: {
@@ -126,6 +135,10 @@ export default {
     },
     submit() {
       const form = this.$refs.addResponsibilityForm;
+      console.log(this.$refs);
+      // this.daysValid = this.$refs.estimateDays.validate(true);
+      // this.hoursValid = this.$refs['estimateHours'].validate(true);
+      // this.minutesValid = this.$refs['estimateMinutes'].validate(true);
       if (form.validate()) {
         axios
           .post(`/api/add/responsibility/${this.division.id}`, {
@@ -144,6 +157,21 @@ export default {
       this.addResponsibilityDialog = !this.addResponsibilityDialog;
       form.reset();
       this.responsibilityDescriptions.length = 0;
+    }
+  },
+  watch: {
+    responsibilityDescriptions: {
+      handler: function(elem){
+       elem.forEach(item => {
+         this.isValid = item.days || item.hours || item.minutes
+       });
+      },
+      deep: true
+    },
+    isValid(val){
+      this.daysValid;
+      this.hoursValid;
+      this.minutesValid;
     }
   }
 };

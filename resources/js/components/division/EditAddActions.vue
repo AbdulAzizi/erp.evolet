@@ -64,7 +64,8 @@
                   :name="'day' + index"
                   rounded
                   type="number"
-                  filled>
+                  filled
+                  ref="estimateDays">
                   </v-text-field>
                 </v-col>
                  <v-col cols="4" :key="'hour' + index">
@@ -74,7 +75,8 @@
                   :name="'hour' + index"
                   type="number"
                   rounded
-                  filled>
+                  filled
+                  ref="estimateHours">
                   </v-text-field>
                 </v-col>
                  <v-col cols="4" :key="'minute' + index">
@@ -84,7 +86,8 @@
                   :name="'minute' + index"
                   type="number"
                   rounded
-                  filled>
+                  filled
+                  ref="estimateMinutes">
                   </v-text-field>
                 </v-col>
                  <v-divider :key="'divider' + index" v-if="index > responsibilityForms.length" class="ma-2"/>
@@ -130,19 +133,18 @@ export default {
         axios.post(`/api/add/single/responsibility/${this.responsibility.id}`, {
             descriptions: this.responsibilityForms
         }).then(res => {
-          Event.fire('descriptionAdded', res.data);
           this.resetForm();
+          Event.fire('descriptionAdded', res.data);
         })
     },
     addResponsibilityForm() {
       this.responsibilityForms.push({
-        text: null,
+          text: null,
           level: null,
           days: null,
           hours: null,
           minutes: null
       });
-      this.disabled = false;
     },
     editResponsibility(){
       Event.fire('editResponsibility', this.responsibility.id);
@@ -161,6 +163,22 @@ export default {
       this.formDialog = false;
       this.responsibilityForms.length = 1;
     }
-  }
+  },
+   watch: {
+    estimateTime(val) {
+      this.estimateDaysValid;
+      this.estimateHoursValid;
+      this.estimateMinutesValid;
+    },
+    estimateDays(val) {
+      this.estimateTime = val;
+    },
+    estimateHours(val) {
+      this.estimateTime = val;
+    },
+    estimateMinutes(val) {
+      this.estimateTime = val;
+    }
+  },
 };
 </script>
