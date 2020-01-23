@@ -26,7 +26,7 @@
 export default {
   props: ["task"],
   data() {
-    const items = this.loadResponsibilities();
+    const items = this.loadPositions();
     return {
       processTask: {},
       milliseconds: null,
@@ -46,7 +46,7 @@ export default {
           rules: ["required"],
           items: items,
           col: 12,
-          value: this.task.responsibility.id
+          value: this.task.position.id
         },
         {
           type: "number",

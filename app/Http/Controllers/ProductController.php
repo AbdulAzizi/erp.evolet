@@ -60,18 +60,18 @@ class ProductController extends Controller
         // Get auth User
         $authUser = auth()->user();
         // Get responsibilitilies of that User
-        $responsibilities = $authUser->responsibilities;
+        $positions = $authUser->positions;
 
         $formExists = false;
-        // loop through each responsibilities
-        foreach ($responsibilities as $responsibility) {
+        // loop through each positions
+        foreach ($positions as $position) {
             // If Portfolio Manager
-            if ($responsibility->name == 'Куратор Портфеля ПК стран' || $responsibility->name == 'ПК') {
+            if ($position->name == 'Куратор Портфеля ПК стран' || $position->name == 'ПК') {
                 // Get First BP form
                 $form = Form::where('name', 'Форма ПК Этап 1')->first();
                 $formExists = true;
             }
-            if ($responsibility->name == 'НО') {
+            if ($position->name == 'НО') {
                 // Get First BP form
                 $form = Form::where('name', 'Форма НО Этап 1')->first();
                 $formExists = true;
@@ -278,7 +278,7 @@ class ProductController extends Controller
         // Loop through each task
         foreach ($processTasks as $key => $task) {
             $responsiblePerson = User::whereHas('projectParticipant', function (Builder $query) use ($task, $projectId) {
-                $query->where('role_id', $task->responsibility_id)
+                $query->where('role_id', $task->position_id)
                     ->where('project_id', $projectId);
             })->first();
 
@@ -310,13 +310,13 @@ class ProductController extends Controller
                 // $createdTask->polls()->create($task->polls->first());
             }
             if (count($task->watchers) != 0) {
-                $watcherResponsibilities = $task->watchers->pluck('id');
-                $usersByResponsibility = User::whereHas('projectParticipant', function (Builder $query) use ($watcherResponsibilities, $projectId) {
-                    $query->whereIn('role_id', $watcherResponsibilities)
+                $watcherPositions = $task->watchers->pluck('id');
+                $usersByPosition = User::whereHas('projectParticipant', function (Builder $query) use ($watcherPositions, $projectId) {
+                    $query->whereIn('role_id', $watcherPositions)
                         ->where('project_id', $projectId);
                 })->get();
 
-                $createdTask->watchers()->attach($usersByResponsibility);
+                $createdTask->watchers()->attach($usersByPosition);
             }
         }
     }

@@ -17,7 +17,7 @@ class ProcessTask extends Model
 
     public function watchers()
     {
-        return $this->belongsToMany('App\Responsibility', 'process_task_watchers', 'process_task_id', 'responsibility_id');
+        return $this->belongsToMany('App\Position', 'process_task_watchers', 'process_task_id', 'position_id');
     }
 
     public function polls()
@@ -30,8 +30,8 @@ class ProcessTask extends Model
         return $this->belongsTo('App\Process');
     }
 
-    public function responsibility()
+    public function position()
     {
-        return $this->belongsTo('App\Responsibility');
+        return $this->belongsTo('App\Position');
     }
 }

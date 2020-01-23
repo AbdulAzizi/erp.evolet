@@ -19,14 +19,14 @@ class ProcessTaskController extends Controller
        $processTask = ProcessTask::create([
            'process_id' => $request->processId,
            'title' => $title,
-           'responsibility_id' => $responsible,
+           'position_id' => $responsible,
            'description' => $description,
            'planned_time' => $planned_time
        ]);
 
        $processTask->save();
 
-       $processTaskWithPivot = ProcessTask::with('responsibility', 'forms')->find($processTask->id);
+       $processTaskWithPivot = ProcessTask::with('position', 'forms')->find($processTask->id);
 
        return $processTaskWithPivot;
     }
@@ -41,21 +41,21 @@ class ProcessTaskController extends Controller
     public function edit(Request $request)
     {
        $title = $request->data['processTaskName'];
-       $responsibility_id = $request->data['processTaskResponsible'];
+       $position_id = $request->data['processTaskResponsible'];
        $description = $request->data['processTaskDescription'];
 
         $processTask = ProcessTask::find($request->id);
 
         $processTask->update([
             'title' => $title,
-            'responsibility_id' => $responsibility_id ,
+            'position_id' => $position_id ,
             'description' => $description,
             'planned_time' => $request->planned_time
         ]);
 
         $processTask->save();
 
-        $processTaskWithPivot = ProcessTask::with('responsibility', 'forms')->where('process_id', $request->processId)->get();
+        $processTaskWithPivot = ProcessTask::with('position', 'forms')->where('process_id', $request->processId)->get();
 
         return $processTaskWithPivot;
     }

@@ -28,7 +28,7 @@
 export default {
   props: ["processId"],
   data() {
-    const items = this.loadResponsibilities(); // Variable to store responsibilites array
+    const items = this.loadPositions(); // Variable to store responsibilites array
 
     return {
       dialog: false,

@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Division;
 use App\User;
 use App\PositionLevel;
-use App\Responsibility;
+use App\Position;
 
 class UserTableSeeder extends Seeder
 {
@@ -15,7 +15,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        // TODO fix many to many responsibilities seed code
+        // TODO fix many to many positions seed code
         $this->seedUsers([
             [
                 'img' => 'parviz.jpg',
@@ -25,7 +25,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОД',
                 'positionLevel' => 'Руководитель',
-                'responsibilities' => [],
+                'positions' => [],
             ],
             [
                 'img' => 'bezhan.jpg',
@@ -35,7 +35,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОР',
                 'positionLevel' => 'Руководитель',
-                'responsibilities' => [],
+                'positions' => [],
             ],
             [
                 'img' => 'nozim.jpg',
@@ -45,7 +45,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'НАП',
                 'positionLevel' => 'Руководитель',
-                'responsibilities' => ['Рук НАП'],
+                'positions' => ['Рук НАП'],
             ],
             [
                 'img' => 'firdavs.jpg',
@@ -55,7 +55,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОМАР',
                 'positionLevel' => 'Руководитель',
-                'responsibilities' => [],
+                'positions' => [],
             ],
             [
                 'img' => 'mehroj.jpg',
@@ -65,7 +65,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'НО',
                 'positionLevel' => 'Руководитель',
-                'responsibilities' => ['НО'],
+                'positions' => ['НО'],
             ],
             [
                 'img' => 'inoyat.jpg',
@@ -75,7 +75,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ПК',
                 'positionLevel' => 'Главный специалист',
-                'responsibilities' => ['ПК'],
+                'positions' => ['ПК'],
             ],
             [
                 'img' => 'azimv.jpg',
@@ -85,7 +85,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОМАП',
                 'positionLevel' => 'Руководитель',
-                'responsibilities' => ['ПК'],
+                'positions' => ['ПК'],
             ],
             [
                 'img' => 'behruz.jpg',
@@ -95,7 +95,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'НО',
                 'positionLevel' => 'Главный специалист',
-                'responsibilities' => ['НО'],
+                'positions' => ['НО'],
             ],
             [
                 'img' => 'alisher.jpg',
@@ -105,7 +105,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОМАР',
                 'positionLevel' => 'Главный специалист',
-                'responsibilities' => ['Куратор Портфеля ПК стран'],
+                'positions' => ['Куратор Портфеля ПК стран'],
             ],
             [
                 'name' => 'Akbar',
@@ -114,7 +114,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОЦМ',
                 'positionLevel' => 'Главный специалист',
-                'responsibilities' => ['ПК'],
+                'positions' => ['ПК'],
             ],
             [
                 'name' => 'AbdulAziz',
@@ -124,7 +124,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОРПО',
                 'positionLevel' => 'Руководитель',
-                'responsibilities' => ['Программист'],
+                'positions' => ['Программист'],
             ],
             [
                 'name' => 'Anvar',
@@ -134,7 +134,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОЦМ',
                 'positionLevel' => 'Руководитель',
-                'responsibilities' => [],
+                'positions' => [],
             ],
             [
                 'name' => 'Sayora',
@@ -143,7 +143,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'Evolet',
                 'positionLevel' => 'Руководитель',
-                'responsibilities' => ['РВЗ'],
+                'positions' => ['РВЗ'],
             ],
             [
                 'name' => 'Jovidon',
@@ -152,7 +152,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОЗк',
                 'positionLevel' => 'Главный специалист',
-                'responsibilities' => ['МРБ'],
+                'positions' => ['МРБ'],
             ],
             [
                 'name' => 'Shuhrat',
@@ -161,7 +161,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ДЧ',
                 'positionLevel' => 'Специалист',
-                'responsibilities' => ['HR'],
+                'positions' => ['HR'],
             ],
         ]);
 
@@ -174,7 +174,7 @@ class UserTableSeeder extends Seeder
 
         // factory(User::class, 40)->create()->each(function ($user){
         //     for($i = 1; $i <= random_int(1,4); $i++){
-        //         $user->responsibilities()->attach(Responsibility::inRandomOrder()->first()->id);
+        //         $user->positions()->attach(Position::inRandomOrder()->first()->id);
         //     }
         // });
         
@@ -206,8 +206,8 @@ class UserTableSeeder extends Seeder
             $userData['img'] = $credential['img'];
             
             $user = User::create($userData);
-            foreach ($credential['responsibilities'] as $responsibility) {
-                $user->responsibilities()->attach( Responsibility::firstOrCreate(['name' => $responsibility ])->id );
+            foreach ($credential['positions'] as $position) {
+                $user->positions()->attach( Position::firstOrCreate(['name' => $position ])->id );
             }
             
         }

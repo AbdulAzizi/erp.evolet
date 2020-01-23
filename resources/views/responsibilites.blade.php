@@ -1,5 +1,5 @@
 @extends('layouts.default')
 
 @section('content')
-    <responsibilities :responsibilities="{{$responsibilities}}"></responsibilities>
+    <positions :positions="{{$positions}}"></positions>
 @endsection

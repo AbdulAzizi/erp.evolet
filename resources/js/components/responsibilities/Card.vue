@@ -2,10 +2,10 @@
   <div>
     <v-card>
       <v-toolbar color="primary" dark flat>
-        <v-toolbar-title v-if="!edit">{{responsibility.name}}</v-toolbar-title>
+        <v-toolbar-title v-if="!edit">{{position.name}}</v-toolbar-title>
         <v-toolbar-title v-else>
           <v-text-field
-            v-model="responsibilityName"
+            v-model="positionName"
             label="Название"
             required
             solo
@@ -14,16 +14,16 @@
             background-color="primary darken-1"
             append-icon="mdi-check"
             append-outer-icon="mdi-close"
-            :placeholder="responsibility.name"
-            @click:append="editResponsibilityName()"
+            :placeholder="position.name"
+            @click:append="editPositionName()"
             @click:append-outer="resetEditForm()"
           ></v-text-field>
         </v-toolbar-title>
         <v-spacer />
-        <edit-add-actions :responsibility="responsibility" />
+        <edit-add-actions :position="position" />
       </v-toolbar>
-      <v-card-text v-if="responsibility.descriptions.length" class="pa-0 ma-0">
-        <template v-for="(description, subIndex) in responsibility.descriptions">
+      <v-card-text v-if="position.descriptions.length" class="pa-0 ma-0">
+        <template v-for="(description, subIndex) in position.descriptions">
           <v-hover v-slot:default="{ hover }" :key="'hover' + subIndex">
             <div :key="'description' + subIndex" class="ma-4">
               <span>{{subIndex + 1}}. {{ description.text }}</span>
@@ -130,13 +130,13 @@
 <script>
 export default {
   props: {
-    responsibility: {}
+    position: {}
   },
   data() {
     return {
       edit: false,
-      responsibilityName: null,
-      localResponsibility: this.responsibility,
+      positionName: null,
+      localPosition: this.position,
       descriptionDialog: false,
       description: {
         text: null,
@@ -151,16 +151,16 @@ export default {
   methods: {
     resetEditForm() {
       this.edit = false;
-      this.responsibilityName = null;
+      this.positionName = null;
     },
-    editResponsibilityName() {
-      if (this.responsibilityName !== null) {
+    editPositionName() {
+      if (this.positionName !== null) {
         axios
-          .post(`/api/edit/responsibility/${this.responsibility.id}`, {
-            name: this.responsibilityName
+          .post(`/api/edit/position/${this.position.id}`, {
+            name: this.positionName
           })
           .then(res => {
-            this.localResponsibility.name = res.data.name;
+            this.localPosition.name = res.data.name;
             this.resetEditForm();
           })
           .catch(err => err.messages);
@@ -170,10 +170,10 @@ export default {
       axios
         .delete(`/api/delete/description/${item.id}`)
         .then(res => {
-          this.localResponsibility.descriptions.forEach(
+          this.localPosition.descriptions.forEach(
             (description, index) => {
               if (description.id == item.id) {
-                this.localResponsibility.descriptions.splice(index, 1);
+                this.localPosition.descriptions.splice(index, 1);
               }
             }
           );
@@ -191,7 +191,7 @@ export default {
          minutes: this.minutes
         }).then(res => {
           this.descriptionDialog = false;
-          this.localResponsibility.descriptions.forEach(description => {
+          this.localPosition.descriptions.forEach(description => {
             if(description.id == this.description.id){
               description.planned_time = res.data;
             }
@@ -205,8 +205,8 @@ export default {
     }
   },
   created() {
-    Event.listen("editResponsibility", responsibilityId => {
-      if (this.responsibility.id == responsibilityId) {
+    Event.listen("editPosition", positionId => {
+      if (this.position.id == positionId) {
         this.edit = true;
       }
     });

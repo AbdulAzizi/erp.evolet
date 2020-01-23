@@ -66,8 +66,8 @@ Route::post('/files/field/delete/{id}', 'FileController@deleteFieldFromFile')->n
 Route::post('/files/fields/create', 'FileController@attachFields')->name('file.attachFields');
 Route::post('/files/update/{id}', 'FileController@update')->name('file.update');
 Route::post('/process/tasks/create', 'ProcessTaskController@create')->name('processTask.create');
-Route::get('/responsibilities', 'ResponsibilityController@loadResponsibilities')->name('responsibility.loadResponsibilities');
-Route::get('/division/responsibilities/{id}', 'ResponsibilityController@loadDivisionResponsibilities')->name('responsibility.loadDivisionResponsibilities');
+Route::get('/positions', 'PositionController@loadPositions')->name('position.loadPositions');
+Route::get('/division/positions/{id}', 'PositionController@loadDivisionPositions')->name('position.loadDivisionPositions');
 Route::get('/positionLevels', 'PositionController@loadPositionLevels')->name('positionLevel.loadPositionLevels');
 Route::delete('/process/task/delete/{id}', 'ProcessTaskController@delete')->name('processTask.delete');
 Route::put('/process/task/edit/{id}', 'ProcessTaskController@edit')->name('processTask.edit');
@@ -79,11 +79,11 @@ Route::get('/field/type', 'FieldTypeController@index')->name('fieldType.index');
 Route::post('/field/create', 'FieldController@create')->name('field.create');
 Route::post('/field/delete/{id}', 'FormController@deleteField')->name('field.deleteField');
 Route::post('/mark/all/notifications/{id}', 'UserController@markAllNotificationsAsRead')->name('user.markAllNotificationsAsRead');
-Route::post('/add/responsibility/{id}', 'ResponsibilityController@store')->name('responsibility.store');
-Route::post('/add/single/responsibility/{id}', 'ResponsibilityController@addResponsibility')->name('responsibility.add');
+Route::post('/add/position/{id}', 'PositionController@store')->name('position.store');
+Route::post('/add/single/position/{id}', 'PositionController@addPosition')->name('position.add');
 Route::post('/users', 'UserController@store')->name('users.store');
-Route::post('/edit/responsibility/{id}', 'ResponsibilityController@edit')->name('responsibility.edit');
-Route::delete('/delete/responsibility/{id}', 'ResponsibilityController@delete')->name('responsibility.delete');
+Route::post('/edit/position/{id}', 'PositionController@edit')->name('position.edit');
+Route::delete('/delete/position/{id}', 'PositionController@delete')->name('position.delete');
 Route::delete('/delete/description/{id}', 'JobDescriptionController@delete')->name('jobDescription.delete');
 Route::post('/edit/description/{id}', 'JobDescriptionController@edit')->name('jobDescription.edit');
 

@@ -45,7 +45,7 @@ class ProcessTableSeeder extends Seeder
             'process_id' => $bp1->id,
             'title' => 'Заполните следующие поля',
             'planned_time' => '180120000',
-            'responsibility_id' => App\Responsibility::where('name', 'Куратор Портфеля ПК стран')->first()->id,
+            'position_id' => App\Position::where('name', 'Куратор Портфеля ПК стран')->first()->id,
         ]);
 
         $bp1task1->forms()->attach(Form::where('name', 'Форма КП_ПК Этап 2')->first()->id);
@@ -54,13 +54,13 @@ class ProcessTableSeeder extends Seeder
             'process_id' => $bp2->id,
             'title' => 'Пройдите опрос',
             'planned_time' => '180120000',
-            'responsibility_id' => App\Responsibility::where('name', 'ПК')->first()->id,
+            'position_id' => App\Position::where('name', 'ПК')->first()->id,
         ]);
 
         $bp2task1->watchers()->attach([
-            App\Responsibility::where('name', 'Рук НАП')->first()->id,
-            App\Responsibility::where('name', 'РВЗ')->first()->id,
-            App\Responsibility::where('name', 'Куратор Портфеля ПК стран')->first()->id,
+            App\Position::where('name', 'Рук НАП')->first()->id,
+            App\Position::where('name', 'РВЗ')->first()->id,
+            App\Position::where('name', 'Куратор Портфеля ПК стран')->first()->id,
         ]);
 
         $bp2task1->polls()->attach(Question::where('body', 'Стоит ли браться за этот продукт?')->first()->id);
@@ -69,7 +69,7 @@ class ProcessTableSeeder extends Seeder
             'process_id' => $bp2->id,
             'title' => 'Сделайте выбор',
             'planned_time' => '180120000',
-            'responsibility_id' => App\Responsibility::where('name', 'Куратор Портфеля ПК стран')->first()->id,
+            'position_id' => App\Position::where('name', 'Куратор Портфеля ПК стран')->first()->id,
         ]);
 
         // $bp1task1->forms()->attach(Form::where('name','Форма КП_ПК Этап 2')->first()->id);

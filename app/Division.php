@@ -39,8 +39,8 @@ class Division extends Model
         return self::withDepth()->having('depth', '=', 4)->get();
     }
 
-    public function responsibilities()
+    public function positions()
     {
-        return $this->hasMany('App\Responsibility');
+        return $this->hasMany('App\Position');
     }
 }

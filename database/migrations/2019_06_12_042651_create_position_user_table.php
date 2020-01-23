@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateResponsibilitiesTable extends Migration
+class CreatePositionUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateResponsibilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('responsibilities', function (Blueprint $table) {
+        Schema::create('position_user', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('division_id');
-            $table->string('name');
+            $table->unsignedInteger('position_id');
+            $table->unsignedInteger('user_id');
         });
     }
 
@@ -27,6 +27,6 @@ class CreateResponsibilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('responsibilities');
+        Schema::dropIfExists('position_user');
     }
 }

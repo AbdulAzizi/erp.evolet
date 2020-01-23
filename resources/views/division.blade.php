@@ -6,7 +6,7 @@
     :division="{{$division}}" 
     :is-user-head="{{$isUserHead}}" 
     :is-root="true"
-    :jsonResponsibilities="{{$jsonResponsibilities}}"
+    :jsonPositions="{{$jsonPositions}}"
     :ildInputs="{{$oldInputs}}"
     :errors="{{ $errors }}"
     :user="{{$authUser}}">

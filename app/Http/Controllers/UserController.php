@@ -49,7 +49,7 @@ class UserController extends Controller
             'division_id' => $request->divisionId,
         ]);
 
-        $newUser->responsibilities()->attach($request->responsibilities);
+        $newUser->positions()->attach($request->positions);
 
         if ($positionLevel->name == 'Руководитель') {
 
@@ -67,7 +67,7 @@ class UserController extends Controller
         }
         // Password::broker()->sendResetLink(['email' => $newUser->email]);
 
-        $user = User::with('positionLevel', 'responsibilities')->find($newUser->id);
+        $user = User::with('positionLevel', 'positions')->find($newUser->id);
         return $user;
     }
 

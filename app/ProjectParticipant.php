@@ -12,7 +12,7 @@ class ProjectParticipant extends Pivot
 
     public function role()
     {
-        return $this->belongsTo('App\Responsibility');
+        return $this->belongsTo('App\Position');
     }
 
     public function project()

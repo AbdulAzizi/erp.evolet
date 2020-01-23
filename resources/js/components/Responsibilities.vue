@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-row v-if="responsibilities.length > 0">
-      <v-col cols="6" v-for="(responsibility, index ) in responsibilities" :key="index">
-        <responsibility-card :responsibility="responsibility" />
+    <v-row v-if="positions.length > 0">
+      <v-col cols="6" v-for="(position, index ) in positions" :key="index">
+        <position-card :position="position" />
       </v-col>
     </v-row>
     <div class="d-flex justify-center" v-else>
@@ -14,18 +14,18 @@
 <script>
 export default {
   props: {
-    responsibilities: {}
+    positions: {}
   },
   data() {
     return {
-      localResponsibilities: this.responsibilities
+      localPositions: this.positions
     };
   },
   created() {
-    Event.listen("deleteResponsibility", responsibilityId => {
-      this.localResponsibilities.forEach((responsibility, index) => {
-        if (responsibility.id == responsibilityId) {
-          this.localResponsibilities.splice(index, 1);
+    Event.listen("deletePosition", positionId => {
+      this.localPositions.forEach((position, index) => {
+        if (position.id == positionId) {
+          this.localPositions.splice(index, 1);
         }
       });
     });

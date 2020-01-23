@@ -24,7 +24,7 @@ class DivisionController extends Controller
     public function show()
     {
         $userDivisionId = auth()->user()->division_id;
-        $division = Division::with('head', 'users', 'responsibilities.descriptions')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
+        $division = Division::with('head', 'users', 'positions.descriptions')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
 
         $positionLevels = PositionLevel::where('name', '!=', 'Руководитель')->get();
         $authUser = \Auth::user();
@@ -38,9 +38,9 @@ class DivisionController extends Controller
         $isUserHead = json_encode($isUserHead);
         $oldInputs = json_encode(Session::getOldInput());
         $jsonPositionLevels = json_encode($positionLevels);
-        $jsonResponsibilities = json_encode($division->responsibilities);
+        $jsonPositions = json_encode($division->positions);
 
-        return view('division', compact('division', 'positionLevels', 'isUserHead', 'oldInputs', 'jsonPositionLevels', 'jsonResponsibilities'));
+        return view('division', compact('division', 'positionLevels', 'isUserHead', 'oldInputs', 'jsonPositionLevels', 'jsonPositions'));
     }
 
     public function store(Request $request)

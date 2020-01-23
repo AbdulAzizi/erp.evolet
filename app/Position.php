@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Responsibility extends Model
+class Position extends Model
 {
     protected $fillable = ['name', 'division_id'];
 

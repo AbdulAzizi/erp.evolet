@@ -5,7 +5,7 @@ use App\User;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 use App\PositionLevel;
-use App\Responsibility;
+use App\Position;
 use App\Division;
 
 /*

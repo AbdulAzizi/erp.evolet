@@ -9,10 +9,10 @@ class JobDescription extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['responsibility_id', 'text'];
+    protected $fillable = ['position_id', 'text'];
 
-    public function responsibility()
+    public function position()
     {
-        return $this->belongsTo(Responsibility::class);
+        return $this->belongsTo(Position::class);
     }
 }

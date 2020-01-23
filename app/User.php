@@ -37,7 +37,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public $with = ['positionLevel', 'responsibilities'];
+    public $with = ['positionLevel', 'positions'];
 
     // protected $appends = ['fullname', 'last_message_date'];
 
@@ -63,9 +63,9 @@ class User extends Authenticatable
         return $this->belongsTo('App\PositionLevel');
     }
 
-    public function responsibilities()
+    public function positions()
     {
-        return $this->belongsToMany('App\Responsibility');
+        return $this->belongsToMany('App\Position');
     }
 
     public function givenTasks()
@@ -119,7 +119,7 @@ class User extends Authenticatable
 
     public static function alone()
     {
-        return self::without(['positionLevel', 'responsibilities']);
+        return self::without(['positionLevel', 'positions']);
     }
 
     /**

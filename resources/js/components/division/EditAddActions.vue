@@ -8,7 +8,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn text color="red lightne-2" @click="warningDialog = !warningDialog">отмена</v-btn>
-          <v-btn text color="primary" @click="deleteResponsibility()">удалить</v-btn>
+          <v-btn text color="primary" @click="deletePosition()">удалить</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -20,7 +20,7 @@
       </template>
       <v-list>
         <v-list-item @click="formDialog = !formDialog" dense>Добавить ДИ</v-list-item>
-        <v-list-item dense @click="editResponsibility()">Изменить</v-list-item>
+        <v-list-item dense @click="editPosition()">Изменить</v-list-item>
         <v-list-item dense @click="warningDialog = !warningDialog">Удалить</v-list-item>
       </v-list>
     </v-menu>
@@ -32,7 +32,7 @@
         <v-card-text>
           <v-form ref="form" class="mt-3">
             <v-row>
-              <template v-for="(description, index) in responsibilityForms">
+              <template v-for="(description, index) in positionForms">
                 <v-col cols="12" :key="'desc' + index">
                   <v-textarea
                     v-model="description.text"
@@ -87,9 +87,9 @@
                   filled>
                   </v-text-field>
                 </v-col>
-                 <v-divider :key="'divider' + index" v-if="index > responsibilityForms.length" class="ma-2"/>
+                 <v-divider :key="'divider' + index" v-if="index > positionForms.length" class="ma-2"/>
               </template>
-              <v-btn block outlined rounded color="primary" @click="addResponsibilityForm()">Добавить еще</v-btn>
+              <v-btn block outlined rounded color="primary" @click="addPositionForm()">Добавить еще</v-btn>
             </v-row>
           </v-form>
         </v-card-text>
@@ -108,13 +108,13 @@
 </template>
 <script>
 export default {
-  props: ["responsibility"],
+  props: ["position"],
   data() {
     return {
       formDialog: false,
       warningDialog: false,
       disabled: true,
-      responsibilityForms: [
+      positionForms: [
         {
           text: null,
           level: null,
@@ -127,15 +127,15 @@ export default {
   },
   methods: {
     submit() {
-        axios.post(`/api/add/single/responsibility/${this.responsibility.id}`, {
-            descriptions: this.responsibilityForms
+        axios.post(`/api/add/single/position/${this.position.id}`, {
+            descriptions: this.positionForms
         }).then(res => {
           Event.fire('descriptionAdded', res.data);
           this.resetForm();
         })
     },
-    addResponsibilityForm() {
-      this.responsibilityForms.push({
+    addPositionForm() {
+      this.positionForms.push({
         text: null,
           level: null,
           days: null,
@@ -144,22 +144,22 @@ export default {
       });
       this.disabled = false;
     },
-    editResponsibility(){
-      Event.fire('editResponsibility', this.responsibility.id);
+    editPosition(){
+      Event.fire('editPosition', this.position.id);
     },
     displayDeleteWarning(){
       this.deleteWarningDialog = true;
     },
-    deleteResponsibility(){
-      axios.delete(`/api/delete/responsibility/${this.responsibility.id}`).then(res => {
-        Event.fire('deleteResponsibility', this.responsibility.id);
+    deletePosition(){
+      axios.delete(`/api/delete/position/${this.position.id}`).then(res => {
+        Event.fire('deletePosition', this.position.id);
       }).catch(err => err.messages);
     },
     resetForm(){
       const form = this.$refs.form;
       form.reset();
       this.formDialog = false;
-      this.responsibilityForms.length = 1;
+      this.positionForms.length = 1;
     }
   }
 };

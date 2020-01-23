@@ -288,8 +288,8 @@ export default {
                 return field.type.name;
             }
         },
-        defineAuthUserResponsibility() {
-            this.authuser.responsibilities.filter(elem => {
+        defineAuthUserPosition() {
+            this.authuser.positions.filter(elem => {
                 if (elem.name == "Рук НАП") {
                     this.editAllowed = true;
                 } else {
@@ -312,7 +312,7 @@ export default {
         ].pivot.spent_time = this.lastProcessSpentTime;
         // Calculate total spent time
         this.overallSpentTime = this.totalSpentTime;
-        this.defineAuthUserResponsibility();
+        this.defineAuthUserPosition();
         this.getPoll();
     }
 };

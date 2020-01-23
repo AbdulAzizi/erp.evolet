@@ -38,10 +38,10 @@ class VerifyTaskOwnership
         // Add exception users
         // loop through all users
         $users->each(function ($user) use ($allowedUserIDs) {
-            // loop through responsibilities
-            $respExceptions = $user->responsibilities->filter(function ($responsibility) {
+            // loop through positions
+            $respExceptions = $user->positions->filter(function ($position) {
                 // return if it is HR or CEO
-                return $responsibility->name == "HR" || $responsibility->name == "РВЗ";
+                return $position->name == "HR" || $position->name == "РВЗ";
             });
             // if has HR or CEO
             if($respExceptions->count() > 0){

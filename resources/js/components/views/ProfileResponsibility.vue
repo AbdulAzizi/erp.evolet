@@ -1,7 +1,7 @@
 <template>
     <div>
         <profile-banner :user="user" />
-        <responsibilities :responsibilities="responsibilities" />
+        <positions :positions="positions" />
     </div>
 </template>
 
@@ -9,7 +9,7 @@
 export default {
     props: {
         user: {},
-        responsibilities: {}
+        positions: {}
     }
 };
 </script>

@@ -17,7 +17,7 @@ class CreateJobDescriptionsTable extends Migration
             $table->bigIncrements('id');
             $table->text('text');
             $table->integer('level');
-            $table->unsignedInteger('responsibility_id');
+            $table->unsignedInteger('position_id');
             $table->string('planned_time')->nullable();
         });
     }

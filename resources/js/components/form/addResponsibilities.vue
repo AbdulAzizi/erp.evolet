@@ -6,28 +6,28 @@
       bottom
       right
       color="primary"
-      @click="addResponsibilityDialog = !addResponsibilityDialog"
+      @click="addPositionDialog = !addPositionDialog"
     >
       <v-icon>mdi-plus</v-icon>
     </v-btn>
-    <v-dialog persistent width="600" v-model="addResponsibilityDialog">
+    <v-dialog persistent width="600" v-model="addPositionDialog">
       <v-card>
         <v-toolbar flat dense dark color="primary">
           <v-toolbar-title>Добавить должностную объязанность</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-form class="my-5" ref="addResponsibilityForm">
+          <v-form class="my-5" ref="addPositionForm">
             <v-text-field
-              name="responsibility"
+              name="position"
               rounded
               filled
               label="Должностная объязанность"
-              v-model="responsibilityName"
+              v-model="positionName"
               :rules="rules"
             ></v-text-field>
-            <v-divider v-if="responsibilityDescriptions.length > 0" class="ma-2"/>
+            <v-divider v-if="positionDescriptions.length > 0" class="ma-2"/>
             <v-row>
-              <template v-for="(description, index) in responsibilityDescriptions">
+              <template v-for="(description, index) in positionDescriptions">
                 <v-col cols="12" :key="'desc' + index">
                   <v-textarea
                     v-model="description.text"
@@ -82,7 +82,7 @@
                   filled>
                   </v-text-field>
                 </v-col>
-               <v-divider :key="'divider' + index" v-if="index < responsibilityDescriptions.length" class="ma-2"/>
+               <v-divider :key="'divider' + index" v-if="index < positionDescriptions.length" class="ma-2"/>
               </template>
             </v-row>
             <v-btn
@@ -90,7 +90,7 @@
               outlined
               block
               color="primary"
-              @click="addResponsibilityDescription()"
+              @click="addPositionDescription()"
             >Добавить интсрукцию</v-btn>
           </v-form>
         </v-card-text>
@@ -105,18 +105,18 @@
 </template>
 <script>
 export default {
-  props: ["division", "user", "responsibilities"],
+  props: ["division", "user", "positions"],
   data() {
     return {
-      addResponsibilityDialog: false,
-      responsibilityName: null,
-      responsibilityDescriptions: [],
+      addPositionDialog: false,
+      positionName: null,
+      positionDescriptions: [],
       rules: [v => !!v || "Обязательное поле"],
     };
   },
   methods: {
-    addResponsibilityDescription() {
-      this.responsibilityDescriptions.push({
+    addPositionDescription() {
+      this.positionDescriptions.push({
         text: null,
         level: null,
         days: null,
@@ -125,25 +125,25 @@ export default {
       });
     },
     submit() {
-      const form = this.$refs.addResponsibilityForm;
+      const form = this.$refs.addPositionForm;
       if (form.validate()) {
         axios
-          .post(`/api/add/responsibility/${this.division.id}`, {
-            descriptions: this.responsibilityDescriptions,
-            name: this.responsibilityName
+          .post(`/api/add/position/${this.division.id}`, {
+            descriptions: this.positionDescriptions,
+            name: this.positionName
           })
           .then(res => {
-            Event.fire("responsibilityAdded", res.data);
+            Event.fire("positionAdded", res.data);
             this.resetForm();
           })
           .catch(err => err.messages);
       }
     },
     resetForm() {
-      const form = this.$refs.addResponsibilityForm;
-      this.addResponsibilityDialog = !this.addResponsibilityDialog;
+      const form = this.$refs.addPositionForm;
+      this.addPositionDialog = !this.addPositionDialog;
       form.reset();
-      this.responsibilityDescriptions.length = 0;
+      this.positionDescriptions.length = 0;
     }
   }
 };

@@ -1,5 +1,7 @@
 <?php
 
+use App\Division;
+use App\Position;
 use Illuminate\Database\Seeder;
 
 class PositionTableSeeder extends Seeder
@@ -11,12 +13,48 @@ class PositionTableSeeder extends Seeder
      */
     public function run()
     {
-        $positionLevels = App\PositionLevel::insert([
-            ['name' => 'Руководитель'],
-            ['name' => 'Главный специалист'],
-            ['name' => 'Ведущий специалист'],
-            ['name' => 'Младший специалист'],
-            ['name' => 'Стажёр'],
+
+        Position::insert([
+            [
+                'name' => 'Программист',
+                'division_id' => Division::where('abbreviation', 'ОРПО')->first()->id
+            ],
+            [
+                'name' => 'Контент Менеджер',
+                'division_id' => Division::where('abbreviation', 'ОЦМ')->first()->id
+            ],
+            [
+                'name' => 'Веб Мастер',
+                'division_id' => Division::where('abbreviation', 'ОЦМ')->first()->id
+            ],
+            [
+                'name' => 'Куратор Портфеля ПК стран',
+                'division_id' => Division::where('abbreviation', 'ОМАР')->first()->id
+            ],
+            [
+                'name' => 'НО',
+                'division_id' => Division::where('abbreviation', 'НО')->first()->id
+            ],
+            [
+                'name' => 'ПК',
+                'division_id' => Division::where('abbreviation', 'ПК')->first()->id
+            ],
+            [
+                'name' => 'Рук НАП',
+                'division_id' => Division::where('abbreviation', 'НАП')->first()->id
+            ],
+            [
+                'name' => 'РВЗ',
+                'division_id' => Division::where('abbreviation', 'Evolet')->first()->id
+            ],
+            [
+                'name' => 'МРБ',
+                'division_id' => Division::where('abbreviation', 'ОЗк')->first()->id
+            ],
+            [
+                'name' => 'HR',
+                'division_id' => Division::where('abbreviation', 'ДЧ')->first()->id
+            ],
         ]);
     }
 }

@@ -41,12 +41,12 @@
                         <v-list-item-title>{{data.item.name}} {{data.item.surname}}</v-list-item-title>
                         <v-list-item-subtitle>
                             <span
-                                v-for="(responsibility,key) in data.item.responsibilities"
-                                :key="'responsibility-'+key"
+                                v-for="(position,key) in data.item.positions"
+                                :key="'position-'+key"
                             >
-                                {{responsibility.name}}
+                                {{position.name}}
                                 <span
-                                    v-if="key != data.item.responsibilities.length-1"
+                                    v-if="key != data.item.positions.length-1"
                                 >|</span>
                             </span>
                             <!-- - {{data.item.division.abbreviation}} -->
