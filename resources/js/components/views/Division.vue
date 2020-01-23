@@ -4,10 +4,10 @@
             <span class=" grey--text text--darken-2 align-self-center pl-4">{{localDivision.name}}</span>
             <v-spacer></v-spacer>
             <v-tab :value="activeBtn.STRUCTURE">Структура</v-tab>
-            <v-tab :value="activeBtn.POSITION">Объязанности</v-tab>
+            <v-tab :value="activeBtn.POSITION">Должности</v-tab>
         </v-tabs>
 
-        <v-tabs-items v-model="currentView" class="transparent">
+        <v-tabs-items v-model="currentView" class="transparent mt-3">
             <!-- <v-tabs-items v-model="currentView" class="transparent"> -->
             <v-tab-item>
                 <division-structure
