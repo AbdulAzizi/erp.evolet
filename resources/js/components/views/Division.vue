@@ -17,11 +17,11 @@
                 />
             </v-tab-item>
             <v-tab-item>
-                <positions :positions="localDivision.positions" />
-                <add-positions
+                <positions :positions="localDivision.positions" :divisionId="localDivision.id" />
+                <!-- <add-positions
                     :division="localDivision"
                     v-if="user.position_level.name == 'Руководитель'"
-                />
+                /> -->
             </v-tab-item>
         </v-tabs-items>
     </div>

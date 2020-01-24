@@ -79,7 +79,7 @@ Route::get('/field/type', 'FieldTypeController@index')->name('fieldType.index');
 Route::post('/field/create', 'FieldController@create')->name('field.create');
 Route::post('/field/delete/{id}', 'FormController@deleteField')->name('field.deleteField');
 Route::post('/mark/all/notifications/{id}', 'UserController@markAllNotificationsAsRead')->name('user.markAllNotificationsAsRead');
-Route::post('/add/position/{id}', 'PositionController@store')->name('position.store');
+Route::post('/create/position/{id}', 'PositionController@store')->name('position.store');
 Route::post('/add/single/position/{id}', 'PositionController@addPosition')->name('position.add');
 Route::post('/users', 'UserController@store')->name('users.store');
 Route::post('/edit/position/{id}', 'PositionController@edit')->name('position.edit');

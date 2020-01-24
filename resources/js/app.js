@@ -287,7 +287,7 @@ Vue.component("position-card", require("./components/positions/Card.vue").defaul
 
 Vue.component("add-job-description", require("./components/form/AddJobDescription.vue").default);
 
-Vue.component("add-positions", require("./components/form/addPositions.vue").default);
+Vue.component("add-position", require("./components/positions/AddPosition.vue").default);
 
 Vue.component("user-card-vertical", require("./components/profile/UserCard.vue").default);
 

@@ -28,26 +28,11 @@ class PositionController extends Controller
 
     public function store(Request $request)
     {
-        $data = [];
-
         $position = Position::create([
-            'name' => $request->name,
+            'name' => $request->position,
             'division_id' => $request->id
         ]);
-
-
-        foreach ($request->descriptions as $description) {
-            if ($description['level'] !== null && $description['text'] !== null) {
-                $data[] = [
-                    'position_id' => $position->id,
-                    'text' => $description['text'],
-                    'level' => $description['level'],
-                    'planned_time' => $description['days'] * 86400000 + $description['hours'] * 3600000 + $description['minutes'] * 60000
-                ];
-            }
-        }
-        $jobDescription = JobDescription::insert($data);
-
+        
         $positionWithDescriptions = Position::with('descriptions')->find($position->id);
 
         return $positionWithDescriptions;
