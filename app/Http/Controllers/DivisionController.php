@@ -24,7 +24,7 @@ class DivisionController extends Controller
     public function show()
     {
         $userDivisionId = auth()->user()->division_id;
-        $division = Division::with('head', 'users', 'positions.descriptions')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
+        $division = Division::with('head', 'users', 'positions.responsibilities')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
 
         $positionLevels = PositionLevel::where('name', '!=', 'Руководитель')->get();
         $authUser = \Auth::user();

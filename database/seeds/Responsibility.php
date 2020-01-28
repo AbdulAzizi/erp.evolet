@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\JobDescription;
+use App\Responsibility;
 
-class JobDescriptionSeeder extends Seeder
+class ResponsibilitySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,7 @@ class JobDescriptionSeeder extends Seeder
      */
     public function run()
     {
-        JobDescription::truncate();
-        factory(JobDescription::class, 20)->create();
+        Responsibility::truncate();
+        factory(Responsibility::class, 20)->create();
     }
 }

@@ -15,124 +15,72 @@
             append-icon="mdi-check"
             append-outer-icon="mdi-close"
             :placeholder="position.name"
-            @click:append="editPositionName()"
-            @click:append-outer="resetEditForm()"
+            @click:append="editPosition()"
+            @click:append-outer="resetPositionEditForm()"
           ></v-text-field>
         </v-toolbar-title>
         <v-spacer />
         <edit-add-actions :position="position" />
       </v-toolbar>
-      <v-card-text v-if="position.descriptions.length" class="pa-0 ma-0">
-        <template v-for="(description, subIndex) in position.descriptions">
-          <v-hover v-slot:default="{ hover }" :key="'hover' + subIndex">
-            <div :key="'description' + subIndex" class="ma-4">
-              <span>{{subIndex + 1}}. {{ description.text }}</span>
-              <span class="float-right mr-3 grey--text" v-if="!hover">
-                <v-icon small>mdi-timer-sand-full</v-icon>
-                {{ days(description.planned_time) }} {{ hours(description.planned_time) }} {{ minutes(description.planned_time) }}
-              </span>
-              <span class="float-right mr-3 grey--text" v-if="!hover">
-                <v-icon small>mdi-seal</v-icon>
-                {{ description.level }}
-              </span>
-              <span class="float-right mr-3" v-if="hover">
-                <v-btn x-small icon @click="deleteDescription(description)">
-                  <v-icon small>mdi-delete</v-icon>
-                </v-btn>
-              </span>
-              <span class="float-right" v-if="hover">
-                <v-btn x-small icon>
-                  <v-icon small @click="getDataBeforeEdit(description)">mdi-pencil</v-icon>
-                </v-btn>
-              </span>
-            </div>
-          </v-hover>
-          <v-divider :key="'divider-'+subIndex"></v-divider>
-        </template>
+      <v-card-text class="pa-0" v-if="position.responsibilities.length > 0">
+        <v-list class="ml-2 mr-4" flat>
+          <v-list-group
+            v-for="(responsibility, index) in position.responsibilities"
+            :key="index"
+            :ripple="false"
+          >
+            <template v-slot:activator>
+              <v-hover v-slot:default="{ hover }">
+                <v-list-item>
+                  <v-list-item-title>{{ responsibility.text }}</v-list-item-title>
+                  <v-list-item-action class="ma-0" v-if="hover">
+                    <v-btn icon small @click.stop="deleteResponsibility(responsibility.id)">
+                      <v-icon small>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                  <v-list-item-action class="ma-0" v-if="hover">
+                    <v-btn icon small @click.stop="editResponsibility(responsibility)">
+                      <v-icon small>mdi-pencil</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-hover>
+            </template>
+            <v-hover v-slot:default="{ hover }">
+              <v-row class="mx-4">
+                <v-col cols="10">
+                  <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa odio nobis ad quas cum numquam? Delectus iure laborum error rem ad minus deleniti eos inventore exercitationem. Reiciendis perferendis quo rerum.</div>
+                </v-col>
+                <v-col cols="2" v-if="hover">
+                  <v-btn icon small>
+                    <v-icon small>mdi-delete</v-icon>
+                  </v-btn>
+                  <v-btn icon small>
+                    <v-icon small>mdi-pencil</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-hover>
+            <v-divider />
+            <v-btn text small color="primary" class="mx-4">
+              <v-icon small>mdi-plus-circle</v-icon>Добавить объязанность
+            </v-btn>
+          </v-list-group>
+        </v-list>
       </v-card-text>
-      <v-card-text v-else class="text-center">
-        <span class="mt-2">Инструкций нет</span>
-      </v-card-text>
+      <v-divider></v-divider>
+      <v-btn class="py-2" text block color="primary" @click="addResponsibility = true">
+        <v-icon small>mdi-plus-circle</v-icon>Добавить объязанность
+      </v-btn>
     </v-card>
-    <v-dialog v-model="descriptionDialog" width="600">
-      <v-card>
-        <v-toolbar dark dense flat color="primary">
-          <v-toolbar-title>Изменить инструкцию</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text>
-          <v-form class="mt-5" ref="form">
-            <v-row>
-              <v-col cols="12">
-                <v-textarea
-                  v-model="description.text"
-                  name="text"
-                  label="Должностные инструкции"
-                  rounded
-                  filled
-                  :rules="simpleRules"
-                ></v-textarea>
-              </v-col>
-              <v-col cols="12">
-                <v-slider
-                  v-model="description.level"
-                  rounded
-                  filled
-                  step="1"
-                  :max="10"
-                  ticks="always"
-                  thumb-label="always"
-                  :thumb-size="24"
-                  name="level"
-                  label="Уровень"
-                  :rules="simpleRules"
-                ></v-slider>
-              </v-col>
-              <v-col cols="4">
-                <v-form ref="estimateDays">
-                  <v-text-field
-                    v-model="estimateDays"
-                    name="days"
-                    label="Дни"
-                    rounded
-                    type="number"
-                    filled
-                    :rules="rules"
-                  ></v-text-field>
-                </v-form>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model="estimateHours"
-                  label="Часы"
-                  name="hours"
-                  type="number"
-                  rounded
-                  filled
-                  ref="estimateHours"
-                  :rules="rules"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model="estimateMinutes"
-                  label="Минуты"
-                  name="minutes"
-                  type="number"
-                  rounded
-                  filled
-                  ref="estimateMinutes"
-                  :rules="rules"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-form>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text color="primary" @click="descriptionDialog = false">отмена</v-btn>
-            <v-btn dark color="primary" @click="editDescription()">изменить</v-btn>
-          </v-card-actions>
-        </v-card-text>
-      </v-card>
+    <v-dialog v-model="addResponsibility" width="600">
+      <add-responsibility :position="localPosition" />
+    </v-dialog>
+    <v-dialog eager v-model="editResponsibilityDialog" width="600">
+      <edit-responsibility />
+    </v-dialog>
+    <v-dialog eager v-model="deleteResponsibilityDialog" width="400">
+      <delete-responsibility />
     </v-dialog>
   </div>
 </template>
@@ -147,27 +95,18 @@ export default {
       positionName: null,
       localPosition: this.position,
       descriptionDialog: false,
-      description: {
-        text: null,
-        level: null
-      },
-      estimateDays: null,
-      estimateHours: null,
-      estimateMinutes: null,
-      estimateTime: null,
-      estimateDaysValid: null,
-      estimateHoursValid: null,
-      estimateMinutesValid: null,
-      rules: [v => !!this.estimateTime || "Обязательное поле"],
-      simpleRules: [v => !!v || "Обязательное поле"]
+      addResponsibility: false,
+      editResponsibilityDialog: false,
+      deleteResponsibilityDialog: false,
+      responsibilityForEdit: null
     };
   },
   methods: {
-    resetEditForm() {
+    resetPositionEditForm() {
       this.edit = false;
       this.positionName = null;
     },
-    editPositionName() {
+    editPosition() {
       if (this.positionName !== null) {
         axios
           .post(`/api/edit/position/${this.position.id}`, {
@@ -175,78 +114,18 @@ export default {
           })
           .then(res => {
             this.localPosition.name = res.data.name;
-            this.resetEditForm();
+            this.resetPositionEditForm();
           })
           .catch(err => err.messages);
       }
     },
-    deleteDescription(item) {
-      axios
-        .delete(`/api/delete/description/${item.id}`)
-        .then(res => {
-          this.localPosition.descriptions.forEach((description, index) => {
-            if (description.id == item.id) {
-              this.localPosition.descriptions.splice(index, 1);
-            }
-          });
-        })
-        .catch(err => err.messages);
+    editResponsibility(responsibility) {
+      this.editResponsibilityDialog = true;
+      Event.fire('responsibility', responsibility);
     },
-    editDescription() {
-      const form = this.$refs.form;
-      this.estimateTime =
-        this.estimateDays || this.estimateHours || this.estimateMinutes;
-      this.estimateDaysValid = this.$refs.estimateDays.validate(true);
-      this.estimateHoursValid = this.$refs.estimateHours.validate(true);
-      this.estimateMinutesValid = this.$refs.estimateMinutes.validate(true);
-
-      if (form.validate()) {
-        axios
-          .post(`/api/edit/description/${this.description.id}`, {
-            text: this.description.text,
-            level: this.description.level,
-            days: this.days,
-            hours: this.hours,
-            minutes: this.minutes
-          })
-          .then(res => {
-            this.descriptionDialog = false;
-            this.localPosition.descriptions.forEach(description => {
-              if (description.id == this.description.id) {
-                description.planned_time = res.data;
-              }
-            });
-          })
-          .catch(err => err.messages);
-      }
-    }
-  },
-  getDataBeforeEdit(item) {
-    this.descriptionDialog = true;
-    this.description = {
-      id: item.id,
-      text: item.text,
-      level: item.level
-    };
-
-    (this.estimateDays = parseInt(this.days(item.planned_time))),
-      (this.estimateHours = parseInt(this.hours(item.planned_time))),
-      (this.estimateMinutes = parseInt(this.minutes(item.planned_time)));
-  },
-  watch: {
-    estimateTime(val) {
-      this.estimateDaysValid;
-      this.estimateHoursValid;
-      this.estimateMinutesValid;
-    },
-    estimateDays(val) {
-      this.estimateTime = val;
-    },
-    estimateHours(val) {
-      this.estimateTime = val;
-    },
-    estimateMinutes(val) {
-      this.estimateTime = val;
+    deleteResponsibility(responsibilityId) {
+      this.deleteResponsibilityDialog = true;
+      Event.fire('deleteResponsibility', responsibilityId)
     }
   },
   created() {
@@ -255,6 +134,36 @@ export default {
         this.edit = true;
       }
     });
+    Event.listen("responsibilityAdded", data => {
+      this.addResponsibility = false;
+      this.localPosition.responsibilities.push(data);
+    });
+    Event.listen("closeResponsibilityDialog", data => {
+      this.addResponsibility = false;
+    });
+    Event.listen("editResponsibility", editedResponsibility => {
+      this.localPosition.responsibilities.forEach(responsibility => {
+        if(responsibility.id == editedResponsibility.id){
+          responsibility.text = editedResponsibility.text;
+        }
+      })
+      this.editResponsibilityDialog = false;
+    })
+    Event.listen("cancelResponsibilityEdit", data => {
+      this.editResponsibilityDialog = false;
+    });
+
+    Event.listen("dontDeleteResponsibility", responsibility => this.deleteResponsibilityDialog = false);
+
+    Event.listen("responsibilityDeleted", responsibilityId => {
+      this.deleteResponsibilityDialog = false;
+
+      this.localPosition.responsibilities.forEach((responsibility, index) => {
+        if(responsibility.id == responsibilityId){
+          this.localPosition.responsibilities.splice(index, 1);
+        }
+      });
+    })
   }
 };
 </script>

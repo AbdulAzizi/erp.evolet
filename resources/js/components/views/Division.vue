@@ -87,7 +87,7 @@ export default {
         Event.listen("descriptionAdded", data => {
             this.localDivision.positions.forEach(element => {
                 if (element.id == data.id) {
-                    element.descriptions = data.descriptions;
+                    element.responsibilities = data.responsibilities;
                 }
             });
         });

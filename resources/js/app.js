@@ -264,6 +264,9 @@ Vue.component("process-task-edit", require("./components/processTask/Edit.vue").
 Vue.component("process-task-add-form", require("./components/processTask/AddForm.vue").default);
 Vue.component("edit-add-actions", require("./components/division/EditAddActions.vue").default);
 Vue.component("add-employee", require("./components/division/AddEmployee.vue").default);
+Vue.component("add-responsibility", require("./components/responsibility/AddResponsibility.vue").default);
+Vue.component("edit-responsibility", require("./components/responsibility/EditResponsibility.vue").default);
+Vue.component("delete-responsibility", require("./components/responsibility/DeleteResponsibility.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("factories", require("./components/views/factories/Index.vue").default);
@@ -284,8 +287,6 @@ Vue.component("profile-position", require("./components/views/ProfilePosition.vu
 
 Vue.component("positions", require("./components/Positions.vue").default);
 Vue.component("position-card", require("./components/positions/Card.vue").default);
-
-Vue.component("add-job-description", require("./components/form/AddJobDescription.vue").default);
 
 Vue.component("add-position", require("./components/positions/AddPosition.vue").default);
 

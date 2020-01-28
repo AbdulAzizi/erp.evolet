@@ -15,9 +15,9 @@ class Position extends Model
         return $this->belongsToMany('App\User');
     }
 
-    public function descriptions()
+    public function responsibilities()
     {
-        return $this->hasMany('App\JobDescription');
+        return $this->hasMany('App\Responsibility');
     }
 
     public function division()

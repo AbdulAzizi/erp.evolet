@@ -23,7 +23,8 @@ export default {
   data() {
     return {
       localPositions: this.positions,
-      addPosition: false
+      addPosition: false,
+      addResponsibility: false
     };
   },
   created() {
@@ -37,6 +38,9 @@ export default {
     Event.listen('newPosition', position => {
       this.localPositions.push(position);
       this.addPosition = false;
+    });
+    Event.listen('addResponsibility', positionId => {
+      
     })
   }
 };

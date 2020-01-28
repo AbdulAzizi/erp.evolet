@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Division;
-use App\JobDescription;
+use App\Responsibility;
 use App\User;
 use App\Position;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class PositionController extends Controller
 
     public function show(Request $request, $id)
     {
-        $user = User::with('positions.descriptions')->find($request->id);
+        $user = User::with('positions.responsibilities')->find($request->id);
         $division = new Division();
 
         if (\Auth::user()->positionLevel->name = "Руководитель" && \Auth::user()->division->id == $user->division->id)
@@ -32,8 +32,8 @@ class PositionController extends Controller
             'name' => $request->position,
             'division_id' => $request->id
         ]);
-        
-        $positionWithDescriptions = Position::with('descriptions')->find($position->id);
+
+        $positionWithDescriptions = Position::with('responsibilities')->find($position->id);
 
         return $positionWithDescriptions;
     }
@@ -53,14 +53,14 @@ class PositionController extends Controller
 
         $position = Position::find($request->id);
 
-        $position->descriptions()->delete();
+        $position->responsibilities()->delete();
 
         $position->delete();
     }
     
-    public function createJobDescription()
+    public function createResponsibility()
     {
-        JobDescription::create([
+        Responsibility::create([
             'position_id' => request('position_id'),
             'text' => request('text')
         ]);
@@ -97,9 +97,9 @@ class PositionController extends Controller
             }
         }
 
-        $jobdescription = JobDescription::insert($data);
+        $Responsibility = Responsibility::insert($data);
 
-        $position = Position::with('descriptions')->find($request->id);
+        $position = Position::with('responsibilities')->find($request->id);
 
         return $position;
     }

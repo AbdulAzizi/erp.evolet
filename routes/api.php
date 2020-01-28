@@ -84,7 +84,10 @@ Route::post('/add/single/position/{id}', 'PositionController@addPosition')->name
 Route::post('/users', 'UserController@store')->name('users.store');
 Route::post('/edit/position/{id}', 'PositionController@edit')->name('position.edit');
 Route::delete('/delete/position/{id}', 'PositionController@delete')->name('position.delete');
-Route::delete('/delete/description/{id}', 'JobDescriptionController@delete')->name('jobDescription.delete');
-Route::post('/edit/description/{id}', 'JobDescriptionController@edit')->name('jobDescription.edit');
+Route::delete('/delete/description/{id}', 'ResponsibilityController@delete')->name('responsibility.delete');
+Route::post('/edit/responsibility/{id}', 'ResponsibilityController@edit')->name('responsibility.edit');
+Route::post('/add/responsibility', 'ResponsibilityController@create')->name('responsibility.create');
+Route::delete('/delete/responsibility/{id}', 'ResponsibilityController@delete')->name('responsibility.delete');
+
 
 
