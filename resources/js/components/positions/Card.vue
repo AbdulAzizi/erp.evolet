@@ -14,7 +14,6 @@
             background-color="primary darken-1"
             append-icon="mdi-check"
             append-outer-icon="mdi-close"
-            :placeholder="position.name"
             @click:append="editPosition()"
             @click:append-outer="resetPositionEditForm()"
           ></v-text-field>
@@ -54,7 +53,9 @@
               <v-hover v-slot:default="{ hover }">
                 <v-row style="border-bottom: 1px solid #e0e0e0" class="mx-2">
                   <v-col cols="10">
-                    <div class="grey--text text--darken-4">{{index + 1}}.{{subIndex + 1}}. {{ description.title }}</div>
+                    <div
+                      class="grey--text text--darken-4"
+                    >{{index + 1}}.{{subIndex + 1}}. {{ description.title }}</div>
                     <div class="grey--text text--darken-2 pl-7">{{ description.description }}</div>
                   </v-col>
                   <v-col cols="2" v-if="hover">
@@ -88,7 +89,7 @@
         <v-icon small class="px-2">mdi-plus-circle</v-icon>Добавить объязанность
       </v-btn>
     </v-card>
-    <v-dialog persistent v-model="addResponsibilityDialog" width="600" >
+    <v-dialog persistent v-model="addResponsibilityDialog" width="600">
       <add-responsibility :position="localPosition" />
     </v-dialog>
     <v-dialog persistent eager v-model="editResponsibilityDialog" width="600">
@@ -116,7 +117,7 @@ export default {
   data() {
     return {
       edit: false,
-      positionName: null,
+      positionName: this.position.name,
       localPosition: this.position,
       descriptionDialog: false,
       addResponsibilityDialog: false,
@@ -131,7 +132,7 @@ export default {
   methods: {
     resetPositionEditForm() {
       this.edit = false;
-      this.positionName = null;
+      this.positionName = this.position.name;
     },
     editPosition() {
       if (this.positionName !== null) {
@@ -175,7 +176,7 @@ export default {
     });
     Event.listen("responsibilityAdded", data => {
       this.addResponsibilityDialog = false;
-      if(this.localPosition.id == data.position_id){
+      if (this.localPosition.id == data.position_id) {
         this.localPosition.responsibilities.push(data);
       }
     });

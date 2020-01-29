@@ -37,8 +37,8 @@
             :field="{
           type: 'select',
           name: 'positionId',
-          label: 'Должность',
-          items: positionItems,
+          label: 'Позиционный уровень',
+          items: positionLevelItems,
           rules: ['required']
           }"
             v-model="positionLevel"
@@ -47,7 +47,7 @@
             :field="{
           type: 'autocomplete',
           name: 'positionId',
-          label: 'Полномочия',
+          label: 'Должность',
           items: positionItems,
           multiple: true,
           rules: ['required']
@@ -76,7 +76,7 @@ export default {
       positionLevel: null,
       positions: [],
       positionItems: this.loadDivisionPositions(this.division.id),
-      positionItems: this.loadPositionLevels()
+      positionLevelItems: this.loadPositionLevels()
     };
   },
   methods: {
@@ -106,7 +106,13 @@ export default {
     }
   },
   created() {
-    Event.listen("positionAdded", data => {
+    Event.listen("newPosition", data => {
+      this.positionItems = this.loadDivisionPositions(
+        this.division.id
+      );
+    });
+
+    Event.listen("deletePosition", data => {
       this.positionItems = this.loadDivisionPositions(
         this.division.id
       );

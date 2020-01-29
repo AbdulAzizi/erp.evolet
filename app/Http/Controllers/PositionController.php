@@ -68,18 +68,4 @@ class PositionController extends Controller
         return  redirect()->back();
     }
 
-    public function loadPositions()
-    {
-        $responsibilites = Position::all();
-
-        return $responsibilites;
-    }
-
-    public function loadDivisionPositions(Request $request)
-    {
-        $divisionPositions = Position::where('division_id', $request->id)->get();
-
-        return $divisionPositions;
-    }
-
 }

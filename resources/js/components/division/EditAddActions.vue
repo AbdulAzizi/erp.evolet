@@ -5,8 +5,8 @@
         <v-card-title class="headline">Вы действительно хотите удалить полномочие?</v-card-title>
         <v-card-actions>
           <v-spacer />
-          <v-btn text color="red lightne-2" @click="warningDialog = !warningDialog">отмена</v-btn>
-          <v-btn text color="primary" @click="deletePosition()">удалить</v-btn>
+          <v-btn text color="red lighten-2" @click="warningDialog = !warningDialog">нет</v-btn>
+          <v-btn text color="primary" @click="deletePosition()">да</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -45,6 +45,7 @@ export default {
         .delete(`/api/delete/position/${this.position.id}`)
         .then(res => {
           Event.fire("deletePosition", this.position.id);
+          this.warningDialog = false;
         })
         .catch(err => err.messages);
     },

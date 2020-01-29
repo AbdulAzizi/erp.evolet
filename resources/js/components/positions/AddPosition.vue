@@ -10,13 +10,13 @@
             type: 'string',
             label: 'Должность',
             name: 'position',
-            requried: ['required']
+            rules: ['required']
         }" v-model="position" />
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn text color="primary">отмена</v-btn>
+        <v-btn text color="primary" @click="cancel()">отмена</v-btn>
         <v-btn dark color="primary" @click="submitForm()">создать</v-btn>
       </v-card-actions>
     </v-card>
@@ -41,6 +41,11 @@ export default {
           form.reset();
         }).catch(err => err.messages);
       }
+    },
+    cancel(){
+      const form = this.$refs.form;
+      form.reset();
+      Event.fire("cancelPositionAdding");
     }
   }
 };
