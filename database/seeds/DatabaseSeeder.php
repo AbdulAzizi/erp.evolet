@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
     {
 
         
-        $this->call(PollSeeder::class);
+        // $this->call(PollSeeder::class);
         $this->call(DivisionTableSeeder::class);
         $this->call(PositionTableSeeder::class);
-        $this->call(ResponsibilitySeeder::class);
+        // $this->call(ResponsibilitySeeder::class);
         $this->call(FieldsTypesSeeder::class);
         $this->call(TagTableSeeder::class);
         $this->call(FormTableSeeder::class);
