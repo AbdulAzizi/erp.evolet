@@ -16,42 +16,43 @@
                 :href="appPath('division')"
             >{{user.division.abbreviation}}</v-btn>
         </v-toolbar-items>
+        <template v-if="false">
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" :href="appPath('users')">
+                        <v-icon color="grey darken-1">mdi-account-group</v-icon>
+                    </v-btn>
+                </template>
+                <span>Сотрудники</span>
+            </v-tooltip>
 
-        <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" :href="appPath('users')">
-                    <v-icon color="grey darken-1">mdi-account-group</v-icon>
-                </v-btn>
-            </template>
-            <span>Сотрудники</span>
-        </v-tooltip>
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" :href="appPath('tasks')">
+                        <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
+                    </v-btn>
+                </template>
+                <span>Задачи</span>
+            </v-tooltip>
 
-        <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" :href="appPath('tasks')">
-                    <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
-                </v-btn>
-            </template>
-            <span>Задачи</span>
-        </v-tooltip>
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" :href="appPath('chats')">
+                        <v-icon color="grey darken-1">mdi-forum</v-icon>
+                    </v-btn>
+                </template>
+                <span>Сообщения</span>
+            </v-tooltip>
 
-        <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" :href="appPath('chats')">
-                    <v-icon color="grey darken-1">mdi-forum</v-icon>
-                </v-btn>
-            </template>
-            <span>Сообщения</span>
-        </v-tooltip>
-
-        <dropdown-btn
-            :items="auth.notifications"
-            :user="user"
-            tooltip="Уведомления"
-            icon="mdi-bell"
-            max-width="500"
-        ></dropdown-btn>
-        <!-- // TODO if there are not notifications display proper text -->
+            <dropdown-btn
+                :items="auth.notifications"
+                :user="user"
+                tooltip="Уведомления"
+                icon="mdi-bell"
+                max-width="500"
+            ></dropdown-btn>
+            <!-- // TODO if there are not notifications display proper text -->
+        </template>
 
         <v-menu offset-y left>
             <template v-slot:activator="{ on }">
@@ -105,19 +106,19 @@
                     <!-- <v-list-item v-for="(item, index) in items" :href="item.link" :key="index">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
                     </v-list-item>-->
+                    <template v-if="false">
+                        <v-list-item :href="appPath('users/'+auth.id)">
+                            <v-list-item-content>
+                                <v-list-item-title>Профиль</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
 
-                    <v-list-item :href="appPath('users/'+auth.id)">
-                        <v-list-item-content>
-                            <v-list-item-title>Профиль</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-
-                    <v-list-item :href="appPath('resume/index')">
-                        <v-list-item-content>
-                            <v-list-item-title>Добавленные резюме</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-
+                        <v-list-item :href="appPath('resume/index')">
+                            <v-list-item-content>
+                                <v-list-item-title>Добавленные резюме</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </template>
                     <v-list-item @click="$refs.logoutform.submit()">
                         <v-list-item-content>
                             <v-list-item-title>Выйти</v-list-item-title>
@@ -192,7 +193,7 @@ export default {
         },
         toggleDrawer() {
             Event.fire("toggleDrawer");
-        },
+        }
     }
 };
 </script>
