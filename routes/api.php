@@ -88,6 +88,8 @@ Route::delete('/delete/description/{id}', 'ResponsibilityController@delete')->na
 Route::post('/edit/responsibility/{id}', 'ResponsibilityController@edit')->name('responsibility.edit');
 Route::post('/add/responsibility', 'ResponsibilityController@create')->name('responsibility.create');
 Route::delete('/delete/responsibility/{id}', 'ResponsibilityController@delete')->name('responsibility.delete');
-
+Route::post('/add/responsibility/description', 'ResponsibilityDescriptionController@create')->name('responsibilityDescription.create');
+Route::post('/edit/responsibility/description/{id}', 'ResponsibilityDescriptionController@edit')->name('responsibilityDescription.edit');
+Route::delete('/delete/responsibility/description/{id}', 'ResponsibilityDescriptionController@delete')->name('responsibilityDescription.delete');
 
 

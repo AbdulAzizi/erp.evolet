@@ -15,4 +15,9 @@ class Responsibility extends Model
     {
         return $this->belongsTo(Position::class);
     }
+
+    public function descriptions()
+    {
+        return $this->hasMany('App\ResponsibilityDescription');
+    }
 }

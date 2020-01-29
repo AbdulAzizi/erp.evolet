@@ -32,6 +32,6 @@ class ResponsibilityController extends Controller
     {
         $responsibility = Responsibility::find($request->id);
 
-        $responsibility->delete();
+        $responsibility->descriptions()->delete();
     }
 }

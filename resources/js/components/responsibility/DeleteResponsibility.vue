@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card>
-      <v-card-title>Действительно хотите удалить должностную объязанность?</v-card-title>
+      <v-card-title>Действительно хотите удалить?</v-card-title>
       <v-card-actions>
         <v-spacer />
         <v-btn text color="primary" @click="cancel()">нет</v-btn>

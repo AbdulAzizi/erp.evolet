@@ -12,13 +12,13 @@ class PositionController extends Controller
 {
     public function index()
     {
-        $positions = Position::with('descriptions')->get();
+        $positions = Position::with('responsibilities.descriptions')->get();
         return view('responsibilites', compact('positions'));
     }
 
     public function show(Request $request, $id)
     {
-        $user = User::with('positions.responsibilities')->find($request->id);
+        $user = User::with('positions.responsibilities.descriptions',)->find($request->id);
         $division = new Division();
 
         if (\Auth::user()->positionLevel->name = "Руководитель" && \Auth::user()->division->id == $user->division->id)
@@ -33,7 +33,7 @@ class PositionController extends Controller
             'division_id' => $request->id
         ]);
 
-        $positionWithDescriptions = Position::with('responsibilities')->find($position->id);
+        $positionWithDescriptions = Position::with('responsibilities.descriptions')->find($position->id);
 
         return $positionWithDescriptions;
     }
@@ -82,25 +82,4 @@ class PositionController extends Controller
         return $divisionPositions;
     }
 
-    public function addPosition(Request $request)
-    {
-        $data = [];
-
-        foreach ($request->descriptions as $description) {
-            if ($description['level'] !== null && $description['text'] !== null) {
-                $data[] = [
-                    'position_id' => $request->id,
-                    'text' => $description['text'],
-                    'level' => $description['level'],
-                    'planned_time' => $description['days'] * 86400000 + $description['hours'] * 3600000 + $description['minutes'] * 60000
-                ];
-            }
-        }
-
-        $Responsibility = Responsibility::insert($data);
-
-        $position = Position::with('responsibilities')->find($request->id);
-
-        return $position;
-    }
 }

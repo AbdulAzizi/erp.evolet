@@ -267,6 +267,9 @@ Vue.component("add-employee", require("./components/division/AddEmployee.vue").d
 Vue.component("add-responsibility", require("./components/responsibility/AddResponsibility.vue").default);
 Vue.component("edit-responsibility", require("./components/responsibility/EditResponsibility.vue").default);
 Vue.component("delete-responsibility", require("./components/responsibility/DeleteResponsibility.vue").default);
+Vue.component("add-responsibility-description", require("./components/responsibility/AddResponsibilityDescription.vue").default);
+Vue.component("edit-responsibility-description", require("./components/responsibility/EditResponsibilityDescription.vue").default);
+Vue.component("delete-responsibility-description", require("./components/responsibility/DeleteResponsibilityDescription.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("factories", require("./components/views/factories/Index.vue").default);

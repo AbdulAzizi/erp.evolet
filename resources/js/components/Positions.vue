@@ -28,6 +28,7 @@ export default {
     };
   },
   created() {
+    console.log(this.positions);
     Event.listen("deletePosition", positionId => {
       this.localPositions.forEach((position, index) => {
         if (position.id == positionId) {
@@ -40,7 +41,6 @@ export default {
       this.addPosition = false;
     });
     Event.listen('addResponsibility', positionId => {
-      
     })
   }
 };
