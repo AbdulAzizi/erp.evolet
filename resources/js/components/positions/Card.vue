@@ -78,7 +78,7 @@
               class="mx-4 mt-2"
               @click="addResponsibilityDescription(responsibility.id)"
             >
-              <v-icon class="px-2" small>mdi-plus-circle</v-icon>Добавить должностную инструкцию
+              <v-icon class="px-2" small>mdi-plus-circle</v-icon>Добавить должностную задачу
             </v-btn>
           </v-list-group>
         </v-list>
@@ -175,7 +175,9 @@ export default {
     });
     Event.listen("responsibilityAdded", data => {
       this.addResponsibilityDialog = false;
-      this.localPosition.responsibilities.push(data);
+      if(this.localPosition.id == data.position_id){
+        this.localPosition.responsibilities.push(data);
+      }
     });
     Event.listen("closeResponsibilityDialog", data => {
       this.addResponsibilityDialog = false;

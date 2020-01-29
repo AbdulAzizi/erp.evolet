@@ -1,13 +1,13 @@
 <template>
   <v-card>
     <v-toolbar dense dark flat color="primary">
-      <v-toolbar-title>Добавить должностную инструкцию</v-toolbar-title>
+      <v-toolbar-title>Добавить должностную задачу</v-toolbar-title>
     </v-toolbar>
     <v-card-text>
       <v-form ref="form" class="mt-5">
         <form-field
           :field="{
-                label: 'Должностная инструкция',
+                label: 'Должностная задача',
                 name: 'title',
                 type: 'string',
                 rules: ['required'],
@@ -16,7 +16,7 @@
         />
         <form-field
           :field="{
-                label: 'Описание',
+                label: 'Должностная инструкция',
                 name: 'description',
                 type: 'text'
             }"

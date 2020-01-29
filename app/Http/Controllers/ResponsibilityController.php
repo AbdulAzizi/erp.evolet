@@ -13,8 +13,10 @@ class ResponsibilityController extends Controller
             'position_id' => $request->positionId,
             'text' => $request->text
         ]);
-
-        return $responsibility;
+        
+        $responsibilityWithDescriptions = Responsibility::with('descriptions')->find($responsibility->id);
+        
+        return $responsibilityWithDescriptions;
     }
 
     public function edit(Request $request)

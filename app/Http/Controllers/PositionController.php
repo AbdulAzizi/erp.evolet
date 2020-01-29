@@ -18,7 +18,7 @@ class PositionController extends Controller
 
     public function show(Request $request, $id)
     {
-        $user = User::with('positions.responsibilities.descriptions',)->find($request->id);
+        $user = User::with('positions.responsibilities.descriptions')->find($request->id);
         $division = new Division();
 
         if (\Auth::user()->positionLevel->name = "Руководитель" && \Auth::user()->division->id == $user->division->id)
