@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
 
         
-        // $this->call(PollSeeder::class);
+        $this->call(PollSeeder::class);
         $this->call(DivisionTableSeeder::class);
         $this->call(PositionTableSeeder::class);
         // $this->call(ResponsibilitySeeder::class);
