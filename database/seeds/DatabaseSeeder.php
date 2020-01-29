@@ -28,13 +28,13 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusTableSeeder::class);
         $this->call(ProjectSeeder::class);
         // $this->call(TetherSeeder::class);
-        $this->call(TaskTableSeeder::class);
+        // $this->call(TaskTableSeeder::class);
         $this->call(ListsSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(ProjectParticipantTableSeeder::class);
         $this->call(ResumeTableSeeder::class);
-        $this->call(ChatSeeder::class);
-        $this->call(MessageTableSeeder::class);
+        // $this->call(ChatSeeder::class);
+        // $this->call(MessageTableSeeder::class);
         $this->call(FilesTableSeeder::class);
         $this->call(FactorySeeder::class);
     }
