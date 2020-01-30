@@ -27,6 +27,7 @@ class DivisionController extends Controller
         $division = Division::with('head', 'users', 'positions.responsibilities.descriptions')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
 
         $positionLevels = PositionLevel::where('name', '!=', 'Руководитель')->get();
+
         $authUser = \Auth::user();
 
         if ($division->head) {
@@ -40,7 +41,7 @@ class DivisionController extends Controller
         $jsonPositionLevels = json_encode($positionLevels);
         $jsonPositions = json_encode($division->positions);
 
-        return view('division', compact('division', 'positionLevels', 'isUserHead', 'oldInputs', 'jsonPositionLevels', 'jsonPositions'));
+        return view('division', compact('division', 'positionLevels', 'isUserHead', 'oldInputs', 'jsonPositionLevels', 'jsonPositions', 'authUser'));
     }
 
     public function store(Request $request)

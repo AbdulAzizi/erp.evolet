@@ -17,7 +17,7 @@
                 />
             </v-tab-item>
             <v-tab-item>
-                <positions :positions="localDivision.positions" :divisionId="localDivision.id" />
+                <positions :positions="localDivision.positions" :divisionId="localDivision.id" :user="user" />
                 <!-- <add-positions
                     :division="localDivision"
                     v-if="user.position_level.name == 'Руководитель'"
