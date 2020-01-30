@@ -272,6 +272,7 @@ Vue.component("edit-responsibility-description", require("./components/responsib
 Vue.component("delete-responsibility-description", require("./components/responsibility/DeleteResponsibilityDescription.vue").default);
 
 /****************************VIEWS********************************/
+Vue.component("views-login", require("./components/views/Login.vue").default);
 Vue.component("factories", require("./components/views/factories/Index.vue").default);
 Vue.component("views-factories-create", require("./components/views/factories/Create.vue").default);
 Vue.component("views-factories-show", require("./components/views/factories/Show.vue").default);
