@@ -7,13 +7,21 @@ use App\Responsibility;
 use App\User;
 use App\Position;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class PositionController extends Controller
 {
     public function index()
     {
         $positions = Position::with('responsibilities.descriptions')->get();
-        return view('responsibilites', compact('positions'));
+
+        $divisions = Division::with('positions.responsibilities.descriptions')->get();
+
+        $authUser = \Auth::user();
+
+        $currentRouteName = Route::currentRouteName();
+
+        return view('positions', compact('positions', 'authUser', 'divisions', 'currentRouteName'));
     }
 
     public function show(Request $request, $id)
@@ -30,7 +38,7 @@ class PositionController extends Controller
     {
         $position = Position::create([
             'name' => $request->position,
-            'division_id' => $request->id
+            'division_id' => $request->divisionId
         ]);
 
         $positionWithDescriptions = Position::with('responsibilities.descriptions')->find($position->id);

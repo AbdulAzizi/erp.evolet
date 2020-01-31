@@ -160,7 +160,7 @@ class UserTableSeeder extends Seeder
                 'email' => 'shuhrat@admin.com',
                 'password' => 'admin',
                 'division' => 'ДЧ',
-                'positionLevel' => 'Главный специалист',
+                'positionLevel' => 'Руководитель',
                 'positions' => ['HR'],
             ],
         ]);

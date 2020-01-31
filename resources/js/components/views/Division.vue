@@ -29,7 +29,7 @@
 
 <script>
 export default {
-    props: ["division", "isUserHead", "isRoot", "oldInputs", "errors", "user"],
+    props: ["division", "isUserHead", "isRoot", "oldInputs", "errors", "user", "divisions"],
     data() {
         return {
             tab: null,
