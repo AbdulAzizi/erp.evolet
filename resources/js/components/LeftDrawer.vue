@@ -138,9 +138,16 @@ export default {
                 },
                 {
                     icon: "mdi-script-text",
-                    text: "ДО",
+                    text: "ДО Компании",
                     url: "/positions",
                     positions: ["РВЗ","HR"],
+                    divisions: []
+                },
+                {
+                    icon: "mdi-account-group",
+                    text: "Сотрудники",
+                    url: "/users",
+                    positions: ["HR"],
                     divisions: []
                 }
             ]
