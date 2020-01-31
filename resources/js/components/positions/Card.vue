@@ -19,30 +19,43 @@
           ></v-text-field>
         </v-toolbar-title>
         <v-spacer />
-        <edit-add-actions :position="position" v-if="headUser || hrUser"/>
+        <edit-add-actions :position="position" v-if="headUser || hrUser" />
       </v-toolbar>
       <v-card-text class="pa-0" v-if="position.responsibilities.length > 0">
-        <v-list class="ml-2 mr-4" flat>
+        <v-list class="ml-2 mr-4" flat expand>
           <v-list-group
             v-for="(responsibility, index) in position.responsibilities"
             :key="index"
+            active-class
             :ripple="false"
           >
             <template v-slot:activator>
               <v-hover v-slot:default="{ hover }">
-                <v-list-item>
-                  <v-list-item-title>{{index + 1}}. {{ responsibility.text }}</v-list-item-title>
-                  <v-list-item-action class="ma-0" v-if="hover">
-                    <v-btn icon small @click.stop="deleteResponsibility(responsibility.id)" v-if="headUser || hrUser">
-                      <v-icon small>mdi-delete</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                  <v-list-item-action class="ma-0" v-if="hover">
-                    <v-btn icon small @click.stop="editResponsibility(responsibility)" v-if="headUser || hrUser">
-                      <v-icon small>mdi-pencil</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
+                <v-row style="width: 95%">
+                  
+                  <v-col cols="9" class="ml-3">
+                      <div class="float-left mr-2 font-weight-bold grey--text text--darken-3">{{ index + 1 }}.</div>
+                      <div class="ml-5 font-weight-bold grey--text text--darken-3">{{ responsibility.text }}</div>
+                  </v-col>
+                  <v-col cols="2" v-if="hover" class="pb-0">
+                     <v-btn
+                        icon
+                        small
+                        @click.stop="deleteResponsibility(responsibility.id)"
+                        v-if="headUser || hrUser"
+                      >
+                        <v-icon small>mdi-delete</v-icon>
+                      </v-btn>
+                      <v-btn
+                        icon
+                        small
+                        @click.stop="editResponsibility(responsibility)"
+                        v-if="headUser || hrUser"
+                      >
+                        <v-icon small>mdi-pencil</v-icon>
+                      </v-btn>
+                  </v-col>
+                </v-row>
               </v-hover>
             </template>
             <v-row
@@ -51,14 +64,14 @@
               :key="subIndex"
             >
               <v-hover v-slot:default="{ hover }">
-                <v-row style="border-bottom: 1px solid #e0e0e0" class="mx-2">
-                  <v-col cols="10">
-                    <div
-                      class="grey--text text--darken-4"
-                    >{{index + 1}}.{{subIndex + 1}}. {{ description.title }}</div>
+                <v-row style="border-bottom: 1px solid #e0e0e0; width: 100%" class="mx-2">
+                  <v-col cols="10" class="pl-1">
+                    <div class="float-left">{{index + 1}}.{{subIndex + 1}}.</div>
+                    <div class=" grey--text text--darken-4 ml-7"
+                    >{{ description.title }}</div>
                     <div class="grey--text text--darken-2 pl-7">{{ description.description }}</div>
                   </v-col>
-                  <v-col cols="2" v-if="hover">
+                  <v-col cols="2" v-if="hover" class="pb-0">
                     <v-btn icon small v-if="headUser || hrUser">
                       <v-icon
                         small
@@ -86,10 +99,20 @@
         </v-list>
       </v-card-text>
       <v-divider></v-divider>
-      <v-btn class="py-2" text block color="primary" @click="addResponsibilityDialog = true" v-if="headUser || hrUser">
+      <v-btn
+        class="py-2"
+        text
+        block
+        color="primary"
+        @click="addResponsibilityDialog = true"
+        v-if="headUser || hrUser"
+      >
         <v-icon small class="px-2">mdi-plus-circle</v-icon>Добавить объязанность
       </v-btn>
-      <p class="pa-4" v-if="!headUser && position.responsibilities.length == 0 && !hrUser">Объязанностей нет</p>
+      <p
+        class="pa-4"
+        v-if="!headUser && position.responsibilities.length == 0 && !hrUser"
+      >Объязанностей нет</p>
     </v-card>
     <v-dialog persistent v-model="addResponsibilityDialog" width="600">
       <add-responsibility :position="localPosition" />
@@ -119,8 +142,8 @@ export default {
   },
   data() {
     return {
-      headUser: this.user.position_level.name == 'Руководитель',
-      hrUser: this.user.division.abbreviation == 'ОУПС',
+      headUser: this.user.position_level.name == "Руководитель",
+      hrUser: this.user.division.abbreviation == "ОУПС",
       edit: false,
       positionLabel: this.position.label,
       localPosition: this.position,
@@ -264,3 +287,12 @@ export default {
   }
 };
 </script>
+<style>
+.v-list-group__items{
+  color: black !important;
+}
+
+.v-list-item--active{
+  color: black !important;
+}
+</style>
