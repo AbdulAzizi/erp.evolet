@@ -1,10 +1,11 @@
 <template>
   <div>
-    <v-card>
-      <v-toolbar color="primary" dark flat>
+    <v-card flat>
+      <v-toolbar dense color="primary" dark flat>
         <v-toolbar-title v-if="!edit">{{position.label}}</v-toolbar-title>
         <v-toolbar-title v-else>
           <v-text-field
+            dense
             v-model="positionLabel"
             label="Название"
             required
