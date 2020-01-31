@@ -16,7 +16,7 @@
         />
         <form-field
           :field="{
-                label: 'Должностная инструкция',
+                label: 'Инструкция',
                 name: 'description',
                 type: 'text'
             }"
