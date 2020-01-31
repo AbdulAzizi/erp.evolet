@@ -63,7 +63,7 @@ class PositionTableSeeder extends Seeder
             [
                 'name' => 'HR',
                 'label' => 'HR',
-                'division_id' => Division::where('abbreviation', 'ДЧ')->first()->id
+                'division_id' => Division::where('abbreviation', 'ОУПС')->first()->id
             ],
         ]);
     }
