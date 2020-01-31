@@ -35,5 +35,7 @@ class ResponsibilityController extends Controller
         $responsibility = Responsibility::find($request->id);
 
         $responsibility->descriptions()->delete();
+
+        $responsibility->delete();
     }
 }
