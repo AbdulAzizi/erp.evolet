@@ -19,7 +19,7 @@
           ></v-text-field>
         </v-toolbar-title>
         <v-spacer />
-        <edit-add-actions :position="position" />
+        <edit-add-actions :position="position" v-if="user.position_level.name == 'Руководитель'" />
       </v-toolbar>
       <v-card-text class="pa-0" v-if="position.responsibilities.length > 0">
         <v-list class="ml-2 mr-4" flat>
@@ -33,12 +33,12 @@
                 <v-list-item>
                   <v-list-item-title>{{index + 1}}. {{ responsibility.text }}</v-list-item-title>
                   <v-list-item-action class="ma-0" v-if="hover">
-                    <v-btn icon small @click.stop="deleteResponsibility(responsibility.id)">
+                    <v-btn icon small @click.stop="deleteResponsibility(responsibility.id)" v-if="headUser">
                       <v-icon small>mdi-delete</v-icon>
                     </v-btn>
                   </v-list-item-action>
                   <v-list-item-action class="ma-0" v-if="hover">
-                    <v-btn icon small @click.stop="editResponsibility(responsibility)">
+                    <v-btn icon small @click.stop="editResponsibility(responsibility)" v-if="headUser">
                       <v-icon small>mdi-pencil</v-icon>
                     </v-btn>
                   </v-list-item-action>
@@ -59,13 +59,13 @@
                     <div class="grey--text text--darken-2 pl-7">{{ description.description }}</div>
                   </v-col>
                   <v-col cols="2" v-if="hover">
-                    <v-btn icon small>
+                    <v-btn icon small v-if="headUser">
                       <v-icon
                         small
                         @click="deleteResponsibilityDescription(description.id)"
                       >mdi-delete</v-icon>
                     </v-btn>
-                    <v-btn icon small>
+                    <v-btn icon small v-if="headUser">
                       <v-icon small @click="editResponsibilityDescription(description)">mdi-pencil</v-icon>
                     </v-btn>
                   </v-col>
@@ -78,6 +78,7 @@
               color="primary"
               class="mx-4 mt-2"
               @click="addResponsibilityDescription(responsibility.id)"
+              v-if="headUser"
             >
               <v-icon class="px-2" small>mdi-plus-circle</v-icon>Добавить должностную задачу
             </v-btn>
@@ -85,9 +86,10 @@
         </v-list>
       </v-card-text>
       <v-divider></v-divider>
-      <v-btn class="py-2" text block color="primary" @click="addResponsibilityDialog = true">
+      <v-btn class="py-2" text block color="primary" @click="addResponsibilityDialog = true" v-if="headUser">
         <v-icon small class="px-2">mdi-plus-circle</v-icon>Добавить объязанность
       </v-btn>
+      <p class="pa-4" v-if="!headUser && position.responsibilities.length == 0">Объязанностей нет</p>
     </v-card>
     <v-dialog persistent v-model="addResponsibilityDialog" width="600">
       <add-responsibility :position="localPosition" />
@@ -112,10 +114,12 @@
 <script>
 export default {
   props: {
-    position: {}
+    position: {},
+    user: {}
   },
   data() {
     return {
+      headUser: this.user.position_level.name == 'Руководитель',
       edit: false,
       positionLabel: this.position.label,
       localPosition: this.position,

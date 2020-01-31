@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-btn outlined color="primary" @click="addPosition = !addPosition">Добавить должность</v-btn>
+    <v-btn outlined color="primary" @click="addPosition = !addPosition" v-if="headUser">Добавить должность</v-btn>
     <v-row v-if="positions.length > 0">
       <v-col cols="6" v-for="(position, index ) in positions" :key="index">
-        <position-card :position="position" />
+        <position-card :position="position" :user="user" />
       </v-col>
     </v-row>
     <div class="d-flex justify-center" v-else>
@@ -18,10 +18,12 @@
 export default {
   props: {
     positions: {},
-    divisionId: Number
+    divisionId: Number,
+    user: {}
   },
   data() {
     return {
+      headUser: this.user.position_level.name == 'Руководитель',
       localPositions: this.positions,
       addPosition: false,
       addResponsibility: false
