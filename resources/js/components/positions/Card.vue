@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-toolbar color="primary" dark flat>
-        <v-toolbar-title v-if="!edit">{{position.name}}</v-toolbar-title>
+        <v-toolbar-title v-if="!edit">{{position.label}}</v-toolbar-title>
         <v-toolbar-title v-else>
           <v-text-field
             v-model="positionName"
@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       edit: false,
-      positionName: this.position.name,
+      positionName: this.position.label,
       localPosition: this.position,
       descriptionDialog: false,
       addResponsibilityDialog: false,
@@ -132,7 +132,7 @@ export default {
   methods: {
     resetPositionEditForm() {
       this.edit = false;
-      this.positionName = this.position.name;
+      this.positionName = this.position.label;
     },
     editPosition() {
       if (this.positionName !== null) {
@@ -141,7 +141,7 @@ export default {
             name: this.positionName
           })
           .then(res => {
-            this.localPosition.name = res.data.name;
+            this.localPosition.label = res.data.name;
             this.resetPositionEditForm();
           })
           .catch(err => err.messages);

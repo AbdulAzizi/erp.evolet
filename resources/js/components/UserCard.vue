@@ -15,7 +15,7 @@
                             v-for="(position,key) in user.positions"
                             :key="'position-'+key"
                         >
-                            {{position.name}}
+                            {{position.label}}
                             <span v-if="key != user.positions.length-1">|</span>
                         </span>
                     </v-list-item-subtitle>

@@ -95,7 +95,7 @@
                                     v-for="(position,index) in user.positions"
                                     :key="'position-'+index"
                                     class="subtheader font-weight-regular grey--text text-sm-left"
-                                >{{position.name}}</h4>
+                                >{{position.label}}</h4>
                             </v-list>
                         </v-flex>
                     </v-layout>

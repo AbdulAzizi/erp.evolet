@@ -30,6 +30,7 @@ class PositionController extends Controller
     {
         $position = Position::create([
             'name' => $request->position,
+            'label' => $request->position,
             'division_id' => $request->id
         ]);
 

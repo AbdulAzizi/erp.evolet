@@ -125,7 +125,7 @@ export default {
             let canCreate = false;
 
             this.auth.positions.forEach(position => {
-                if (this.usersThatCanCreate.includes(position.name) && this.project)
+                if (this.usersThatCanCreate.includes(position.label) && this.project)
                     canCreate = true;
             });
 

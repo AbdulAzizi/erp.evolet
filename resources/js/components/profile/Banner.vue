@@ -22,12 +22,12 @@
                   :key="'position-'+key"
                   class="headline font-weight-regular text-sm-left"
                 >
-                  {{position.name}}
+                  {{position.label}}
                   <template v-if="key != user.positions.length-1">|</template>
                 </span>
                 <!-- <h4
                                     class="headline font-weight-regular text-sm-left"
-                >{{user.position.name}}</h4>-->
+                >{{user.position.label}}</h4>-->
               </div>
             </v-flex>
           </v-layout>
