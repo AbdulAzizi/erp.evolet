@@ -5,7 +5,7 @@
         <v-toolbar-title v-if="!edit">{{position.label}}</v-toolbar-title>
         <v-toolbar-title v-else>
           <v-text-field
-            v-model="positionName"
+            v-model="positionLabel"
             label="Название"
             required
             solo
@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       edit: false,
-      positionName: this.position.label,
+      positionLabel: this.position.label,
       localPosition: this.position,
       descriptionDialog: false,
       addResponsibilityDialog: false,
@@ -132,16 +132,16 @@ export default {
   methods: {
     resetPositionEditForm() {
       this.edit = false;
-      this.positionName = this.position.label;
+      this.positionLabel = this.position.label;
     },
     editPosition() {
-      if (this.positionName !== null) {
+      if (this.positionLabel !== null) {
         axios
           .post(`/api/edit/position/${this.position.id}`, {
-            name: this.positionName
+            label: this.positionLabel
           })
           .then(res => {
-            this.localPosition.label = res.data.name;
+            this.localPosition.label = res.data.label;
             this.resetPositionEditForm();
           })
           .catch(err => err.messages);

@@ -43,7 +43,7 @@ class PositionController extends Controller
     {
         $position = Position::find($request->id);
 
-        $position->name = $request->name;
+        $position->label = $request->label;
 
         $position->save();
 
