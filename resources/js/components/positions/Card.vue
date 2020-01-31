@@ -2,10 +2,10 @@
   <div>
     <v-card>
       <v-toolbar color="primary" dark flat>
-        <v-toolbar-title v-if="!edit">{{position.name}}</v-toolbar-title>
+        <v-toolbar-title v-if="!edit">{{position.label}}</v-toolbar-title>
         <v-toolbar-title v-else>
           <v-text-field
-            v-model="positionName"
+            v-model="positionLabel"
             label="Название"
             required
             solo
@@ -121,7 +121,7 @@ export default {
     return {
       headUser: this.user.position_level.name == 'Руководитель',
       edit: false,
-      positionName: this.position.name,
+      positionLabel: this.position.label,
       localPosition: this.position,
       descriptionDialog: false,
       addResponsibilityDialog: false,
@@ -136,16 +136,16 @@ export default {
   methods: {
     resetPositionEditForm() {
       this.edit = false;
-      this.positionName = this.position.name;
+      this.positionLabel = this.position.label;
     },
     editPosition() {
-      if (this.positionName !== null) {
+      if (this.positionLabel !== null) {
         axios
           .post(`/api/edit/position/${this.position.id}`, {
-            name: this.positionName
+            label: this.positionLabel
           })
           .then(res => {
-            this.localPosition.name = res.data.name;
+            this.localPosition.label = res.data.label;
             this.resetPositionEditForm();
           })
           .catch(err => err.messages);

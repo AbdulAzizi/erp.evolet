@@ -17,6 +17,7 @@ class CreatePositionsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('division_id');
             $table->string('name');
+            $table->string('label');
         });
     }
 

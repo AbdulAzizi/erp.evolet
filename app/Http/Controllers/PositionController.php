@@ -38,6 +38,7 @@ class PositionController extends Controller
     {
         $position = Position::create([
             'name' => $request->position,
+            'label' => $request->position,
             'division_id' => $request->divisionId
         ]);
 
@@ -50,7 +51,7 @@ class PositionController extends Controller
     {
         $position = Position::find($request->id);
 
-        $position->name = $request->name;
+        $position->label = $request->label;
 
         $position->save();
 

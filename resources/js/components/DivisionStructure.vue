@@ -124,7 +124,7 @@ export default {
       return divisionUsersRecursiveCount(this.division);
     },
     departmentDepth: function() {
-      return this.division.depth > 2;
+      return this.division.depth > 0;
     }
   },
   created() {    

@@ -44,7 +44,7 @@
                                 v-for="(position,key) in data.item.positions"
                                 :key="'position-'+key"
                             >
-                                {{position.name}}
+                                {{position.label}}
                                 <span
                                     v-if="key != data.item.positions.length-1"
                                 >|</span>
