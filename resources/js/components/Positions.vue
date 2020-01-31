@@ -17,7 +17,7 @@
                   outlined
                   color="primary"
                   @click="addPositionToDivision(division.id)"
-                  v-if="headUser && divisions !== undefined"
+                  v-if="divisions !== undefined"
                 >Добавить должность</v-btn>
             </v-toolbar>
           </v-col>
