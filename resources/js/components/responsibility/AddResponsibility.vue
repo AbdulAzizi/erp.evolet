@@ -10,7 +10,7 @@
             :field="{
           label: 'Должностная объязанность',
           name: 'responsibility',
-          type: 'string',
+          type: 'text',
           rules:['required']
         }"
         v-model="text" />
