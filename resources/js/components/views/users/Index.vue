@@ -12,7 +12,7 @@
         ></v-text-field>
       </v-col>
       <v-col md="3" sm="12" v-if="addUser">
-        <v-btn height="38" outlined color="primary" block>Добавить сотрудника</v-btn>
+        <v-btn height="38" outlined color="primary" block @click="dialog = true">Добавить сотрудника</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -20,6 +20,9 @@
         <user-card-horizontal :user="user" />
       </v-col>
     </v-row>
+    <v-dialog v-model="dialog" width="600" persistent>
+      <add-user />
+    </v-dialog>
   </v-container>
 </template>
 
@@ -29,7 +32,8 @@ export default {
   data() {
     return {
       search: "",
-      filteredUsers: this.users
+      filteredUsers: this.users,
+      dialog: false
     };
   },
   watch: {
@@ -39,6 +43,17 @@ export default {
         if (new RegExp(this.search, "gi").test(user.surname)) return true;
       });
     }
+  },
+  created(){
+    // Event listeners
+
+    Event.listen('userAdded', user => {
+      this.dialog = false;
+      this.filteredUsers.push(user);
+      Event.fire('notify', [`Добавлен новый сотрудник ${user.name} ${user.surname}`]);
+    });
+
+    Event.listen('cancelUserAdding', dialog => this.dialog = false);
   }
 };
 </script>

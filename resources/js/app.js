@@ -213,6 +213,18 @@ Vue.mixin({
             }).catch(err => err.messages);
 
             return items;
+        },
+
+        loadDivisions(){
+            let items = [];
+
+            axios.get("/api/divisions").then(res => {
+                res.data.forEach(item => {
+                    items.push({name: item.name, id: item.id});
+                });
+            }).catch(err => err.messages);
+
+            return items;
         }
     },
     computed: {
@@ -270,6 +282,7 @@ Vue.component("delete-responsibility", require("./components/responsibility/Dele
 Vue.component("add-responsibility-description", require("./components/responsibility/AddResponsibilityDescription.vue").default);
 Vue.component("edit-responsibility-description", require("./components/responsibility/EditResponsibilityDescription.vue").default);
 Vue.component("delete-responsibility-description", require("./components/responsibility/DeleteResponsibilityDescription.vue").default);
+Vue.component("add-user", require("./components/users/AddUser.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("views-login", require("./components/views/Login.vue").default);

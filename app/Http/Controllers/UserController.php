@@ -113,4 +113,25 @@ class UserController extends Controller
 
         return $notifications;
     }
+
+    public function hrCreateUser(Request $request)
+    {
+
+        $randomPassword = Str::random(10);
+
+        // dd($request->user);
+
+        $user = User::create([
+            'name' => $request->user['name'],
+            'surname' => $request->user['surname'],
+            'email' => $request->user['email'],
+            'password' => $randomPassword,
+            'position_level_id' => $request->user['positionLevel'],
+            'division_id' => $request->user['division']
+        ]);
+        
+        $userWithRelations = User::with('division')->find($user->id);
+
+        return $userWithRelations;
+    }
 }

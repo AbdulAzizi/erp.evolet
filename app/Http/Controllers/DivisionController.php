@@ -63,4 +63,11 @@ class DivisionController extends Controller
 
         return redirect()->back();
     }
+
+    public function loadDivisions()
+    {
+        $divisions = Division::all();
+
+        return $divisions;
+    }
 }
