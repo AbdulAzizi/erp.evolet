@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     
     Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/users', 'UserController@index')->name('users.index');
+    Route::get('/users/hr', 'UserController@usersForHr')->name('users.hr');
     Route::post('/users', 'UserController@store')->name('users.store');
     Route::get('/users/{id}', 'UserController@show')->name('users.show');
     Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume.show');

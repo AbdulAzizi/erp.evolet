@@ -22,15 +22,22 @@ class UserController extends Controller
 
         $users = User::with('division')->get();
 
-        return view('users.index', compact('users'));
+        return view('users.index', compact('users', 'addUsers'));
     }
 
     public function show(Request $request)
     {
 
-        $user = User::find($request->id);
+        $user = User::find($request->id);    
 
         return view('profile.tasks', compact('user'));
+    }
+
+    public function usersForHr()
+    {
+        $users = User::with('division')->get();
+
+        return view('users.hr', compact('users'));
     }
 
     public function store(Request $request)
