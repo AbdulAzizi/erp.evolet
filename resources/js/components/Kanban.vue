@@ -24,7 +24,7 @@
       </v-card>
     </v-dialog>
     <v-dialog v-model="cardDialog" v-if="cardDialog" width="800px">
-      <task :item="selectedTask" :users="users"></task>
+      <task :item="selectedTask"></task>
     </v-dialog>
     <div class="parent-container">
       <div v-for="(status, index) in statuses" :key="index">
@@ -209,7 +209,7 @@ export default {
   components: {
     draggable
   },
-  props: ["users", "taskStatuses", "tasks", "authuser"],
+  props: ["taskStatuses", "tasks", "authuser"],
   data() {
     return {
       updateListForm: null,

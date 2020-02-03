@@ -153,9 +153,8 @@ class TaskController extends Controller
 
         $task->readed = 1;
         $task->save();
-        $users = User::with(['division'])->get();
-
-        return view('tasks.show', compact('task', 'users'));
+        
+        return view('tasks.show', compact('task'));
     }
 
     public function update($id, Request $request)

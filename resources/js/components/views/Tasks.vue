@@ -1,45 +1,45 @@
 <template>
     <div>
-        <v-row>
-            <v-col class="pt-0">
-                <v-autocomplete
-                    v-model="selectedTags"
-                    :items="tasksTags"
-                    item-text="name"
-                    item-value="id"
-                    dense
-                    solo
-                    no-data-text="У вас нет задачи с таким тегом"
-                    chips
-                    hide-details
-                    small-chips
-                    color="primary"
-                    label="Тег"
-                    multiple
-                    hide-selected
-                    deletable-chips
-                    return-object
-                />
-            </v-col>
-            <v-col class="pt-0">
-                <v-btn-toggle
-                    v-model="currentView"
-                    active-class="primary"
-                    class="float-right"
-                    mandatory
-                >
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <v-btn small text :value="activeBtn.TABLE" dark v-on="on">
-                                <v-icon
-                                    :color="isTable ? 'white' : 'grey lighten-0'"
-                                >mdi-table-of-contents</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>таблица</span>
-                    </v-tooltip>
+        <v-row align="center" class="px-3 mb-3">
+            <span class="title font-weight-medium">Задачи</span>
+            <v-autocomplete
+                v-model="selectedTags"
+                :items="tasksTags"
+                item-text="name"
+                item-value="id"
+                dense
+                solo
+                no-data-text="У вас нет задачи с таким тегом"
+                chips
+                hide-details
+                small-chips
+                color="primary"
+                label="Тег"
+                multiple
+                hide-selected
+                deletable-chips
+                return-object
+                class="ml-3"
+                flat
+            />
+            <v-btn-toggle
+                v-model="currentView"
+                active-class="primary"
+                class="ml-3"
+                mandatory
+            >
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                        <v-btn small text :value="activeBtn.TABLE" dark v-on="on" height="38">
+                            <v-icon
+                                :color="isTable ? 'white' : 'grey lighten-0'"
+                            >mdi-table-of-contents</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>таблица</span>
+                </v-tooltip>
 
-                    <!-- <v-tooltip bottom>
+                <!-- <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-btn small text :value="activeBtn.CALENDAR" dark v-on="on">
                                 <v-icon
@@ -48,28 +48,26 @@
                             </v-btn>
                         </template>
                         <span>календарь</span>
-                    </v-tooltip> -->
+                </v-tooltip>-->
 
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <v-btn small text :value="activeBtn.KANBAN" dark v-on="on">
-                                <v-icon
-                                    :color="isKanban ? 'white' : 'grey lighten-0'"
-                                >mdi-view-dashboard</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>Канбан доска</span>
-                    </v-tooltip>
-                </v-btn-toggle>
-            </v-col>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                        <v-btn small text :value="activeBtn.KANBAN" dark v-on="on" height="38">
+                            <v-icon
+                                :color="isKanban ? 'white' : 'grey lighten-0'"
+                            >mdi-view-dashboard</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Канбан доска</span>
+                </v-tooltip>
+            </v-btn-toggle>
         </v-row>
 
-        <tasks-table :tasks="filteredTasks" :users="users" v-show="isTable"></tasks-table>
+        <tasks-table :tasks="filteredTasks" v-show="isTable"></tasks-table>
         <!-- <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar> -->
         <kanban-view
             v-show="isKanban"
             :tasks="filteredTasks"
-            :users="users"
             :taskStatuses="statuses"
             :authuser="authuser"
         />
@@ -139,25 +137,23 @@ export default {
         currentView(value) {
             localStorage.currentView = value;
         },
-        selectedTags(tags){
-
+        selectedTags(tags) {
             this.filteredTasks = [];
 
-            this.tasks.forEach( (task) => {
-                let unionTags = task.tags.filter( function(tag){
-                    let matchedTags = tags.filter( el => el.id == tag.id );
+            this.tasks.forEach(task => {
+                let unionTags = task.tags.filter(function(tag) {
+                    let matchedTags = tags.filter(el => el.id == tag.id);
                     return matchedTags.length != 0;
                 });
-                
-                if( unionTags.length )
-                    this.filteredTasks.push( task );
+
+                if (unionTags.length) this.filteredTasks.push(task);
             });
-            
+
             if (this.filteredTasks.length == 0) {
-                this.filteredTasks = this.tasks
+                this.filteredTasks = this.tasks;
             }
         },
-        filteredTasks(val){
+        filteredTasks(val) {
             console.log(val);
         }
     },

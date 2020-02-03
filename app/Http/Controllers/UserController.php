@@ -106,4 +106,9 @@ class UserController extends Controller
 
         return $notifications;
     }
+
+    public function getUsers()
+    {
+        return User::all();
+    }
 }
