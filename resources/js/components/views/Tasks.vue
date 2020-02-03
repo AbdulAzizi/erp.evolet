@@ -39,7 +39,7 @@
                         <span>таблица</span>
                     </v-tooltip>
 
-                    <v-tooltip bottom>
+                    <!-- <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-btn small text :value="activeBtn.CALENDAR" dark v-on="on">
                                 <v-icon
@@ -48,7 +48,7 @@
                             </v-btn>
                         </template>
                         <span>календарь</span>
-                    </v-tooltip>
+                    </v-tooltip> -->
 
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
@@ -65,7 +65,7 @@
         </v-row>
 
         <tasks-table :tasks="filteredTasks" :users="users" v-show="isTable"></tasks-table>
-        <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar>
+        <!-- <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar> -->
         <kanban-view
             v-show="isKanban"
             :tasks="filteredTasks"
