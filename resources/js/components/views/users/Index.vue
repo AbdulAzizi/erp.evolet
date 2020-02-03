@@ -1,14 +1,18 @@
 <template>
   <v-container fluid>
-    <v-row justify="center">
-      <v-col md="5">
+    <v-row>
+      <v-col :md="addUser ? 9 : 12" sm="12">
         <v-text-field
           hide-details
           label="Search"
           prepend-inner-icon="mdi-magnify"
           solo
           v-model="search"
+          dense
         ></v-text-field>
+      </v-col>
+      <v-col md="3" sm="12" v-if="addUser">
+        <v-btn height="38" outlined color="primary" block>Добавить сотрудника</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -21,11 +25,11 @@
 
 <script>
 export default {
-  props: ["users"],
+  props: ["users", "addUser"],
   data() {
     return {
       search: "",
-      filteredUsers: this.users,
+      filteredUsers: this.users
     };
   },
   watch: {
