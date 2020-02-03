@@ -4,25 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Division;
 use App\PositionLevel;
-use App\User;
-use App\Resume;
 use App\Task;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Validator;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\Validator as ValidationValidator;
 
 class UserController extends Controller
 {
-
 
     public function index(Request $request)
     {
 
         $users = User::with('division')->get();
 
-        return view('users.index', compact('users'));
+        return view('users.index', compact('users', 'addUsers'));
     }
 
     public function show(Request $request)
@@ -33,12 +28,18 @@ class UserController extends Controller
         return view('profile.tasks', compact('user'));
     }
 
+    public function usersForHr()
+    {
+        $users = User::with('division')->get();
+
+        return view('users.hr', compact('users'));
+    }
+
     public function store(Request $request)
     {
         $randomPassword = Str::random(10);
 
         $positionLevel = PositionLevel::find($request->positionId);
-
 
         $newUser = User::create([
             'name' => $request->name,
@@ -110,5 +111,21 @@ class UserController extends Controller
     public function getUsers()
     {
         return User::all();
+    }
+
+    public function hrCreateUser(Request $request)
+    {
+        $user = User::create([
+            'name' => $request->user['name'],
+            'surname' => $request->user['surname'],
+            'email' => $request->user['email'],
+            'password' => Str::random(10),
+            'position_level_id' => $request->user['positionLevel'],
+            'division_id' => $request->user['division'],
+        ]);
+
+        $userWithRelations = User::with('division')->find($user->id);
+
+        return $userWithRelations;
     }
 }

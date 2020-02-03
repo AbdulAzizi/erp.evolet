@@ -110,7 +110,6 @@ const getTextField = field => {
 
 const getSelectField = field => {
     const baseField = getBaseField(field);
-    console.log(field);
     
     //Default props for select field
     baseField.component = "v-select";
@@ -141,7 +140,6 @@ const getAutoCompleteField = field => {
         "no-data-text": "Данные отсутствуют",
         "hide-selected": true
     };
-    console.log(baseSelectField);
     
     return baseSelectField;
 };

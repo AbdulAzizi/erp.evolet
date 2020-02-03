@@ -146,7 +146,7 @@ export default {
                 {
                     icon: "mdi-account-group",
                     text: "Сотрудники",
-                    url: "/users",
+                    url: "/users/hr",
                     positions: ["HR"],
                     divisions: []
                 }
