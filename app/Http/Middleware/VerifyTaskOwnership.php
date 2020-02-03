@@ -33,6 +33,8 @@ class VerifyTaskOwnership
         }
         // get Users
         $users = $response->original->__get('users');
+        // if division has a head
+        if($authUser->division->head)
         // add division head id
         $allowedUserIDs[] = $authUser->division->head->id;
         // Add exception users
