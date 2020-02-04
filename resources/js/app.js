@@ -297,7 +297,7 @@ Vue.component("product", require("./components/Product.vue").default);
 Vue.component("products-create-view", require("./components/views/products/Create.vue").default);
 Vue.component("projects-view", require("./components/views/Projects.vue").default);
 Vue.component("bp", require("./components/views/BP.vue").default);
-Vue.component("profile-tasks", require("./components/views/ProfileTasks.vue").default);
+Vue.component("users-show", require("./components/views/users/Show.vue").default);
 Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vue").default);
 
 Vue.component("profile-position", require("./components/views/ProfilePosition.vue").default);

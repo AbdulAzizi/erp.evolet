@@ -1,5 +1,5 @@
 @extends('layouts.default')
 
 @section('content')
-    <profile-tasks :user="{{ $user ? $user : $authUser }}"></profile-tasks>
+    <users-show :user="{{ $user ? $user : $authUser }}"></users-show>
 @endsection

@@ -30,7 +30,7 @@ class UserController extends Controller
 
         $user = User::find($request->id);    
 
-        return view('profile.tasks', compact('user'));
+        return view('users.show', compact('user'));
     }
 
     public function usersForHr()
