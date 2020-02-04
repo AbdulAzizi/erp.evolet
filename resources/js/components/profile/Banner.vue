@@ -1,6 +1,31 @@
 <template>
   <v-card color="secondary profile-view mb-3" dark>
     <v-container grid-list-xl text-xs-center class="pt-5 pb-0">
+      <v-dialog v-model="changeAvatarDialog" width="600" persistent>
+        <v-card class="pb-5">
+          <v-toolbar dense flat dark color="primary">
+            <v-toolbar-title>
+              Изменить аватар
+            </v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-form class="mt-5" ref="form" enctype="multipart/form-data" method="POST" :action="`/users/change/avatar/${user.id}`">
+              <input type="hidden" name="_token" :value="token">
+              <v-file-input
+              prepend-icon="mdi-camera"
+              rounded
+              filled
+              name="avatar">
+              </v-file-input>
+              <v-btn color="primary" class="float-right" type="submit">изменить</v-btn>
+              <v-btn text color="primary" class="float-right" @click="cancelAvatarChange()">отмена</v-btn>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-layout row wrap class="py-0 ma-0">
         <v-flex xs12 md6>
           <v-layout row wrap>
@@ -10,7 +35,12 @@
                 alt="avatar"
                 style="border-radius: 100%; border: solid 6px #b8cf41;"
                 class="elevation-14"
-              />
+              >
+              <div class="upload-avatar" @click="changeAvatarDialog = true">
+                <p class="text-center mb-0"><v-icon>mdi-camera</v-icon></p>
+                <p class="text-center">изменить</p>
+              </div>
+              </v-img>
             </v-flex>
             <v-flex xs8>
               <div class="text-sm-left">
@@ -76,6 +106,9 @@ export default {
   data() {
     return {
       tabs: null,
+      changeAvatarDialog: false,
+      file: null,
+      token: window.Laravel.csrf_token,
       priorities: [
         { color: "red", title: "Высокий", count: 24 },
         { color: "yellow", title: "Средний", count: 30 },
@@ -105,6 +138,13 @@ export default {
 
       url: window.location.pathname
     };
+  },
+  methods: {
+    cancelAvatarChange(){
+      const form = this.$refs.form;
+      this.changeAvatarDialog = false;
+      form.reset();
+    }
   }
 };
 </script>
@@ -115,5 +155,17 @@ export default {
 .profile-view .v-sheet--offset {
   top: -24px;
   position: relative;
+}
+.upload-avatar {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  padding-top: 40%;
+  cursor: pointer;
+}
+.upload-avatar:hover {
+  opacity: 0.8;
+  transition: .2s ease-in;
 }
 </style>
