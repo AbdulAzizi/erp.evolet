@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Division;
+use App\File;
 use App\PositionLevel;
 use App\Task;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Image;
 
 class UserController extends Controller
 {
@@ -127,5 +130,29 @@ class UserController extends Controller
         $userWithRelations = User::with('division')->find($user->id);
 
         return $userWithRelations;
+    }
+
+    public function changeAvatar(Request $request)
+    {
+        $user = User::find($request->id);
+
+        if ($request->hasFile('avatar')) {
+
+            $avatar = $request->file('avatar');
+            $filename = $user->name . $user->surname . '.' . $avatar->getClientOriginalExtension();            
+
+            if (Storage::exists($filename)) {
+                Storage::delete($filename);
+            }
+
+            Image::make($avatar)->resize(250, 250)->save(public_path("/img/" . $filename), 70);
+
+            Image::make($avatar)->resize(40, 40)->save( public_path("/img/thumbs/" . $filename), 70 );
+
+            $user->img = $filename;
+            $user->save();
+        }
+
+        return redirect()->back();
     }
 }
