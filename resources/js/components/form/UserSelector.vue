@@ -2,7 +2,7 @@
     <div>
         <v-autocomplete
             v-model="selectedUsers"
-            :items="preparedDivisions"
+            :items="users ? users : preparedDivisions"
             item-text="fullname"
             item-value="id"
             no-data-text="Данные отсутствуют"
@@ -31,7 +31,7 @@
                 </v-chip>
             </template>
 
-            <template slot="item" slot-scope="data" @click="damn">
+            <template slot="item" slot-scope="data">
                 <template v-if="'surname' in data.item">
                     <v-list-item-avatar>
                         <img v-if="data.item.img" :src="photo(data.item.img)" />
@@ -45,15 +45,13 @@
                                 :key="'position-'+key"
                             >
                                 {{position.label}}
-                                <span
-                                    v-if="key != data.item.positions.length-1"
-                                >|</span>
+                                <span v-if="key != data.item.positions.length-1">|</span>
                             </span>
                             <!-- - {{data.item.division.abbreviation}} -->
                         </v-list-item-subtitle>
                     </v-list-item-content>
                 </template>
-                <v-list-item-content v-else @click="handleDivisionSelection(data.item)">
+                <v-list-item-content v-else @click.stop="handleDivisionSelection(data.item)">
                     <v-list-item-title>{{data.item.name}}</v-list-item-title>
                 </v-list-item-content>
             </template>
@@ -79,7 +77,6 @@ export default {
         value: null
     },
     data() {
-        console.log(this.value);
         return {
             selectedUsers: this.value || [],
             searchText: null
@@ -87,12 +84,12 @@ export default {
     },
     methods: {
         handleDivisionSelection(el) {
-            console.log(this.selectedUsers);
-            
             // this.selectedUsers.pop();
             this.divisions.forEach(division => {
                 if (division.id == el.id) {
-                    this.selectedUsers.push(...division.users.map(user=>user.id));
+                    this.selectedUsers.push(
+                        ...division.users.map(user => user.id)
+                    );
                 }
             });
         },
@@ -100,13 +97,7 @@ export default {
             this.selectedUsers = this.selectedUsers.filter(
                 userId => userId !== user.id
             );
-        },
-        damn() {
-            console.log("damn");
         }
-    },
-    created() {
-        console.log(this.preparedDivisions);
     },
     watch: {
         selectedUsers(selectedUsersId) {

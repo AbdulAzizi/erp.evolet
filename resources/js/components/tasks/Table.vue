@@ -3,7 +3,11 @@
     <!-- <v-dialog v-model="taskDialog" max-width="1000">
             <task :item="selectedTask" :users="users"></task>
     </v-dialog>-->
+    
+    
+    <!-- <v-card>You dont have any tasks</v-card> -->
     <v-data-table
+      v-if="localTasks.length"
       :headers="headers"
       :items="localTasks"
       class="elevation-1 tasks-table"
@@ -12,6 +16,7 @@
       :items-per-page="-1"
       height="calc(100vh - 120px)"
       fixed-header
+      no-data-text="У вас нет задач"
     >
       <template v-slot:item="{ item }">
         <tr :class="(item.readed == 0 ? 'grey lighten-2' : 'white')" @click="displayTask(item)">
@@ -54,14 +59,16 @@
         </tr>
       </template>
     </v-data-table>
+    <v-alert type="info" v-else>
+      У вас нет задач
+    </v-alert>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    tasks: Array,
-    users: Array
+    tasks: Array
   },
   data() {
     return {

@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Task;
+use App\User;
 use Closure;
+use Illuminate\Database\Eloquent\Builder;
 
 class VerifyTaskOwnership
 {
@@ -31,27 +32,19 @@ class VerifyTaskOwnership
         if ($task->from_type == 'App\User') {
             $allowedUserIDs[] = $task->from->id;
         }
-        // get Users
-        $users = $response->original->__get('users');
         // if division has a head
-        if($authUser->division->head)
-        // add division head id
-        $allowedUserIDs[] = $authUser->division->head->id;
-        // Add exception users
-        // loop through all users
-        $users->each(function ($user) use ($allowedUserIDs) {
-            // loop through positions
-            $respExceptions = $user->positions->filter(function ($position) {
-                // return if it is HR or CEO
-                return $position->name == "HR" || $position->name == "РВЗ";
-            });
-            // if has HR or CEO
-            if($respExceptions->count() > 0){
-                // add user to participants
-                $allowedUserIDs[] = $user->id;
-                // echo $allowedUserIDs;
-            }
-        });
+        if ($authUser->division->head) {
+            // add division head id
+            $allowedUserIDs[] = $authUser->division->head->id;
+        }
+        // add HR and RVZ users as exceptions
+        $respExceptions = User::whereHas('positions', function (Builder $query) {
+            $query->where('name', 'HR')
+                ->orWhere('name', 'РВЗ');
+        })->pluck('id');
+        // merge the result of query with existing array
+        $allowedUserIDs = $allowedUserIDs->merge($respExceptions);
+
         // if auth user is have a relation with task
         if ($allowedUserIDs->contains($authUser->id)) {
             // continue
