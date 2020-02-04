@@ -51,7 +51,7 @@
                         </v-list-item-subtitle>
                     </v-list-item-content>
                 </template>
-                <v-list-item-content v-else @click="handleDivisionSelection(data.item)">
+                <v-list-item-content v-else @click.stop="handleDivisionSelection(data.item)">
                     <v-list-item-title>{{data.item.name}}</v-list-item-title>
                 </v-list-item-content>
             </template>
