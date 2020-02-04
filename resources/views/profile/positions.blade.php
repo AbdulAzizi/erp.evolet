@@ -1,8 +1,5 @@
-@extends('layouts.default')
+@extends('layouts.profile')
 
 @section('content')
-    <profile-position 
-        :user="{{ $user }}"
-        :positions="{{ $user->positions }}"
-    ></profile-position>
+    <positions :positions="{{ $user->positions }}" />
 @endsection
