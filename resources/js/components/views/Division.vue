@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-tabs v-model="currentView" background-color="white" class="">
-            <span class=" grey--text text--darken-2 align-self-center pl-4">{{localDivision.name}}</span>
+            <span class=" grey--text text--darken-2 align-self-center pl-4">Мои Отдел</span>
             <v-spacer></v-spacer>
             <v-tab :value="activeBtn.STRUCTURE">Структура</v-tab>
             <v-tab :value="activeBtn.POSITION">Должности</v-tab>
