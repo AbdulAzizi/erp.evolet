@@ -10,12 +10,19 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items class="mr-2">
-            <v-btn
-                color="grey darken-1"
-                text
-                :href="appPath('division')"
-            >{{user.division.abbreviation}}</v-btn>
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn
+                        v-on="on"
+                        color="grey darken-1"
+                        text
+                        :href="appPath('division')"
+                    >{{user.division.abbreviation}}</v-btn>
+                </template>
+                <span>Мои отдел</span>
+            </v-tooltip>
         </v-toolbar-items>
+
         <template v-if="false">
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
