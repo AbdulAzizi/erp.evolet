@@ -86,7 +86,7 @@ export default {
       const form = this.$refs.form;
       if (form.validate) {
         axios
-          .post("/api/users/hr/create", {
+          .post("/api/hr/users/create", {
             user: this.user
           })
           .then(res => {
