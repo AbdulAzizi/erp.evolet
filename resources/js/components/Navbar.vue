@@ -64,10 +64,10 @@
         <v-menu offset-y left>
             <template v-slot:activator="{ on }">
                 <v-avatar v-on="on" size="40" class="ml-2">
-                    <img v-if="user.img" :src="photo(user.img)" alt="avatar" />
+                    <img v-if="user.img" :src="thumb(user.img)" alt="avatar" />
                     <img
                         v-else
-                        :src="photo('green-solo-logo.svg')"
+                        :src="thumb('green-solo-logo.svg')"
                         style="border-radius:0;"
                         alt="avatar"
                         class="pa-1 pt-2"

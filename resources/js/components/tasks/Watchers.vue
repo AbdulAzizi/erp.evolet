@@ -18,7 +18,7 @@
                             v-for="(watcher, key) in watchersData"
                             :key="'watcher-'+key"
                         >
-                            <img :src="photo(watcher.img)">
+                            <img :src="thumb(watcher.img)">
                         </v-avatar>
                     </v-btn>
                     <input type="hidden" name="watchers" :value="JSON.stringify(watchers)"/>

@@ -55,7 +55,7 @@
         <v-layout py-2 px-3 :class="item.read_at == null ? 'grey lighten-3' : 'white'">
           <v-flex xs1>
             <v-avatar size="40">
-              <img :src="photo(item.data.avatar)" />
+              <img :src="thumb(item.data.avatar)" />
             </v-avatar>
           </v-flex>
           <v-flex xs11>
