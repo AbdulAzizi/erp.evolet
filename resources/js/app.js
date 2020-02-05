@@ -300,8 +300,6 @@ Vue.component("bp", require("./components/views/BP.vue").default);
 Vue.component("users-show", require("./components/views/users/Show.vue").default);
 Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vue").default);
 
-Vue.component("profile-position", require("./components/views/ProfilePosition.vue").default);
-
 Vue.component("positions", require("./components/Positions.vue").default);
 Vue.component("position-card", require("./components/positions/Card.vue").default);
 

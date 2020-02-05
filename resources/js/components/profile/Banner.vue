@@ -157,6 +157,9 @@ export default {
   top: -24px;
   position: relative;
 }
+.profile-view .v-btn--active{
+  border-bottom: 2px #6897f5 solid;
+}
 .upload-avatar {
   opacity: 0;
   width: 100%;
