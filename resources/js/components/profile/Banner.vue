@@ -15,6 +15,7 @@
               prepend-icon="mdi-camera"
               rounded
               filled
+              label="Выберите фото"
               name="avatar">
               </v-file-input>
               <v-btn color="primary" class="float-right" type="submit">изменить</v-btn>
