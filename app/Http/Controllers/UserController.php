@@ -145,9 +145,9 @@ class UserController extends Controller
                 Storage::delete($filename);
             }
 
-            Image::make($avatar)->fit(250)->save(public_path("/img/" . $filename), 70);
+            Image::make($avatar)->fit(250)->save(public_path("/img/" . $filename), 100);
 
-            Image::make($avatar)->fit(40)->save( public_path("/img/thumbs/" . $filename), 70 );
+            Image::make($avatar)->fit(40)->save( public_path("/img/thumbs/" . $filename), 100 );
 
             $user->img = $filename;
             $user->save();

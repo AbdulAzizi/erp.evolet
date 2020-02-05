@@ -87,7 +87,7 @@ Vue.mixin({
                 return window.Laravel.asset_path + "img/thumbs/" + name;
             }
             else{
-                return window.Laravel.asset_path + "img/thumbs/green-solo.png";
+                return window.Laravel.asset_path + "img/thumbs/green-solo-logo.png";
             }
         },
         isCssColor(color) {
