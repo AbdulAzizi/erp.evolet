@@ -14,7 +14,7 @@
             class="elevation-2"
             :style=" {'z-index': (items.length - index)} "
           >
-            <img :src="photo(item.img)" alt="avatar" />
+            <img :src="thumb(item.img)" alt="avatar" />
           </v-avatar>
         </a>
       </template>

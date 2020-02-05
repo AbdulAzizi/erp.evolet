@@ -7,7 +7,7 @@
             <template v-slot:icon>
                 <a :href="`/users/${historyItem.user.id}`">
                     <v-avatar size="33" color="primary">
-                        <img :src="photo(historyItem.user.img)" :alt="historyItem.user.name" />
+                        <img :src="thumb(historyItem.user.img)" :alt="historyItem.user.name" />
                     </v-avatar>
                 </a>
             </template>
