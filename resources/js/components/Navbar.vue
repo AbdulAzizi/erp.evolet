@@ -67,7 +67,7 @@
                     <img v-if="user.img" :src="thumb(user.img)" alt="avatar" />
                     <img
                         v-else
-                        :src="thumb('green-solo-logo.svg')"
+                        :src="thumb('green-solo-logo.png')"
                         style="border-radius:0;"
                         alt="avatar"
                         class="pa-1 pt-2"

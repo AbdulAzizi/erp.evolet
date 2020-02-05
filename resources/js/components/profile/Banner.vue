@@ -37,7 +37,7 @@
                 style="border-radius: 100%; border: solid 6px #b8cf41;"
                 class="elevation-14"
               >
-              <div class="upload-avatar" @click="changeAvatarDialog = true">
+              <div class="upload-avatar" @click="changeAvatarDialog = true" v-if="user.id == authuser.id">
                 <p class="text-center mb-0"><v-icon>mdi-camera</v-icon></p>
                 <p class="text-center">изменить</p>
               </div>
@@ -102,6 +102,9 @@ export default {
   props: {
     user: {
       required: true
+    },
+    authuser: {
+      required: false
     }
   },
   data() {
