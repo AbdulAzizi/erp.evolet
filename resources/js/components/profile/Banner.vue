@@ -4,21 +4,27 @@
       <v-dialog v-model="changeAvatarDialog" width="600" persistent>
         <v-card class="pb-5">
           <v-toolbar dense flat dark color="primary">
-            <v-toolbar-title>
-              Изменить аватар
-            </v-toolbar-title>
+            <v-toolbar-title>Изменить аватар</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form class="mt-5" ref="form" enctype="multipart/form-data" method="POST" :action="`/users/change/avatar/${user.id}`">
-              <input type="hidden" name="_token" :value="token">
+            <v-form
+              class="mt-5"
+              ref="form"
+              enctype="multipart/form-data"
+              method="POST"
+              :action="`/users/change/avatar/${user.id}`"
+            >
+              <input type="hidden" name="_token" :value="token" />
               <v-file-input
-              prepend-icon="mdi-camera"
-              rounded
-              filled
-              label="Выберите фото"
-              name="avatar">
-              </v-file-input>
-              <v-btn color="primary" class="float-right" type="submit">изменить</v-btn>
+                v-model="file"
+                prepend-icon="mdi-camera"
+                rounded
+                filled
+                label="Выберите фото"
+                :rules="rules"
+                name="avatar"
+              ></v-file-input>
+              <v-btn color="primary" class="float-right" type="submit" :disabled="disabled">изменить</v-btn>
               <v-btn text color="primary" class="float-right" @click="cancelAvatarChange()">отмена</v-btn>
             </v-form>
           </v-card-text>
@@ -37,10 +43,16 @@
                 style="border-radius: 100%; border: solid 6px #b8cf41;"
                 class="elevation-14"
               >
-              <div class="upload-avatar" @click="changeAvatarDialog = true" v-if="user.id == authuser.id">
-                <p class="text-center mb-0"><v-icon>mdi-camera</v-icon></p>
-                <p class="text-center">изменить</p>
-              </div>
+                <div
+                  class="upload-avatar"
+                  @click="changeAvatarDialog = true"
+                  v-if="user.id == authuser.id"
+                >
+                  <p class="text-center mb-0">
+                    <v-icon>mdi-camera</v-icon>
+                  </p>
+                  <p class="text-center">изменить</p>
+                </div>
               </v-img>
             </v-flex>
             <v-flex xs8>
@@ -113,6 +125,10 @@ export default {
       changeAvatarDialog: false,
       file: null,
       token: window.Laravel.csrf_token,
+      disabled: true,
+      file: null,
+      rules: [ v => !!v || 'Объязательное поле. Формат файла должен быть .jpg, .jpeg или .png' ],
+      allowedFiles: ['image/jpeg', 'image/png'],
       priorities: [
         { color: "red", title: "Высокий", count: 24 },
         { color: "yellow", title: "Средний", count: 30 },
@@ -144,10 +160,16 @@ export default {
     };
   },
   methods: {
-    cancelAvatarChange(){
+    cancelAvatarChange() {
       const form = this.$refs.form;
       this.changeAvatarDialog = false;
       form.reset();
+    }
+  },
+  watch: {
+    file(value){
+      const type = value ? value.type : null;
+      this.disabled = this.allowedFiles.includes(type)  ? false : true;
     }
   }
 };
@@ -160,7 +182,7 @@ export default {
   top: -24px;
   position: relative;
 }
-.profile-view .v-btn--active{
+.profile-view .v-btn--active {
   border-bottom: 2px #6897f5 solid;
 }
 .upload-avatar {
@@ -173,6 +195,6 @@ export default {
 }
 .upload-avatar:hover {
   opacity: 0.8;
-  transition: .2s ease-in;
+  transition: 0.2s ease-in;
 }
 </style>
