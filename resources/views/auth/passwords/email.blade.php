@@ -1,7 +1,12 @@
 @extends('layouts.clean')
 
 @section('content')
-<div class="container">
+<views-password-email 
+    :errors="{{$errors}}" 
+    :old-inputs="{{ json_encode( session()->getOldInput() ) }}"
+    :status="{{ json_encode( session('status') ) }}"
+></views-password-email>
+{{-- <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -43,5 +48,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endsection

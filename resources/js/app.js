@@ -292,6 +292,8 @@ Vue.component("add-user", require("./components/users/AddUser.vue").default);
 
 /****************************VIEWS********************************/
 Vue.component("views-login", require("./components/views/Login.vue").default);
+Vue.component("views-password-email", require("./components/views/PasswordEmail.vue").default);
+Vue.component("views-password-reset", require("./components/views/PasswordReset.vue").default);
 Vue.component("factories", require("./components/views/factories/Index.vue").default);
 Vue.component("views-factories-create", require("./components/views/factories/Create.vue").default);
 Vue.component("views-factories-show", require("./components/views/factories/Show.vue").default);
