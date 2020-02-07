@@ -18,7 +18,6 @@ class UserTableSeeder extends Seeder
         // TODO fix many to many positions seed code
         $this->seedUsers([
             [
-                'img' => 'parviz.jpg',
                 'name' => 'Parviz',
                 'surname' => 'Jabborov',
                 'email' => 'parviz@admin.com',
@@ -28,7 +27,6 @@ class UserTableSeeder extends Seeder
                 'positions' => [],
             ],
             [
-                'img' => 'bezhan.jpg',
                 'name' => 'Bezhan',
                 'surname' => 'Sufiev',
                 'email' => 'bezhan@admin.com',
@@ -38,7 +36,6 @@ class UserTableSeeder extends Seeder
                 'positions' => [],
             ],
             [
-                'img' => 'nozim.jpg',
                 'name' => 'Nozim',
                 'surname' => 'Khakimov',
                 'email' => 'nozim@admin.com',
@@ -48,7 +45,6 @@ class UserTableSeeder extends Seeder
                 'positions' => ['Рук НАП'],
             ],
             [
-                'img' => 'firdavs.jpg',
                 'name' => 'Firdavs',
                 'surname' => 'Kilichbekov',
                 'email' => 'firdavs@admin.com',
@@ -58,7 +54,6 @@ class UserTableSeeder extends Seeder
                 'positions' => [],
             ],
             [
-                'img' => 'mehroj.jpg',
                 'name' => 'Mehroj',
                 'surname' => 'Khakimov',
                 'email' => 'mehroj@admin.com',
@@ -68,7 +63,6 @@ class UserTableSeeder extends Seeder
                 'positions' => ['НО'],
             ],
             [
-                'img' => 'inoyat.jpg',
                 'name' => 'Inoyat',
                 'surname' => 'Nasridinshoev',
                 'email' => 'inoyat@admin.com',
@@ -78,7 +72,6 @@ class UserTableSeeder extends Seeder
                 'positions' => ['ПК'],
             ],
             [
-                'img' => 'azimv.jpg',
                 'name' => 'Azimjon',
                 'surname' => 'Vohidi',
                 'email' => 'azimjon@admin.com',
@@ -88,7 +81,6 @@ class UserTableSeeder extends Seeder
                 'positions' => ['ПК'],
             ],
             [
-                'img' => 'behruz.jpg',
                 'name' => 'Behruz',
                 'surname' => 'Kholov',
                 'email' => 'behruz@admin.com',
@@ -98,7 +90,6 @@ class UserTableSeeder extends Seeder
                 'positions' => ['НО'],
             ],
             [
-                'img' => 'alisher.jpg',
                 'name' => 'Alisher',
                 'surname' => 'Baratov',
                 'email' => 'alisher@admin.com',
@@ -119,7 +110,6 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'AbdulAziz',
                 'surname' => 'Nurov',
-                'img' => 'abdulaziz.jpg',
                 'email' => 'nurovaziz@admin.com',
                 'password' => 'admin',
                 'division' => 'ОРПО',
@@ -129,7 +119,6 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'Anvar',
                 'surname' => 'Jabarrov',
-                'img' => 'anvar.jpg',
                 'email' => 'anvar@admin.com',
                 'password' => 'admin',
                 'division' => 'ОЦМ',
