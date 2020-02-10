@@ -1,11 +1,13 @@
 <template>
     <div>
-        <v-tabs v-model="currentView" background-color="white" class="">
-            <span class=" grey--text text--darken-2 align-self-center pl-4">Мои Отдел</span>
-            <v-spacer></v-spacer>
-            <v-tab :value="activeBtn.STRUCTURE">Структура</v-tab>
-            <v-tab :value="activeBtn.POSITION">Должности</v-tab>
-        </v-tabs>
+        <v-card flat>
+            <v-tabs v-model="currentView">
+                <!-- <span class=" grey--text text--darken-2 align-self-center pl-4">Мои Отдел</span> -->
+                <v-tab :value="activeBtn.STRUCTURE">Структура</v-tab>
+                <v-tab :value="activeBtn.POSITION">Должности</v-tab>
+                <v-spacer></v-spacer>
+            </v-tabs>
+        </v-card>
 
         <v-tabs-items v-model="currentView" class="transparent mt-3">
             <!-- <v-tabs-items v-model="currentView" class="transparent"> -->
@@ -17,11 +19,15 @@
                 />
             </v-tab-item>
             <v-tab-item>
-                <positions :positions="localDivision.positions" :divisionId="localDivision.id" :user="user" />
+                <positions
+                    :positions="localDivision.positions"
+                    :divisionId="localDivision.id"
+                    :user="user"
+                />
                 <!-- <add-positions
                     :division="localDivision"
                     v-if="user.position_level.name == 'Руководитель'"
-                /> -->
+                />-->
             </v-tab-item>
         </v-tabs-items>
     </div>
@@ -29,7 +35,15 @@
 
 <script>
 export default {
-    props: ["division", "isUserHead", "isRoot", "oldInputs", "errors", "user", "divisions"],
+    props: [
+        "division",
+        "isUserHead",
+        "isRoot",
+        "oldInputs",
+        "errors",
+        "user",
+        "divisions"
+    ],
     data() {
         return {
             tab: null,
