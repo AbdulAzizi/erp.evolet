@@ -1,11 +1,11 @@
 <template>
-  <v-expansion-panels accordion class="d-inline-flex justify-end">
+  <v-expansion-panels accordion class="d-inline-flex justify-end division-expansion-panel " >
     <v-dialog width="600" v-model="addEmployeeDialog">
       <add-employee :division="division" />
     </v-dialog>
-    <v-expansion-panel class="transparent" v-if="isDivision">
-      <v-expansion-panel-header class="white">
-        <h1 class="title">{{ division.name }}</h1>
+    <v-expansion-panel  v-if="isDivision">
+      <v-expansion-panel-header  class=" px-4 py-0">
+        {{ division.name }}
         <div class="text-sm-right" v-if="!departmentDepth">
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
@@ -33,7 +33,7 @@
           </v-menu>
         </div>
       </v-expansion-panel-header>
-      <v-expansion-panel-content>
+      <v-expansion-panel-content >
         <v-container grid-list-lg fluid px-0 pl-5>
           <v-layout row wrap>
             <v-flex xs12 md6 lg4 xl3 v-if="division.head">
@@ -148,5 +148,15 @@ export default {
 
 .v-expansion-panel-header {
   border-radius: 0;
+}
+.division-expansion-panel .v-expansion-panel-header--active{
+  background-color: #6897f5  !important;
+  color:white;
+}
+.division-expansion-panel.theme--light.v-expansion-panels .v-expansion-panel{
+  background-color: transparent !important;
+}
+.division-expansion-panel .v-expansion-panel-header{
+  background-color: white;
 }
 </style>
