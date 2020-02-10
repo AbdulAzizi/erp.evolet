@@ -8,8 +8,10 @@
                 <h4 class="primary--text">{{ user.name }} {{ user.surname }}</h4>
                 <span style="font-size:12px">{{ user.position_level.name }}</span>
                 <br />
-                <span style="font-size:12px">{{user.division.name}}</span>
-                <br />
+                <template v-if="user.division">
+                    <span style="font-size:12px">{{user.division.name}}</span>
+                    <br />
+                </template>
                 <span
                     style="font-size: 12px;"
                     class="grey--text"
