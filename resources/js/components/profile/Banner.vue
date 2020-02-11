@@ -57,9 +57,18 @@
             </v-flex>
             <v-flex xs8>
               <div class="text-sm-left">
-                <h2
-                  class="primary--text display-1 font-weight-regular"
-                >{{user.name}} {{user.surname}}</h2>
+                <h2 class="primary--text display-1 font-weight-regular">
+                  {{user.name}} {{user.surname}}
+                  <v-btn text icon>
+                    <v-icon>mdi-pencil</v-icon>
+                  </v-btn>
+                </h2>
+                <h3 class="font-weight-regular">
+                  {{user.email}}
+                  <v-btn text icon>
+                    <v-icon>mdi-pencil</v-icon>
+                  </v-btn>
+                </h3>
                 <span
                   v-for="(position,key) in user.positions"
                   :key="'position-'+key"
@@ -127,8 +136,12 @@ export default {
       token: window.Laravel.csrf_token,
       disabled: true,
       file: null,
-      rules: [ v => !!v || 'Объязательное поле. Формат файла должен быть .jpg, .jpeg или .png' ],
-      allowedFiles: ['image/jpeg', 'image/png'],
+      rules: [
+        v =>
+          !!v ||
+          "Объязательное поле. Формат файла должен быть .jpg, .jpeg или .png"
+      ],
+      allowedFiles: ["image/jpeg", "image/png"],
       priorities: [
         { color: "red", title: "Высокий", count: 24 },
         { color: "yellow", title: "Средний", count: 30 },
@@ -148,15 +161,8 @@ export default {
           title: "ДО",
           path: `/users/${this.user.id}/position`,
           icon: "mdi-ballot-outline"
-        },
-        {
-          title: "Резюме",
-          path: `/users/${this.user.id}/cv`,
-          icon: "mdi-account-card-details"
         }
-      ],
-
-      url: window.location.pathname
+      ]
     };
   },
   methods: {
@@ -167,9 +173,9 @@ export default {
     }
   },
   watch: {
-    file(value){
+    file(value) {
       const type = value ? value.type : null;
-      this.disabled = this.allowedFiles.includes(type)  ? false : true;
+      this.disabled = this.allowedFiles.includes(type) ? false : true;
     }
   }
 };

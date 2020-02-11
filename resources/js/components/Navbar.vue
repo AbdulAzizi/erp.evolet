@@ -23,7 +23,7 @@
             </v-tooltip>
         </v-toolbar-items>
 
-        <template v-if="false">
+        <template>
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                     <v-btn icon v-on="on" :href="appPath('users')">
@@ -33,7 +33,7 @@
                 <span>Сотрудники</span>
             </v-tooltip>
 
-            <v-tooltip bottom>
+            <v-tooltip bottom v-if="false">
                 <template v-slot:activator="{ on }">
                     <v-btn icon v-on="on" :href="appPath('tasks')">
                         <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
@@ -42,7 +42,7 @@
                 <span>Задачи</span>
             </v-tooltip>
 
-            <v-tooltip bottom>
+            <v-tooltip bottom v-if="false">
                 <template v-slot:activator="{ on }">
                     <v-btn icon v-on="on" :href="appPath('chats')">
                         <v-icon color="grey darken-1">mdi-forum</v-icon>
@@ -52,6 +52,7 @@
             </v-tooltip>
 
             <dropdown-btn
+                v-if="false"
                 :items="auth.notifications"
                 :user="user"
                 tooltip="Уведомления"

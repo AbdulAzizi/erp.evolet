@@ -8,6 +8,7 @@ use App\PositionLevel;
 use App\Task;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Image;
@@ -33,9 +34,10 @@ class UserController extends Controller
 
     public function usersForHr()
     {
-        $users = User::with('division')->get();
+        $division = Division::with('users','head')->get()->toTree()->first();
+        // $users = User::with('division')->get();
 
-        return view('users.hr', compact('users'));
+        return view('hr.users', compact('division'));
     }
 
     public function store(Request $request)
@@ -69,6 +71,7 @@ class UserController extends Controller
             $division->head_id = $newUser->id;
             $division->save();
         }
+        // SendsPasswordResetEmails::sendResetLinkEmail(new Request (['email' => $newUser->email]) );
         // Password::broker()->sendResetLink(['email' => $newUser->email]);
 
         $user = User::with('positionLevel', 'positions')->find($newUser->id);
@@ -126,6 +129,10 @@ class UserController extends Controller
             'position_level_id' => $request->user['positionLevel'],
             'division_id' => $request->user['division'],
         ]);
+        // // Generate a new reset password token
+        // $token = app('auth.password.broker')->createToken($user);
+        // $user->notify(new SetupPassword($token));
+        Password::broker()->sendResetLink(['email' => $user->email]);
 
         $userWithRelations = User::with('division')->find($user->id);
 
@@ -139,7 +146,7 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
 
             $avatar = $request->file('avatar');
-            $filename = $user->name . $user->surname . '.' . $avatar->getClientOriginalExtension();            
+            $filename = $user->name . $user->surname . '.' . $avatar->getClientOriginalExtension();
 
             if (Storage::exists($filename)) {
                 Storage::delete($filename);
@@ -147,7 +154,7 @@ class UserController extends Controller
 
             Image::make($avatar)->fit(250)->save(public_path("/img/" . $filename));
 
-            Image::make($avatar)->fit(80)->save( public_path("/img/thumbs/" . $filename));
+            Image::make($avatar)->fit(80)->save(public_path("/img/thumbs/" . $filename));
 
             $user->img = $filename;
             $user->save();
