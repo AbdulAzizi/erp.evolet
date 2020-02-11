@@ -21,7 +21,7 @@ class UserController extends Controller
 
         $users = User::with('division')->get();
 
-        return view('users.index', compact('users', 'addUsers'));
+        return view('users.index', compact('users'));
     }
 
     public function show(Request $request)
