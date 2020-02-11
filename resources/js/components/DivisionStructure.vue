@@ -4,7 +4,7 @@
             <add-employee :division="division" />
         </v-dialog>
         <v-expansion-panel v-if="isDivision">
-            <v-expansion-panel-header class="px-4 py-0">
+            <v-expansion-panel-header class="px-4 py-0" style="min-height:48px !important">
                 {{ division.name }} • {{usersCount}} сотрудников
                 <div class="text-sm-right" v-if="!departmentDepth">
                     <v-menu offset-y>
