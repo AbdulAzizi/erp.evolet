@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     
     Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/users', 'UserController@index')->name('users.index');
-    Route::get('/hr/users', 'UserController@usersForHr')->name('users.hr');
+    
     Route::post('/users', 'UserController@store')->name('users.store');
     Route::get('/users/{id}', 'UserController@show')->name('users.show');
     Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume.show');
@@ -89,6 +89,10 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::prefix('admin')->group(function () {
         Route::get('/products', 'ProductController@adminIndex')->name('admin.products');
         Route::get('/files', 'FileController@index')->name('admin.files.index');
+    });
+
+    Route::prefix('hr')->group(function () {
+        Route::get('/users', 'UserController@usersForHr')->name('hr.users');
     });
     
     Route::get('/factories/create', 'FactoryController@create')->name('factories.create');

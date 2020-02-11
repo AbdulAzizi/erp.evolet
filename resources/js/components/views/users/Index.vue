@@ -21,7 +21,7 @@
                 >Добавить сотрудника</v-btn>
             </v-col>
         </v-row>
-        <v-row justify="center">
+        <v-row justify="start">
             <v-col
                 v-for="(user, i) in filteredUsers"
                 :key="i"
@@ -30,6 +30,7 @@
                 md="4"
                 lg="4"
                 xl="2"
+                class="pa-1"
             >
                 <user-card-horizontal :user="user" :link="userLink"/>
             </v-col>

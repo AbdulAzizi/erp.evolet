@@ -60,9 +60,18 @@
                         </v-flex>
                         <v-flex xs8>
                             <div class="text-sm-left">
-                                <h2
-                                    class="primary--text display-1 font-weight-regular"
-                                >{{user.name}} {{user.surname}}</h2>
+                                <h2 class="primary--text display-1 font-weight-regular">
+                                    {{user.name}} {{user.surname}}
+                                    <v-btn text icon>
+                                        <v-icon >mdi-pencil</v-icon>
+                                    </v-btn>
+                                </h2>
+                                <h3 class="font-weight-regular">
+                                    {{user.email}}
+                                    <v-btn text icon>
+                                        <v-icon >mdi-pencil</v-icon>
+                                    </v-btn>
+                                </h3>
                                 <span
                                     v-for="(position,key) in user.positions"
                                     :key="'position-'+key"

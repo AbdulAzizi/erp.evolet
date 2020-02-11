@@ -46,11 +46,15 @@
                         <v-flex xs12 md6 lg4 xl3 v-for="user in divisionEmployees" :key="user.id">
                             <user-card-horizontal link :user="user"></user-card-horizontal>
                         </v-flex>
-                        <!-- <v-flex xs12 md6 lg4 xl3 v-if="isUserHead && departmentDepth">
-              <v-card @click="addEmployeeDialog = !addEmployeeDialog" hover height="100%">
-                <div class="display-4 text-sm-center align-center">+</div>
-              </v-card>
-                        </v-flex>-->
+                        <v-flex xs12 md6 lg4 xl3 v-if="isUserHead && departmentDepth">
+                            <v-card
+                                @click="addEmployeeDialog = !addEmployeeDialog"
+                                hover
+                                height="100%"
+                            >
+                                <div class="display-4 text-sm-center align-center">+</div>
+                            </v-card>
+                        </v-flex>
                     </v-layout>
 
                     <div>
@@ -105,6 +109,8 @@ export default {
                     value: this.division.id
                 } //<form-field />
             ]);
+            console.log("clicked");
+            
         }
     },
 
@@ -134,8 +140,7 @@ export default {
             this.addEmployeeDialog = false;
         });
 
-        console.log(this.division);
-        
+        console.log(this.isUserHead);
     }
 };
 </script>
@@ -159,10 +164,10 @@ export default {
 .division-expansion-panel .v-expansion-panel-header {
     background-color: white;
 }
-.division-expansion-panel .v-expansion-panel-content__wrap{
-  padding-right: 0;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  padding-left: 40px;
+.division-expansion-panel .v-expansion-panel-content__wrap {
+    padding-right: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 40px;
 }
 </style>
