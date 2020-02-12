@@ -1,7 +1,6 @@
 <template>
     <div>
         <v-container grid-list-lg fluid pa-0>
-            <profile-banner :user="user" :authuser="authuser" />
             <v-layout row wrap>
                 <v-flex xs6 md3>
                     <stats-card
