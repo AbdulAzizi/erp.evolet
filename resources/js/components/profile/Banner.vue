@@ -159,7 +159,7 @@ export default {
         { title: "Задачи", path: `/users/${this.user.id}`, icon: "mdi-phone" },
         {
           title: "ДИ",
-          path: `/users/${this.user.id}/position`,
+          path: `/users/${this.user.id}/positions`,
           icon: "mdi-ballot-outline"
         }
       ],

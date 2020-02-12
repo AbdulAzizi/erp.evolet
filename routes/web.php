@@ -39,8 +39,8 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/users/{id}', 'UserController@show')->name('users.show');
     Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume.show');
     Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume.store');
-    Route::get('/users/{id}/position', 'PositionController@show')->name('position.show');
-    Route::post('/users/{id}/position', 'PositionController@store')->name('position.store');
+    Route::get('/users/{id}/positions', 'PositionController@show')->name('position.show');
+    // Route::post('/users/{id}/position', 'PositionController@store')->name('position.store');
     Route::post('/users/{id}/create-job-description', 'PositionController@createResponsibility')->name('position.create.job.description');
     Route::get('/users/{id}/cv/edit', 'ResumeController@showEdit')->name('resume.show.edit');
     Route::get('/profile/tasks', 'UserController@tasks')->name('profile.tasks');
