@@ -158,11 +158,12 @@ export default {
       links: [
         { title: "Задачи", path: `/users/${this.user.id}`, icon: "mdi-phone" },
         {
-          title: "ДО",
+          title: "ДИ",
           path: `/users/${this.user.id}/position`,
           icon: "mdi-ballot-outline"
         }
-      ]
+      ],
+      url: window.location.pathname
     };
   },
   methods: {
