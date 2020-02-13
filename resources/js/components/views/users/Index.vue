@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-col :md="hrUser ? 9 : 12" sm="12">
+            <v-col cols="12" class="pa-1">
                 <v-text-field
                     hide-details
                     label="Search"
@@ -10,15 +10,6 @@
                     v-model="search"
                     dense
                 ></v-text-field>
-            </v-col>
-            <v-col md="3" sm="12" v-if="hrUser">
-                <v-btn
-                    height="38"
-                    outlined
-                    color="primary"
-                    block
-                    @click="dialog = true"
-                >Добавить сотрудника</v-btn>
             </v-col>
         </v-row>
         <v-row justify="start">
@@ -35,9 +26,6 @@
                 <user-card-horizontal :user="user" :link="userLink"/>
             </v-col>
         </v-row>
-        <v-dialog v-model="dialog" width="600" persistent>
-            <add-user />
-        </v-dialog>
     </v-container>
 </template>
 
@@ -56,16 +44,7 @@ export default {
         return {
             search: "",
             filteredUsers: this.users,
-            dialog: false
         };
-    },
-
-    computed: {
-        hrUser(){
-            const position = this.auth.positions.filter(position => position.name == 'HR');
-
-            return position.length > 0;
-        }
     },
 
     created() {

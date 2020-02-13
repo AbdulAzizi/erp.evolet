@@ -90,7 +90,6 @@ Route::delete('/delete/responsibility/{id}', 'ResponsibilityController@delete')-
 Route::post('/add/responsibility/description', 'ResponsibilityDescriptionController@create')->name('responsibilityDescription.create');
 Route::post('/edit/responsibility/description/{id}', 'ResponsibilityDescriptionController@edit')->name('responsibilityDescription.edit');
 Route::delete('/delete/responsibility/description/{id}', 'ResponsibilityDescriptionController@delete')->name('responsibilityDescription.delete');
-Route::post('/hr/users/create', 'UserController@hrCreateUser')->name('user.hrCreateUser');
 Route::get('/divisions', 'DivisionController@loadDivisions')->name('division.load');
 
 

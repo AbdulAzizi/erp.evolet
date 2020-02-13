@@ -139,26 +139,6 @@ class UserController extends Controller
         return User::all();
     }
 
-    public function hrCreateUser(Request $request)
-    {
-        $user = User::create([
-            'name' => $request->user['name'],
-            'surname' => $request->user['surname'],
-            'email' => $request->user['email'],
-            'password' => Str::random(10),
-            'position_level_id' => $request->user['positionLevel'],
-            'division_id' => $request->user['division'],
-        ]);
-        // // Generate a new reset password token
-        // $token = app('auth.password.broker')->createToken($user);
-        // $user->notify(new SetupPassword($token));
-        Password::broker()->sendResetLink(['email' => $user->email]);
-
-        $userWithRelations = User::with('division')->find($user->id);
-
-        return $userWithRelations;
-    }
-
     public function changeAvatar(Request $request)
     {
         $user = User::find($request->id);
