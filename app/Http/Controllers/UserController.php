@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Image;
 
@@ -42,20 +43,39 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $randomPassword = Str::random(10);
+        $messages = [
+            'email.unique' => 'Пользователь с таким адресом существует',
+            'email.email' => 'Введен неправильный адрес'
+        ];
 
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users,email'
+        ], $messages);
+
+        
+        $randomPassword = Str::random(10);
+        
         $positionLevel = PositionLevel::find($request->positionId);
 
-        $newUser = User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'email' => $request->email,
-            'password' => $randomPassword,
-            'position_level_id' => $request->positionId,
-            'division_id' => $request->divisionId,
-        ]);
+        if ($validator->fails()) {
+            return ['emailError' => $validator->errors()->first() ];
+        }
 
-        $newUser->positions()->attach($request->positions);
+        else {
+            $newUser = User::create([
+                'name' => $request->name,
+                'surname' => $request->surname,
+                'email' => $request->email,
+                'password' => $randomPassword,
+                'position_level_id' => $request->positionId,
+                'division_id' => $request->divisionId,
+            ]);
+        }
+
+        
+        if($request->positions){
+            $newUser->positions()->attach($request->positions);
+        }
 
         if ($positionLevel->name == 'Руководитель') {
 

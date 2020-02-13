@@ -26,10 +26,12 @@
           ></form-field>
           <form-field
             :field="{
-         type: 'string',
+          type: 'email',
           name: 'email',
           label: 'Email',
-          rules: ['required']
+          rules: ['required'],
+          error: emailError,
+          errorMsg: errorMessage
           }"
             v-model="email"
           ></form-field>
@@ -49,8 +51,7 @@
           name: 'positionId',
           label: 'Должность',
           items: positionItems,
-          multiple: true,
-          rules: ['required']
+          multiple: true
           }"
             v-model="positions"
           ></form-field>
@@ -73,6 +74,8 @@ export default {
       name: null,
       surname: null,
       email: null,
+      errorMessage: null,
+      emailError: false,
       positionLevel: null,
       positions: [],
       positionItems: this.loadDivisionPositions(this.division.id),
@@ -93,8 +96,16 @@ export default {
             divisionId: this.division.id
           })
           .then(res => {
-            Event.fire("userAdded", res.data);
-            form.reset();
+            if (res.data.emailError) {
+              this.emailError = true,
+              this.errorMessage = res.data.emailError;
+            } else {
+              Event.fire("userAdded", {
+                divisionId: this.division.id,
+                user: res.data
+              });
+              form.reset();
+            }
           })
           .catch(err => err.messages);
       }
@@ -107,16 +118,20 @@ export default {
   },
   created() {
     Event.listen("newPosition", data => {
-      this.positionItems = this.loadDivisionPositions(
-        this.division.id
-      );
+      this.positionItems = this.loadDivisionPositions(this.division.id);
     });
 
     Event.listen("deletePosition", data => {
-      this.positionItems = this.loadDivisionPositions(
-        this.division.id
-      );
+      this.positionItems = this.loadDivisionPositions(this.division.id);
     });
+  },
+  watch: {
+    email(newVal, oldVal){
+      if(newVal !== oldVal){
+        this.errorMessage = null;
+        this.emailError = false;
+      }
+    }
   }
 };
 </script>
