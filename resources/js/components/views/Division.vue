@@ -38,11 +38,9 @@ export default {
     props: [
         "division",
         "isUserHead",
-        "isRoot",
         "oldInputs",
         "errors",
         "user",
-        "divisions"
     ],
     data() {
         return {

@@ -43,7 +43,16 @@ class DivisionController extends Controller
         $jsonPositionLevels = json_encode($positionLevels);
         $jsonPositions = json_encode($division->positions);
 
-        return view('division', compact('division', 'positionLevels', 'isUserHead', 'oldInputs', 'jsonPositionLevels', 'jsonPositions', 'authUser', 'divisions'));
+        return view('division', compact(
+            'division', 
+            'positionLevels', 
+            'isUserHead', 
+            'oldInputs', 
+            'jsonPositionLevels', 
+            'jsonPositions', 
+            'authUser', 
+            'divisions'
+        ));
     }
 
     public function store(Request $request)

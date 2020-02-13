@@ -32,15 +32,17 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/positions', 'PositionController@index')->name('position.index');
     
+    Route::group(['middleware' => 'profile'], function () {
+        Route::get('/users/{id}/positions', 'ProfileController@positions')->name('profile.positions');
+        Route::get('/users/{id}', 'UserController@show')->name('users.show');
+    });
     Route::get('/profile', 'UserController@show')->name('profile');
     Route::get('/users', 'UserController@index')->name('users.index');
     
     Route::post('/users', 'UserController@store')->name('users.store');
-    Route::get('/users/{id}', 'UserController@show')->name('users.show');
     Route::get('/users/{id}/cv', 'ResumeController@show')->name('resume.show');
     Route::post('/users/{id}/cv', 'ResumeController@store')->name('resume.store');
-    Route::get('/users/{id}/position', 'PositionController@show')->name('position.show');
-    Route::post('/users/{id}/position', 'PositionController@store')->name('position.store');
+    // Route::post('/users/{id}/position', 'PositionController@store')->name('position.store');
     Route::post('/users/{id}/create-job-description', 'PositionController@createResponsibility')->name('position.create.job.description');
     Route::get('/users/{id}/cv/edit', 'ResumeController@showEdit')->name('resume.show.edit');
     Route::get('/profile/tasks', 'UserController@tasks')->name('profile.tasks');

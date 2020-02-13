@@ -129,7 +129,6 @@ export default {
     },
 
     hrUser(){
-
       const position = this.auth.positions.filter(position => position.name == 'HR');
 
       return position.length > 0;
