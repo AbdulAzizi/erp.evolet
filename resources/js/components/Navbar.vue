@@ -33,7 +33,7 @@
                 <span>Сотрудники</span>
             </v-tooltip>
 
-            <v-tooltip bottom v-if="false">
+            <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                     <v-btn icon v-on="on" :href="appPath('tasks')">
                         <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
