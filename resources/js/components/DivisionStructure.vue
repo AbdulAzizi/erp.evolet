@@ -1,11 +1,14 @@
 <template>
   <v-expansion-panels accordion class="d-inline-flex justify-end division-expansion-panel">
     <v-dialog eager width="600" v-model="addEmployeeDialog">
-      <add-employee :division="division" />
+      <add-employee :division="localDivision" />
+    </v-dialog>
+    <v-dialog eager persistent width="600" v-model="addDivisionDialog">
+      <add-division :division="localDivision"/>
     </v-dialog>
     <v-expansion-panel v-if="isDivision">
       <v-expansion-panel-header class="px-4 py-0">
-        {{ division.name }} • {{usersCount}} сотрудников
+        {{ localDivision.name }} • {{usersCount}} сотрудников
         <div class="text-sm-right" v-if="!departmentDepth">
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
@@ -23,7 +26,7 @@
               </v-btn>
             </template>
             <v-card>
-              <v-list-item @click="addDivision()">
+              <v-list-item @click="addDivision()"  v-if="!departmentDivisions">
                 <v-list-item-title>Добавить</v-list-item-title>
               </v-list-item>
               <v-list-item @click="addDivision()">
@@ -35,9 +38,9 @@
       </v-expansion-panel-header>
       <v-expansion-panel-content class="pr-0 py-2">
         <v-container grid-list-lg fluid pa-0>
-          <v-row v-if="division.head" class="ma-0">
+          <v-row v-if="localDivision.head" class="ma-0">
             <v-col md="12" lg="4" xl="3" class="pa-2 pt-0 pr-0">
-              <user-card-horizontal link :user="division.head"></user-card-horizontal>
+              <user-card-horizontal link :user="localDivision.head"></user-card-horizontal>
             </v-col>
           </v-row>
           <v-row class="ma-0">
@@ -59,7 +62,7 @@
           <div>
             <v-expansion-panels>
               <division-structure
-                v-for="( subDivision ) in division.children"
+                v-for="( subDivision ) in localDivision.children"
                 :key="subDivision.id"
                 :division="subDivision"
                 :is-user-head="isUserHead"
@@ -99,7 +102,8 @@ export default {
       localDivision: this.division,
       tab: null,
       items: [],
-      addEmployeeDialog: false
+      addEmployeeDialog: false,
+      addDivisionDialog: false
     };
   },
 
@@ -109,14 +113,9 @@ export default {
         { type: "input", name: "divisionId", value: this.division.id }
       ]);
     },
-    addDivision: function() {
-      Event.fire("addDivision", [
-        {
-          type: "input",
-          name: "parentDivisionId",
-          value: this.division.id
-        }
-      ]);
+    addDivision() {
+      Event.fire('division', this.localDivision);
+      this.addDivisionDialog = true;
     }
   },
 
@@ -138,10 +137,10 @@ export default {
       return this.localDivision.children.length == 0;
     },
     usersCount: function() {
-      return divisionUsersRecursiveCount(this.division);
+      return divisionUsersRecursiveCount(this.localDivision);
     },
     departmentDepth: function() {
-      return this.division.depth > 0;
+      return this.localDivision.depth > 0;
     }
   },
   created() {
@@ -157,6 +156,16 @@ export default {
     Event.listen("cancelEmployeeSubmition", data => {
       this.addEmployeeDialog = false;
     });
+
+    Event.listen("divisionCreated", data => {
+      if(this.localDivision.id == data.divisionId){
+        this.localDivision.children.push(data.division);
+        this.addDivisionDialog = false;
+        Event.fire('notify', [`Создан отдел ${data.division.name}`]);
+      }
+    });
+
+    Event.listen("cancelDivision", dialog => this.addDivisionDialog = false);
   }
 };
 </script>

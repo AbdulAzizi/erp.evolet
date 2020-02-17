@@ -288,7 +288,7 @@ Vue.component("delete-responsibility", require("./components/responsibility/Dele
 Vue.component("add-responsibility-description", require("./components/responsibility/AddResponsibilityDescription.vue").default);
 Vue.component("edit-responsibility-description", require("./components/responsibility/EditResponsibilityDescription.vue").default);
 Vue.component("delete-responsibility-description", require("./components/responsibility/DeleteResponsibilityDescription.vue").default);
-
+Vue.component("add-division", require("./components/division/AddDivision.vue").default);
 /****************************VIEWS********************************/
 Vue.component("views-login", require("./components/views/Login.vue").default);
 Vue.component("views-password-email", require("./components/views/PasswordEmail.vue").default);

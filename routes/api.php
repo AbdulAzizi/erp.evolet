@@ -91,5 +91,7 @@ Route::post('/add/responsibility/description', 'ResponsibilityDescriptionControl
 Route::post('/edit/responsibility/description/{id}', 'ResponsibilityDescriptionController@edit')->name('responsibilityDescription.edit');
 Route::delete('/delete/responsibility/description/{id}', 'ResponsibilityDescriptionController@delete')->name('responsibilityDescription.delete');
 Route::get('/divisions', 'DivisionController@loadDivisions')->name('division.load');
+Route::post('/divisions/create', 'DivisionController@store')->name('division.store');
+
 
 

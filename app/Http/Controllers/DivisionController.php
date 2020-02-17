@@ -57,20 +57,16 @@ class DivisionController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'parentDivisionId' => 'required',
+
+        $division = Division::create([
+            'name' => $request->name,
+            'abbreviation' => $request->abbreviation,
+            'parent_id' => $request->parent_id
         ]);
+        
+        $divisionWithRelations = Division::with('users', 'head', 'children')->find($division->id);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $parentDivision = Division::find($request->input('parentDivisionId'));
-
-        Division::create($request->only(['name', 'abbreviation']), $parentDivision);
-
-        return redirect()->back();
+        return $divisionWithRelations;
     }
 
     public function loadDivisions()
