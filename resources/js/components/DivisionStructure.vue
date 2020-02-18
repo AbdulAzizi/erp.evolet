@@ -4,12 +4,19 @@
       <add-employee :division="localDivision" />
     </v-dialog>
     <v-dialog eager persistent width="600" v-model="addDivisionDialog">
-      <add-division :division="localDivision"/>
+      <add-division :division="localDivision" />
     </v-dialog>
+    <delete-record
+      :route="`/api/divisions/${localDivision.id}`"
+      :visible="deleteDivision"
+      :caution="usersCount > 0"
+      :cautionMsg="`Невозможно удалить. ${localDivision.abbreviation} имеет сотрудников!`"
+      @close="deleteDivision = false"
+    />
     <v-expansion-panel v-if="isDivision">
       <v-expansion-panel-header class="px-4 py-0">
         {{ localDivision.name }} • {{usersCount}} сотрудников
-        <div class="text-sm-right" v-if="!departmentDepth">
+        <div class="text-sm-right" v-if="hrUser">
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -26,10 +33,10 @@
               </v-btn>
             </template>
             <v-card>
-              <v-list-item @click="addDivision()"  v-if="!departmentDivisions">
+              <v-list-item @click="addDivision()" v-if="isDepartment">
                 <v-list-item-title>Добавить</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="addDivision()">
+              <v-list-item @click="deleteDivision = !deleteDivision">
                 <v-list-item-title>Удалить</v-list-item-title>
               </v-list-item>
             </v-card>
@@ -44,12 +51,18 @@
             </v-col>
           </v-row>
           <v-row class="ma-0">
-            <v-col md="4" xl="3" class="pa-2 pt-0 pr-0" v-for="user in divisionEmployees" :key="user.id">
+            <v-col
+              md="4"
+              xl="3"
+              class="pa-2 pt-0 pr-0"
+              v-for="user in divisionEmployees"
+              :key="user.id"
+            >
               <user-card-horizontal link :user="user" v-if="divisionEmployees.length"></user-card-horizontal>
             </v-col>
           </v-row>
           <v-row class="ma-0">
-            <v-col cols="4" class="pa-0 pl-2" v-if="hrUser && departmentDivisions">
+            <v-col cols="4" class="pa-0 pl-2" v-if="hrUser && isSubdivision">
               <v-btn
                 outlined
                 block
@@ -103,7 +116,8 @@ export default {
       tab: null,
       items: [],
       addEmployeeDialog: false,
-      addDivisionDialog: false
+      addDivisionDialog: false,
+      deleteDivision: false
     };
   },
 
@@ -114,7 +128,7 @@ export default {
       ]);
     },
     addDivision() {
-      Event.fire('division', this.localDivision);
+      Event.fire("division", this.localDivision);
       this.addDivisionDialog = true;
     }
   },
@@ -127,20 +141,21 @@ export default {
       );
     },
 
-    hrUser(){
-      const position = this.auth.positions.filter(position => position.name == 'HR');
+    hrUser() {
+      const position = this.auth.positions.filter(
+        position => position.name == "HR"
+      );
 
       return position.length > 0;
-    },
-
-    departmentDivisions() {
-      return this.localDivision.children.length == 0;
     },
     usersCount: function() {
       return divisionUsersRecursiveCount(this.localDivision);
     },
-    departmentDepth: function() {
-      return this.localDivision.depth > 0;
+    isDepartment() {
+      return this.localDivision.depth < 3;
+    },
+    isSubdivision(){
+      return this.localDivision.depth >= 3;
     }
   },
   created() {
@@ -158,14 +173,14 @@ export default {
     });
 
     Event.listen("divisionCreated", data => {
-      if(this.localDivision.id == data.divisionId){
+      if (this.localDivision.id == data.divisionId) {
         this.localDivision.children.push(data.division);
         this.addDivisionDialog = false;
-        Event.fire('notify', [`Создан отдел ${data.division.name}`]);
+        Event.fire("notify", [`Создан отдел ${data.division.name}`]);
       }
     });
 
-    Event.listen("cancelDivision", dialog => this.addDivisionDialog = false);
+    Event.listen("cancelDivision", dialog => (this.addDivisionDialog = false));
   }
 };
 </script>

@@ -24,9 +24,10 @@ class DivisionController extends Controller
     public function show()
     {
         $userDivisionId = auth()->user()->division_id;
+
         $division = Division::with('head', 'users', 'positions.responsibilities.descriptions')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
         
-        $divisions = Division::with('positions.responsibilities.descriptions')->get();
+        $divisions = Division::with('positions.responsibilities.descriptions')->withDepth()->get();
 
         $positionLevels = PositionLevel::where('name', '!=', 'Руководитель')->get();
 
@@ -64,9 +65,18 @@ class DivisionController extends Controller
             'parent_id' => $request->parent_id
         ]);
         
-        $divisionWithRelations = Division::with('users', 'head', 'children')->find($division->id);
+        $divisionWithRelations = Division::with('users', 'head', 'children')->withDepth()->find($division->id);
 
         return $divisionWithRelations;
+    }
+
+    public function delete(Request $request)
+    {
+        $division = Division::find($request->id);
+
+        $division->children()->delete();
+
+        $division->delete();
     }
 
     public function loadDivisions()

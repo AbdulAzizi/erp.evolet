@@ -35,7 +35,7 @@ class UserController extends Controller
 
     public function usersForHr()
     {
-        $division = Division::with('users','head')->get()->toTree()->first();
+        $division = Division::with('users','head')->withDepth()->descendantsAndSelf(1)->toTree()->first();
         // $users = User::with('division')->get();
 
         return view('hr.users', compact('division'));
