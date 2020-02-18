@@ -2,7 +2,8 @@
   <div>
     <v-card>
       <v-toolbar dense flat dark color="primary">
-        <v-toolbar-title>Добавить сотрудника</v-toolbar-title>
+        <v-toolbar-title v-if="addHeadEmployee">Добавить руководителя</v-toolbar-title>
+        <v-toolbar-title v-else>Добавить сотрудника</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <v-form class="mt-5" ref="addEmployeeForm">
@@ -44,6 +45,7 @@
           rules: ['required']
           }"
             v-model="positionLevel"
+            v-if="!addHeadEmployee"
           ></form-field>
           <form-field
             :field="{
@@ -68,7 +70,14 @@
 
 <script>
 export default {
-  props: ["division"],
+  props: {
+    division: {
+      required: true
+    },
+    addHeadEmployee: {
+      required: false
+    }
+  },
   data() {
     return {
       name: null,
@@ -93,7 +102,8 @@ export default {
             email: this.email,
             positionId: this.positionLevel,
             positions: this.positions,
-            divisionId: this.division.id
+            divisionId: this.division.id,
+            headEmployee: this.addHeadEmployee
           })
           .then(res => {
             if (res.data.emailError) {
@@ -102,12 +112,13 @@ export default {
             } else {
               Event.fire("userAdded", {
                 divisionId: this.division.id,
-                user: res.data
+                user: res.data,
+                headEmployee: this.addHeadEmployee
               });
               form.reset();
             }
           })
-          .catch(err => err.messages);
+          .catch(err => err.message);
       }
     },
     resetForm() {

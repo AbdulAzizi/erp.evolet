@@ -43,6 +43,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        
         $messages = [
             'email.unique' => 'Пользователь с таким адресом существует',
             'email.email' => 'Введен неправильный адрес'
@@ -55,7 +56,7 @@ class UserController extends Controller
         
         $randomPassword = Str::random(10);
         
-        $positionLevel = PositionLevel::find($request->positionId);
+        $positionLevel = $request->headEmployee ? PositionLevel::where('name', 'Руководитель')->first() : PositionLevel::find($request->positionId);
 
         if ($validator->fails()) {
             return ['emailError' => $validator->errors()->first() ];
@@ -67,7 +68,7 @@ class UserController extends Controller
                 'surname' => $request->surname,
                 'email' => $request->email,
                 'password' => $randomPassword,
-                'position_level_id' => $request->positionId,
+                'position_level_id' => $request->headEmployee ? $positionLevel->id : $request->positionId,
                 'division_id' => $request->divisionId,
             ]);
         }
@@ -85,14 +86,21 @@ class UserController extends Controller
 
             $headUser = User::find($division->head_id);
 
-            $headUser->position_level_id = $secondaryPositionId;
-            $headUser->save();
+            if($headUser){
 
-            $division->head_id = $newUser->id;
+                $headUser->position_level_id = $secondaryPositionId;
+
+                $headUser->save();
+            }
+            else {
+
+                $division->head_id = $newUser->id;
+            }
+
             $division->save();
         }
         // SendsPasswordResetEmails::sendResetLinkEmail(new Request (['email' => $newUser->email]) );
-        // Password::broker()->sendResetLink(['email' => $newUser->email]);
+        Password::broker()->sendResetLink(['email' => $newUser->email]);
 
         $user = User::with('positionLevel', 'positions')->find($newUser->id);
         return $user;

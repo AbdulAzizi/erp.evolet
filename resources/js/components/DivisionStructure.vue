@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panels accordion class="d-inline-flex justify-end division-expansion-panel">
     <v-dialog eager width="600" v-model="addEmployeeDialog">
-      <add-employee :division="localDivision" />
+      <add-employee :division="localDivision" :addHeadEmployee="addHeadEmployee"/>
     </v-dialog>
     <v-dialog eager persistent width="600" v-model="addDivisionDialog">
       <add-division :division="localDivision" />
@@ -62,11 +62,19 @@
             </v-col>
           </v-row>
           <v-row class="ma-0">
+            <v-col cols="4" class="pa-0 pl-2 pb-2" v-if="hrUser && isDepartment">
+              <v-btn
+                outlined
+                block
+                @click="addHead()"
+                color="primary"
+              >Добавить руководителя</v-btn>
+            </v-col>
             <v-col cols="4" class="pa-0 pl-2" v-if="hrUser && isSubdivision">
               <v-btn
                 outlined
                 block
-                @click="addEmployeeDialog = !addEmployeeDialog"
+                @click="addEmployee()"
                 color="primary"
               >Добавить сотрудника</v-btn>
             </v-col>
@@ -117,7 +125,8 @@ export default {
       items: [],
       addEmployeeDialog: false,
       addDivisionDialog: false,
-      deleteDivision: false
+      deleteDivision: false,
+      addHeadEmployee: false
     };
   },
 
@@ -130,6 +139,13 @@ export default {
     addDivision() {
       Event.fire("division", this.localDivision);
       this.addDivisionDialog = true;
+    },
+    addEmployee(){
+      this.addEmployeeDialog = true;
+    },
+    addHead(){
+      this.addEmployeeDialog = true;
+      this.addHeadEmployee = true;
     }
   },
 
@@ -163,6 +179,10 @@ export default {
       this.addEmployeeDialog = false;
       if (this.localDivision.id == data.divisionId) {
         this.localDivision.users.push(data.user);
+        if(data.headEmployee){
+          this.localDivision.head_id = data.user.id;
+          this.localDivision.head = data.user;
+        }
         Event.fire("notify", [
           `Создан сотрудник ${data.user.name} ${data.user.surname}`
         ]);
