@@ -35,15 +35,33 @@ class UserController extends Controller
 
     public function usersForHr()
     {
-        $division = Division::with('users','head')->withDepth()->descendantsAndSelf(1)->toTree()->first();
+        $division = Division::with('users', 'head')->withDepth()->descendantsAndSelf(1)->toTree()->first();
         // $users = User::with('division')->get();
 
         return view('hr.users', compact('division'));
     }
 
+    public function edit(Request $request)
+    {
+        $user = User::find($request->id);
+
+        if ($request->email) {
+            $user->email = $request->email;
+        } else {
+
+            $user->name = $request->name;
+
+            $user->surname = $request->surname;
+        }
+
+        $user->save();
+
+        return $user;
+    }
+
     public function store(Request $request)
     {
-        
+
         $messages = [
             'email.unique' => 'Пользователь с таким адресом существует',
             'email.email' => 'Введен неправильный адрес'
@@ -53,16 +71,14 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email'
         ], $messages);
 
-        
+
         $randomPassword = Str::random(10);
-        
+
         $positionLevel = $request->headEmployee ? PositionLevel::where('name', 'Руководитель')->first() : PositionLevel::find($request->positionId);
 
         if ($validator->fails()) {
-            return ['emailError' => $validator->errors()->first() ];
-        }
-
-        else {
+            return ['emailError' => $validator->errors()->first()];
+        } else {
             $newUser = User::create([
                 'name' => $request->name,
                 'surname' => $request->surname,
@@ -73,8 +89,8 @@ class UserController extends Controller
             ]);
         }
 
-        
-        if($request->positions){
+
+        if ($request->positions) {
             $newUser->positions()->attach($request->positions);
         }
 
@@ -86,13 +102,12 @@ class UserController extends Controller
 
             $headUser = User::find($division->head_id);
 
-            if($headUser){
+            if ($headUser) {
 
                 $headUser->position_level_id = $secondaryPositionId;
 
                 $headUser->save();
-            }
-            else {
+            } else {
 
                 $division->head_id = $newUser->id;
             }

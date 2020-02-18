@@ -93,6 +93,7 @@ Route::delete('/delete/responsibility/description/{id}', 'ResponsibilityDescript
 Route::get('/divisions', 'DivisionController@loadDivisions')->name('division.load');
 Route::post('/divisions/create', 'DivisionController@store')->name('division.store');
 Route::delete('/divisions/{id}', 'DivisionController@delete')->name('division.delete');
+Route::post('/users/edit/{id}', 'UserController@edit')->name('user.edit');
 
 
 
