@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'data.default' => \App\Http\Middleware\ProvideDefaultData::class,
         'task.ownership' => \App\Http\Middleware\VerifyTaskOwnership::class,
         'profile' => \App\Http\Middleware\Profile::class,
+        'hr' => \App\Http\Middleware\HR::class,
     ];
 
     /**

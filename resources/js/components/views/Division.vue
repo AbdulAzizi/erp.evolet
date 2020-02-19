@@ -20,14 +20,10 @@
             </v-tab-item>
             <v-tab-item>
                 <positions
-                    :positions="localDivision.positions"
-                    :divisionId="localDivision.id"
-                    :user="user"
+                    :divisions="[localDivision]"
+                    :createable="auth.position_level.name == 'Руководитель'"
+                    :editable="auth.position_level.name == 'Руководитель'"
                 />
-                <!-- <add-positions
-                    :division="localDivision"
-                    v-if="user.position_level.name == 'Руководитель'"
-                />-->
             </v-tab-item>
         </v-tabs-items>
     </div>
@@ -40,7 +36,6 @@ export default {
         "isUserHead",
         "oldInputs",
         "errors",
-        "user",
     ],
     data() {
         return {

@@ -146,4 +146,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Chat');
     }
+
+    public function responsibilities()
+    {
+        return $this->belongsToMany('App\Responsibility');
+    }
 }

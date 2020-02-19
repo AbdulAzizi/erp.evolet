@@ -20,4 +20,9 @@ class Responsibility extends Model
     {
         return $this->hasMany('App\ResponsibilityDescription');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
 }

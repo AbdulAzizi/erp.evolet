@@ -139,7 +139,7 @@ export default {
                 {
                     icon: "mdi-script-text",
                     text: "ДО Компании",
-                    url: "/positions",
+                    url: "/hr/positions",
                     positions: ["РВЗ","HR"],
                     divisions: []
                 },

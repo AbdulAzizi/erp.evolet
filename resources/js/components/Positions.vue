@@ -1,105 +1,111 @@
 <template>
     <div>
-        <v-btn
-            outlined
-            color="primary"
-            @click="addPosition = !addPosition"
-            v-if="headUser && localDivisions == undefined"
-        >Добавить должность</v-btn>
-        <div v-if="localDivisions !== undefined">
-            <template v-for="(division, index) in localDivisions">
-                <v-row v-if="division.positions.length > 0" :key="'name' + index">
-                    <v-col cols="12" class="py-0">
-                        <v-card flat>
-                            <v-toolbar flat dense>
-                                <v-toolbar-title>{{ division.name }}</v-toolbar-title>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    small
-                                    outlined
-                                    color="primary"
-                                    @click="addPositionToDivision(division.id)"
-                                    v-if="divisions !== undefined"
-                                >Добавить должность</v-btn>
-                            </v-toolbar>
-                        </v-card>
-                    </v-col>
-                </v-row>
-                <v-row v-if="division.positions.length > 0" :key="'position' + index">
-                    <v-col cols="6" v-for="(position, index ) in division.positions" :key="index">
-                        <position-card :position="position" :user="user" />
-                    </v-col>
-                </v-row>
-            </template>
-        </div>
-        <v-row v-else>
-            <v-col cols="6" v-for="(position, index) in positions" :key="index">
-                <position-card :position="position" :user="user" :division="divisions" />
+        <v-row class="ma-0" justify="end" align="start">
+            <add-position
+                v-if="createable && localDivisions.length == 1  "
+                :divisionId="divisions[0].id"
+            />
+            <attach-responsibilities-btn
+                :positions="localUser.division.positions"
+                :user="localUser"
+                v-if="localUser && editable"
+            />
+        </v-row>
+        <v-row v-if="(divisions.length == 1 && divisions[0].positions.length == 0) || (localUser && localUser.positions.length == 0)">
+            <v-col>
+                <v-alert
+                    dense
+                    class="pl-6 mb-0"
+                    colored-border
+                    color="primary"
+                    border="left"
+                >Должности отсутствуют</v-alert>
             </v-col>
         </v-row>
-        <v-dialog eager width="600" v-model="addPosition">
-            <add-position :divisionId="divisionId" />
-        </v-dialog>
+        <v-row v-if="localUser && localUser.positions.length">
+            <v-col cols="6" v-for="(position, index) in localUser.positions" :key="index">
+                <position-card :user="localUser" :position="position" :division="divisions" />
+            </v-col>
+        </v-row>
+        <template v-for="(division, index) in localDivisions">
+            <v-row
+                v-if="division.positions.length > 0 && localDivisions.length > 1"
+                :key="'name' + index"
+            >
+                <v-col cols="12" class="py-0">
+                    <v-card flat>
+                        <v-toolbar flat dense>
+                            <v-toolbar-title>{{ division.name }}</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <add-position v-if="divisions !== undefined && editable" :divisionId="division.id" />
+                        </v-toolbar>
+                    </v-card>
+                </v-col>
+            </v-row>
+            <v-row v-if="division.positions.length > 0" :key="'position' + index">
+                <v-col cols="6" v-for="(position, index ) in division.positions" :key="index">
+                    <position-card :position="position" :editable="editable" />
+                </v-col>
+            </v-row>
+        </template>
     </div>
 </template>
 <script>
 export default {
     props: {
-        positions: {},
-        divisionId: Number,
-        user: {},
-        divisions: Array
+        editable: {
+            default: false,
+            required: false
+        },
+        user: {
+            required: false
+        },
+        createable: {
+            required: false,
+            defaut: false
+        },
+        divisions: {
+            default: function() {
+                return [];
+            },
+            required: false,
+            type: Array
+        }
     },
     data() {
         return {
-            headUser: this.user.position_level.name == "Руководитель",
-            localPositions: this.positions,
-            localDivisions: this.divisions,
-            addPosition: false,
-            addResponsibility: false
+            localUser: this.user,
+            localDivisions: this.divisions
         };
     },
     methods: {
-        addPositionToDivision(divisionId) {
-            this.addPosition = true;
-            Event.fire("addPositionToDivision", divisionId);
+        addPositionToDivision(divisionsId) {
+            Event.fire("addPositionToDivision", divisionsId);
         }
     },
     created() {
+        console.log(this.localUser);
+        
         Event.listen("deletePosition", positionId => {
-            if (this.divisions == undefined) {
-                this.localPositions.forEach((position, index) => {
+            this.localDivisions.forEach(division => {
+                division.positions.forEach((position, index) => {
                     if (position.id == positionId) {
-                        this.localPositions.splice(index, 1);
+                        division.positions.splice(index, 1);
                     }
                 });
-            } else {
-                this.localDivisions.forEach(division => {
-                    division.positions.forEach((position, index) => {
-                        if (position.id == positionId) {
-                            division.positions.splice(index, 1);
-                        }
-                    });
-                });
-            }
+            });
         });
-        Event.listen("newPosition", position => {
-            this.localPositions.push(position);
-            this.addPosition = false;
-        });
-        Event.listen("newPositionToDivision", data => {
+        Event.listen("newPositionCreated", data => {
             this.localDivisions.forEach(division => {
                 if (division.id == data.divisionId) {
                     division.positions.push(data.position);
                 }
             });
-            this.addPosition = false;
         });
         Event.listen("addResponsibility", positionId => {});
-        Event.listen(
-            "cancelPositionAdding",
-            position => (this.addPosition = false)
-        );
+        Event.listen("responsibilitiesAddedToUser", user => {
+            this.localUser = user;
+        });
     }
 };
 </script>

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Position;
 use App\Responsibility;
+use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ResponsibilityController extends Controller
@@ -11,11 +14,11 @@ class ResponsibilityController extends Controller
     {
         $responsibility = Responsibility::create([
             'position_id' => $request->positionId,
-            'text' => $request->text
+            'text' => $request->text,
         ]);
-        
+
         $responsibilityWithDescriptions = Responsibility::with('descriptions')->find($responsibility->id);
-        
+
         return $responsibilityWithDescriptions;
     }
 
@@ -37,5 +40,28 @@ class ResponsibilityController extends Controller
         $responsibility->descriptions()->delete();
 
         $responsibility->delete();
+    }
+
+    public function attachUser(Request $request, $id)
+    {
+        $user = User::find($id);
+        $user->positions()->syncWithoutDetaching($request->position);
+
+        $respsToDetach = Position::find($request->position)->responsibilities->pluck('id');
+        $user->responsibilities()->detach($respsToDetach);
+        
+        $user->responsibilities()->syncWithoutDetaching($request->responsibilities);
+
+        $user = User::with([
+            'division.positions.responsibilities',
+        ])->with(['positions' => function ($positionQuery) use ($id) {
+            $positionQuery->with(['responsibilities' => function ($responsibilityQuery) use ($id) {
+                $responsibilityQuery->with('descriptions')->whereHas('users', function (Builder $userQuery) use ($id) {
+                    $userQuery->where('users.id', $id);
+                });
+            }]);
+        }])->find($id);
+        
+        return $user;
     }
 }
