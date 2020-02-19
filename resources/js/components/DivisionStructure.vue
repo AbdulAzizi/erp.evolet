@@ -47,7 +47,7 @@
         <v-container grid-list-lg fluid pa-0>
           <v-row v-if="localDivision.head" class="ma-0">
             <v-col md="12" lg="4" xl="3" class="pa-2 pt-0 pr-0">
-              <user-card-horizontal link :user="localDivision.head"></user-card-horizontal>
+              <user-card-horizontal :link="true" :user="localDivision.head"></user-card-horizontal>
             </v-col>
           </v-row>
           <v-row class="ma-0">
@@ -58,7 +58,7 @@
               v-for="user in divisionEmployees"
               :key="user.id"
             >
-              <user-card-horizontal link :user="user" v-if="divisionEmployees.length"></user-card-horizontal>
+              <user-card-horizontal :link="true" :user="user" v-if="divisionEmployees.length"></user-card-horizontal>
             </v-col>
           </v-row>
           <v-row class="ma-0">
