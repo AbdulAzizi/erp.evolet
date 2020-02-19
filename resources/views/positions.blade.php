@@ -2,8 +2,7 @@
 
 @section('content')
 <positions 
-    :positions="{{$positions}}" 
-    :user="{{$authUser}}" 
-    :divisions="{{$divisions}}">
+    :divisions="{{$divisions}}"
+    :editable="true">
 </positions>
 @endsection

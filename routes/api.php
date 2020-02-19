@@ -92,5 +92,5 @@ Route::post('/edit/responsibility/description/{id}', 'ResponsibilityDescriptionC
 Route::delete('/delete/responsibility/description/{id}', 'ResponsibilityDescriptionController@delete')->name('responsibilityDescription.delete');
 Route::post('/hr/users/create', 'UserController@hrCreateUser')->name('user.hrCreateUser');
 Route::get('/divisions', 'DivisionController@loadDivisions')->name('division.load');
-
+Route::post('/users/{id}/responsibilities', 'ResponsibilityController@attachUser')->name('responsibilities.attachUser');
 

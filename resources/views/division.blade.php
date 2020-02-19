@@ -9,8 +9,7 @@
     :is-root="true"
     :jsonPositions="{{$jsonPositions}}"
     :ildInputs="{{$oldInputs}}"
-    :errors="{{ $errors }}"
-    :user="{{$authUser}}">
+    :errors="{{ $errors }}">
     </views-division>
 
 
