@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Image;
 
@@ -34,28 +35,64 @@ class UserController extends Controller
 
     public function usersForHr()
     {
-        $division = Division::with('users','head')->get()->toTree()->first();
+        $division = Division::with('users', 'head')->withDepth()->descendantsAndSelf(1)->toTree()->first();
         // $users = User::with('division')->get();
 
         return view('hr.users', compact('division'));
     }
 
+    public function edit(Request $request)
+    {
+        $user = User::find($request->id);
+
+        if ($request->email) {
+            $user->email = $request->email;
+        } else {
+
+            $user->name = $request->name;
+
+            $user->surname = $request->surname;
+        }
+
+        $user->save();
+
+        return $user;
+    }
+
     public function store(Request $request)
     {
+
+        $messages = [
+            'email.unique' => 'Пользователь с таким адресом существует',
+            'email.email' => 'Введен неправильный адрес'
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users,email'
+        ], $messages);
+
+
         $randomPassword = Str::random(10);
 
-        $positionLevel = PositionLevel::find($request->positionId);
+        $positionLevel = $request->headEmployee ? PositionLevel::where('name', 'Руководитель')->first() : PositionLevel::find($request->positionId);
 
-        $newUser = User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'email' => $request->email,
-            'password' => $randomPassword,
-            'position_level_id' => $request->positionId,
-            'division_id' => $request->divisionId,
-        ]);
+        if ($validator->fails()) {
+            return ['emailError' => $validator->errors()->first()];
+        } else {
+            $newUser = User::create([
+                'name' => $request->name,
+                'surname' => $request->surname,
+                'email' => $request->email,
+                'password' => $randomPassword,
+                'position_level_id' => $request->headEmployee ? $positionLevel->id : $request->positionId,
+                'division_id' => $request->divisionId,
+            ]);
+        }
 
-        $newUser->positions()->attach($request->positions);
+
+        if ($request->positions) {
+            $newUser->positions()->attach($request->positions);
+        }
 
         if ($positionLevel->name == 'Руководитель') {
 
@@ -65,14 +102,20 @@ class UserController extends Controller
 
             $headUser = User::find($division->head_id);
 
-            $headUser->position_level_id = $secondaryPositionId;
-            $headUser->save();
+            if ($headUser) {
 
-            $division->head_id = $newUser->id;
+                $headUser->position_level_id = $secondaryPositionId;
+
+                $headUser->save();
+            } else {
+
+                $division->head_id = $newUser->id;
+            }
+
             $division->save();
         }
         // SendsPasswordResetEmails::sendResetLinkEmail(new Request (['email' => $newUser->email]) );
-        // Password::broker()->sendResetLink(['email' => $newUser->email]);
+        Password::broker()->sendResetLink(['email' => $newUser->email]);
 
         $user = User::with('positionLevel', 'positions')->find($newUser->id);
         return $user;
@@ -117,26 +160,6 @@ class UserController extends Controller
     public function getUsers()
     {
         return User::all();
-    }
-
-    public function hrCreateUser(Request $request)
-    {
-        $user = User::create([
-            'name' => $request->user['name'],
-            'surname' => $request->user['surname'],
-            'email' => $request->user['email'],
-            'password' => Str::random(10),
-            'position_level_id' => $request->user['positionLevel'],
-            'division_id' => $request->user['division'],
-        ]);
-        // // Generate a new reset password token
-        // $token = app('auth.password.broker')->createToken($user);
-        // $user->notify(new SetupPassword($token));
-        Password::broker()->sendResetLink(['email' => $user->email]);
-
-        $userWithRelations = User::with('division')->find($user->id);
-
-        return $userWithRelations;
     }
 
     public function changeAvatar(Request $request)

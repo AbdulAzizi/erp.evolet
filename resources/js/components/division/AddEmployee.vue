@@ -2,7 +2,8 @@
   <div>
     <v-card>
       <v-toolbar dense flat dark color="primary">
-        <v-toolbar-title>Добавить сотрудника</v-toolbar-title>
+        <v-toolbar-title v-if="addHeadEmployee">Добавить руководителя</v-toolbar-title>
+        <v-toolbar-title v-else>Добавить сотрудника</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <v-form class="mt-5" ref="addEmployeeForm">
@@ -26,10 +27,12 @@
           ></form-field>
           <form-field
             :field="{
-         type: 'string',
+          type: 'email',
           name: 'email',
           label: 'Email',
-          rules: ['required']
+          rules: ['required'],
+          error: emailError,
+          errorMsg: errorMessage
           }"
             v-model="email"
           ></form-field>
@@ -42,6 +45,7 @@
           rules: ['required']
           }"
             v-model="positionLevel"
+            v-if="!addHeadEmployee"
           ></form-field>
           <form-field
             :field="{
@@ -49,8 +53,7 @@
           name: 'positionId',
           label: 'Должность',
           items: positionItems,
-          multiple: true,
-          rules: ['required']
+          multiple: true
           }"
             v-model="positions"
           ></form-field>
@@ -67,12 +70,21 @@
 
 <script>
 export default {
-  props: ["division"],
+  props: {
+    division: {
+      required: true
+    },
+    addHeadEmployee: {
+      required: false
+    }
+  },
   data() {
     return {
       name: null,
       surname: null,
       email: null,
+      errorMessage: null,
+      emailError: false,
       positionLevel: null,
       positions: [],
       positionItems: this.loadDivisionPositions(this.division.id),
@@ -90,13 +102,23 @@ export default {
             email: this.email,
             positionId: this.positionLevel,
             positions: this.positions,
-            divisionId: this.division.id
+            divisionId: this.division.id,
+            headEmployee: this.addHeadEmployee
           })
           .then(res => {
-            Event.fire("userAdded", res.data);
-            form.reset();
+            if (res.data.emailError) {
+              this.emailError = true,
+              this.errorMessage = res.data.emailError;
+            } else {
+              Event.fire("userAdded", {
+                divisionId: this.division.id,
+                user: res.data,
+                headEmployee: this.addHeadEmployee
+              });
+              form.reset();
+            }
           })
-          .catch(err => err.messages);
+          .catch(err => err.message);
       }
     },
     resetForm() {
@@ -107,16 +129,20 @@ export default {
   },
   created() {
     Event.listen("newPosition", data => {
-      this.positionItems = this.loadDivisionPositions(
-        this.division.id
-      );
+      this.positionItems = this.loadDivisionPositions(this.division.id);
     });
 
     Event.listen("deletePosition", data => {
-      this.positionItems = this.loadDivisionPositions(
-        this.division.id
-      );
+      this.positionItems = this.loadDivisionPositions(this.division.id);
     });
+  },
+  watch: {
+    email(newVal, oldVal){
+      if(newVal !== oldVal){
+        this.errorMessage = null;
+        this.emailError = false;
+      }
+    }
   }
 };
 </script>

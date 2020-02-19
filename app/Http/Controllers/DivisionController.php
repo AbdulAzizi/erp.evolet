@@ -24,9 +24,10 @@ class DivisionController extends Controller
     public function show()
     {
         $userDivisionId = auth()->user()->division_id;
+
         $division = Division::with('head', 'users', 'positions.responsibilities.descriptions')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
         
-        $divisions = Division::with('positions.responsibilities.descriptions')->get();
+        $divisions = Division::with('positions.responsibilities.descriptions')->withDepth()->get();
 
         $positionLevels = PositionLevel::where('name', '!=', 'Руководитель')->get();
 
@@ -57,20 +58,25 @@ class DivisionController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'parentDivisionId' => 'required',
+
+        $division = Division::create([
+            'name' => $request->name,
+            'abbreviation' => $request->abbreviation,
+            'parent_id' => $request->parent_id
         ]);
+        
+        $divisionWithRelations = Division::with('users', 'head', 'children')->withDepth()->find($division->id);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+        return $divisionWithRelations;
+    }
 
-        $parentDivision = Division::find($request->input('parentDivisionId'));
+    public function delete(Request $request)
+    {
+        $division = Division::find($request->id);
 
-        Division::create($request->only(['name', 'abbreviation']), $parentDivision);
+        $division->children()->delete();
 
-        return redirect()->back();
+        $division->delete();
     }
 
     public function loadDivisions()

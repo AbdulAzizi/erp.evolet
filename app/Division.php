@@ -12,7 +12,7 @@ class Division extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'abbreviation', 'head_id'];
+    protected $fillable = ['name', 'abbreviation', 'head_id', 'parent_id'];
 
     public function head()
     {

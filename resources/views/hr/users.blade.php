@@ -4,7 +4,7 @@
     {{-- <views-users-index :users="{{ $users }}" :add-user="true" :user-link="true"></views-users-index> --}}
     <views-hr-users :division="{{$division}}"></views-hr-users>
     <dynamic-form title="Добавить в структуру" dialog activator-event-name="addDivision" action-url="/divisions" method="POST"
-    :errors="{{$errors}}" :old-inputs="{{$oldInputs}}" :fields="[
+    :fields="[
         {
             type: 'string',
             name: 'name',

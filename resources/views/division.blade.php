@@ -8,25 +8,7 @@
     :is-user-head="{{$isUserHead}}" 
     :is-root="true"
     :jsonPositions="{{$jsonPositions}}"
-    :ildInputs="{{$oldInputs}}"
-    :errors="{{ $errors }}">
+    >
     </views-division>
-
-
-
-<dynamic-form title="Добавить в структуру" dialog activator-event-name="addDivision" action-url="/divisions" method="POST"
-    :errors="{{$errors}}" :old-inputs="{{$oldInputs}}" :fields="[
-        {
-            type: 'string',
-            name: 'name',
-            label: 'Название',
-            rules: ['required']
-        },
-        {
-            type: 'string',
-            name: 'abbreviation',
-            label: 'Аббревиатура',
-        }
-    ]"></dynamic-form>
 
 @endsection

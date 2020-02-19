@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-col :md="addUser ? 9 : 12" sm="12">
+            <v-col cols="12" class="pa-1">
                 <v-text-field
                     hide-details
                     label="Search"
@@ -10,15 +10,6 @@
                     v-model="search"
                     dense
                 ></v-text-field>
-            </v-col>
-            <v-col md="3" sm="12" v-if="addUser">
-                <v-btn
-                    height="38"
-                    outlined
-                    color="primary"
-                    block
-                    @click="dialog = true"
-                >Добавить сотрудника</v-btn>
             </v-col>
         </v-row>
         <v-row justify="start">
@@ -35,9 +26,6 @@
                 <user-card-horizontal :user="user" :link="userLink"/>
             </v-col>
         </v-row>
-        <v-dialog v-model="dialog" width="600" persistent>
-            <add-user />
-        </v-dialog>
     </v-container>
 </template>
 
@@ -46,10 +34,6 @@ export default {
     props: {
         users: {
             required: true
-        },
-        addUser: {
-            required: false,
-            default: false
         },
         userLink: {
             required: false,
@@ -60,18 +44,9 @@ export default {
         return {
             search: "",
             filteredUsers: this.users,
-            dialog: false
         };
     },
-    watch: {
-        search(value) {
-            this.filteredUsers = this.users.filter(user => {
-                if (new RegExp(this.search, "gi").test(user.name)) return true;
-                if (new RegExp(this.search, "gi").test(user.surname))
-                    return true;
-            });
-        }
-    },
+
     created() {
         // Event listeners
 
@@ -84,6 +59,16 @@ export default {
         });
 
         Event.listen("cancelUserAdding", dialog => (this.dialog = false));
-    }
+    },
+
+    watch: {
+        search(value) {
+            this.filteredUsers = this.users.filter(user => {
+                if (new RegExp(this.search, "gi").test(user.name)) return true;
+                if (new RegExp(this.search, "gi").test(user.surname))
+                    return true;
+            });
+        }
+    },
 };
 </script>

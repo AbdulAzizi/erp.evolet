@@ -237,6 +237,22 @@ const getImagePicker = field => {
     }
 };
 
+const getEmailField = field => {
+   return {
+        ...field,
+        component: "v-text-field",
+        props: {
+            name: field.name,
+            filled: true,
+            rounded: true,
+            rules: getRuleFunctions(field.rules),
+            error: field.error,
+            'error-messages': field.errorMsg,
+            label: field.label,
+        }
+    }
+};
+
 export default {
     props: {
         field: Object,
@@ -308,6 +324,9 @@ export default {
                     break;
                 case "image":
                     fieldData = getImagePicker(this.field);
+                    break;
+                case "email":
+                    fieldData = getEmailField(this.field);
                     break;
             }
 
