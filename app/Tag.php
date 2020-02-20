@@ -15,4 +15,9 @@ class Tag extends Model
         return $this->belongsToMany('App\Task');
     }
 
+    public function division()
+    {
+        return $this->belongsTo('App\Division');
+    }
+
 }

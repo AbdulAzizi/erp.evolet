@@ -5,6 +5,7 @@
                 <!-- <span class=" grey--text text--darken-2 align-self-center pl-4">Мои Отдел</span> -->
                 <v-tab :value="activeBtn.STRUCTURE">Структура</v-tab>
                 <v-tab :value="activeBtn.POSITION">Должности</v-tab>
+                <v-tab :value="activeBtn.TAG">Теги</v-tab>
                 <v-spacer></v-spacer>
             </v-tabs>
         </v-card>
@@ -24,6 +25,9 @@
                     :createable="auth.position_level.name == 'Руководитель'"
                     :editable="auth.position_level.name == 'Руководитель'"
                 />
+            </v-tab-item>
+            <v-tab-item>
+                <division-tags :division="localDivision"></division-tags>
             </v-tab-item>
         </v-tabs-items>
     </div>
@@ -67,6 +71,9 @@ export default {
         },
         isPosition() {
             return this.currentView === this.activeBtn.POSITION;
+        },
+        isTag() {
+            return this.currentView === this.activeBtn.TAG
         }
     },
 

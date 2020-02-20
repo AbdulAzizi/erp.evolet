@@ -349,6 +349,7 @@ Vue.component("file-add", require("./components/files/Add.vue").default);
 Vue.component("add-field", require("./components/files/AddField.vue").default);
 Vue.component("bp-forms", require('./components/BP/BPForms.vue').default);
 Vue.component("bp-form", require('./components/BP/BPForm.vue').default);
+Vue.component("division-tags", require("./components/division/Tags.vue").default);
 
 /****************************TASKS********************************/
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
