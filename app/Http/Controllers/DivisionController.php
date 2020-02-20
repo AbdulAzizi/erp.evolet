@@ -25,7 +25,7 @@ class DivisionController extends Controller
     {
         $userDivisionId = auth()->user()->division_id;
 
-        $division = Division::with('head', 'users', 'positions.responsibilities.descriptions')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
+        $division = Division::with('head', 'users', 'positions.responsibilities.descriptions', 'tags')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
         
         $divisions = Division::with('positions.responsibilities.descriptions')->withDepth()->get();
 

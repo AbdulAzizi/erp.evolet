@@ -43,4 +43,9 @@ class Division extends Model
     {
         return $this->hasMany('App\Position');
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
 }
