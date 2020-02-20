@@ -33,6 +33,14 @@ class UserController extends Controller
         return view('users.show', compact('user'));
     }
 
+    public function delete($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+
+        return redirect()->back();
+    }
+
     public function usersForHr()
     {
         $division = Division::with('users', 'head')->withDepth()->descendantsAndSelf(1)->toTree()->first();

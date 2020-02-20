@@ -80,7 +80,6 @@ Route::post('/field/delete/{id}', 'FormController@deleteField')->name('field.del
 Route::post('/mark/all/notifications/{id}', 'UserController@markAllNotificationsAsRead')->name('user.markAllNotificationsAsRead');
 Route::post('/create/position', 'PositionController@store')->name('position.store');
 Route::post('/add/single/position/{id}', 'PositionController@addPosition')->name('position.add');
-Route::post('/users', 'UserController@store')->name('users.store');
 Route::post('/edit/position/{id}', 'PositionController@edit')->name('position.edit');
 Route::delete('/delete/position/{id}', 'PositionController@delete')->name('position.delete');
 Route::delete('/delete/description/{id}', 'ResponsibilityController@delete')->name('responsibility.delete');
@@ -94,7 +93,10 @@ Route::get('/divisions', 'DivisionController@loadDivisions')->name('division.loa
 Route::post('/users/{id}/responsibilities', 'ResponsibilityController@attachUser')->name('responsibilities.attachUser');
 Route::post('/divisions/create', 'DivisionController@store')->name('division.store');
 Route::delete('/divisions/{id}', 'DivisionController@delete')->name('division.delete');
+
 Route::post('/users/edit/{id}', 'UserController@edit')->name('user.edit');
+Route::post('/users', 'UserController@store')->name('users.store');
+Route::delete('/users/{id}', 'UserController@delete')->name('users.delete');
 
 
 
