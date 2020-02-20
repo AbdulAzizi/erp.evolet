@@ -63,17 +63,22 @@
         </template>
 
         <v-menu offset-y left>
-            <template v-slot:activator="{ on }">
-                <v-avatar v-on="on" size="40" class="ml-2">
-                    <img v-if="user.img" :src="thumb(user.img)" alt="avatar" />
-                    <img
-                        v-else
-                        :src="thumb('green-solo-logo.png')"
-                        style="border-radius:0;"
-                        alt="avatar"
-                        class="pa-1 pt-2"
-                    />
-                </v-avatar>
+            <template v-slot:activator="{ on: menu }">
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on: tooltip }">
+                        <v-avatar v-on="{ ...menu, ...tooltip }" size="40" class="ml-2">
+                            <img v-if="user.img" :src="thumb(user.img)" alt="avatar" />
+                            <img
+                                v-else
+                                :src="thumb('green-solo-logo.png')"
+                                style="border-radius:0;"
+                                alt="avatar"
+                                class="pa-1 pt-2"
+                            />
+                        </v-avatar>
+                    </template>
+                    <span>Профиль</span>
+                </v-tooltip>
             </template>
             <div>
                 <v-container grid-list-md text-xs-center class="pa-3 white">
