@@ -193,7 +193,7 @@ Vue.mixin({
                 res.data.forEach(item => {
                     items.push({name: item.name, id: item.id}); // collect data and store in array
                 });
-            }).catch(err => err.messages);
+            }).catch(err => err.message);
 
             // return collected items for field
             return items;
@@ -205,7 +205,7 @@ Vue.mixin({
                 res.data.forEach(item => {
                     items.push({name: item.name, id: item.id});
                 });
-            }).catch(err => err.messages);
+            }).catch(err => err.message);
 
             return items;
         },
@@ -216,7 +216,7 @@ Vue.mixin({
                 res.data.forEach(item => {
                     items.push({name: item.name, id: item.id});
                 });
-            }).catch(err => err.messages);
+            }).catch(err => err.message);
 
             return items;
         },
@@ -228,9 +228,21 @@ Vue.mixin({
                 res.data.forEach(item => {
                     items.push({name: item.name, id: item.id});
                 });
-            }).catch(err => err.messages);
+            }).catch(err => err.message);
 
             return items;
+        },
+        loadDivisionTags(){
+            let items = [];
+            let divisionId = this.auth.division_id;
+
+            axios.get(`/api/divisions/${divisionId}/tags`).then(res => {
+                res.data.forEach(item => {
+                    items.push({name: item.name, id: item.id});
+                });
+            }).catch(err => err.message)
+
+        return items;
         }
     },
     computed: {
