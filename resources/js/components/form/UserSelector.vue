@@ -2,7 +2,7 @@
   <div>
     <v-autocomplete
       v-model="selectedUsers"
-      :items="preparedDivisions"
+      :items="users ? users : preparedDivisions"
       item-text="fullname"
       item-value="id"
       no-data-text="Данные отсутствуют"
@@ -82,6 +82,7 @@ export default {
   methods: {
     handleDivisionSelection(el) {
       // this.selectedUsers.pop();
+
       this.divisions.forEach(division => {
         if (division.id == el.id) {
           division.users.forEach(user => {
