@@ -1,5 +1,5 @@
 <template>
-    <v-card :href=" link ? appPath('users/' + user.id) : null" :hover="link">
+    <v-card :href=" link ? appPath('users/' + user.id) : null" :hover="link" class="flex-grow-1">
         <v-menu offset-y left v-if="editable">
             <template v-slot:activator="{ on }">
                 <v-btn @click.prevent v-on="on" icon style="position:absolute;right:0px;top:0px;">
@@ -22,13 +22,14 @@
             </v-list>
         </v-menu>
         <v-row class="pa-0 ma-0">
-            <v-img
-                max-width="85"
-                class="mr-2"
-                style="border-radius:4px 0 0 4px"
-                :src="photo(user.img)"
-            ></v-img>
-            <div cols="9" class="pa-0">
+            <v-col cols="3" class="pa-0">
+                <v-img
+                    class="mr-2"
+                    style="border-radius:4px 0 0 4px"
+                    :src="photo(user.img)"
+                ></v-img>
+            </v-col>
+            <v-col cols="9" class="pa-0">
                 <div class="primary--text">{{ user.name }} {{ user.surname }}</div>
                 <div style="font-size:12px">{{ user.position_level.name }}</div>
                 <div v-if="user.division" style="font-size:12px">{{user.division.name}}</div>
@@ -43,7 +44,7 @@
                         <span v-if="key != user.positions.length-1">&#183;</span>
                     </span>
                 </div>
-            </div>
+            </v-col>
         </v-row>
     </v-card>
 </template>
