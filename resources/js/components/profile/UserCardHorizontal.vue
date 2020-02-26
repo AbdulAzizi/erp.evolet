@@ -21,11 +21,11 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-        <v-row class="pa-0 ma-0">
+        <v-row class="pa-0 ma-0" style="height:100%;">
             <v-col cols="3" class="pa-0">
                 <v-img
                     class="mr-2"
-                    style="border-radius:4px 0 0 4px"
+                    style="border-radius:4px 0 0 4px; height:100%;"
                     :src="photo(user.img)"
                 ></v-img>
             </v-col>
