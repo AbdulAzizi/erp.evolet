@@ -173,7 +173,7 @@ class UserController extends Controller
     public function changeAvatar(Request $request)
     {
         $user = User::find($request->id);
-
+        
         if ($request->hasFile('avatar')) {
 
             $avatar = $request->file('avatar');
@@ -183,9 +183,9 @@ class UserController extends Controller
                 Storage::delete($filename);
             }
 
-            Image::make($avatar)->fit(250)->save(public_path("/img/" . $filename));
+            $orientateAvatar = Image::make($avatar)->fit(250)->orientate()->save(public_path("/img/" . $filename));
 
-            Image::make($avatar)->fit(80)->save(public_path("/img/thumbs/" . $filename));
+            $orientateThumb = Image::make($avatar)->fit(80)->orientate()->save(public_path("/img/thumbs/" . $filename))->orientate();
 
             $user->img = $filename;
             $user->save();
