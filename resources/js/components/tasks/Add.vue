@@ -24,20 +24,23 @@
                             >Форма заполнена не верно</h1>
                         </v-col>
                         <v-col cols="12" class="py-0">
-                            <user-selector
-                                icon="mdi-account-tie"
-                                dense
-                                label="Исполнители"
-                                rounded
-                                filled
-                                :multiple="true" 
-                                :divisions="divisions"
-                                name="assignees"
-                                hint="У каждого исполнителя будет своя отдельная задача"
+                            <form-field
+                                :field="{
+                                    type: 'users',
+                                    divisions: divisions,
+                                    name: 'assignees',
+                                    label: 'Исполнители',
+                                    icon: 'mdi-account-tie',
+                                    hint: 'У каждого исполнителя будет своя отдельная задача',
+                                    rules: ['required'],
+                                    multiple: true,
+                                    dense:true,
+                                    selectedUserEventName:'selectedAssignee'
+                                }"
                             />
                         </v-col>
                         <v-col cols="12" class="pb-0">
-                            <form-field
+                            <!-- <form-field
                                 :field="{
                                 type: 'string',
                                 name: 'title',
@@ -45,6 +48,18 @@
                                 icon: 'mdi-rename-box',
                                 rules: ['required'],
                             }"
+                            />-->
+                            <v-select
+                                v-model="selectedResponsibility"
+                                prepend-icon="mdi-rename-box"
+                                rounded
+                                filled
+                                label="Должностные задачи"
+                                :disabled="userResponsibilities.length == 0"
+                                :items="userResponsibilities"
+                                item-text="text"
+                                item-value="id"
+                                :rules="[required=>!!selectedResponsibility || 'Обязательное поле']"
                             />
                         </v-col>
                         <v-col cols="12" class="py-0">
@@ -439,7 +454,7 @@
 
 <script>
 export default {
-    props: ["divisions","users", "errors", "tags"],
+    props: ["divisions", "users", "errors", "tags"],
     data() {
         return {
             searchText: null,
@@ -520,7 +535,12 @@ export default {
             poll: null,
             pollDialog: false,
             startTime: false,
-            startTimeValue: null
+            startTimeValue: null,
+
+            selectedAssignee: [],
+
+            selectedResponsibility: null,
+            userResponsibilities: []
         };
     },
     created() {
@@ -528,6 +548,19 @@ export default {
         Event.listen("pollAdded", data => {
             this.poll = data;
             this.pollDialog = false;
+        });
+        Event.listen("selectedAssignee", userIDs => {
+            console.log("new user selected");
+            console.log(userIDs.length);
+
+            if (userIDs.length == 1) {
+                this.fetchResponsibilities(userIDs[0]);
+            } else {
+                this.userResponsibilities = [];
+            }
+
+            console.log("user responsibilities");
+            console.log(this.userResponsibilities);
         });
     },
     watch: {
@@ -569,6 +602,16 @@ export default {
         }
     },
     methods: {
+        fetchResponsibilities(userID) {
+            axios
+                .get(this.appPath(`api/users/${userID}/responsibilities`))
+                .then(resp => {
+                    console.log("axios data");
+                    console.log(resp.data);
+
+                    this.userResponsibilities = resp.data;
+                });
+        },
         toMilliseconds(days, hours, minutes) {
             return days * 86400000 + hours * 3600000 + minutes * 60000;
         },

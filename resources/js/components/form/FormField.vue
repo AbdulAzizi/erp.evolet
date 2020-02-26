@@ -45,9 +45,9 @@ const getRuleFunctions = rules => {
 
 const getBaseInput = field => {
     return {
-        ...field,
         component: "input",
         props: {
+            ...field,
             name: field.name,
             value: field.value,
             type: "hidden"
@@ -57,7 +57,6 @@ const getBaseInput = field => {
 
 const getBaseField = field => {
     const baseInput = getBaseInput(field);
-
     delete baseInput.props.value; //Remove value because there is model fieldVar, and I will assign value to that model
     delete baseInput.props.type; //Remove type because other fields shoudn't be hidden
 
@@ -94,7 +93,7 @@ const getBooleanField = field => {
 
     // //Default props for textarea
     baseField.component = "v-switch";
-    
+
     return baseField;
 };
 
@@ -110,7 +109,7 @@ const getTextField = field => {
 
 const getSelectField = field => {
     const baseField = getBaseField(field);
-    
+
     //Default props for select field
     baseField.component = "v-select";
     baseField.props = {
@@ -140,7 +139,7 @@ const getAutoCompleteField = field => {
         "no-data-text": "Данные отсутствуют",
         "hide-selected": true
     };
-    
+
     return baseSelectField;
 };
 
@@ -174,9 +173,18 @@ const getUsersField = field => {
 
     //Default props for userselector
     baseField.component = "user-selector";
-    baseField.props["icon"] = field.icon;
-    baseField.props["users"] = field.users;
-    baseField.props["multiple"] = field.multiple;
+
+    baseField.props = {
+        ...baseField.props,
+        multiple: field.multiple,
+        icon: field.icon
+    };
+    if (field.users) {
+        baseField.props["users"] = field.users;
+    }
+    if (field.divisions) {
+        baseField.props["divisions"] = field.divisions;
+    }
 
     return baseField;
 };
@@ -201,7 +209,6 @@ const getPicker = field => {
 
 const getYearField = field => {
     const baseField = getBaseField(field);
-
 
     let years = [];
     let currentYear = new Date().getFullYear();
@@ -232,13 +239,13 @@ const getImagePicker = field => {
             filled: true,
             rounded: true,
             label: field.label,
-            "prepend-icon": "mdi-camera",
+            "prepend-icon": "mdi-camera"
         }
-    }
+    };
 };
 
 const getEmailField = field => {
-   return {
+    return {
         ...field,
         component: "v-text-field",
         props: {
@@ -247,10 +254,10 @@ const getEmailField = field => {
             rounded: true,
             rules: getRuleFunctions(field.rules),
             error: field.error,
-            'error-messages': field.errorMsg,
-            label: field.label,
+            "error-messages": field.errorMsg,
+            label: field.label
         }
-    }
+    };
 };
 
 export default {
@@ -276,9 +283,9 @@ export default {
             this.fieldVar = this.oldInputs[this.formField.props.name]; //FIXME Fix old inputs for multiple fields
         }
     },
-    mounted() {
-        // console.log(this.field.value);
-    },
+    // mounted() {
+    //     console.log(this.formField);
+    // },
     computed: {
         formField() {
             let fieldData = null;
@@ -353,9 +360,9 @@ export default {
             this.fieldVar = v;
         },
         // change value when field prop is changed
-        field(val){
-            if(this.field.hasOwnProperty("value"))
-                this.fieldVar = this.field.value
+        field(val) {
+            if (this.field.hasOwnProperty("value"))
+                this.fieldVar = this.field.value;
         }
     },
     methods: {

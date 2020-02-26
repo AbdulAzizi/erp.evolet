@@ -112,4 +112,5 @@ Route::prefix('api')->group(function () {
     Route::put('/fields/edit/{id}', 'FieldController@edit')->name('fields.edit');
     Route::get('/fieldtypes', 'FieldController@getFieldTypes')->name('api.getFieldTypes');
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
+    Route::get('/users/{id}/responsibilities', 'UserController@responsibilities')->name('api.users.responsibilities');
 });
