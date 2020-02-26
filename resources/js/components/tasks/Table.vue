@@ -46,6 +46,9 @@
           <td>
             <avatar :user="item.from" />
           </td>
+          <td>
+            <avatar :user="item.responsible" />
+          </td>
           <td>{{ moment(item.created_at).fromNow() }}</td>
           <td>{{ item.status.name }}</td>
           <td>
@@ -80,6 +83,7 @@ export default {
         { text: "Время на задачу", value: "planned_time" },
         { text: "Дедлайн", value: "deadline" },
         { text: "От", value: "from", sort: false },
+        { text: "Исполнитель", value: "responsible", sort: false},
         { text: "CreatedAt", value: "created_at" },
         { text: "Статус", value: "status" },
         { text: "Теги", value: "tags", width: 100 }

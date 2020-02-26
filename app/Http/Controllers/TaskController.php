@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Division;
 use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
+use App\Filters\TaskFilters;
 use App\Notifications\AssignedAsWatcher;
 use App\Option;
 use App\Product;
@@ -15,24 +16,46 @@ use App\User;
 use App\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\URL as url;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request, TaskFilters $filters)
     {
+        $filteredUrl = url::full();
+        $currentUrl = url::current();
+
         $authUser = \Auth::user();
 
         $statuses = Status::all();
 
-        $tasks = Task::where('responsible_id', $authUser->id)
-            ->with(
+        
+        if ($filteredUrl == $currentUrl) {
+            
+            $tasks = Task::filter($filters)->with(
                 'from',
                 'responsible',
                 'watchers',
                 'status',
                 'tags'
-            )
-            ->get();
+                )->where('from_id', $authUser->id)
+                ->orWhere('responsible_id', $authUser->id)
+                ->orWhereHas('watchers', function($q) use ($authUser){
+                    $q->where('user_id', $authUser->id);
+                })
+                ->get();
+            } else {
+                $tasks = Task::filter($filters)->with(
+                    'from',
+                    'responsible',
+                    'watchers',
+                    'status',
+                    'tags'
+                    )
+                    ->get();
+                }
+                
+        
 
         // foreach ($tasks as $task) {
         //     // If task is from process
@@ -45,6 +68,7 @@ class TaskController extends Controller
         // All Users needed while choosing user assignee
         $users = User::with(['division'])->get();
         $divisions = Division::withDepth()->having('depth', '=', 3)->with('users')->whereHas('users')->get();
+
         // $notifications = $authUser->notifications;
 
         return view('tasks.index', compact(
@@ -100,14 +124,14 @@ class TaskController extends Controller
         }
         // Loop through Tasks
         foreach ($tasks as $task) {
-            
+
             // TODO On the clide side restrickt User to add himself as a watcher
             // TODO select auth user as task responsible by deafauld on the client side
-            
+
             // Attach Watchers to Task
             $task->watchers()->attach($watchers);
             $task->tags()->attach($existingTags);
-            
+
             //Log creation to tasks History
             event(new TaskCreatedEvent($task));
         }
@@ -146,7 +170,7 @@ class TaskController extends Controller
 
         $task->readed = 1;
         $task->save();
-        
+
         return view('tasks.show', compact('task'));
     }
 

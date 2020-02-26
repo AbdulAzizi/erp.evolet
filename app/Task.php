@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Filters\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
+    use Filterable;
+    
     protected $fillable = [
         'title',
         'description',
@@ -33,7 +36,7 @@ class Task extends Model
 
     public function watchers()
     {
-        return $this->belongsToMany('App\User', 'task_watchers');
+        return $this->belongsToMany('App\User', 'task_watchers')->withPivot('id');
     }
 
     public function status()
