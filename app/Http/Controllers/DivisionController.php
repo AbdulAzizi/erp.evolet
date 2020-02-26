@@ -85,4 +85,11 @@ class DivisionController extends Controller
 
         return $divisions;
     }
+
+    public function tags(Request $request)
+    {
+        $division = Division::with('tags')->find($request->id);
+
+        return $division->tags;
+    }
 }

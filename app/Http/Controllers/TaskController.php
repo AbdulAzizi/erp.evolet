@@ -42,8 +42,6 @@ class TaskController extends Controller
         //         // return $task;
         //     }
         // }
-
-        $tags = Tag::all();
         // All Users needed while choosing user assignee
         $users = User::with(['division'])->get();
         $divisions = Division::withDepth()->having('depth', '=', 3)->with('users')->whereHas('users')->get();
@@ -52,7 +50,6 @@ class TaskController extends Controller
         return view('tasks.index', compact(
             'tasks',
             'users',
-            'tags',
             'statuses',
             'authUser',
             'divisions'
@@ -71,7 +68,6 @@ class TaskController extends Controller
         // Decode things that must be decoded
         $assignees = json_decode($request->assignees);
         $watchers = json_decode($request->watchers);
-        $newTags = json_decode($request->newTags);
         $existingTags = json_decode($request->existingTags);
         $poll = json_decode($request->poll);
 
@@ -95,26 +91,23 @@ class TaskController extends Controller
                 'from_type' => User::class,
             ]);
         }
-        // Loop through newTags
-        foreach ($newTags as $newTag) {
-            // Create new tags and merge them to existing tags array
-            $existingTags[] = Tag::create(['name' => $newTag])->id;
-        }
         // Get all Watcher Users
         $watchers = User::alone()->find($watchers);
+
         // if there is a poll
         if ($poll) {
             $this->createPoll($poll, $tasks);
         }
         // Loop through Tasks
         foreach ($tasks as $task) {
-
+            
             // TODO On the clide side restrickt User to add himself as a watcher
             // TODO select auth user as task responsible by deafauld on the client side
-
+            
             // Attach Watchers to Task
             $task->watchers()->attach($watchers);
             $task->tags()->attach($existingTags);
+            
             //Log creation to tasks History
             event(new TaskCreatedEvent($task));
         }

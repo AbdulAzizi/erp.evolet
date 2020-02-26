@@ -65,23 +65,23 @@
                         <v-col cols="12" class="py-0">
                             <form-field
                                 :field="{
-                                type: 'text',
-                                name: 'description',
-                                label: 'Описание',
-                                icon: 'mdi-text-subject',
-                            }"
+                    type: 'text',
+                    name: 'description',
+                    label: 'Описание',
+                    icon: 'mdi-text-subject',
+                }"
                             />
                         </v-col>
 
                         <v-col cols="12" class="py-0">
                             <form-field
                                 :field="{
-                                type: 'date-time',
-                                name: 'deadline',
-                                label: 'Дедлайн',
-                                icon: 'mdi-calendar-clock',
-                                rules: ['required'],
-                            }"
+                    type: 'date-time',
+                    name: 'deadline',
+                    label: 'Дедлайн',
+                    icon: 'mdi-calendar-clock',
+                    rules: ['required'],
+                }"
                             />
                         </v-col>
                         <v-col cols="12" class="py-0">
@@ -97,11 +97,11 @@
                                     <v-col cols="12" md="4" class="py-0">
                                         <form-field
                                             :field="{
-                                            type: 'number',
-                                            label: 'Дни',
-                                            icon: 'mdi-timelapse',
-                                            rules: [rules.taskTimeRule]
-                                        }"
+                            type: 'number',
+                            label: 'Дни',
+                            icon: 'mdi-timelapse',
+                            rules: [rules.taskTimeRule]
+                        }"
                                             v-model="estimateDays"
                                             ref="estimateDays"
                                         />
@@ -109,10 +109,10 @@
                                     <v-col cols="12" md="4" class="py-0">
                                         <form-field
                                             :field="{
-                                            type: 'number',
-                                            label: 'Часы',
-                                            rules: [rules.taskTimeRule]
-                                        }"
+                            type: 'number',
+                            label: 'Часы',
+                            rules: [rules.taskTimeRule]
+                        }"
                                             v-model="estimateHours"
                                             ref="estimateHours"
                                         />
@@ -120,10 +120,10 @@
                                     <v-col cols="12" md="4" class="py-0">
                                         <form-field
                                             :field="{
-                                            type: 'number',
-                                            label: 'Минуты',
-                                            rules: [rules.taskTimeRule]
-                                        }"
+                            type: 'number',
+                            label: 'Минуты',
+                            rules: [rules.taskTimeRule]
+                        }"
                                             v-model="estimateMinutes"
                                             ref="estimateMinutes"
                                         />
@@ -163,11 +163,11 @@
                                     <v-card-text>
                                         <form-field
                                             :field="{
-                                        type: 'select',
-                                        items: priorities,
-                                        label: 'Приоритет',
-                                        props: {'item-text': 'label'}
-                                    }"
+                            type: 'select',
+                            items: priorities,
+                            label: 'Приоритет',
+                            props: {'item-text': 'label'}
+                        }"
                                             v-model="selectedPriority"
                                         >
                                             <template v-slot:item="{ item, index }">
@@ -186,63 +186,6 @@
                                                 <span>{{ item.label }}</span>
                                             </template>
                                         </form-field>
-                                    </v-card-text>
-                                </v-card>
-                            </v-dialog>
-
-                            <v-dialog v-model="tagsDialog" width="500">
-                                <template v-slot:activator="{ on:dialog }">
-                                    <v-tooltip top>
-                                        <template v-slot:activator="{ on:tooltip }">
-                                            <v-btn
-                                                v-on="{ ...tooltip, ...dialog }"
-                                                text
-                                                rounded
-                                                min-width="0"
-                                                style="min-width:0"
-                                                class="ma-0 grey--text px-2 text--darken-1"
-                                            >
-                                                <v-icon
-                                                    :color="selectedTags.length ? 'primary' : '' "
-                                                >mdi-tag</v-icon>
-                                                <span>
-                                                    <span
-                                                        v-for="(selectedTag, key) in selectedTags"
-                                                        :key="'selectedTag-'+key"
-                                                    >
-                                                        <span class="primary--text title">#</span>
-                                                        {{ selectedTag.name }}
-                                                    </span>
-                                                </span>
-                                            </v-btn>
-
-                                            <input
-                                                type="hidden"
-                                                name="newTags"
-                                                :value="JSON.stringify(newTags)"
-                                            />
-                                            <input
-                                                type="hidden"
-                                                name="existingTags"
-                                                :value="JSON.stringify(existingTags)"
-                                            />
-                                        </template>
-                                        <span>Теги</span>
-                                    </v-tooltip>
-                                </template>
-                                <v-card>
-                                    <v-card-text>
-                                        <form-field
-                                            :field="{
-                        type: 'combobox',
-                        name: 'tags',
-                        label: 'Теги',
-                        items: tags,
-                        icon: 'mdi-tag',
-                        multiple: true
-                    }"
-                                            v-model="selectedTags"
-                                        />
                                     </v-card-text>
                                 </v-card>
                             </v-dialog>
@@ -306,6 +249,63 @@
                                     </v-tooltip>
                                 </template>
                                 <poll-create returnEventName="pollAdded" />
+                            </v-dialog>
+                            <v-dialog v-model="tagsDialog" width="500">
+                                <template v-slot:activator="{ on:dialog }">
+                                    <v-tooltip top>
+                                        <template v-slot:activator="{ on:tooltip }">
+                                            <v-btn
+                                                v-on="{ ...tooltip, ...dialog }"
+                                                text
+                                                rounded
+                                                min-width="0"
+                                                style="min-width:0"
+                                                class="ma-0 grey--text px-2 text--darken-1"
+                                                x-small
+                                            >
+                                                <v-icon
+                                                    :color="selectedTags.length ? 'primary' : '' "
+                                                >mdi-tag</v-icon>
+                                                <span>
+                                                    <span
+                                                        v-for="(selectedTag, key) in selectedTags"
+                                                        :key="'selectedTag-'+key"
+                                                    >
+                                                        <span class="primary--text title">#</span>
+                                                        {{ selectedTag.name }}
+                                                    </span>
+                                                </span>
+                                            </v-btn>
+
+                                            <input
+                                                type="hidden"
+                                                name="existingTags"
+                                                :value="JSON.stringify(existingTags)"
+                                            />
+                                        </template>
+                                        <span>Теги</span>
+                                    </v-tooltip>
+                                </template>
+                                <v-card>
+                                    <v-card-text class="pt-5">
+                                        <form-field
+                                            :field="{
+                        type: 'autocomplete',
+                        name: 'tags',
+                        label: 'Теги',
+                        items: tags,
+                        icon: 'mdi-tag',
+                        multiple: true,
+                        returnObject: true
+                    }"
+                                            v-model="selectedTags"
+                                        />
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer />
+                                        <v-btn color="primary" @click="tagsDialog = false">добавить</v-btn>
+                                    </v-card-actions>
+                                </v-card>
                             </v-dialog>
 
                             <input type="hidden" name="poll" :value="JSON.stringify(poll)" />
@@ -371,13 +371,13 @@
                             name: 'time',
                             label: 'Выберите время',
                             props: {
-                                textField: {
-                                    'readonly': true,
-                                    'single-line': true,
-                                    solo: true,
-                                    'single-line': true,
-                                    'prepend-inner-icon': 'mdi-clock-outline'
-                                }
+                            textField: {
+                                'readonly': true,
+                                'single-line': true,
+                                solo: true,
+                                'single-line': true,
+                                'prepend-inner-icon': 'mdi-clock-outline'
+                            }
                             }
                         }"
                                                 />
@@ -454,7 +454,7 @@
 
 <script>
 export default {
-    props: ["divisions", "users", "errors", "tags"],
+    props: ["divisions", "users", "errors"],
     data() {
         return {
             searchText: null,
@@ -618,7 +618,6 @@ export default {
         submit(e) {
             this.formHasErrors = false;
             this.formHasErrors = !this.$refs.form.validate();
-            console.log(this.$refs);
 
             if (!this.formHasErrors) return;
 
@@ -633,17 +632,14 @@ export default {
                 minutes: this.estimateMinutes
             };
         },
-        newTags() {
-            const filteredNewTags = this.selectedTags.filter(
-                tag => tag.id === -1
-            );
-            return this.pluck(filteredNewTags, "name");
-        },
         existingTags() {
             const filteredExistingTags = this.selectedTags.filter(
                 tag => tag.id !== -1
             );
             return this.pluck(filteredExistingTags, "id");
+        },
+        tags() {
+            return this.loadDivisionTags();
         }
     }
 };

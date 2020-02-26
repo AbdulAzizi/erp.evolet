@@ -137,7 +137,9 @@ const getAutoCompleteField = field => {
         hint: field.hint,
         "persistent-hint": true,
         "no-data-text": "Данные отсутствуют",
-        "hide-selected": true
+        "hide-selected": true,
+        "return-object": field.returnObject ? true : false,
+        
     };
 
     return baseSelectField;

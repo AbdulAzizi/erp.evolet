@@ -35,9 +35,10 @@ export default {
         remove(item) {
             if (Array.isArray(this.selectedItems)) {
                 this.selectedItems = this.selectedItems.filter(
-                    selected => selected !== item.id
+                    selected => typeof(selected) == 'object' ? selected.id !== item.id : selected !== item.id
                 );
-            } else {
+            }
+            else {
                 this.selectedItems = null;
             }
         }
