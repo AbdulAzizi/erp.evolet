@@ -193,4 +193,10 @@ class UserController extends Controller
 
         return redirect()->back();
     }
+
+    public function responsibilities($id)
+    {
+        $responsibilities = User::find($id)->responsibilities;
+        return $responsibilities;
+    }
 }

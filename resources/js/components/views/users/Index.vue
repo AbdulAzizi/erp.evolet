@@ -19,9 +19,9 @@
                 cols="12"
                 sm="6"
                 md="4"
-                lg="4"
-                xl="2"
-                class="pa-1"
+                lg="3"
+                xl="3"
+                class="pa-1 d-flex align-content-stretch"
             >
                 <user-card-horizontal :user="user" :link="userLink"/>
             </v-col>
