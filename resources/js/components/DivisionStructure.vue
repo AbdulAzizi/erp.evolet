@@ -13,6 +13,19 @@
       :cautionMsg="`Невозможно удалить. ${localDivision.abbreviation} имеет сотрудников!`"
       @close="deleteDivision = false"
     />
+    <edit-record
+      :route="`/api/divisions/${localDivision.id}/edit`"
+      :visible="editDivision"
+      title="Изменить название"
+      :fields="[{
+        name: 'name',
+        type: 'string',
+        label: 'Название',
+        rules: ['required'],
+        value: localDivision.name
+        }]"
+      @close="editDivision = false" 
+    />
     <v-expansion-panel v-if="isDivision">
       <v-expansion-panel-header class="px-4 py-0">
         {{ localDivision.name }} • {{usersCount}} сотрудников
@@ -38,6 +51,9 @@
               </v-list-item>
               <v-list-item @click="deleteDivision = !deleteDivision">
                 <v-list-item-title>Удалить</v-list-item-title>
+              </v-list-item>
+              <v-list-item  @click="editDivision = !editDivision">
+                <v-list-item-title>Изменить</v-list-item-title>
               </v-list-item>
             </v-card>
           </v-menu>
@@ -126,6 +142,7 @@ export default {
       addEmployeeDialog: false,
       addDivisionDialog: false,
       deleteDivision: false,
+      editDivision: false,
       addHeadEmployee: false
     };
   },

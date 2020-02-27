@@ -294,6 +294,7 @@ Vue.component("process-task-edit", require("./components/processTask/Edit.vue").
 Vue.component("process-task-add-form", require("./components/processTask/AddForm.vue").default);
 Vue.component("edit-add-actions", require("./components/division/EditAddActions.vue").default);
 Vue.component("add-employee", require("./components/division/AddEmployee.vue").default);
+Vue.component("edit-record", require("./components/EditRecord.vue").default);
 
 /****************************RESPONSIBILITIES********************************/
 Vue.component("attach-responsibilities-btn", require("./components/responsibility/AttachResponsibilityBtn.vue").default);
