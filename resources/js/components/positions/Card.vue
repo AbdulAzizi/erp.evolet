@@ -176,7 +176,7 @@ export default {
             responsibilityForEdit: null,
             addResponsibilityDescriptionDialog: false,
             editResponsibilityDescriptionDialog: false,
-            deleteResponsibilityDescriptionDialog: false,
+            deleteResponsibilityDescriptionDialog: false
         };
     },
     methods: {
@@ -201,6 +201,10 @@ export default {
             this.editResponsibilityDialog = true;
             Event.fire("responsibility", responsibility);
         },
+        deleteResponsibility(responsibilityId) {
+            this.deleteResponsibilityDialog = true;
+            Event.fire("deleteResponsibility", responsibilityId);
+        },
         addResponsibilityDescription(responsibilityId) {
             this.addResponsibilityDescriptionDialog = true;
             Event.fire("addResponsibilityDescription", responsibilityId);
@@ -212,7 +216,7 @@ export default {
         deleteResponsibilityDescription(descriptionId) {
             this.deleteResponsibilityDescriptionDialog = true;
             Event.fire("deleteResponsibilityDescription", descriptionId);
-        },
+        }
     },
     created() {
         Event.listen("editPosition", positionId => {
@@ -289,7 +293,7 @@ export default {
             description => (this.editResponsibilityDescriptionDialog = false)
         );
 
-        Event.listen("responsibilityDescriptionDeleted.1", descriptionId => {
+        Event.listen("responsibilityDescriptionDeleted", descriptionId => {
             this.localPosition.responsibilities.forEach(responsibility => {
                 responsibility.descriptions.forEach((description, index) => {
                     if (description.id == descriptionId) {
