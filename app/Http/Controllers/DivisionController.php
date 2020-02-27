@@ -101,5 +101,7 @@ class DivisionController extends Controller
                $data['name'] => $data['value'] 
             ]);
         }
+
+        return $division;
     }
 }
