@@ -6,56 +6,27 @@ use App\Division;
 use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
 use App\Filters\TaskFilters;
-use App\Notifications\AssignedAsWatcher;
 use App\Option;
-use App\Product;
 use App\Question;
-use App\Tag;
+use App\Status;
 use App\Task;
 use App\User;
-use App\Status;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\URL as url;
 
 class TaskController extends Controller
 {
     public function index(Request $request, TaskFilters $filters)
     {
-        $filteredUrl = url::full();
-        $currentUrl = url::current();
-
         $authUser = \Auth::user();
-
         $statuses = Status::all();
-
         
-        if ($filteredUrl == $currentUrl) {
-            
-            $tasks = Task::filter($filters)->with(
-                'from',
-                'responsible',
-                'watchers',
-                'status',
-                'tags'
-                )->where('from_id', $authUser->id)
-                ->orWhere('responsible_id', $authUser->id)
-                ->orWhereHas('watchers', function($q) use ($authUser){
-                    $q->where('user_id', $authUser->id);
-                })
-                ->get();
-            } else {
-                $tasks = Task::filter($filters)->with(
-                    'from',
-                    'responsible',
-                    'watchers',
-                    'status',
-                    'tags'
-                    )
-                    ->get();
-                }
-                
-        
+        $tasks = Task::filter($filters)->with(
+            'from',
+            'responsible',
+            'watchers',
+            'status',
+            'tags'
+        )->get();
 
         // foreach ($tasks as $task) {
         //     // If task is from process
@@ -157,16 +128,16 @@ class TaskController extends Controller
         )->find($id);
         // return $task;
 
-        if ($task->from_type == "App\Process")
+        if ($task->from_type == "App\Process") {
             $task->load('products.messages');
-        else
+        } else {
             $task->load('messages');
+        }
 
         // if has front tether load it
         if ($task->from_type == "App\Process") {
             $task->from->load('frontTethers.forms.fields');
         }
-
 
         $task->readed = 1;
         $task->save();
@@ -266,7 +237,7 @@ class TaskController extends Controller
             'from',
             'responsible',
             'watchers',
-            'status'
+            'status',
         ]);
 
         return $task;
@@ -276,7 +247,7 @@ class TaskController extends Controller
     {
         $status = Status::create([
             'name' => $request->name,
-            'user_id' => $request->auth_user_id
+            'user_id' => $request->auth_user_id,
         ]);
 
         return $status;
@@ -320,10 +291,11 @@ class TaskController extends Controller
         )->find($id);
 
         // if has front tether load it
-        if ($task->from_type == "App\Process")
+        if ($task->from_type == "App\Process") {
             $task->load('products.messages');
-        else
+        } else {
             $task->load('messages');
+        }
 
         // if has front tether load it
         if ($task->from_type == "App\Process") {
@@ -338,7 +310,7 @@ class TaskController extends Controller
 
         $timeset = \App\Timeset::create([
             'task_id' => $request->task_id,
-            'start_time' => date(now())
+            'start_time' => date(now()),
         ]);
 
         $task = Task::with('status', 'timeSets')->find($request->task_id);
@@ -355,7 +327,7 @@ class TaskController extends Controller
         $timeset = \App\Timeset::find($id);
 
         $timeset->update([
-            'end_time' => date(now())
+            'end_time' => date(now()),
         ]);
 
         $task = Task::with('status', 'timeSets')->find($request->task_id);
@@ -378,7 +350,7 @@ class TaskController extends Controller
             $task->save();
         } else {
             $timeset->update([
-                'end_time' => date(now())
+                'end_time' => date(now()),
             ]);
 
             $task->status_id = 3;

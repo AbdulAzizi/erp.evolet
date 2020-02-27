@@ -15,7 +15,7 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/', function () {
-        return redirect('/tasks');
+        return redirect('/tasks?all=true');
     });
 
     Route::get('/company/structure', 'HomeController@company')->name('company');
