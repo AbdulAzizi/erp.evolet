@@ -1,17 +1,23 @@
 <template>
-    <div>
+    <div class="positionsPage">
+
+
         <v-row class="ma-0" justify="end" align="start">
-            <add-position
+            <!-- <add-position
                 v-if="createable && localDivisions.length == 1  "
                 :divisionId="divisions[0].id"
-            />
+            />-->
             <attach-responsibilities-btn
                 :positions="localUser.division.positions"
                 :user="localUser"
                 v-if="localUser && editable"
             />
         </v-row>
-        <v-row v-if="(divisions.length == 1 && divisions[0].positions.length == 0) || (localUser && localUser.positions.length == 0)">
+
+
+        <v-row
+            v-if="(divisions.length == 1 && divisions[0].positions.length == 0) || (localUser && localUser.positions.length == 0)"
+        >
             <v-col>
                 <v-alert
                     dense
@@ -22,12 +28,43 @@
                 >Должности отсутствуют</v-alert>
             </v-col>
         </v-row>
+
+
         <v-row v-if="localUser && localUser.positions.length">
             <v-col cols="6" v-for="(position, index) in localUser.positions" :key="index">
                 <position-card :user="localUser" :position="position" :division="divisions" />
             </v-col>
         </v-row>
-        <template v-for="(division, index) in localDivisions">
+
+
+        <v-expansion-panels>
+            <v-expansion-panel
+                v-for="(division, index) in divisionsThatHasPositions"
+                :key="'panels-'+index"
+            >
+                <v-expansion-panel-header>{{ division.name }}</v-expansion-panel-header>
+                <v-expansion-panel-content class="grey lighten-2">
+                    <v-row class="pa-0 ma-0 pb-3">
+                        <v-col cols="12" class="pb-0">
+                            <add-position
+                                v-if="divisions !== undefined && editable"
+                                :divisionId="division.id"
+                            />
+                        </v-col>
+                        <v-col
+                            cols="6"
+                            v-for="(position, index ) in division.positions"
+                            :key="index"
+                            class="pb-0"
+                        >
+                            <position-card :position="position" :editable="editable" />
+                        </v-col>
+                    </v-row>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </v-expansion-panels>
+
+        <!-- <template v-for="(division, index) in localDivisions">
             <v-row
                 v-if="division.positions.length > 0 && localDivisions.length > 1"
                 :key="'name' + index"
@@ -37,7 +74,10 @@
                         <v-toolbar flat dense>
                             <v-toolbar-title>{{ division.name }}</v-toolbar-title>
                             <v-spacer></v-spacer>
-                            <add-position v-if="divisions !== undefined && editable" :divisionId="division.id" />
+                            <add-position
+                                v-if="divisions !== undefined && editable"
+                                :divisionId="division.id"
+                            />
                         </v-toolbar>
                     </v-card>
                 </v-col>
@@ -47,7 +87,7 @@
                     <position-card :position="position" :editable="editable" />
                 </v-col>
             </v-row>
-        </template>
+        </template> -->
     </div>
 </template>
 <script>
@@ -84,8 +124,6 @@ export default {
         }
     },
     created() {
-        console.log(this.localUser);
-        
         Event.listen("deletePosition", positionId => {
             this.localDivisions.forEach(division => {
                 division.positions.forEach((position, index) => {
@@ -106,6 +144,18 @@ export default {
         Event.listen("responsibilitiesAddedToUser", user => {
             this.localUser = user;
         });
+    },
+    computed: {
+        divisionsThatHasPositions() {
+            return this.localDivisions.filter(div => {
+                return div.positions && div.positions.length;
+            });
+        }
     }
 };
 </script>
+<style>
+.positionsPage .v-expansion-panel-content__wrap {
+    padding: 0px;
+}
+</style>

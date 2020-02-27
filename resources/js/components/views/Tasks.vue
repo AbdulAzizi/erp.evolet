@@ -94,7 +94,7 @@ export default {
       filterItems: [
         {
           name: "Все задачи",
-          url: `/tasks`
+          url: `/tasks?all=true`
         },
         {
           name: "Мои задачи",

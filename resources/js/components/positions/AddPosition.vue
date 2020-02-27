@@ -2,8 +2,8 @@
     <v-dialog eager width="600" v-model="dialog">
         <template v-slot:activator="{ on }">
             <v-btn
+                depressed
                 v-on="on"
-                outlined
                 color="primary"
             >Создать должность</v-btn>
         </template>
