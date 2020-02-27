@@ -304,7 +304,7 @@ export default {
             this.deleteResponsibilityDescriptionDialog = false;
         });
         Event.listen(
-            "cancelResponsibilityDescriptionDeleteing",
+            "cancelResponsibilityDescriptionDeleting",
             description => (this.deleteResponsibilityDescriptionDialog = false)
         );
     },
