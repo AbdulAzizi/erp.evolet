@@ -15,7 +15,7 @@
     />
     <edit-record
       :route="`/api/divisions/${localDivision.id}/edit`"
-      :visible="editDivision"
+      :visible="editDivisionDialog"
       title="Изменить название"
       :fields="[{
         name: 'name',
@@ -24,7 +24,8 @@
         rules: ['required'],
         value: localDivision.name
         }]"
-      @close="editDivision = false" 
+      @close="editDivisionDialog = false"
+      @edit="editDivision"
     />
     <v-expansion-panel v-if="isDivision">
       <v-expansion-panel-header class="px-4 py-0">
@@ -52,7 +53,7 @@
               <v-list-item @click="deleteDivision = !deleteDivision">
                 <v-list-item-title>Удалить</v-list-item-title>
               </v-list-item>
-              <v-list-item  @click="editDivision = !editDivision">
+              <v-list-item  @click="editDivisionDialog = !editDivisionDialog">
                 <v-list-item-title>Изменить</v-list-item-title>
               </v-list-item>
             </v-card>
@@ -142,7 +143,7 @@ export default {
       addEmployeeDialog: false,
       addDivisionDialog: false,
       deleteDivision: false,
-      editDivision: false,
+      editDivisionDialog: false,
       addHeadEmployee: false
     };
   },
@@ -163,6 +164,11 @@ export default {
     addHead(){
       this.addEmployeeDialog = true;
       this.addHeadEmployee = true;
+    },
+    editDivision(value){
+      this.editDivisionDialog = false;
+      Event.fire('notify', [`${this.localDivision.name} изменен на ${value.name}`]);
+      this.localDivision.name = value.name;
     }
   },
 

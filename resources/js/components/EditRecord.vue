@@ -5,17 +5,19 @@
         <v-toolbar-title>{{title ? title : 'Изменить запись'}}</v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pt-5 pb-0">
-        <form-field
-          v-for="(field, index) in fields"
-          :key="index"
-          :field="field"
-          v-model="field.value"
-        />
+        <v-form ref="form">
+          <form-field
+            v-for="(field, index) in fields"
+            :key="index"
+            :field="field"
+            v-model="field.value"
+          />
+        </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn text color="primary" @click.stop="dialog = false">отмена</v-btn>
-        <v-btn text color="primary" @click="editRecord()">Изменить</v-btn>
+        <v-btn color="primary" @click="editRecord()">Изменить</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -37,14 +39,24 @@ export default {
       required: false
     }
   },
+  data() {
+    return {
+      localDivision: null
+    };
+  },
   methods: {
     editRecord() {
-      axios
-        .post(this.route, {
+      const form = this.$refs.form;
+      if (form.validate()) {
+        axios
+          .post(this.route, {
             data: this.fields
-        })
-        .then(res => window.location.reload())
-        .catch(err => err.message);
+          })
+          .then(res => {
+            this.$emit("edit", res.data);
+          })
+          .catch(err => err.message);
+      }
     }
   },
   computed: {
