@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateResponsibilitiesTable extends Migration
+class AddOrderFieldToResponsibilitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateResponsibilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('responsibilities', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('text');
-            $table->unsignedInteger('position_id');
+        Schema::table('responsibilities', function (Blueprint $table) {
+            $table->integer('order')->unsigned()->nullable();
         });
     }
 
@@ -27,6 +25,8 @@ class CreateResponsibilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('responsibilities');
+        Schema::table('responsibilities', function (Blueprint $table) {
+            $table->dropColumn('age');
+        });
     }
 }
