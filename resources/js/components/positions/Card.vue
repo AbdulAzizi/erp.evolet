@@ -35,8 +35,8 @@
                     >
                         <template v-slot:activator>
                             <v-hover v-slot:default="{ hover }">
-                                <v-row style="width: 95%">
-                                    <v-col cols="8" class="ml-3">
+                                <v-row class="pa-0 ma-0">
+                                    <v-col cols="9">
                                         <div
                                             class="float-left mr-2 grey--text text--darken-3"
                                         >{{ index + 1 }}.</div>
@@ -44,12 +44,12 @@
                                             class="ml-5 grey--text text--darken-3"
                                         >{{ responsibility.text }}</div>
                                     </v-col>
-                                    <v-col cols="3" v-if="hover" class="pb-0">
+                                    <v-col cols="3"  class="py-2 px-0 text-right">
                                         <v-btn
                                             icon
                                             small
                                             @click.stop="deleteResponsibility(responsibility.id)"
-                                            v-if="editable"
+                                            v-if="hover && editable"
                                         >
                                             <v-icon small>mdi-delete</v-icon>
                                         </v-btn>
@@ -57,14 +57,14 @@
                                             icon
                                             small
                                             @click.stop="editResponsibility(responsibility)"
-                                            v-if="editable && !user"
+                                            v-if="hover && editable && !user"
                                         >
                                             <v-icon small>mdi-pencil</v-icon>
                                         </v-btn>
                                         <v-btn
                                             icon
                                             small
-                                            v-if="editable && !user"
+                                            v-if="hover && editable && !user"
                                             @click.stop="moveResponsibilityUp(responsibility)"
                                         >
                                             <v-icon small>mdi-arrow-up-bold</v-icon>
@@ -72,7 +72,7 @@
                                         <v-btn
                                             icon
                                             small
-                                            v-if="editable && !user"
+                                            v-if="hover && editable && !user"
                                             @click.stop="moveResponsibilityDown(responsibility)"
                                         >
                                             <v-icon small>mdi-arrow-down-bold</v-icon>
@@ -385,7 +385,7 @@ export default {
             this.deleteResponsibilityDescriptionDialog = false;
         });
         Event.listen(
-            "cancelResponsibilityDescriptionDeleting",
+            "cancelResponsibilityDescriptionDeleteing",
             description => (this.deleteResponsibilityDescriptionDialog = false)
         );
     },
