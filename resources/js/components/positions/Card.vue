@@ -44,7 +44,7 @@
                                             class="ml-5 grey--text text--darken-3"
                                         >{{ responsibility.text }}</div>
                                     </v-col>
-                                    <v-col cols="3"  class="py-2 px-0 text-right">
+                                    <v-col cols="3" class="py-2 px-0 text-right">
                                         <v-btn
                                             icon
                                             small
@@ -112,6 +112,22 @@
                                                 small
                                                 @click="editResponsibilityDescription(description)"
                                             >mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            icon
+                                            small
+                                            v-if="hover && editable && !user"
+                                            @click.stop="moveDescriptionUp(localPosition, description)"
+                                        >
+                                            <v-icon small>mdi-arrow-up-bold</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            icon
+                                            small
+                                            v-if="hover && editable && !user"
+                                            @click.stop="moveDescriptionDown(localPosition, responsibility, description)"
+                                        >
+                                            <v-icon small>mdi-arrow-down-bold</v-icon>
                                         </v-btn>
                                     </v-col>
                                 </v-row>
@@ -234,7 +250,6 @@ export default {
             Event.fire("deleteResponsibilityDescription", descriptionId);
         },
         moveResponsibilityUp(responsibility) {
-            
             if (responsibility.order > 1) {
                 axios
                     .get(
@@ -263,7 +278,6 @@ export default {
             if (
                 responsibility.order <
                 this.localPosition.responsibilities.length
-                
             ) {
                 axios
                     .get(
@@ -282,6 +296,79 @@ export default {
                                             index + 1
                                         );
                                     }
+                                }
+                            );
+                        }
+                    });
+            }
+        },
+        moveDescriptionUp(position, description) {
+            if (description.order > 1) {
+                axios
+                    .post(
+                        this.appPath(`api/responsibility_descriptions/moveup`),
+                        {
+                            position_id: position.id,
+                            description_id: description.id
+                        }
+                    )
+                    .then(resp => {
+                        if (resp.data == "success") {
+                            this.localPosition.responsibilities.forEach(
+                                (resp, respIndex) => {
+                                    resp.descriptions.forEach(
+                                        (desc, descIndex) => {
+                                            if (desc.id == description.id) {
+                                                this.swap(
+                                                    this.position
+                                                        .responsibilities[
+                                                        respIndex
+                                                    ].descriptions,
+                                                    descIndex - 1,
+                                                    descIndex
+                                                );
+                                            }
+                                        }
+                                    );
+                                }
+                            );
+                        }
+                    });
+            }
+        },
+        moveDescriptionDown(position, responsibility, description) {
+            if (
+                description.order <
+                responsibility.descriptions.length
+            ) {
+                axios
+                    .post(
+                        this.appPath(
+                            `api/responsibility_descriptions/movedown`
+                        ),
+                        {
+                            position_id: position.id,
+                            description_id: description.id
+                        }
+                    )
+                    .then(resp => {
+                        if (resp.data == "success") {
+                            this.localPosition.responsibilities.forEach(
+                                (resp, respIndex) => {
+                                    resp.descriptions.forEach(
+                                        (desc, descIndex) => {
+                                            if (desc.id == description.id) {
+                                                this.swap(
+                                                    this.position
+                                                        .responsibilities[
+                                                        respIndex
+                                                    ].descriptions,
+                                                    descIndex,
+                                                    descIndex + 1
+                                                );
+                                            }
+                                        }
+                                    );
                                 }
                             );
                         }

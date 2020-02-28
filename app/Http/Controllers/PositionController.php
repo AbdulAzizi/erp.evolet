@@ -11,10 +11,11 @@ class PositionController extends Controller
 {
     public function index()
     {
-        $divisions = Division::with(['positions.responsibilities' => function($query){
-            $query->orderBy('order')->with('descriptions');
+        $divisions = Division::with(['positions.responsibilities' => function ($query) {
+            $query->orderBy('order')->with(['descriptions' => function ($query) {
+                $query->orderBy('order');
+            }]);
         }])->get();
-
         return view('positions', compact('divisions'));
     }
 
