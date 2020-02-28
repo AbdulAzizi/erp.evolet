@@ -99,6 +99,7 @@ Route::delete('/tags/{id}', 'TagController@delete')->name('tag.delete');
 Route::get('/divisions/{id}/tags', 'DivisionController@tags')->name('division.tags');
 Route::post('/users', 'UserController@store')->name('users.store');
 Route::delete('/users/{id}', 'UserController@delete')->name('users.delete');
+Route::post('/divisions/{id}/edit', 'DivisionController@edit')->name('divisions.edit');
 
 
 

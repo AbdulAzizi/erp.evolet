@@ -92,4 +92,16 @@ class DivisionController extends Controller
 
         return $division->tags;
     }
+
+    public function edit(Request $request){
+        $division = Division::find($request->id);
+
+        foreach($request->data as $data){
+            $division->update([
+               $data['name'] => $data['value'] 
+            ]);
+        }
+
+        return $division;
+    }
 }
