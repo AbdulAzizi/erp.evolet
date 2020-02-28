@@ -17,6 +17,7 @@ class CreateResponsibilitiesTable extends Migration
             $table->bigIncrements('id');
             $table->text('text');
             $table->unsignedInteger('position_id');
+            $table->integer('order');
         });
     }
 

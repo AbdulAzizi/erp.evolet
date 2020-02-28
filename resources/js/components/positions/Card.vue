@@ -20,15 +20,15 @@
                     ></v-text-field>
                 </v-toolbar-title>
                 <v-spacer />
-                <edit-add-actions :position="position" v-if="editable" />
+                <edit-add-actions :position="localPosition" v-if="editable" />
             </v-toolbar>
             <v-card-text
                 class="pa-0"
-                v-if="position.responsibilities && position.responsibilities.length > 0"
+                v-if="localPosition.responsibilities && localPosition.responsibilities.length > 0"
             >
                 <v-list class="ml-2 mr-4" flat expand>
                     <v-list-group
-                        v-for="(responsibility, index) in position.responsibilities"
+                        v-for="(responsibility, index) in localPosition.responsibilities"
                         :key="index"
                         active-class
                         :ripple="false"
@@ -36,7 +36,7 @@
                         <template v-slot:activator>
                             <v-hover v-slot:default="{ hover }">
                                 <v-row style="width: 95%">
-                                    <v-col cols="9" class="ml-3">
+                                    <v-col cols="8" class="ml-3">
                                         <div
                                             class="float-left mr-2 grey--text text--darken-3"
                                         >{{ index + 1 }}.</div>
@@ -44,7 +44,7 @@
                                             class="ml-5 grey--text text--darken-3"
                                         >{{ responsibility.text }}</div>
                                     </v-col>
-                                    <v-col cols="2" v-if="hover" class="pb-0">
+                                    <v-col cols="3" v-if="hover" class="pb-0">
                                         <v-btn
                                             icon
                                             small
@@ -60,6 +60,22 @@
                                             v-if="editable && !user"
                                         >
                                             <v-icon small>mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            icon
+                                            small
+                                            v-if="editable && !user"
+                                            @click.stop="moveResponsibilityUp(responsibility)"
+                                        >
+                                            <v-icon small>mdi-arrow-up-bold</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            icon
+                                            small
+                                            v-if="editable && !user"
+                                            @click.stop="moveResponsibilityDown(responsibility)"
+                                        >
+                                            <v-icon small>mdi-arrow-down-bold</v-icon>
                                         </v-btn>
                                     </v-col>
                                 </v-row>
@@ -116,7 +132,7 @@
             </v-card-text>
             <div
                 class="pa-4"
-                v-if="position.responsibilities &&  position.responsibilities.length == 0"
+                v-if="localPosition.responsibilities &&  localPosition.responsibilities.length == 0"
             >Объязанностей нет</div>
             <v-divider></v-divider>
             <v-btn
@@ -216,6 +232,71 @@ export default {
         deleteResponsibilityDescription(descriptionId) {
             this.deleteResponsibilityDescriptionDialog = true;
             Event.fire("deleteResponsibilityDescription", descriptionId);
+        },
+        moveResponsibilityUp(responsibility) {
+            
+            if (responsibility.order > 1) {
+                axios
+                    .get(
+                        this.appPath(
+                            `api/responsibilities/${responsibility.id}/moveup`
+                        )
+                    )
+                    .then(resp => {
+                        if (resp.data == "success") {
+                            this.localPosition.responsibilities.forEach(
+                                (resp, index) => {
+                                    if (resp.id == responsibility.id) {
+                                        this.swap(
+                                            this.position.responsibilities,
+                                            index - 1,
+                                            index
+                                        );
+                                    }
+                                }
+                            );
+                        }
+                    });
+            }
+        },
+        moveResponsibilityDown(responsibility) {
+            if (
+                responsibility.order <
+                this.localPosition.responsibilities.length
+                
+            ) {
+                axios
+                    .get(
+                        this.appPath(
+                            `api/responsibilities/${responsibility.id}/movedown`
+                        )
+                    )
+                    .then(resp => {
+                        if (resp.data == "success") {
+                            this.localPosition.responsibilities.forEach(
+                                (resp, index) => {
+                                    if (resp.id == responsibility.id) {
+                                        this.swap(
+                                            this.position.responsibilities,
+                                            index,
+                                            index + 1
+                                        );
+                                    }
+                                }
+                            );
+                        }
+                    });
+            }
+        },
+        swap(arr, index1, index2) {
+            let temp = {};
+            Object.assign(temp, arr[index1]);
+            Object.assign(arr[index1], arr[index2]);
+
+            arr[index1].order = temp.order;
+            temp.order = arr[index2].order;
+
+            Object.assign(arr[index2], temp);
         }
     },
     created() {

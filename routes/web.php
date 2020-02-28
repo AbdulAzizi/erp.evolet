@@ -113,4 +113,6 @@ Route::prefix('api')->group(function () {
     Route::get('/fieldtypes', 'FieldController@getFieldTypes')->name('api.getFieldTypes');
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
     Route::get('/users/{id}/responsibilities', 'UserController@responsibilities')->name('api.users.responsibilities');
+    Route::get('/responsibilities/{id}/moveup', 'ResponsibilityController@moveup')->name('api.responsibilities.moveup');
+    Route::get('/responsibilities/{id}/movedown', 'ResponsibilityController@movedown')->name('api.responsibilities.movedown');
 });

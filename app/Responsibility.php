@@ -9,7 +9,7 @@ class Responsibility extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['position_id', 'text'];
+    protected $fillable = ['position_id', 'text', 'order'];
 
     public function position()
     {
