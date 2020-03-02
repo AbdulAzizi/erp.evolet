@@ -98,7 +98,7 @@
                         </v-flex>
                         <v-flex>
                             <v-list dense two-line class="pt-0">
-                                <a :href="'/users/' + user.id " class="black--text">
+                                <a :href="appPath('users/' + user.id + '/positions')" class="black--text">
                                     <h2
                                         class="title font-weight-regular text-sm-left"
                                         style="line-height: 25px;"
