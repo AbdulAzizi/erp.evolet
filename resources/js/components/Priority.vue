@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tooltip top v-if="icon">
+    <v-tooltip bottom v-if="icon">
       <template v-slot:activator="{ on:tooltip }">
         <v-icon
           v-on="{ ...tooltip }"
