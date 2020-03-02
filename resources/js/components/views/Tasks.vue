@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-row align="center" class="px-3 mb-3">
-      <v-col cols="2" class="pl-0">
         <v-select
           v-model="filter"
           :items="filterItems"
@@ -15,15 +14,16 @@
           hide-details
           single-line
           return-object
+          class="pr-2"
         ></v-select>
-      </v-col>
         <v-menu>
           <template v-slot:activator="{ on }">
             <v-btn
             v-on="on"
             depressed
             color="white"
-            class="mr-3"
+            class="mr-2"
+            height="38"
             >
             <v-icon :color="localPriorityColor">mdi-flag-variant</v-icon>
 
@@ -181,7 +181,7 @@ export default {
   },
   methods: {
     priorityFilter(url, color){
-      let filter = localStorage.filter ? JSON.parse(localStorage.filter).url : allTasksUrl;
+      let filter = localStorage.filter ? JSON.parse(localStorage.filter).url : this.allTasksUrl;
       window.location.href = filter + url;
       localStorage.priority = color;
       this.localPriorityColor = localStorage.priority;

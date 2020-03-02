@@ -15,9 +15,11 @@ class ResponsibilityController extends Controller
         $responsibility = Responsibility::create([
             'position_id' => $request->positionId,
             'text' => $request->text,
+            'order' => Position::find($request->positionId)->responsibilities()->count() + 1,
         ]);
 
-        $responsibilityWithDescriptions = Responsibility::with('descriptions')->find($responsibility->id);
+        $responsibility->descriptions = [];
+        $responsibilityWithDescriptions = $responsibility;
 
         return $responsibilityWithDescriptions;
     }
@@ -49,7 +51,7 @@ class ResponsibilityController extends Controller
 
         $respsToDetach = Position::find($request->position)->responsibilities->pluck('id');
         $user->responsibilities()->detach($respsToDetach);
-        
+
         $user->responsibilities()->syncWithoutDetaching($request->responsibilities);
 
         $user = User::with([
@@ -61,7 +63,39 @@ class ResponsibilityController extends Controller
                 });
             }]);
         }])->find($id);
-        
+
         return $user;
+    }
+
+    public function moveup($id)
+    {
+        $responsibility = Responsibility::find($id);
+        $responsibilityAbove = Responsibility::where('order', $responsibility->order - 1)
+                                             ->where('position_id', $responsibility->position_id)
+                                             ->first();
+
+        $responsibility->order = $responsibility->order - 1;
+        $responsibility->save();
+
+        $responsibilityAbove->order = $responsibilityAbove->order + 1;
+        $responsibilityAbove->save();
+
+        return 'success';
+    }
+
+    public function movedown($id)
+    {
+        $responsibility = Responsibility::find($id);
+        $bottomResponsibility = Responsibility::where('order', $responsibility->order + 1)
+                                             ->where('position_id', $responsibility->position_id)
+                                             ->first();
+
+        $responsibility->order = $responsibility->order + 1;
+        $responsibility->save();
+
+        $bottomResponsibility->order = $bottomResponsibility->order - 1;
+        $bottomResponsibility->save();
+
+        return 'success';
     }
 }

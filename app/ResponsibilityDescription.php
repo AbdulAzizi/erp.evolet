@@ -12,6 +12,6 @@ class ResponsibilityDescription extends Model
 
     public function responsibility()
     {
-        return $this->belongsToMany('App\Responsibility');
+        return $this->belongsTo('App\Responsibility');
     }
 }

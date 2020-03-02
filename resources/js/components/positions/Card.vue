@@ -20,23 +20,23 @@
                     ></v-text-field>
                 </v-toolbar-title>
                 <v-spacer />
-                <edit-add-actions :position="position" v-if="editable" />
+                <edit-add-actions :position="localPosition" v-if="editable" />
             </v-toolbar>
             <v-card-text
                 class="pa-0"
-                v-if="position.responsibilities && position.responsibilities.length > 0"
+                v-if="localPosition.responsibilities && localPosition.responsibilities.length > 0"
             >
                 <v-list class="ml-2 mr-4" flat expand>
                     <v-list-group
-                        v-for="(responsibility, index) in position.responsibilities"
+                        v-for="(responsibility, index) in localPosition.responsibilities"
                         :key="index"
                         active-class
                         :ripple="false"
                     >
                         <template v-slot:activator>
                             <v-hover v-slot:default="{ hover }">
-                                <v-row style="width: 95%">
-                                    <v-col cols="9" class="ml-3">
+                                <v-row class="pa-0 ma-0">
+                                    <v-col cols="9">
                                         <div
                                             class="float-left mr-2 grey--text text--darken-3"
                                         >{{ index + 1 }}.</div>
@@ -44,12 +44,12 @@
                                             class="ml-5 grey--text text--darken-3"
                                         >{{ responsibility.text }}</div>
                                     </v-col>
-                                    <v-col cols="2" v-if="hover" class="pb-0">
+                                    <v-col cols="3" class="py-2 px-0 text-right">
                                         <v-btn
                                             icon
                                             small
                                             @click.stop="deleteResponsibility(responsibility.id)"
-                                            v-if="editable"
+                                            v-if="hover && editable"
                                         >
                                             <v-icon small>mdi-delete</v-icon>
                                         </v-btn>
@@ -57,25 +57,40 @@
                                             icon
                                             small
                                             @click.stop="editResponsibility(responsibility)"
-                                            v-if="editable && !user"
+                                            v-if="hover && editable && !user"
                                         >
                                             <v-icon small>mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            icon
+                                            small
+                                            v-if="hover && editable && !user"
+                                            @click.stop="moveResponsibilityUp(responsibility)"
+                                        >
+                                            <v-icon small>mdi-arrow-up-bold</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            icon
+                                            small
+                                            v-if="hover && editable && !user"
+                                            @click.stop="moveResponsibilityDown(responsibility)"
+                                        >
+                                            <v-icon small>mdi-arrow-down-bold</v-icon>
                                         </v-btn>
                                     </v-col>
                                 </v-row>
                             </v-hover>
                         </template>
                         <v-row
-                            class="mx-5"
+                            class="ml-7 mr-1"
                             v-for="(description, subIndex) in responsibility.descriptions"
                             :key="subIndex"
                         >
                             <v-hover v-slot:default="{ hover }">
                                 <v-row
-                                    style="border-bottom: 1px solid #e0e0e0; width: 100%"
-                                    class="mx-2"
+                                    style="border-bottom: 1px solid #e0e0e0;" class="pa-0 ma-0"
                                 >
-                                    <v-col cols="10" class="pl-1">
+                                    <v-col cols="9">
                                         <div class="float-left">{{index + 1}}.{{subIndex + 1}}.</div>
                                         <div
                                             class="grey--text text--darken-4 ml-7"
@@ -84,7 +99,7 @@
                                             class="grey--text text--darken-2 pl-7"
                                         >{{ description.description }}</div>
                                     </v-col>
-                                    <v-col cols="2" v-if="hover" class="pb-0">
+                                    <v-col cols="3" v-if="hover" class="py-2 px-0 text-right">
                                         <v-btn icon small v-if="editable">
                                             <v-icon
                                                 small
@@ -96,6 +111,22 @@
                                                 small
                                                 @click="editResponsibilityDescription(description)"
                                             >mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            icon
+                                            small
+                                            v-if="hover && editable && !user"
+                                            @click.stop="moveDescriptionUp(localPosition, description)"
+                                        >
+                                            <v-icon small>mdi-arrow-up-bold</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            icon
+                                            small
+                                            v-if="hover && editable && !user"
+                                            @click.stop="moveDescriptionDown(localPosition, responsibility, description)"
+                                        >
+                                            <v-icon small>mdi-arrow-down-bold</v-icon>
                                         </v-btn>
                                     </v-col>
                                 </v-row>
@@ -116,7 +147,7 @@
             </v-card-text>
             <div
                 class="pa-4"
-                v-if="position.responsibilities &&  position.responsibilities.length == 0"
+                v-if="localPosition.responsibilities &&  localPosition.responsibilities.length == 0"
             >Объязанностей нет</div>
             <v-divider></v-divider>
             <v-btn
@@ -216,6 +247,142 @@ export default {
         deleteResponsibilityDescription(descriptionId) {
             this.deleteResponsibilityDescriptionDialog = true;
             Event.fire("deleteResponsibilityDescription", descriptionId);
+        },
+        moveResponsibilityUp(responsibility) {
+            if (responsibility.order > 1) {
+                axios
+                    .get(
+                        this.appPath(
+                            `api/responsibilities/${responsibility.id}/moveup`
+                        )
+                    )
+                    .then(resp => {
+                        if (resp.data == "success") {
+                            this.localPosition.responsibilities.forEach(
+                                (resp, index) => {
+                                    if (resp.id == responsibility.id) {
+                                        this.swap(
+                                            this.position.responsibilities,
+                                            index - 1,
+                                            index
+                                        );
+                                    }
+                                }
+                            );
+                        }
+                    });
+            }
+        },
+        moveResponsibilityDown(responsibility) {
+            if (
+                responsibility.order <
+                this.localPosition.responsibilities.length
+            ) {
+                axios
+                    .get(
+                        this.appPath(
+                            `api/responsibilities/${responsibility.id}/movedown`
+                        )
+                    )
+                    .then(resp => {
+                        if (resp.data == "success") {
+                            this.localPosition.responsibilities.forEach(
+                                (resp, index) => {
+                                    if (resp.id == responsibility.id) {
+                                        this.swap(
+                                            this.position.responsibilities,
+                                            index,
+                                            index + 1
+                                        );
+                                    }
+                                }
+                            );
+                        }
+                    });
+            }
+        },
+        moveDescriptionUp(position, description) {
+            if (description.order > 1) {
+                axios
+                    .post(
+                        this.appPath(`api/responsibility_descriptions/moveup`),
+                        {
+                            position_id: position.id,
+                            description_id: description.id
+                        }
+                    )
+                    .then(resp => {
+                        if (resp.data == "success") {
+                            this.localPosition.responsibilities.forEach(
+                                (resp, respIndex) => {
+                                    resp.descriptions.forEach(
+                                        (desc, descIndex) => {
+                                            if (desc.id == description.id) {
+                                                this.swap(
+                                                    this.position
+                                                        .responsibilities[
+                                                        respIndex
+                                                    ].descriptions,
+                                                    descIndex - 1,
+                                                    descIndex
+                                                );
+                                            }
+                                        }
+                                    );
+                                }
+                            );
+                        }
+                    });
+            }
+        },
+        moveDescriptionDown(position, responsibility, description) {
+            if (
+                description.order <
+                responsibility.descriptions.length
+            ) {
+                axios
+                    .post(
+                        this.appPath(
+                            `api/responsibility_descriptions/movedown`
+                        ),
+                        {
+                            position_id: position.id,
+                            description_id: description.id
+                        }
+                    )
+                    .then(resp => {
+                        if (resp.data == "success") {
+                            this.localPosition.responsibilities.forEach(
+                                (resp, respIndex) => {
+                                    resp.descriptions.forEach(
+                                        (desc, descIndex) => {
+                                            if (desc.id == description.id) {
+                                                this.swap(
+                                                    this.position
+                                                        .responsibilities[
+                                                        respIndex
+                                                    ].descriptions,
+                                                    descIndex,
+                                                    descIndex + 1
+                                                );
+                                            }
+                                        }
+                                    );
+                                }
+                            );
+                        }
+                    });
+            }
+        },
+        swap(arr, index1, index2) {
+            let temp = {};
+            Object.assign(temp, arr[index1]);
+            Object.assign(arr[index1], arr[index2]);
+
+            arr[index1].order = temp.order;
+            temp.order = arr[index2].order;
+
+            Object.assign(arr[index2], temp);
         }
     },
     created() {
@@ -304,7 +471,7 @@ export default {
             this.deleteResponsibilityDescriptionDialog = false;
         });
         Event.listen(
-            "cancelResponsibilityDescriptionDeleting",
+            "cancelResponsibilityDescriptionDeleteing",
             description => (this.deleteResponsibilityDescriptionDialog = false)
         );
     },

@@ -4,8 +4,6 @@
             <task :item="selectedTask" :users="users"></task>
     </v-dialog>-->
     
-    
-    <!-- <v-card>You dont have any tasks</v-card> -->
     <v-data-table
       v-if="localTasks.length"
       :headers="headers"
@@ -17,6 +15,7 @@
       height="calc(100vh - 120px)"
       fixed-header
       no-data-text="У вас нет задач"
+      dense
     >
       <template v-slot:item="{ item }">
         <tr :class="(item.readed == 0 ? 'grey lighten-2' : 'white')" @click="displayTask(item)">
@@ -42,12 +41,12 @@
           <td>
            <span>{{durObj(item.planned_time)}}</span>
           </td>
-          <td>{{ moment(item.deadline).fromNow() }}</td>
+          <td>{{ moment(item.deadline).format('L') }}</td>
           <td>
-            <avatar :user="item.from" />
+            <avatar size="30" :user="item.from" />
           </td>
           <td>
-            <avatar :user="item.responsible" />
+            <avatar size="30" :user="item.responsible" />
           </td>
           <td>{{ moment(item.created_at).fromNow() }}</td>
           <td>{{ item.status.name }}</td>
@@ -132,5 +131,9 @@ export default {
 <style>
 .tasks-table {
   cursor: pointer;
+}
+.tasks-table th, .tasks-table td{
+  padding-left: 0;
+  padding-right: 0;
 }
 </style>

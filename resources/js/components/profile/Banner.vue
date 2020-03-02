@@ -216,11 +216,11 @@ export default {
         { title: "Перенесено", count: 5 }
       ],
       links: [
-        {
-          title: "Задачи",
-          path: `/users/${this.user.id}`,
-          icon: "mdi-phone"
-        },
+        // {
+        //   title: "Задачи",
+        //   path: `/users/${this.user.id}`,
+        //   icon: "mdi-phone"
+        // },
         {
           title: "ДИ",
           path: `/users/${this.user.id}/positions`,
