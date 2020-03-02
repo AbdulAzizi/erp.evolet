@@ -82,16 +82,15 @@
                             </v-hover>
                         </template>
                         <v-row
-                            class="mx-5"
+                            class="ml-7 mr-1"
                             v-for="(description, subIndex) in responsibility.descriptions"
                             :key="subIndex"
                         >
                             <v-hover v-slot:default="{ hover }">
                                 <v-row
-                                    style="border-bottom: 1px solid #e0e0e0; width: 100%"
-                                    class="mx-2"
+                                    style="border-bottom: 1px solid #e0e0e0;" class="pa-0 ma-0"
                                 >
-                                    <v-col cols="10" class="pl-1">
+                                    <v-col cols="9">
                                         <div class="float-left">{{index + 1}}.{{subIndex + 1}}.</div>
                                         <div
                                             class="grey--text text--darken-4 ml-7"
@@ -100,7 +99,7 @@
                                             class="grey--text text--darken-2 pl-7"
                                         >{{ description.description }}</div>
                                     </v-col>
-                                    <v-col cols="2" v-if="hover" class="pb-0">
+                                    <v-col cols="3" v-if="hover" class="py-2 px-0 text-right">
                                         <v-btn icon small v-if="editable">
                                             <v-icon
                                                 small
