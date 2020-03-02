@@ -5,11 +5,10 @@
         <v-select
           v-model="filter"
           :items="filterItems"
+          :label="localFilter.name ? localFilter.name : localFilter"
           item-text="name"
           item-value="url"
-          value="localFilter"
           height="38"
-          :label="localFilter"
           solo
           flat
           dense
@@ -18,6 +17,33 @@
           return-object
         ></v-select>
       </v-col>
+        <v-menu>
+          <template v-slot:activator="{ on }">
+            <v-btn
+            v-on="on"
+            depressed
+            color="white"
+            class="mr-3"
+            >
+            <v-icon :color="localPriorityColor">mdi-flag-variant</v-icon>
+
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+            v-for="(priority, index) in priorityItems" :key="index"
+            @click="priorityFilter(priority.url, priority.color)">
+            <v-list-item-icon>
+              <v-icon :color="priority.color">
+                {{priority.icon}}
+              </v-icon>
+            </v-list-item-icon>
+                <v-list-item-title>
+                  {{priority.name}}
+                </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       <v-autocomplete
         v-model="selectedTags"
         :items="tasksTags"
@@ -91,6 +117,7 @@ export default {
       filteredTasks: this.tasks,
       myTasks: null,
       filter: null,
+      localPriorityColor: 'grey',
       filterItems: [
         {
           name: "Все задачи",
@@ -109,13 +136,55 @@ export default {
           url: `/tasks?watcher_id=${this.authuser.id}`
         }
       ],
-      localFilter: "Все задачи"
+      priorityItems: [
+        {
+          name: "Высокий",
+          icon: "mdi-flag-variant",
+          color: "red lighten-1",
+          url: `&priority=2`
+        },
+        {
+          name: "Средний",
+          icon: "mdi-flag-variant",
+          color: "blue lighten-1",
+          url: `&priority=1`
+        },
+        {
+          name: "Низкий",
+          icon: "mdi-flag-variant",
+          color: "green lighten-1",
+          url: `&priority=0`
+        },
+        {
+          name: "Все",
+          icon: "mdi-flag-variant",
+          color: "grey",
+          url: ''
+        },
+      ],
+      localFilter: "Все задачи",
+      allTasksUrl: '/tasks?all=true'
     };
   },
   mounted() {
     this.currentView = this.localCurrentView;
-    if (localStorage.filter) {
-      this.localFilter = localStorage.filter;
+    if(localStorage.getItem('filter')){
+      try {
+        this.localFilter = JSON.parse(localStorage.getItem('filter'))
+      } catch(e) {
+        localStorage.removeItem('filter');
+      }
+    }
+    if(localStorage.priority) {
+      this.localPriorityColor = localStorage.priority;
+    }
+  },
+  methods: {
+    priorityFilter(url, color){
+      let filter = localStorage.filter ? JSON.parse(localStorage.filter).url : allTasksUrl;
+      window.location.href = filter + url;
+      localStorage.priority = color;
+      this.localPriorityColor = localStorage.priority;
     }
   },
   computed: {
@@ -189,14 +258,17 @@ export default {
       });
     },
     filter(item) {
-      localStorage.filter = item.name;
+      const parsed = JSON.stringify(item);
+      localStorage.setItem('filter', parsed);
       window.location.href = item.url;
       this.localFilter = localStorage.filter;
+      localStorage.priority = 'grey';
     }
   },
   created() {
-    if(window.location.search == ''){
+    if(window.location.search == '?all=true'){
       localStorage.filter = 'Все задачи';
+      localStorage.priority = 'grey';
     }
   }
 };

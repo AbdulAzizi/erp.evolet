@@ -41,11 +41,18 @@ class TaskFilters extends QueryFilters
     {
         $authUser = \Auth::user();
 
+        
         return $this->builder->where('from_id', $authUser->id)
-            ->orWhere('responsible_id', $authUser->id)
-            ->orWhereHas('watchers', function ($q) use ($authUser) {
-                $q->where('user_id', $authUser->id);
-            });
+        ->orWhere('responsible_id', $authUser->id)
+        ->orWhereHas('watchers', function ($q) use ($authUser) {
+            $q->where('user_id', $authUser->id);
+        });
+    }
+
+    public function priority($term)
+    {   
+
+        return $this->builder->having('priority', $term);
 
     }
 }
