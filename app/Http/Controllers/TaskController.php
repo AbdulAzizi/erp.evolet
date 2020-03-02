@@ -38,7 +38,7 @@ class TaskController extends Controller
         // }
         // All Users needed while choosing user assignee
         $users = User::with(['division'])->get();
-        $divisions = Division::withDepth()->having('depth', '=', 3)->with('users')->whereHas('users')->get();
+        $divisions = Division::with('users')->whereHas('users')->get();
 
         // $notifications = $authUser->notifications;
 
