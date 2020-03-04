@@ -19,7 +19,8 @@ class Task extends Model
         'from_id',
         'from_type',
         'created_at',
-        'readed'
+        'readed',
+        'responsibility_description_id'
     ];
 
     // protected $with = ['responsible.user','from'];

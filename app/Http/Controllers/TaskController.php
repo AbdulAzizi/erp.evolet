@@ -55,7 +55,7 @@ class TaskController extends Controller
     {
         // validate obligatory fields
         $validatedData = $request->validate([
-            'title' => 'required',
+            'responsibility_description' => 'required',
             'assignees' => 'required',
             'deadline' => 'required',
             'estimatedTaskTime' => 'required',
@@ -84,6 +84,7 @@ class TaskController extends Controller
                 'responsible_id' => $assigneeID,
                 'from_id' => auth()->id(),
                 'from_type' => User::class,
+                'responsibility_description_id' => $request->responsibility_description
             ]);
         }
         // Get all Watcher Users

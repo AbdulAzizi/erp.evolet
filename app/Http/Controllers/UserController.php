@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Division;
 use App\File;
 use App\PositionLevel;
+use App\ResponsibilityDescription;
 use App\Task;
 use App\User;
 use Illuminate\Http\Request;
@@ -72,13 +73,12 @@ class UserController extends Controller
 
         $messages = [
             'email.unique' => 'Пользователь с таким адресом существует',
-            'email.email' => 'Введен неправильный адрес'
+            'email.email' => 'Введен неправильный адрес',
         ];
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users,email'
+            'email' => 'required|email|unique:users,email',
         ], $messages);
-
 
         $randomPassword = Str::random(10);
 
@@ -96,7 +96,6 @@ class UserController extends Controller
                 'division_id' => $request->divisionId,
             ]);
         }
-
 
         if ($request->positions) {
             $newUser->positions()->attach($request->positions);
@@ -173,7 +172,7 @@ class UserController extends Controller
     public function changeAvatar(Request $request)
     {
         $user = User::find($request->id);
-        
+
         if ($request->hasFile('avatar')) {
 
             $avatar = $request->file('avatar');
@@ -194,9 +193,32 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function responsibilities($id)
+    public function responsibilityDescription(Request $request)
     {
-        $responsibilities = User::find($id)->responsibilities;
-        return $responsibilities;
+        $userIDs = $request->userIDs;
+        $users = User::with(['responsibilities.descriptions'])->find($userIDs);
+        $descriptionGroups = [];
+
+        foreach ($users as $key => $user) {
+            foreach ($user->responsibilities as $responsibility) {
+                foreach ($responsibility->descriptions as $description) {
+                    $descriptionGroups[$key][] = $description;
+                }
+            }
+        }
+
+        $intersactions = collect([]);
+
+        if (count($descriptionGroups)) {
+            $intersactions = collect($descriptionGroups[0]);
+            foreach ($descriptionGroups as $descriptionGroup) {
+                $intersactions = $intersactions->intersect($descriptionGroup);
+            }
+        }
+
+        $others = ResponsibilityDescription::where('title', 'Прочее')->first();
+        $intersactions->push($others);
+        
+        return $intersactions->all();
     }
 }
