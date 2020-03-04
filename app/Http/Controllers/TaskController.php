@@ -25,7 +25,8 @@ class TaskController extends Controller
             'responsible',
             'watchers',
             'status',
-            'tags'
+            'tags',
+            'responsibilityDescription'
         )->get();
 
         // foreach ($tasks as $task) {
@@ -36,7 +37,7 @@ class TaskController extends Controller
         //         // return $task;
         //     }
         // }
-        // All Users needed while choosing user assignee
+        // All Users needed while choosing watchers
         $users = User::with(['division'])->get();
         $divisions = Division::with('users')->whereHas('users')->get();
 

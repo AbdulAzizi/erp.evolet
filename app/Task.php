@@ -84,4 +84,9 @@ class Task extends Model
     {
         return $this->hasMany('App\QuestionTask');
     }
+
+    public function responsibilityDescription()
+    {
+        return $this->belongsTo('App\ResponsibilityDescription');
+    }
 }

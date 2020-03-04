@@ -14,4 +14,9 @@ class ResponsibilityDescription extends Model
     {
         return $this->belongsTo('App\Responsibility');
     }
+
+    public function tasks()
+    {
+        return $this->hasMany('App\Task');
+    }
 }
