@@ -19,7 +19,7 @@ class TaskController extends Controller
     {
         $authUser = \Auth::user();
         $statuses = Status::all();
-        
+
         $tasks = Task::filter($filters)->with(
             'from',
             'responsible',
@@ -85,7 +85,7 @@ class TaskController extends Controller
                 'responsible_id' => $assigneeID,
                 'from_id' => auth()->id(),
                 'from_type' => User::class,
-                'responsibility_description_id' => $request->responsibility_description
+                'responsibility_description_id' => $request->responsibility_description,
             ]);
         }
         // Get all Watcher Users
@@ -109,7 +109,7 @@ class TaskController extends Controller
             event(new TaskCreatedEvent($task));
         }
         // Redirect to Tasks Index page
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.show', $task->id);
     }
 
     public function show($id)
