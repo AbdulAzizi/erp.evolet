@@ -132,7 +132,8 @@ class TaskController extends Controller
             'questionTasks.question.options',
             // 'messages',
             'forms.fields',
-            'timeSets'
+            'timeSets',
+            'responsibilityDescription'
         )->find($id);
         // return $task;
 

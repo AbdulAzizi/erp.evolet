@@ -3,7 +3,7 @@
         <v-row no-gutters>
             <v-col cols="9">
                 <v-toolbar dense flat>
-                    <v-toolbar-title>{{task.title}}</v-toolbar-title>
+                    <v-toolbar-title>{{task.responsibility_description.title}}</v-toolbar-title>
                     <div class="flex-grow-1"></div>
                     <v-menu bottom left :offset-y="true">
                         <template v-slot:activator="{ on }">
@@ -184,7 +184,7 @@
                         </v-list-item-content>
                     </v-list-item>
 
-                    <v-subheader>Теги</v-subheader>
+                    <v-subheader v-if="task.tags.length">Теги</v-subheader>
                     <div class="px-3">
                         <v-chip
                             class="mb-2 mr-2"
