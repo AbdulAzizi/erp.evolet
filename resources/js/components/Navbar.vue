@@ -35,7 +35,7 @@
 
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on" :href="appPath('tasks')">
+                    <v-btn icon v-on="on" :href="appPath('tasks?all=true')">
                         <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
                     </v-btn>
                 </template>
