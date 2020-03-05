@@ -63,9 +63,6 @@ class TaskController extends Controller
         ]);
         // Decode things that must be decoded
         $assignees = json_decode($request->assignees);
-        $watchers = json_decode($request->watchers);
-        $existingTags = json_decode($request->existingTags);
-        $poll = json_decode($request->poll);
 
         // Get new Status instance
         $newStatus = \App\Status::where('name', 'Новый')->first();
@@ -88,9 +85,14 @@ class TaskController extends Controller
                 'responsibility_description_id' => $request->responsibility_description,
             ]);
         }
-        // Get all Watcher Users
-        $watchers = User::alone()->find($watchers);
-
+        // Decode watchers
+        $watchers = json_decode($request->watchers);
+        if (count($watchers)) {
+            // Get all Watcher Users
+            $watchers = User::alone()->find($watchers);
+        }
+        $tags = json_decode($request->existingTags);
+        $poll = json_decode($request->poll);
         // if there is a poll
         if ($poll) {
             $this->createPoll($poll, $tasks);
@@ -101,9 +103,13 @@ class TaskController extends Controller
             // TODO On the clide side restrickt User to add himself as a watcher
             // TODO select auth user as task responsible by deafauld on the client side
 
-            // Attach Watchers to Task
-            $task->watchers()->attach($watchers);
-            $task->tags()->attach($existingTags);
+            if ($request->watchers) {
+                // Attach Watchers to Task
+                $task->watchers()->attach($watchers);
+            }
+            if (count($tags)) {
+                $task->tags()->attach($tags);
+            }
 
             //Log creation to tasks History
             event(new TaskCreatedEvent($task));
