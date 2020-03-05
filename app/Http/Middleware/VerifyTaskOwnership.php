@@ -18,7 +18,6 @@ class VerifyTaskOwnership
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-
         // Perform action after controller
         // get task from response
         $task = $response->original->__get('task');
@@ -31,11 +30,16 @@ class VerifyTaskOwnership
         // add assignee if it is a user
         if ($task->from_type == 'App\User') {
             $allowedUserIDs[] = $task->from->id;
+            // if division has a head
+            if ($task->from->division->head) {
+                // add division head id
+                $allowedUserIDs[] = $task->from->division->head->id;
+            }
         }
         // if division has a head
-        if ($authUser->division->head) {
+        if ($task->responsible->division->head) {
             // add division head id
-            $allowedUserIDs[] = $authUser->division->head->id;
+            $allowedUserIDs[] = $task->responsible->division->head->id;
         }
         // add HR and RVZ users as exceptions
         $respExceptions = User::whereHas('positions', function (Builder $query) {
