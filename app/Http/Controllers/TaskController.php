@@ -10,6 +10,7 @@ use App\Option;
 use App\Question;
 use App\Status;
 use App\Task;
+use App\Timeset;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -314,62 +315,55 @@ class TaskController extends Controller
         return $task;
     }
 
-    public function startTask(Request $request)
+    public function start($id)
     {
-
-        $timeset = \App\Timeset::create([
-            'task_id' => $request->task_id,
+        $timeset = Timeset::create([
+            'task_id' => $id,
             'start_time' => date(now()),
         ]);
 
-        $task = Task::with('status', 'timeSets')->find($request->task_id);
+        $InProcess = Status::where('name','В процессе')->first();
+        
+        $task = Task::with('status', 'timeSets')->find($id);
+        $task->status()->associate( $InProcess );
+        $task->save();
+        
+        return $task;
+    }
 
-        $task->status_id = 2;
+    public function pause($id)
+    {
+        $paused = Status::where('name','Приостановлен')->first();
 
+        $task = Task::with('timeSets')->find($id);
+        $task->status()->associate( $paused );
         $task->save();
 
-        return $task;
-    }
+        $lastTimeSet = $task->timeSets->last();
+        $lastTimeSet->end_time = date(now());
+        $lastTimeSet->save();
 
-    public function pauseTask(Request $request, $id)
-    {
-        $timeset = \App\Timeset::find($id);
-
-        $timeset->update([
-            'end_time' => date(now()),
-        ]);
-
-        $task = Task::with('status', 'timeSets')->find($request->task_id);
-
-        $timeset->save();
+        $task->load('status', 'timeSets');
 
         return $task;
     }
 
-    public function stopTask(Request $request, $id)
+    public function stop($id)
     {
-        $timeset = \App\Timeset::find($id);
+        $stop = Status::where('name','Закрытый')->first();
 
-        $task = Task::find($request->task_id);
+        $task = Task::with('timeSets')->find($id);
+        $task->status()->associate( $stop );
+        $task->save();
 
-        if ($timeset->end_time !== null) {
+        $lastTimeSet = $task->timeSets->last();
 
-            $task->status_id = 3;
-
-            $task->save();
-        } else {
-            $timeset->update([
-                'end_time' => date(now()),
-            ]);
-
-            $task->status_id = 3;
-
-            $task->save();
-
-            $timeset->save();
+        if($lastTimeSet->end_time == null){
+            $lastTimeSet->end_time = date(now());
+            $lastTimeSet->save();
         }
 
-        return $timeset;
+        return $task;
     }
 
     public function mark(Request $request)

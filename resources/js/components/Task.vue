@@ -178,11 +178,8 @@
                     </v-list-item>
 
                     <priority :id="task.priority" classes=" lighten-3"></priority>
-                    <v-list-item>
-                        <v-list-item-content>
-                            <task-control-buttons :task="task" />
-                        </v-list-item-content>
-                    </v-list-item>
+
+                    <task-control-buttons class="mr-5" :task="task" />
 
                     <v-subheader v-if="task.tags.length">Теги</v-subheader>
                     <div class="px-3">
@@ -260,17 +257,16 @@ export default {
         };
     },
     created() {
-        Event.listen("taskStarted", data => {
-            return (this.task.status.name = "В процессе");
-        });
+        this.synch();
 
-        Event.listen("stopTask", data => {
-            return (this.task.status.name = "Закрытый");
+        Event.listen("taskStatusChanged", status => {
+            this.task.status = status;
         });
-
+        Event.listen("taskTimeSetsChanged", time_sets => {
+            this.task.time_sets = time_sets;
+        });
         this.markTaskAsRead();
 
-        this.synch();
     },
     watch: {
         item(v) {
@@ -282,11 +278,10 @@ export default {
             Event.fire(`display_form_${index}`);
         },
         forwardTask() {
-          
-          axios.get("/api/users").then(res => {
+            axios.get("/api/users").then(res => {
                 this.forwardField.users = res.data;
             });
-          Event.fire("forwardTask");
+            Event.fire("forwardTask");
         },
         synch() {
             if (this.item) {

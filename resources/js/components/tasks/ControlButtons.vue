@@ -1,88 +1,150 @@
 <template>
-  <p>
-    <v-btn icon small v-if="play" @click="startTask">
-      <v-icon>mdi-play-circle-outline</v-icon>
-    </v-btn>
-    <v-btn icon small v-if="pause" @click="pauseTask">
-      <v-icon>mdi-pause-circle-outline</v-icon>
-    </v-btn>
-    <v-scroll-x-transition>
-      <v-btn icon small v-if="stop" @click="stopTask">
-        <v-icon>mdi-stop-circle</v-icon>
-      </v-btn>
-    </v-scroll-x-transition>
-    <span>{{timer}}</span>
-  </p>
+    <div>
+        <v-card flat style="padding:2px 0px;" class="grey lighten-2 mb-2 text-center">
+            {{moment(duration).hours() }} :
+            {{moment(duration).minutes() }} :
+            {{moment(duration).seconds() }}
+        </v-card>
+        <v-btn v-if="tasIskNew" class="mb-2" small depressed block color="blue" dark @click="play">
+            <v-icon left>mdi-play</v-icon>Начать
+        </v-btn>
+        <v-btn
+            v-if="taskIsPaused"
+            class="mb-2"
+            small
+            depressed
+            block
+            color="amber darken-3"
+            dark
+            @click="play"
+        >
+            <v-icon left>mdi-play</v-icon>Продолжить
+        </v-btn>
+        <v-btn
+            v-if="taskIsPlaying"
+            class="mb-2"
+            small
+            depressed
+            block
+            color="blue-grey"
+            dark
+            @click="pause"
+        >
+            <v-icon left>mdi-pause</v-icon>Приостановить
+        </v-btn>
+        <v-btn
+            v-if="taskIsPlaying || taskIsPaused"
+            class="mb-2"
+            small
+            depressed
+            block
+            color="green"
+            dark
+            @click="stop"
+        >
+            <v-icon left>mdi-stop</v-icon>Завершить
+        </v-btn>
+    </div>
 </template>
 <script>
 export default {
-  props: ["task"],
-  data() {
-    return {
-      play:
-        this.task.status_id == 1 ||
-        (this.task.time_sets[this.task.time_sets.length - 1].end_time !==
-          null &&
-          this.task.status_id !== 3),
-      pause: this.task.time_sets.length
-        ? this.task.time_sets[this.task.time_sets.length - 1].end_time == null
-        : false,
-      stop: this.task.status_id == 2,
-      timeSetId: this.task.time_sets.length
-        ? this.task.time_sets[this.task.time_sets.length - 1].id
-        : null,
-      timer: null
-    };
-  },
-  methods: {
-    startTask() {
-      axios
-        .post("/api/start-task", {
-          task_id: this.task.id
-        })
-        .then(response => {
-          let responseData = response.data;
-          // let time = this.moment().startOf("day");
-          this.task.time_sets = responseData.time_sets;
-          this.task.status_id = responseData.status_id;
-          Event.fire("taskStarted", {});
-          this.timeSetId =
-            responseData.time_sets[responseData.time_sets.length - 1].id;
-          this.play = false;
-          this.pause = this.stop = true;
-          // setInterval(timer => {
-          //   this.timer = time.add(1, "s").format("LTS");
-          // }, 1000);
-        })
-        .catch(err => err.messages);
+    props: {
+        task: {
+            required: true
+        }
     },
-    pauseTask() {
-      axios
-        .put(`/api/pause-task/${this.timeSetId}`, {
-          task_id: this.task.id
-        })
-        .then(response => {
-          let responseData = response.data;
-          this.task.time_sets = responseData.time_sets;
-          let timeSet = this.task.time_sets[this.task.time_sets.length - 1];
-          this.play = this.stop = true;
-          this.pause = false;
-        })
-        .catch(err => err.messages);
+    data() {
+        return {
+            localTask: this.task,
+            duration: 0,
+            interval: 1000
+        };
     },
-    stopTask() {
-      axios
-        .put(`/api/stop-task/${this.timeSetId}`, {
-          task_id: this.task.id
-        })
-        .then(response => {
-          console.log(response.data);
-          Event.fire("stopTask", response.data);
-          this.play = this.pause = this.stop = false;
-        })
-        .catch(err => err.messages);
+    methods: {
+        calculateTimeSets() {
+            let sumOfDiffTime = 0;
+            let from = 0;
+            let to = 0;
+
+            this.task.time_sets.forEach(time_set => {
+                // Make last start time as a moment object
+                from = this.moment(time_set.start_time);
+                // if end time exists get it if not get current time
+                to = time_set.end_time
+                    ? this.moment(time_set.end_time)
+                    : this.moment();
+                // Add diff time to sum
+                sumOfDiffTime = sumOfDiffTime + to.diff(from);
+            });
+
+            // Set Duration variable as difference time
+            this.duration = sumOfDiffTime;
+        },
+        runTimer() {
+            setInterval(() => {
+                // Run if status is playing
+                if (this.taskIsPlaying) {
+                    this.duration = this.duration + this.interval;
+                }
+            }, this.interval);
+        },
+        play() {
+            axios
+                .get(this.appPath(`api/tasks/${this.localTask.id}/start`))
+                .then(response => {
+                    let task = response.data;
+                    Event.fire("taskStatusChanged", task.status);
+                    Event.fire("taskTimeSetsChanged", task.time_sets);
+                })
+                .catch(err => err.messages);
+        },
+        pause() {
+            axios
+                .get(this.appPath(`api/tasks/${this.localTask.id}/pause`))
+                .then(response => {
+                    let task = response.data;
+                    Event.fire("taskStatusChanged", task.status);
+                    Event.fire("taskTimeSetsChanged", task.time_sets);
+                })
+                .catch(err => err.messages);
+        },
+        stop() {
+            axios
+                .get(this.appPath(`api/tasks/${this.localTask.id}/stop`))
+                .then(response => {
+                    let task = response.data;
+                    Event.fire("taskStatusChanged", task.status);
+                    Event.fire("taskTimeSetsChanged", task.time_sets);
+                })
+                .catch(err => err.messages);
+        }
+    },
+    created() {
+        this.calculateTimeSets();
+        this.runTimer();
+    },
+    watch: {
+        task(val) {
+            this.localTask = val;
+        }
+    },
+    computed: {
+        tasIskNew() {
+            return this.task.time_sets.length == 0;
+        },
+        taskIsPaused() {
+            return this.task.status.name == "Приостановлен";
+        },
+        taskIsPlaying() {
+            if (this.task.time_sets.length) {
+                return (
+                    this.task.time_sets[this.task.time_sets.length - 1]
+                        .end_time == null
+                );
+            } else {
+                return false;
+            }
+        }
     }
-  },
-  created() {}
 };
 </script>
