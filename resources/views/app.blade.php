@@ -52,7 +52,7 @@
             'asset_path' => asset(''),
             'auth'       => Auth::user(),
             'alerts'    => session()->get('alerts'),
-            'currentTask' => $currentTask
+            'currentTask' => isset($currentTask) ? $currentTask : null
         ]); !!}
 	</script>
 
