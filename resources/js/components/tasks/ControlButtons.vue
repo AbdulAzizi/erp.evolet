@@ -75,11 +75,13 @@ export default {
                     this.localTask.time_sets = time_sets;
                 }
             );
-            Event.listen(`tasks/${this.localTask.id}/status/changed`, status => {
-            this.localTask.status = status;
-        });
+            Event.listen(
+                `tasks/${this.localTask.id}/status/changed`,
+                status => {
+                    this.localTask.status = status;
+                }
+            );
             this.calculateTimeSets();
-            this.runTimer();
         },
         calculateTimeSets() {
             let sumOfDiffTime = 0;
@@ -113,7 +115,7 @@ export default {
                 .get(this.appPath(`api/tasks/${this.localTask.id}/start`))
                 .then(response => {
                     this.localTask = response.data;
-                    Event.fire(`new/tasks/started`, this.localTask);
+                    Event.fire(`tasks/changed`, this.localTask);
                     Event.fire(
                         `tasks/${this.localTask.id}/status/changed`,
                         this.localTask.status
@@ -159,15 +161,15 @@ export default {
         }
     },
     created() {
+        this.runTimer();
+
         if (this.localTask) {
             this.initialization();
         }
 
-        Event.listen(`new/tasks/started`, task => {
-            if (!this.localTask) {
-                this.localTask = task;
-                this.initialization();
-            }
+        Event.listen(`tasks/changed`, task => {
+            this.localTask = task;
+            this.initialization();
         });
     },
     watch: {

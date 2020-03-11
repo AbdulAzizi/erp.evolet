@@ -12,6 +12,7 @@ use App\Status;
 use App\Task;
 use App\Timeset;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -317,26 +318,40 @@ class TaskController extends Controller
 
     public function start($id)
     {
+        // Get pasuse status status
+        $paused = Status::where('name', 'Приостановлен')->first();
+        // Get all tasks that are active
+        $activeTasks = Task::whereHas('status', function (Builder $query) {
+            $query->where('name', 'В процессе');
+        })->get();
+        // Pause all tasks
+        foreach ($activeTasks as $task) {
+            $task->status()->associate($paused);
+            $task->save();
+        }
+        // New time set 
         $timeset = Timeset::create([
             'task_id' => $id,
             'start_time' => date(now()),
         ]);
-
-        $InProcess = Status::where('name','В процессе')->first();
-        
+        // Get in process status
+        $InProcess = Status::where('name', 'В процессе')->first();
+        // Get task with this id
         $task = Task::with('status', 'timeSets')->find($id);
-        $task->status()->associate( $InProcess );
+        // Change status
+        $task->status()->associate($InProcess);
+        // save
         $task->save();
-        
+        // return
         return $task;
     }
 
     public function pause($id)
     {
-        $paused = Status::where('name','Приостановлен')->first();
+        $paused = Status::where('name', 'Приостановлен')->first();
 
         $task = Task::with('timeSets')->find($id);
-        $task->status()->associate( $paused );
+        $task->status()->associate($paused);
         $task->save();
 
         $lastTimeSet = $task->timeSets->last();
@@ -350,15 +365,15 @@ class TaskController extends Controller
 
     public function stop($id)
     {
-        $stop = Status::where('name','Закрытый')->first();
+        $stop = Status::where('name', 'Закрытый')->first();
 
         $task = Task::with('timeSets')->find($id);
-        $task->status()->associate( $stop );
+        $task->status()->associate($stop);
         $task->save();
 
         $lastTimeSet = $task->timeSets->last();
 
-        if($lastTimeSet->end_time == null){
+        if ($lastTimeSet->end_time == null) {
             $lastTimeSet->end_time = date(now());
             $lastTimeSet->save();
         }
