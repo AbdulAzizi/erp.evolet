@@ -14,6 +14,7 @@ class StatusTableSeeder extends Seeder
         \App\Status::insert([
             ['name'=>'Новый'],
             ['name'=>'В процессе'],
+            ['name'=>'Приостановлен'],
             ['name'=>'Закрытый'],
         ]);
     }

@@ -9,6 +9,10 @@
 
         <v-spacer></v-spacer>
 
+        <v-toolbar-items style="width:600px;">
+            <task-control-buttons horizontalButtons="true" :task="currentTask" />
+        </v-toolbar-items>
+
         <v-toolbar-items class="mr-2">
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">

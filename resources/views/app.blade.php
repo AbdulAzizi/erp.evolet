@@ -51,7 +51,8 @@
         	'csrf_token' => csrf_token(),
             'asset_path' => asset(''),
             'auth'       => Auth::user(),
-            'alerts'    => session()->get('alerts')
+            'alerts'    => session()->get('alerts'),
+            'currentTask' => $currentTask
         ]); !!}
 	</script>
 

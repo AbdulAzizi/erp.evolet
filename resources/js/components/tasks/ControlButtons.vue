@@ -1,56 +1,63 @@
 <template>
-    <div>
-        <v-card flat style="padding:2px 0px;" class="grey lighten-2 mb-2 text-center">
-            {{moment(duration).hours() }} :
-            {{moment(duration).minutes() }} :
-            {{moment(duration).seconds() }}
-        </v-card>
-        <v-btn v-if="tasIskNew" class="mb-2" small depressed block color="blue" dark @click="play">
-            <v-icon left>mdi-play</v-icon>Начать
-        </v-btn>
-        <v-btn
+    <v-row class="ma-0" v-if="localTask" justify="end">
+        <v-col :class="horizontalButtons ? 'pa-2':'pa-0'" :cols="horizontalButtons ? 4:12">
+            <v-card
+                flat
+                style="padding:2px 0px; width:100%;"
+                class="grey lighten-2 mb-2 text-center"
+            >
+                {{moment(duration).hours() }} :
+                {{moment(duration).minutes() }} :
+                {{moment(duration).seconds() }}
+            </v-card>
+        </v-col>
+        <v-col
+            v-if="tasIskNew"
+            :class="horizontalButtons ? 'pa-2':'pa-0'"
+            :cols="horizontalButtons ? 4:12"
+        >
+            <v-btn class="mb-2" small depressed block color="blue" dark @click="play">
+                <v-icon left>mdi-play</v-icon>Начать
+            </v-btn>
+        </v-col>
+        <v-col
             v-if="taskIsPaused"
-            class="mb-2"
-            small
-            depressed
-            block
-            color="amber darken-3"
-            dark
-            @click="play"
+            :class="horizontalButtons ? 'pa-2':'pa-0'"
+            :cols="horizontalButtons ? 4:12"
         >
-            <v-icon left>mdi-play</v-icon>Продолжить
-        </v-btn>
-        <v-btn
+            <v-btn class="mb-2" small depressed block color="amber darken-3" dark @click="play">
+                <v-icon left>mdi-play</v-icon>Продолжить
+            </v-btn>
+        </v-col>
+        <v-col
             v-if="taskIsPlaying"
-            class="mb-2"
-            small
-            depressed
-            block
-            color="blue-grey"
-            dark
-            @click="pause"
+            :class="horizontalButtons ? 'pa-2':'pa-0'"
+            :cols="horizontalButtons ? 4:12"
         >
-            <v-icon left>mdi-pause</v-icon>Приостановить
-        </v-btn>
-        <v-btn
+            <v-btn class="mb-2" small depressed block color="blue-grey" dark @click="pause">
+                <v-icon left>mdi-pause</v-icon>Приостановить
+            </v-btn>
+        </v-col>
+        <v-col
             v-if="taskIsPlaying || taskIsPaused"
-            class="mb-2"
-            small
-            depressed
-            block
-            color="green"
-            dark
-            @click="stop"
+            :class="horizontalButtons ? 'pa-2':'pa-0'"
+            :cols="horizontalButtons ? 4:12"
         >
-            <v-icon left>mdi-stop</v-icon>Завершить
-        </v-btn>
-    </div>
+            <v-btn class="mb-2" small depressed block color="green" dark @click="stop">
+                <v-icon left>mdi-stop</v-icon>Завершить
+            </v-btn>
+        </v-col>
+    </v-row>
 </template>
 <script>
 export default {
     props: {
         task: {
             required: true
+        },
+        horizontalButtons: {
+            required: false,
+            default: false
         }
     },
     data() {
@@ -61,12 +68,25 @@ export default {
         };
     },
     methods: {
+        initialization() {
+            Event.listen(
+                `tasks/${this.localTask.id}/time_sets/changed`,
+                time_sets => {
+                    this.localTask.time_sets = time_sets;
+                }
+            );
+            Event.listen(`tasks/${this.localTask.id}/status/changed`, status => {
+            this.localTask.status = status;
+        });
+            this.calculateTimeSets();
+            this.runTimer();
+        },
         calculateTimeSets() {
             let sumOfDiffTime = 0;
             let from = 0;
             let to = 0;
 
-            this.task.time_sets.forEach(time_set => {
+            this.localTask.time_sets.forEach(time_set => {
                 // Make last start time as a moment object
                 from = this.moment(time_set.start_time);
                 // if end time exists get it if not get current time
@@ -92,9 +112,16 @@ export default {
             axios
                 .get(this.appPath(`api/tasks/${this.localTask.id}/start`))
                 .then(response => {
-                    let task = response.data;
-                    Event.fire("taskStatusChanged", task.status);
-                    Event.fire("taskTimeSetsChanged", task.time_sets);
+                    this.localTask = response.data;
+                    Event.fire(`new/tasks/started`, this.localTask);
+                    Event.fire(
+                        `tasks/${this.localTask.id}/status/changed`,
+                        this.localTask.status
+                    );
+                    Event.fire(
+                        `tasks/${this.localTask.id}/time_sets/changed`,
+                        this.localTask.time_sets
+                    );
                 })
                 .catch(err => err.messages);
         },
@@ -102,9 +129,15 @@ export default {
             axios
                 .get(this.appPath(`api/tasks/${this.localTask.id}/pause`))
                 .then(response => {
-                    let task = response.data;
-                    Event.fire("taskStatusChanged", task.status);
-                    Event.fire("taskTimeSetsChanged", task.time_sets);
+                    this.localTask = response.data;
+                    Event.fire(
+                        `tasks/${this.localTask.id}/status/changed`,
+                        this.localTask.status
+                    );
+                    Event.fire(
+                        `tasks/${this.localTask.id}/time_sets/changed`,
+                        this.localTask.time_sets
+                    );
                 })
                 .catch(err => err.messages);
         },
@@ -112,16 +145,30 @@ export default {
             axios
                 .get(this.appPath(`api/tasks/${this.localTask.id}/stop`))
                 .then(response => {
-                    let task = response.data;
-                    Event.fire("taskStatusChanged", task.status);
-                    Event.fire("taskTimeSetsChanged", task.time_sets);
+                    this.localTask = response.data;
+                    Event.fire(
+                        `tasks/${this.localTask.id}/status/changed`,
+                        this.localTask.status
+                    );
+                    Event.fire(
+                        `tasks/${this.localTask.id}/time_sets/changed`,
+                        this.localTask.time_sets
+                    );
                 })
                 .catch(err => err.messages);
         }
     },
     created() {
-        this.calculateTimeSets();
-        this.runTimer();
+        if (this.localTask) {
+            this.initialization();
+        }
+
+        Event.listen(`new/tasks/started`, task => {
+            if (!this.localTask) {
+                this.localTask = task;
+                this.initialization();
+            }
+        });
     },
     watch: {
         task(val) {
@@ -130,16 +177,17 @@ export default {
     },
     computed: {
         tasIskNew() {
-            return this.task.time_sets.length == 0;
+            return this.localTask.time_sets.length == 0;
         },
         taskIsPaused() {
-            return this.task.status.name == "Приостановлен";
+            return this.localTask.status.name == "Приостановлен";
         },
         taskIsPlaying() {
-            if (this.task.time_sets.length) {
+            if (this.localTask.time_sets.length) {
                 return (
-                    this.task.time_sets[this.task.time_sets.length - 1]
-                        .end_time == null
+                    this.localTask.time_sets[
+                        this.localTask.time_sets.length - 1
+                    ].end_time == null
                 );
             } else {
                 return false;

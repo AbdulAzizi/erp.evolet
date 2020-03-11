@@ -251,6 +251,9 @@ Vue.mixin({
         },
         csrf() {
             return window.Laravel.csrf_token;
+        },
+        currentTask(){
+            return window.Laravel.currentTask;
         }
     },
     created() {

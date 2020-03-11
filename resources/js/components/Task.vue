@@ -259,14 +259,10 @@ export default {
     created() {
         this.synch();
 
-        Event.listen("taskStatusChanged", status => {
+        Event.listen(`tasks/${this.task.id}/status/changed`, status => {
             this.task.status = status;
         });
-        Event.listen("taskTimeSetsChanged", time_sets => {
-            this.task.time_sets = time_sets;
-        });
         this.markTaskAsRead();
-
     },
     watch: {
         item(v) {
