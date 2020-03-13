@@ -225,6 +225,11 @@ export default {
           title: "ДИ",
           path: `/users/${this.user.id}/positions`,
           icon: "mdi-ballot-outline"
+        },
+        {
+          title: "ТВК",
+          path: `/users/${this.user.id}/tasks`,
+          icon: "mdi-clock-fast"
         }
       ],
       url: window.location.pathname

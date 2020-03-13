@@ -185,12 +185,14 @@ export default {
             return this.localTask.status.name == "Приостановлен";
         },
         taskIsPlaying() {
-            if (this.localTask.time_sets.length) {
-                return (
-                    this.localTask.time_sets[
-                        this.localTask.time_sets.length - 1
-                    ].end_time == null
-                );
+            if (this.localTask) {
+                if (this.localTask.time_sets.length) {
+                    return (
+                        this.localTask.time_sets[
+                            this.localTask.time_sets.length - 1
+                        ].end_time == null
+                    );
+                }
             } else {
                 return false;
             }
