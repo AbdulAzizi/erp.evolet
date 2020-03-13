@@ -100,6 +100,6 @@ Route::get('/divisions/{id}/tags', 'DivisionController@tags')->name('division.ta
 Route::post('/users', 'UserController@store')->name('users.store');
 Route::delete('/users/{id}', 'UserController@delete')->name('users.delete');
 Route::post('/divisions/{id}/edit', 'DivisionController@edit')->name('divisions.edit');
-
+Route::get('/divisions/{id}/users', 'DivisionController@getUsers')->name('divisions.getUsers');
 
 

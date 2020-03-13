@@ -28,6 +28,7 @@
         "moment": "^2.24.0",
         "moment-timezone": "^0.5.27",
         "pusher-js": "^5.0.2",
+        "v-infinite-scroll": "^1.0.4",
         "vuedraggable": "^2.23.2",
         "vuetify": "2.1.9"
     }

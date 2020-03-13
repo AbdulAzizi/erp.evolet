@@ -372,4 +372,17 @@ class TaskController extends Controller
 
         return $task;
     }
+
+    public function getTasks(TaskFilters $filters)
+    {
+        $tasks = Task::filter($filters)->with(
+            'from',
+            'responsible',
+            'watchers',
+            'status',
+            'tags'
+        )->get();
+
+        return $tasks;
+    }
 }
