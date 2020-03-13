@@ -19,7 +19,8 @@ class Task extends Model
         'from_id',
         'from_type',
         'created_at',
-        'readed'
+        'readed',
+        'responsibility_description_id'
     ];
 
     // protected $with = ['responsible.user','from'];
@@ -82,5 +83,10 @@ class Task extends Model
     public function questionTasks()
     {
         return $this->hasMany('App\QuestionTask');
+    }
+
+    public function responsibilityDescription()
+    {
+        return $this->belongsTo('App\ResponsibilityDescription');
     }
 }

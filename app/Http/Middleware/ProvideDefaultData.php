@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Task;
 use Closure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\View;
 
 class ProvideDefaultData
@@ -20,11 +22,16 @@ class ProvideDefaultData
             'division',
             'notifications',
         ]);
+
+        $currentTask = Task::whereHas('status', function (Builder $query) {
+            $query->where('name', 'В процессе');
+        })->with('timeSets','status')->first();
+
         View::share('authUser', $authUser);
+        View::share('currentTask', $currentTask);
 
         // $users = \App\User::with('division')->get();
         // View::share('users', $users );
-
 
         return $next($request);
 

@@ -9,6 +9,10 @@
 
         <v-spacer></v-spacer>
 
+        <v-toolbar-items style="width:600px;">
+            <task-control-buttons horizontalButtons="true" :task="currentTask" />
+        </v-toolbar-items>
+
         <v-toolbar-items class="mr-2">
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
@@ -35,7 +39,7 @@
 
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on" :href="appPath('tasks')">
+                    <v-btn icon v-on="on" :href="appPath('tasks?all=true')">
                         <v-icon color="grey darken-1">mdi-bulletin-board</v-icon>
                     </v-btn>
                 </template>

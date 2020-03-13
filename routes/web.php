@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
 
     Route::group(['middleware' => 'profile'], function () {
+        Route::get('/users/{id}/tasks', 'ProfileController@tasks')->name('profile.tasks');
         Route::get('/users/{id}/positions', 'ProfileController@positions')->name('profile.positions');
         Route::get('/users/{id}', 'UserController@show')->name('users.show');
     });
@@ -112,10 +113,10 @@ Route::prefix('api')->group(function () {
     Route::put('/fields/edit/{id}', 'FieldController@edit')->name('fields.edit');
     Route::get('/fieldtypes', 'FieldController@getFieldTypes')->name('api.getFieldTypes');
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
-    Route::get('/users/{id}/responsibilities', 'UserController@responsibilities')->name('api.users.responsibilities');
+    Route::post('/users/responsibility_description', 'UserController@responsibilityDescription')->name('api.users.responsibilityDescription');
     Route::get('/responsibilities/{id}/moveup', 'ResponsibilityController@moveup')->name('api.responsibilities.moveup');
     Route::get('/responsibilities/{id}/movedown', 'ResponsibilityController@movedown')->name('api.responsibilities.movedown');
-    Route::post('/responsibility_descriptions/moveup', 'ResponsibilityDescriptionController@moveup')->name('api.responsibilities.moveup');
-    Route::post('/responsibility_descriptions/movedown', 'ResponsibilityDescriptionController@movedown')->name('api.responsibilities.movedown');
+    Route::post('/responsibility_descriptions/moveup', 'ResponsibilityDescriptionController@moveup')->name('api.responsibilityDescription.moveup');
+    Route::post('/responsibility_descriptions/movedown', 'ResponsibilityDescriptionController@movedown')->name('api.responsibilityDescription.movedown');
     Route::get('/get/tasks', 'TaskController@getTasks')->name('api.get.tasks');
 });

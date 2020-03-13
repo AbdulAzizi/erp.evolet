@@ -251,6 +251,9 @@ Vue.mixin({
         },
         csrf() {
             return window.Laravel.csrf_token;
+        },
+        currentTask(){
+            return window.Laravel.currentTask;
         }
     },
     created() {
@@ -323,6 +326,7 @@ Vue.component("projects-view", require("./components/views/Projects.vue").defaul
 Vue.component("bp", require("./components/views/BP.vue").default);
 Vue.component("users-show", require("./components/views/users/Show.vue").default);
 Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vue").default);
+Vue.component("views-profile-tasks", require("./components/views/profile/Tasks.vue").default);
 
 
 Vue.component("positions", require("./components/Positions.vue").default);

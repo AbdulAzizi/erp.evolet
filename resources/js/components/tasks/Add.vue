@@ -40,24 +40,16 @@
                             />
                         </v-col>
                         <v-col cols="12" class="pb-0">
-                            <!-- <form-field
-                                :field="{
-                                type: 'string',
-                                name: 'title',
-                                label: 'Название',
-                                icon: 'mdi-rename-box',
-                                rules: ['required'],
-                            }"
-                            />-->
+                            <input type="hidden" name="responsibility_description" :value="selectedResponsibility"/>
                             <v-select
                                 v-model="selectedResponsibility"
                                 prepend-icon="mdi-rename-box"
                                 rounded
                                 filled
                                 label="Должностные задачи"
-                                :disabled="userResponsibilities.length == 0"
-                                :items="userResponsibilities"
-                                item-text="text"
+                                :disabled="userRespDescriptions.length == 0"
+                                :items="userRespDescriptions"
+                                item-text="title"
                                 item-value="id"
                                 :rules="[required=>!!selectedResponsibility || 'Обязательное поле']"
                             />
@@ -540,7 +532,7 @@ export default {
             selectedAssignee: [],
 
             selectedResponsibility: null,
-            userResponsibilities: []
+            userRespDescriptions: []
         };
     },
     created() {
@@ -550,17 +542,13 @@ export default {
             this.pollDialog = false;
         });
         Event.listen("selectedAssignee", userIDs => {
-            console.log("new user selected");
-            console.log(userIDs.length);
+            // console.log("new user selected");
+            // console.log(userIDs.length);
 
-            if (userIDs.length == 1) {
-                this.fetchResponsibilities(userIDs[0]);
-            } else {
-                this.userResponsibilities = [];
-            }
+            this.fetchResponsibilities(userIDs);
 
-            console.log("user responsibilities");
-            console.log(this.userResponsibilities);
+            // console.log("user responsibilities");
+            // console.log(this.userRespDescriptions);
         });
     },
     watch: {
@@ -602,14 +590,16 @@ export default {
         }
     },
     methods: {
-        fetchResponsibilities(userID) {
+        fetchResponsibilities(userIDs) {
             axios
-                .get(this.appPath(`api/users/${userID}/responsibilities`))
+                .post(this.appPath(`api/users/responsibility_description`), {
+                    userIDs: userIDs
+                })
                 .then(resp => {
                     console.log("axios data");
-                    console.log(resp.data);
+                    console.log(Object.values(resp.data));
 
-                    this.userResponsibilities = resp.data;
+                    this.userRespDescriptions = Object.values(resp.data);
                 });
         },
         toMilliseconds(days, hours, minutes) {

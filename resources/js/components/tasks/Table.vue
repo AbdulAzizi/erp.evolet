@@ -35,7 +35,7 @@
                 </v-list>
               </v-menu>
             </td>
-            <td>{{item.title}}</td>
+            <td>{{item.responsibility_description.title}}</td>
             <td>
               <priority :id="item.priority" icon></priority>
             </td>
@@ -139,6 +139,8 @@ export default {
         }
       });
     });
+    console.log(this.tasks);
+    
   },
   watch: {
     tasks(val) {

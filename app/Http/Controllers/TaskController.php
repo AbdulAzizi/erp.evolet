@@ -10,7 +10,9 @@ use App\Option;
 use App\Question;
 use App\Status;
 use App\Task;
+use App\Timeset;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -19,13 +21,14 @@ class TaskController extends Controller
     {
         $authUser = \Auth::user();
         $statuses = Status::all();
-        
+
         $tasks = Task::filter($filters)->with(
             'from',
             'responsible',
             'watchers',
             'status',
-            'tags'
+            'tags',
+            'responsibilityDescription'
         )->get();
 
         // foreach ($tasks as $task) {
@@ -36,7 +39,7 @@ class TaskController extends Controller
         //         // return $task;
         //     }
         // }
-        // All Users needed while choosing user assignee
+        // All Users needed while choosing watchers
         $users = User::with(['division'])->get();
         $divisions = Division::with('users')->whereHas('users')->get();
 
@@ -55,16 +58,13 @@ class TaskController extends Controller
     {
         // validate obligatory fields
         $validatedData = $request->validate([
-            'title' => 'required',
+            'responsibility_description' => 'required',
             'assignees' => 'required',
             'deadline' => 'required',
             'estimatedTaskTime' => 'required',
         ]);
         // Decode things that must be decoded
         $assignees = json_decode($request->assignees);
-        $watchers = json_decode($request->watchers);
-        $existingTags = json_decode($request->existingTags);
-        $poll = json_decode($request->poll);
 
         // Get new Status instance
         $newStatus = \App\Status::where('name', 'Новый')->first();
@@ -84,11 +84,17 @@ class TaskController extends Controller
                 'responsible_id' => $assigneeID,
                 'from_id' => auth()->id(),
                 'from_type' => User::class,
+                'responsibility_description_id' => $request->responsibility_description,
             ]);
         }
-        // Get all Watcher Users
-        $watchers = User::alone()->find($watchers);
-
+        // Decode watchers
+        $watchers = json_decode($request->watchers);
+        if (count($watchers)) {
+            // Get all Watcher Users
+            $watchers = User::alone()->find($watchers);
+        }
+        $tags = json_decode($request->existingTags);
+        $poll = json_decode($request->poll);
         // if there is a poll
         if ($poll) {
             $this->createPoll($poll, $tasks);
@@ -99,15 +105,19 @@ class TaskController extends Controller
             // TODO On the clide side restrickt User to add himself as a watcher
             // TODO select auth user as task responsible by deafauld on the client side
 
-            // Attach Watchers to Task
-            $task->watchers()->attach($watchers);
-            $task->tags()->attach($existingTags);
+            if ($request->watchers) {
+                // Attach Watchers to Task
+                $task->watchers()->attach($watchers);
+            }
+            if (count($tags)) {
+                $task->tags()->attach($tags);
+            }
 
             //Log creation to tasks History
             event(new TaskCreatedEvent($task));
         }
         // Redirect to Tasks Index page
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.show', $task->id);
     }
 
     public function show($id)
@@ -124,7 +134,8 @@ class TaskController extends Controller
             'questionTasks.question.options',
             // 'messages',
             'forms.fields',
-            'timeSets'
+            'timeSets',
+            'responsibilityDescription'
         )->find($id);
         // return $task;
 
@@ -305,62 +316,74 @@ class TaskController extends Controller
         return $task;
     }
 
-    public function startTask(Request $request)
+    public function start($id)
     {
+        // Get pasuse status status
+        $paused = Status::where('name', 'Приостановлен')->first();
+        // Get all tasks that are active
+        $activeTasks = Task::whereHas('status', function (Builder $query) {
+            $query->where('name', 'В процессе');
+        })->get();
+        // Pause all tasks
+        foreach ($activeTasks as $task) {
+            
+            $lastTimeSet = $task->timeSets->last();
+            $lastTimeSet->end_time = date(now());
+            $lastTimeSet->save();
 
-        $timeset = \App\Timeset::create([
-            'task_id' => $request->task_id,
+            $task->status()->associate($paused);
+            $task->save();
+        }
+        // New time set 
+        $timeset = Timeset::create([
+            'task_id' => $id,
             'start_time' => date(now()),
         ]);
+        // Get in process status
+        $InProcess = Status::where('name', 'В процессе')->first();
+        // Get task with this id
+        $task = Task::with('status', 'timeSets')->find($id);
+        // Change status
+        $task->status()->associate($InProcess);
+        // save
+        $task->save();
+        // return
+        return $task;
+    }
 
-        $task = Task::with('status', 'timeSets')->find($request->task_id);
+    public function pause($id)
+    {
+        $paused = Status::where('name', 'Приостановлен')->first();
 
-        $task->status_id = 2;
-
+        $task = Task::with('timeSets')->find($id);
+        $task->status()->associate($paused);
         $task->save();
 
-        return $task;
-    }
+        $lastTimeSet = $task->timeSets->last();
+        $lastTimeSet->end_time = date(now());
+        $lastTimeSet->save();
 
-    public function pauseTask(Request $request, $id)
-    {
-        $timeset = \App\Timeset::find($id);
-
-        $timeset->update([
-            'end_time' => date(now()),
-        ]);
-
-        $task = Task::with('status', 'timeSets')->find($request->task_id);
-
-        $timeset->save();
+        $task->load('status', 'timeSets');
 
         return $task;
     }
 
-    public function stopTask(Request $request, $id)
+    public function stop($id)
     {
-        $timeset = \App\Timeset::find($id);
+        $stop = Status::where('name', 'Закрытый')->first();
 
-        $task = Task::find($request->task_id);
+        $task = Task::with('timeSets')->find($id);
+        $task->status()->associate($stop);
+        $task->save();
 
-        if ($timeset->end_time !== null) {
+        $lastTimeSet = $task->timeSets->last();
 
-            $task->status_id = 3;
-
-            $task->save();
-        } else {
-            $timeset->update([
-                'end_time' => date(now()),
-            ]);
-
-            $task->status_id = 3;
-
-            $task->save();
-
-            $timeset->save();
+        if ($lastTimeSet->end_time == null) {
+            $lastTimeSet->end_time = date(now());
+            $lastTimeSet->save();
         }
 
-        return $timeset;
+        return $task;
     }
 
     public function mark(Request $request)

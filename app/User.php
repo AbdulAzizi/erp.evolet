@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public $with = ['positionLevel', 'positions'];
 
-    // protected $appends = ['fullname', 'last_message_date'];
+    protected $appends = ['fullname'];
 
     /**
      * Send the password reset notification.

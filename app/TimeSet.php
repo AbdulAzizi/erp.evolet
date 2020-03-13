@@ -10,9 +10,9 @@ class Timeset extends Model
 
     protected $fillable = ['task_id', 'start_time', 'end_time'];
 
-    public function tasks()
+    public function task()
     {
-        return $this->belongsToOne('App\Task');
+        return $this->belongsTo('App\Task');
     }
 
 }

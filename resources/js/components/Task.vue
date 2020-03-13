@@ -3,7 +3,7 @@
         <v-row no-gutters>
             <v-col cols="9">
                 <v-toolbar dense flat>
-                    <v-toolbar-title>{{task.title}}</v-toolbar-title>
+                    <v-toolbar-title>{{task.responsibility_description.title}}</v-toolbar-title>
                     <div class="flex-grow-1"></div>
                     <v-menu bottom left :offset-y="true">
                         <template v-slot:activator="{ on }">
@@ -178,13 +178,10 @@
                     </v-list-item>
 
                     <priority :id="task.priority" classes=" lighten-3"></priority>
-                    <v-list-item>
-                        <v-list-item-content>
-                            <task-control-buttons :task="task" />
-                        </v-list-item-content>
-                    </v-list-item>
 
-                    <v-subheader>Теги</v-subheader>
+                    <task-control-buttons class="mr-5" :task="task" />
+
+                    <v-subheader v-if="task.tags.length">Теги</v-subheader>
                     <div class="px-3">
                         <v-chip
                             class="mb-2 mr-2"
@@ -260,17 +257,12 @@ export default {
         };
     },
     created() {
-        Event.listen("taskStarted", data => {
-            return (this.task.status.name = "В процессе");
-        });
-
-        Event.listen("stopTask", data => {
-            return (this.task.status.name = "Закрытый");
-        });
-
-        this.markTaskAsRead();
-
         this.synch();
+
+        Event.listen(`tasks/${this.task.id}/status/changed`, status => {
+            this.task.status = status;
+        });
+        this.markTaskAsRead();
     },
     watch: {
         item(v) {
@@ -282,11 +274,10 @@ export default {
             Event.fire(`display_form_${index}`);
         },
         forwardTask() {
-          
-          axios.get("/api/users").then(res => {
+            axios.get("/api/users").then(res => {
                 this.forwardField.users = res.data;
             });
-          Event.fire("forwardTask");
+            Event.fire("forwardTask");
         },
         synch() {
             if (this.item) {
