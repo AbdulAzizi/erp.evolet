@@ -326,6 +326,11 @@ class TaskController extends Controller
         })->get();
         // Pause all tasks
         foreach ($activeTasks as $task) {
+            
+            $lastTimeSet = $task->timeSets->last();
+            $lastTimeSet->end_time = date(now());
+            $lastTimeSet->save();
+
             $task->status()->associate($paused);
             $task->save();
         }
