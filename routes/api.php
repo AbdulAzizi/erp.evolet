@@ -97,6 +97,7 @@ Route::get('/divisions/{id}/tags', 'DivisionController@tags')->name('division.ta
 Route::post('/users', 'UserController@store')->name('users.store');
 Route::delete('/users/{id}', 'UserController@delete')->name('users.delete');
 Route::post('/divisions/{id}/edit', 'DivisionController@edit')->name('divisions.edit');
+Route::get('/divisions/{id}/users', 'DivisionController@getUsers')->name('divisions.getUsers');
 
 Route::get('/tasks/{id}/start', 'TaskController@start')->name('api.tasks.start');
 Route::get('/tasks/{id}/pause', 'TaskController@pause')->name('api.tasks.pause');

@@ -104,4 +104,21 @@ class DivisionController extends Controller
 
         return $division;
     }
+
+    public function getUsers(Request $request){
+
+        $users = [];
+
+        $division = Division::where('head_id', $request->id)->first();
+        
+        $divisionWithDepth = $division->withDepth()->descendantsOf($division->id);
+        
+        foreach($divisionWithDepth as $division){
+            foreach($division->users as $user){
+                $users[] = $user;
+            }
+        }
+
+        return $users;
+    }
 }
