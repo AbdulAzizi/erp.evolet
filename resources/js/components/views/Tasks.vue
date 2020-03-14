@@ -168,6 +168,9 @@
       :authuser="authuser"
     />
     <tasks-add :divisions="divisions" :users="users" :errors="errors" />
+    <v-overlay v-if="loading" light opacity="0.2">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -240,7 +243,8 @@ export default {
           priority: 0
         }
       ],
-      search: null
+      search: null,
+      loading: false
     };
   },
   mounted() {
@@ -249,6 +253,7 @@ export default {
   methods: {
     filterTask() {
       if (Object.keys(this.filter).length > 1) {
+        this.loading = true;
         axios
           .get(this.appPath("api/tasks/filter"), {
             params: {
@@ -259,6 +264,7 @@ export default {
             this.filtersMenu = false;
             this.filteredTasks = res.data;
             this.page = false;
+            this.loading = false;
           });
       } else {
         this.filteredTasks = [];
@@ -269,6 +275,7 @@ export default {
     },
     paginate() {
       if (this.page) {
+        this.loading = true;
         axios
           .get(this.appPath("api/tasks/paginate"), {
             params: {
@@ -283,6 +290,7 @@ export default {
             } else {
               this.page++;
             }
+            this.loading = false;
           });
       }
     }
@@ -364,7 +372,6 @@ export default {
      } else {
        this.filter["title"] = title;
      }
-     console.log(this.filter);
     },
     myTasks(id) {
       this.tasks.forEach(task => {
@@ -384,6 +391,7 @@ export default {
         delete this.filter["all"];
       } else {
         this.selectEmployee = false;
+        delete this.filter['responsible_id'];
         this.filter["all"] = true;
       }
     },
