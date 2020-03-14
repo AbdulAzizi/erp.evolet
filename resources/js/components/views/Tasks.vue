@@ -178,7 +178,7 @@ export default {
     return {
       currentView: null,
       selectedTags: [],
-      filteredTasks: this.tasks,
+      filteredTasks: [],
       myTasks: null,
       filter: {
         all: true
@@ -192,6 +192,7 @@ export default {
       employeeItems: [],
       priority: null,
       taskCategoryQuery: null,
+      page: 1,
       filterItems: [
         {
           name: "Мои задачи",
@@ -239,7 +240,6 @@ export default {
           priority: 0
         }
       ],
-      allTasksUrl: "/tasks?all=true",
       search: null
     };
   },
@@ -248,16 +248,43 @@ export default {
   },
   methods: {
     filterTask() {
-      axios
-        .get(this.appPath("api/get/tasks"), {
-          params: {
-            ...this.filter
-          }
-        })
-        .then(res => {
-          this.filtersMenu = false;
-          this.filteredTasks = res.data;
-        });
+      if (Object.keys(this.filter).length > 1) {
+        axios
+          .get(this.appPath("api/tasks/filter"), {
+            params: {
+              ...this.filter
+            }
+          })
+          .then(res => {
+            this.filtersMenu = false;
+            this.filteredTasks = res.data;
+            this.page = false;
+          });
+      } else {
+        this.filteredTasks = [];
+        this.page = 1;
+        this.paginate(); 
+        this.filtersMenu = false;
+      }
+    },
+    paginate() {
+      if (this.page) {
+        axios
+          .get(this.appPath("api/tasks/paginate"), {
+            params: {
+              page: this.page,
+              all: true
+            }
+          })
+          .then(res => {
+            this.filteredTasks.push(...res.data.data);
+            if (this.page >= res.data.last_page) {
+              this.page = false;
+            } else {
+              this.page++;
+            }
+          });
+      }
     }
   },
   computed: {
@@ -345,26 +372,24 @@ export default {
       });
     },
     taskCategory(task) {
-      if(this.filter[this.taskCategoryQuery]){
+      if (this.filter[this.taskCategoryQuery]) {
         delete this.filter[this.taskCategoryQuery];
       }
       this.filter[task.query] = task.user;
       this.taskCategoryQuery = task.query;
       if (task.name === "Сотрудник") {
         this.selectEmployee = true;
-        delete this.filter["all"]
+        delete this.filter["all"];
       } else {
         this.selectEmployee = false;
-        this.filter['all'] = true;
+        this.filter["all"] = true;
       }
-      console.log(this.filter);
     },
     employee(employee) {
-      if(this.filter['responsible_id']){
-         delete this.filter['responsible_id']
+      if (this.filter["responsible_id"]) {
+        delete this.filter["responsible_id"];
       }
       this.filter["responsible_id"] = employee.id;
-      console.log(this.filter);
     },
     priority(item) {
       if (this.priority == null) {
@@ -376,6 +401,8 @@ export default {
   },
   created() {
     this.divisionUsers;
+    this.paginate();
+    Event.listen("loadTasks", data => this.paginate());
   }
 };
 </script>

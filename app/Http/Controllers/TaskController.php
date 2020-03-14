@@ -396,14 +396,29 @@ class TaskController extends Controller
         return $task;
     }
 
-    public function getTasks(TaskFilters $filters)
+    public function paginate(TaskFilters $filters)
     {
         $tasks = Task::filter($filters)->with(
             'from',
             'responsible',
             'watchers',
             'status',
-            'tags'
+            'tags',
+            'responsibilityDescription'
+        )->paginate(30);
+
+        return $tasks;
+    }
+
+    public function filter(TaskFilters $filters) 
+    {
+        $tasks = Task::filter($filters)->with(
+            'from',
+            'responsible',
+            'watchers',
+            'status',
+            'tags',
+            'responsibilityDescription'
         )->get();
 
         return $tasks;
