@@ -39,13 +39,6 @@ class TaskFilters extends QueryFilters
     {
         $authUser = \Auth::user();
 
-        
-        // return $this->builder->where('from_id', $authUser->id)
-        // ->orWhere('responsible_id', $authUser->id)
-        // ->orWhereHas('watchers', function ($q) use ($authUser) {
-        //     $q->where('user_id', $authUser->id);
-        // });
-
         return $this->builder->where(function ($q) use ($authUser){
             $q->where('from_id', $authUser->id)
               ->orWhere('responsible_id', $authUser->id)
@@ -74,6 +67,8 @@ class TaskFilters extends QueryFilters
 
     public function title($term)
     {
-        return $this->builder->where("title", "LIKE", "%$term%");
+        return $this->builder->whereHas("responsibilityDescription", function ($q) use ($term) {
+            $q->where("title", "LIKE", "%$term%");
+        });
     }
 }

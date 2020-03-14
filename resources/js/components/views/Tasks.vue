@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row align="center" class="px-3 mb-3">
-      <v-text-field v-model="searchTask" flat dense solo hide-details label="Название задачи"></v-text-field>
+      <v-text-field v-model="searchTask" @keyup="filterTask()" flat dense solo hide-details label="Название задачи"></v-text-field>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn
@@ -357,12 +357,14 @@ export default {
       }
     },
     // function to find task by title
-    searchTask(taskName) {
+    searchTask(title) {
       // collect filtered tasks in filteredTasks
-      this.filteredTasks = this.tasks.filter(task => {
-        if (new RegExp(taskName, "gi").test(task.title)) return true;
-        if (new RegExp(taskName, "gi").test(task.title)) return true;
-      });
+     if(title == "" || this.filter["title"]) {
+        delete this.filter["title"];
+     } else {
+       this.filter["title"] = title;
+     }
+     console.log(this.filter);
     },
     myTasks(id) {
       this.tasks.forEach(task => {
