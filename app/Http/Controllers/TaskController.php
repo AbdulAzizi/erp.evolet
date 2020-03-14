@@ -137,23 +137,28 @@ class TaskController extends Controller
             'timeSets',
             'responsibilityDescription'
         )->find($id);
-        // return $task;
-
-        if ($task->from_type == "App\Process") {
-            $task->load('products.messages');
-        } else {
-            $task->load('messages');
+        // check if task exists
+        if($task){
+            if ($task->from_type == "App\Process") {
+                $task->load('products.messages');
+            } else {
+                $task->load('messages');
+            }
+    
+            // if has front tether load it
+            if ($task->from_type == "App\Process") {
+                $task->from->load('frontTethers.forms.fields');
+            }
+    
+            $task->readed = 1;
+            $task->save();
+    
+            return view('tasks.show', compact('task'));
+        }else{
+            abort(404);
         }
 
-        // if has front tether load it
-        if ($task->from_type == "App\Process") {
-            $task->from->load('frontTethers.forms.fields');
-        }
-
-        $task->readed = 1;
-        $task->save();
-
-        return view('tasks.show', compact('task'));
+        
     }
 
     public function update($id, Request $request)
