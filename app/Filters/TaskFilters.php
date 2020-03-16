@@ -28,6 +28,11 @@ class TaskFilters extends QueryFilters
         return $this->builder->where('responsible_id', $term);
     }
 
+    public function employee_id($term)
+    {
+        return $this->builder->where('responsible_id', $term);
+    }
+
     public function watcher_id($term)
     {
         return $this->builder->whereHas('watchers', function ($q) use ($term) {

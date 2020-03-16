@@ -1,7 +1,15 @@
 <template>
   <div>
     <v-row align="center" class="px-3 mb-3">
-      <v-text-field v-model="searchTask" @keyup="filterTask()" flat dense solo hide-details label="Название задачи"></v-text-field>
+      <v-text-field
+        v-model="searchTask"
+        @keyup="filterTask()"
+        flat
+        dense
+        solo
+        hide-details
+        label="Название задачи"
+      ></v-text-field>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn
@@ -269,7 +277,7 @@ export default {
       } else {
         this.filteredTasks = [];
         this.page = 1;
-        this.paginate(); 
+        this.paginate();
         this.filtersMenu = false;
       }
     },
@@ -367,11 +375,11 @@ export default {
     // function to find task by title
     searchTask(title) {
       // collect filtered tasks in filteredTasks
-     if(title == "" || this.filter["title"]) {
+      if (title == "" || this.filter["title"]) {
         delete this.filter["title"];
-     } else {
-       this.filter["title"] = title;
-     }
+      } else {
+        this.filter["title"] = title;
+      }
     },
     myTasks(id) {
       this.tasks.forEach(task => {
@@ -391,15 +399,18 @@ export default {
         delete this.filter["all"];
       } else {
         this.selectEmployee = false;
-        delete this.filter['responsible_id'];
+        this.employee = null;
+        delete this.filter["employee_id"];
         this.filter["all"] = true;
       }
     },
     employee(employee) {
-      if (this.filter["responsible_id"]) {
-        delete this.filter["responsible_id"];
+      if(employee !== null){
+        if (this.filter["employee_id"]) {
+          delete this.filter["employee_id"];
+        }
+          this.filter["employee_id"] = employee.id;
       }
-      this.filter["responsible_id"] = employee.id;
     },
     priority(item) {
       if (this.priority == null) {
