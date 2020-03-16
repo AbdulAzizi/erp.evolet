@@ -14,9 +14,9 @@
                     <tr>
                         <td>{{item.task.responsibility_description.title}}</td>
                         <td>{{item.task.description}}</td>
-                        <td>{{moment(item.start_time).format('LTS') }}</td>
+                        <td>{{moment(item.start_time).local().format('LTS') }}</td>
                         <td>
-                            <template v-if="item.end_time">{{moment(item.end_time).format('LTS') }}</template>
+                            <template v-if="item.end_time">{{moment(item.end_time).local().format('LTS') }}</template>
                             <template v-else></template>
                         </td>
                         <td>
