@@ -56,7 +56,6 @@
             </v-tooltip>
 
             <dropdown-btn
-                v-if="false"
                 :items="auth.notifications"
                 :user="user"
                 tooltip="Уведомления"

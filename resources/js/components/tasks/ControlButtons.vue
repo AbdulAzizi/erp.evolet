@@ -91,16 +91,25 @@ export default {
             this.localTask.time_sets.forEach(time_set => {
                 // Make last start time as a moment object
                 from = this.moment(time_set.start_time);
+                console.log("from");
+                console.log(from);
                 // if end time exists get it if not get current time
                 to = time_set.end_time
                     ? this.moment(time_set.end_time)
-                    : this.moment();
+                    : this.moment( new Date() );
+                console.log("to");
+                console.log(to);
                 // Add diff time to sum
                 sumOfDiffTime = sumOfDiffTime + to.diff(from);
+                console.log("sumOfDiffTime");
+                console.log(sumOfDiffTime);
+                console.log("to.diff(from)");
+                console.log(to.diff(from));
             });
 
             // Set Duration variable as difference time
             this.duration = sumOfDiffTime;
+            
         },
         runTimer() {
             setInterval(() => {
@@ -175,6 +184,10 @@ export default {
     watch: {
         task(val) {
             this.localTask = val;
+        },
+        duration(val){
+            console.log("Duration");
+            console.log(val);
         }
     },
     computed: {
