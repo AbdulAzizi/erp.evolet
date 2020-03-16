@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row align="center" class="px-3 mb-3">
-      <v-text-field v-model="searchTask" flat dense solo hide-details label="Название задачи"></v-text-field>
+      <v-text-field v-model="searchTask" @keyup="filterTask()" flat dense solo hide-details label="Название задачи"></v-text-field>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn
@@ -168,6 +168,9 @@
       :authuser="authuser"
     />
     <tasks-add :divisions="divisions" :users="users" :errors="errors" />
+    <v-overlay v-if="loading" light opacity="0.2">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -178,7 +181,7 @@ export default {
     return {
       currentView: null,
       selectedTags: [],
-      filteredTasks: this.tasks,
+      filteredTasks: [],
       myTasks: null,
       filter: {
         all: true
@@ -192,6 +195,7 @@ export default {
       employeeItems: [],
       priority: null,
       taskCategoryQuery: null,
+      page: 1,
       filterItems: [
         {
           name: "Мои задачи",
@@ -239,8 +243,8 @@ export default {
           priority: 0
         }
       ],
-      allTasksUrl: "/tasks?all=true",
-      search: null
+      search: null,
+      loading: false
     };
   },
   mounted() {
@@ -248,16 +252,47 @@ export default {
   },
   methods: {
     filterTask() {
-      axios
-        .get(this.appPath("api/get/tasks"), {
-          params: {
-            ...this.filter
-          }
-        })
-        .then(res => {
-          this.filtersMenu = false;
-          this.filteredTasks = res.data;
-        });
+      if (Object.keys(this.filter).length > 1) {
+        this.loading = true;
+        axios
+          .get(this.appPath("api/tasks/filter"), {
+            params: {
+              ...this.filter
+            }
+          })
+          .then(res => {
+            this.filtersMenu = false;
+            this.filteredTasks = res.data;
+            this.page = false;
+            this.loading = false;
+          });
+      } else {
+        this.filteredTasks = [];
+        this.page = 1;
+        this.paginate(); 
+        this.filtersMenu = false;
+      }
+    },
+    paginate() {
+      if (this.page) {
+        this.loading = true;
+        axios
+          .get(this.appPath("api/tasks/paginate"), {
+            params: {
+              page: this.page,
+              all: true
+            }
+          })
+          .then(res => {
+            this.filteredTasks.push(...res.data.data);
+            if (this.page >= res.data.last_page) {
+              this.page = false;
+            } else {
+              this.page++;
+            }
+            this.loading = false;
+          });
+      }
     }
   },
   computed: {
@@ -330,12 +365,13 @@ export default {
       }
     },
     // function to find task by title
-    searchTask(taskName) {
+    searchTask(title) {
       // collect filtered tasks in filteredTasks
-      this.filteredTasks = this.tasks.filter(task => {
-        if (new RegExp(taskName, "gi").test(task.title)) return true;
-        if (new RegExp(taskName, "gi").test(task.title)) return true;
-      });
+     if(title == "" || this.filter["title"]) {
+        delete this.filter["title"];
+     } else {
+       this.filter["title"] = title;
+     }
     },
     myTasks(id) {
       this.tasks.forEach(task => {
@@ -345,26 +381,25 @@ export default {
       });
     },
     taskCategory(task) {
-      if(this.filter[this.taskCategoryQuery]){
+      if (this.filter[this.taskCategoryQuery]) {
         delete this.filter[this.taskCategoryQuery];
       }
       this.filter[task.query] = task.user;
       this.taskCategoryQuery = task.query;
       if (task.name === "Сотрудник") {
         this.selectEmployee = true;
-        delete this.filter["all"]
+        delete this.filter["all"];
       } else {
         this.selectEmployee = false;
-        this.filter['all'] = true;
+        delete this.filter['responsible_id'];
+        this.filter["all"] = true;
       }
-      console.log(this.filter);
     },
     employee(employee) {
-      if(this.filter['responsible_id']){
-         delete this.filter['responsible_id']
+      if (this.filter["responsible_id"]) {
+        delete this.filter["responsible_id"];
       }
       this.filter["responsible_id"] = employee.id;
-      console.log(this.filter);
     },
     priority(item) {
       if (this.priority == null) {
@@ -376,6 +411,8 @@ export default {
   },
   created() {
     this.divisionUsers;
+    this.paginate();
+    Event.listen("loadTasks", data => this.paginate());
   }
 };
 </script>

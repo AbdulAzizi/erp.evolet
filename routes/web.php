@@ -118,5 +118,6 @@ Route::prefix('api')->group(function () {
     Route::get('/responsibilities/{id}/movedown', 'ResponsibilityController@movedown')->name('api.responsibilities.movedown');
     Route::post('/responsibility_descriptions/moveup', 'ResponsibilityDescriptionController@moveup')->name('api.responsibilityDescription.moveup');
     Route::post('/responsibility_descriptions/movedown', 'ResponsibilityDescriptionController@movedown')->name('api.responsibilityDescription.movedown');
-    Route::get('/get/tasks', 'TaskController@getTasks')->name('api.get.tasks');
+    Route::get('/tasks/filter', 'TaskController@filter')->name('api.tasks.filter');
+    Route::get('/tasks/paginate', 'TaskController@paginate')->name('api.tasks.paginate');
 });

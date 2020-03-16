@@ -3,7 +3,7 @@
     <!-- <v-dialog v-model="taskDialog" max-width="1000">
             <task :item="selectedTask" :users="users"></task>
     </v-dialog>-->
-    <v-infinite-scroll @bottom="nextPage()" @top="prevPage()" style="max-height: 80vh; overflow-y: scroll;">
+    <v-infinite-scroll @bottom="nextPage()" style="max-height: 80vh; overflow-y: scroll;">
       <v-data-table
         v-if="localTasks.length"
         :headers="headers"
@@ -127,8 +127,8 @@ export default {
       this.perPage = 30;
     },
     nextPage(){
-      ++this.page;
       this.perPage += 30;
+      Event.fire('loadTasks');
     }
   },
   created() {
@@ -139,14 +139,12 @@ export default {
         }
       });
     });
-    console.log(this.tasks);
-    
   },
   watch: {
     tasks(val) {
       this.localTasks = val;
     }
-  }
+  },
 };
 </script>
 
