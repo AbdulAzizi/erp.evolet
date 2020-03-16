@@ -96,7 +96,7 @@ export default {
                 // if end time exists get it if not get current time
                 to = time_set.end_time
                     ? this.moment(time_set.end_time)
-                    : this.moment();
+                    : this.moment( new Date() );
                 console.log("to");
                 console.log(to);
                 // Add diff time to sum
