@@ -101,6 +101,9 @@ export default {
 
             // Set Duration variable as difference time
             this.duration = sumOfDiffTime;
+            console.log("this.duration");
+            console.log(this.duration);
+            
         },
         runTimer() {
             setInterval(() => {
@@ -175,6 +178,10 @@ export default {
     watch: {
         task(val) {
             this.localTask = val;
+        },
+        duration(val){
+            console.log("Duration");
+            console.log(val);
         }
     },
     computed: {
