@@ -179,7 +179,7 @@
 
                     <priority :id="task.priority" classes=" lighten-3"></priority>
 
-                    <task-control-buttons class="mr-5" :task="task" />
+                    <task-control-buttons v-if="userIsTaskOwner" class="mr-5" :task="task" />
 
                     <v-subheader v-if="task.tags.length">Теги</v-subheader>
                     <div class="px-3">
@@ -351,6 +351,9 @@ export default {
             users.push(this.task.responsible, this.task.from);
 
             return users;
+        },
+        userIsTaskOwner(){
+            return this.auth.id == this.task.responsible_id;
         }
     }
 };
