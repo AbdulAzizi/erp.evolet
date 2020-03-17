@@ -39,6 +39,18 @@ class ResponsibilityController extends Controller
     {
         $responsibility = Responsibility::find($request->id);
 
+        // find all description that are below
+        $lowerResponsibilities = Responsibility::where('order','>', $responsibility->order)
+                                                ->where('position_id', $responsibility->position_id)
+                                                ->get();
+        // lopp through all of them
+        foreach ($lowerResponsibilities as $lowerResponsibility) {
+            // decrease order by 1
+            $lowerResponsibility->order = $lowerResponsibility->order - 1;
+            // save description
+            $lowerResponsibility->save();
+        }
+
         $responsibility->descriptions()->delete();
 
         $responsibility->delete();
