@@ -50,4 +50,13 @@ class ProfileController extends Controller
 
         return view('profile.tasks', compact('timesets','tasks'));
     }
+
+    public function dashboard($id)
+    {
+        $statuses = Status::withCount(['tasks' => function(Builder $query) use ($id){
+            $query->where('responsible_id', $id);
+        }])->get();
+
+        return view('users.show', compact('statuses'));
+    }
 }

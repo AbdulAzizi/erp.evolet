@@ -55,8 +55,7 @@ export default {
             default: undefined
         },
         value: {
-            type: String,
-            default: undefined
+            required:true
         },
         smallValue: {
             type: String,
