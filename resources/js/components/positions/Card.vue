@@ -464,6 +464,17 @@ export default {
             this.localPosition.responsibilities.forEach(responsibility => {
                 responsibility.descriptions.forEach((description, index) => {
                     if (description.id == descriptionId) {
+                        // get the order number of item that is deleted
+                        let order = description.order;
+                        // loop through all of them
+                        responsibility.descriptions.forEach((desc, index) => {
+                            // if order is lower than the deleted one
+                            if(desc.order > order){
+                                // decrease order number by one
+                                desc.order = desc.order - 1;
+                            }
+                        });
+                        // delete item
                         responsibility.descriptions.splice(index, 1);
                     }
                 });

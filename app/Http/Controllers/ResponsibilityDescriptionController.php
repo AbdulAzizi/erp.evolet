@@ -38,6 +38,17 @@ class ResponsibilityDescriptionController extends Controller
     public function delete(Request $request)
     {
         $description = ResponsibilityDescription::find($request->id);
+        // find all description that are below
+        $lowerDescriptions = ResponsibilityDescription::where('order','>', $description->order)
+                                                        ->where('responsibility_id', $description->responsibility_id)
+                                                        ->get();
+        // lopp through all of them
+        foreach ($lowerDescriptions as $lowerDescription) {
+            // decrease order by 1
+            $lowerDescription->order = $lowerDescription->order - 1;
+            // save description
+            $lowerDescription->save();
+        }
 
         $description->delete();
     }
