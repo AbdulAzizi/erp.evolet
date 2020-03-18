@@ -49,7 +49,7 @@
             <td>
               <avatar size="30" :user="item.responsible" />
             </td>
-            <td>{{ moment(item.created_at).fromNow() }}</td>
+            <td>{{ moment(item.created_at).format('L') }}</td>
             <td>{{ item.status.name }}</td>
             <td>
               <v-chip
@@ -90,7 +90,7 @@ export default {
         { text: "Дедлайн", value: "deadline" },
         { text: "От", value: "from", sort: false },
         { text: "Исполнитель", value: "responsible", sort: false },
-        { text: "CreatedAt", value: "created_at" },
+        { text: "Поставленна", value: "created_at" },
         { text: "Статус", value: "status" },
         { text: "Теги", value: "tags", width: 100 }
       ],
