@@ -25,11 +25,20 @@ class DivisionController extends Controller
     {
         $userDivisionId = auth()->user()->division_id;
 
-        $division = Division::with('head', 'users', 'positions.responsibilities.descriptions', 'tags')->withDepth()->descendantsAndSelf($userDivisionId)->toTree()->first();
+        $division = Division::with([
+                            'head', 'users','tags',
+                            'positions.responsibilities' => function ($query) {
+                                $query->orderBy('order')->with(['descriptions' => function ($query) {
+                                    $query->orderBy('order');
+                                }]);
+                            }])
+                            ->withDepth()
+                            ->descendantsAndSelf($userDivisionId)
+                            ->toTree()
+                            ->first();
         
-        $divisions = Division::with('positions.responsibilities.descriptions')->withDepth()->get();
-
-        $positionLevels = PositionLevel::where('name', '!=', 'Руководитель')->get();
+        $positionLevels = PositionLevel::where('name', '!=', 'Руководитель')
+                                        ->get();
 
         $authUser = \Auth::user();
 
@@ -51,8 +60,7 @@ class DivisionController extends Controller
             'oldInputs', 
             'jsonPositionLevels', 
             'jsonPositions', 
-            'authUser', 
-            'divisions'
+            'authUser'
         ));
     }
 
