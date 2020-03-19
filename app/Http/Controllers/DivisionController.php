@@ -111,11 +111,13 @@ class DivisionController extends Controller
 
         $division = Division::where('head_id', $request->id)->first();
         
-        $divisionWithDepth = $division->withDepth()->descendantsOf($division->id);
+        $divisionWithDepth = $division->withDepth()->descendantsAndSelf($division->id);
         
         foreach($divisionWithDepth as $division){
             foreach($division->users as $user){
-                $users[] = $user;
+                if($user->id != $request->id){
+                    $users[] = $user;
+                }
             }
         }
 
