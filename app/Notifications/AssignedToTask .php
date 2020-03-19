@@ -60,10 +60,10 @@ class AssignedToTask extends Notification
         if (isset($this->from->email))
             return [
                 'avatar' => $this->from->img,
-                'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
+                'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
                     ' поставил(a) вам новую задачу',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                            $this->task->title . '</a>',
+                            $this->task->responsibilityDescription->title . '</a>',
                 'task' => $this->task->id
             ];
         // if procces
@@ -73,7 +73,7 @@ class AssignedToTask extends Notification
                 'title' =>  'Процесс <a href="#">' . $this->from->name . '</a>' .
                     ' поставил вам новую задачу',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                            $this->task->title . '</a>',
+                            $this->task->responsibilityDescription->title . '</a>',
                 'task' => $this->task->id
             ];
     }
@@ -83,11 +83,11 @@ class AssignedToTask extends Notification
         if (isset($this->from->email))
             return new BroadcastMessage([
                 'avatar' => $this->from->img,
-                'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
+                'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
                             ' поставил(a) вам новую задачу',
                 'notification' => $notifiable->notifications()->find($this->id),
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                            $this->task->title . '</a>',
+                            $this->task->responsibilityDescription->title . '</a>',
                 'task' => $this->task->id
             ]);
         // if procces
@@ -98,7 +98,7 @@ class AssignedToTask extends Notification
                     ' поставил вам новую задачу',
                 'notification' => $notifiable->notifications()->find($this->id),
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                            $this->task->title . '</a>',
+                            $this->task->responsibilityDescription->title . '</a>',
                 'task' => $this->task->id
             ]);
     }
