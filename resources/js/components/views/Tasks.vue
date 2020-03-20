@@ -158,7 +158,7 @@
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn small text :value="activeBtn.KANBAN" dark v-on="on" height="38">
+            <v-btn small text :value="activeBtn.KANBAN" dark v-on="on" height="38" @click="loadKanbanData()">
               <v-icon :color="isKanban ? 'white' : 'grey lighten-0'">mdi-view-dashboard</v-icon>
             </v-btn>
           </template>
@@ -169,22 +169,17 @@
 
     <tasks-table :tasks="filteredTasks" v-show="isTable"></tasks-table>
     <!-- <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar> -->
-    <kanban-view
-      v-show="isKanban"
-      :tasks="filteredTasks"
-      :taskStatuses="statuses"
-      :authuser="authuser"
-    />
+    <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser"/>
     <tasks-add :divisions="divisions" :users="users" :errors="errors" />
-    <v-overlay v-if="loading" light opacity="0.2">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    <v-overlay v-if="loading" light opacity="0">
+      <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
     </v-overlay>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["tasks", "divisions", "users", "errors", "statuses", "authuser"],
+  props: ["divisions", "users", "errors", "statuses", "authuser"],
   data() {
     return {
       currentView: null,
@@ -280,6 +275,7 @@ export default {
         this.paginate();
         this.filtersMenu = false;
       }
+      Event.fire("kanbanFilter", this.filter);
     },
     paginate() {
       if (this.page) {
@@ -301,6 +297,9 @@ export default {
             this.loading = false;
           });
       }
+    },
+    loadKanbanData(){
+       Event.fire('isKanbanTasks');
     }
   },
   computed: {
@@ -330,7 +329,7 @@ export default {
       // Make empty array to collect all tags
       let localTags = [];
       // Loop through tasks
-      this.tasks.forEach(task => {
+      this.filteredTasks.forEach(task => {
         // Loop through tags of task
         task.tags.forEach(tag => {
           // Get tag that matches from localTags
@@ -405,11 +404,11 @@ export default {
       }
     },
     employee(employee) {
-      if(employee !== null){
+      if (employee !== null) {
         if (this.filter["employee_id"]) {
           delete this.filter["employee_id"];
         }
-          this.filter["employee_id"] = employee.id;
+        this.filter["employee_id"] = employee.id;
       }
     },
     priority(item) {

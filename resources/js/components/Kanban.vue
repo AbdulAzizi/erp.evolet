@@ -201,6 +201,9 @@
         </v-card>
       </div>
     </div>
+    <v-overlay v-if="loading" light opacity="0">
+      <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 <script>
@@ -209,13 +212,16 @@ export default {
   components: {
     draggable
   },
-  props: ["taskStatuses", "tasks", "authuser"],
+  props: ["filteredTasks", "taskStatuses", "authuser"],
   data() {
     return {
       updateListForm: null,
+      loading: false,
       addListForm: false,
+      localView: this.currentView,
       listName: null,
       updateListName: null,
+      params: { all: true },
       mainStatuses: this.taskStatuses.filter(elem => !elem.user_id),
       userStatuses: this.taskStatuses.filter(
         elem => elem.user_id === this.authuser.id
@@ -229,6 +235,8 @@ export default {
       cardDialog: false,
       selectedTask: null,
       check: [],
+      localTasks: null,
+      tasks: [],
       priorities: [
         { id: 0, label: "Низкий", color: "green lighten-3" },
         { id: 1, label: "Средний", color: "blue lighten-3" },
@@ -256,7 +264,7 @@ export default {
         .then(res => {
           this.statuses.forEach(elem => {
             if (elem.id == statusId) {
-              this.tasks.find(task => {
+              this.localTasks.find(task => {
                 if (task.id == id) {
                   elem.items.push(task);
                 }
@@ -278,14 +286,16 @@ export default {
       });
     },
     prepareStatuses() {
-      this.tasks.forEach(task => {
+      this.localTasks.forEach(task => {
         if (!this.statuses.find(status => status.id == task.status.id))
           this.statuses.push({ items: [] });
       });
     },
     preparestatusItems() {
       this.statuses.forEach(status => {
-        status.items = this.tasks.filter(task => task.status_id == status.id);
+        status.items = this.localTasks.filter(
+          task => task.status_id == status.id
+        );
       });
     },
     addList() {
@@ -384,14 +394,49 @@ export default {
       users.push(task.responsible, task.from);
 
       return users;
+    },
+    async loadTasks() {
+      try {
+        const { data } = await axios.get(this.appPath("api/tasks/filter"), {
+          params: {
+            ...this.params
+          }
+        });
+        this.localTasks = await data;
+        console.log("kanban tasks loaded");
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    prepareCards() {
+      this.mainStatuses.forEach(elem => this.statuses.push(elem));
+      this.userStatuses.forEach(elem => this.statuses.push(elem));
+      this.prepareStats()
+    },
+    prepareStats(){
+      this.prepareStatuses();
+      this.preparestatusItems();
     }
   },
-  created() {
-    this.mainStatuses.forEach(elem => this.statuses.push(elem));
-    this.userStatuses.forEach(elem => this.statuses.push(elem));
-    this.prepareStatuses();
-    this.preparestatusItems();
-  },
+  async created() {
+    Event.listen("isKanbanTasks", async data => {
+      if (this.localTasks == null) {
+        await this.loadTasks();
+        this.prepareCards();
+      }
+    });
+    Event.listen("kanbanFilter", async data => {
+      this.loading = true;
+      this.params = data;
+      await this.loadTasks();
+      this.prepareStats();
+      this.loading = false;
+    });
+    if(localStorage.currentView == 3){
+      await this.loadTasks();
+      this.prepareCards();
+    }
+  }
 };
 </script>
 <style>

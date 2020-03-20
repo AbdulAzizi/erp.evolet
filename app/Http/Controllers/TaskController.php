@@ -22,14 +22,14 @@ class TaskController extends Controller
         $authUser = \Auth::user();
         $statuses = Status::all();
 
-        $tasks = Task::filter($filters)->with(
-            'from',
-            'responsible',
-            'watchers',
-            'status',
-            'tags',
-            'responsibilityDescription'
-        )->get();
+        // $tasks = Task::filter($filters)->with(
+        //     'from',
+        //     'responsible',
+        //     'watchers',
+        //     'status',
+        //     'tags',
+        //     'responsibilityDescription'
+        // )->get();
 
         // foreach ($tasks as $task) {
         //     // If task is from process
@@ -46,7 +46,7 @@ class TaskController extends Controller
         // $notifications = $authUser->notifications;
 
         return view('tasks.index', compact(
-            'tasks',
+            // 'tasks',
             'users',
             'statuses',
             'authUser',
@@ -303,7 +303,8 @@ class TaskController extends Controller
             'messages.sender',
             'questionTasks.answers',
             'questionTasks.question.options',
-            'forms.fields'
+            'forms.fields',
+            'responsibilityDescription'
         )->find($id);
 
         // if has front tether load it
