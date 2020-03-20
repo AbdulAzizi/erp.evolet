@@ -26,14 +26,6 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
-    public function show(Request $request)
-    {
-
-        $user = User::find($request->id);
-
-        return view('users.show', compact('user'));
-    }
-
     public function delete($id)
     {
         $user = User::find($id);

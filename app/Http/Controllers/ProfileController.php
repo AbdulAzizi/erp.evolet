@@ -36,15 +36,27 @@ class ProfileController extends Controller
     public function tasks($userID)
     {
         $closedStatus = Status::where('name', 'Закрытый')->first();
-        $timesets = Timeset::with('task.responsibilityDescription')->get();
+
+        $timesets = Timeset::whereHas('task', function(Builder $taskQuery) use ($userID){
+                                $taskQuery->where('responsible_id', $userID);
+                            })
+                            ->with('task.responsibilityDescription')->get();
+
         $tasks = Task::whereHas('timeSets')
                      ->where('status_id',$closedStatus->id)
                      ->where('responsible_id',$userID)
                      ->with('timeSets','responsibilityDescription')
                      ->get();
-        // $user = User::with('tasks.timeSets')->find($userID);
-        // $tasks = $user->tasks;
 
         return view('profile.tasks', compact('timesets','tasks'));
+    }
+
+    public function dashboard($id)
+    {
+        $statuses = Status::withCount(['tasks' => function(Builder $query) use ($id){
+            $query->where('responsible_id', $id);
+        }])->get();
+
+        return view('users.show', compact('statuses'));
     }
 }

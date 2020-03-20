@@ -1,5 +1,5 @@
 @extends('layouts.profile')
 
 @section('content')
-    <users-show :user="{{ $user }}" :authuser="{{ Auth::user() }}"></users-show>
+    <users-show :statuses="{{ $statuses }}"></users-show>
 @endsection

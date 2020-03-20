@@ -40,7 +40,11 @@
                             />
                         </v-col>
                         <v-col cols="12" class="pb-0">
-                            <input type="hidden" name="responsibility_description" :value="selectedResponsibility"/>
+                            <input
+                                type="hidden"
+                                name="responsibility_description"
+                                :value="selectedResponsibility"
+                            />
                             <v-select
                                 v-model="selectedResponsibility"
                                 prepend-icon="mdi-rename-box"
@@ -89,11 +93,12 @@
                                     <v-col cols="12" md="4" class="py-0">
                                         <form-field
                                             :field="{
-                            type: 'number',
-                            label: 'Дни',
-                            icon: 'mdi-timelapse',
-                            rules: [rules.taskTimeRule]
-                        }"
+                                                type: 'number',
+                                                label: 'Дни',
+                                                icon: 'mdi-timelapse',
+                                                rules: [rules.taskTimeRule, rules.day],
+                                                min:'0'
+                                            }"
                                             v-model="estimateDays"
                                             ref="estimateDays"
                                         />
@@ -101,10 +106,12 @@
                                     <v-col cols="12" md="4" class="py-0">
                                         <form-field
                                             :field="{
-                            type: 'number',
-                            label: 'Часы',
-                            rules: [rules.taskTimeRule]
-                        }"
+                                                type: 'number',
+                                                label: 'Часы',
+                                                rules: [rules.taskTimeRule, rules.hour],
+                                                min:'0',
+                                                max:'23'
+                                                }"
                                             v-model="estimateHours"
                                             ref="estimateHours"
                                         />
@@ -112,10 +119,12 @@
                                     <v-col cols="12" md="4" class="py-0">
                                         <form-field
                                             :field="{
-                            type: 'number',
-                            label: 'Минуты',
-                            rules: [rules.taskTimeRule]
-                        }"
+                                                type: 'number',
+                                                label: 'Минуты',
+                                                rules: [rules.taskTimeRule, rules.minute],
+                                                min:'0',
+                                                max:'59'
+                                            }"
                                             v-model="estimateMinutes"
                                             ref="estimateMinutes"
                                         />
@@ -456,7 +465,11 @@ export default {
                 notEmptyArray: value => {
                     return value.length != 0 || "Обязательное поле";
                 },
-                taskTimeRule: () => !!this.estimateTime || "Обязательное поле"
+                taskTimeRule: () => !!this.estimateTime || "Обязательное поле",
+                day: val => val < 366 || "Должно быть меньше 366",
+                hour: val => val < 24 || "Должно быть меньше 24",
+                minute: val => val < 60 || "Должно быть меньше 60",
+
             },
             formHasErrors: false,
             csrf_token: window.Laravel.csrf_token,
@@ -563,6 +576,8 @@ export default {
             }
         },
         estimateTime(value) {
+            console.log(value);
+
             this.$refs["estimateDays"].validate(true);
             this.$refs["estimateHours"].validate(true);
             this.$refs["estimateMinutes"].validate(true);

@@ -43,7 +43,7 @@ class AssignedAsAuthor extends Notification
         return [
             'avatar' => $this->task->responsible->img,
             'title' =>  'Вы автор задачи:',
-            'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' . $this->task->title . '</a>',
+            'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' . $this->task->responsibilityDescription->title . '</a>',
             'task' => $this->task->id
         ];
     }
@@ -52,7 +52,7 @@ class AssignedAsAuthor extends Notification
     // {
     //     return new BroadcastMessage([
     //         'avatar' => $this->task->responsible->img,
-    //         'title' =>  'Вы автор задачи: <a href="' . route("tasks.show", $this->task->id) . '">' . $this->task->title . '</a>'
+    //         'title' =>  'Вы автор задачи: <a href="' . route("tasks.show", $this->task->id) . '">' . $this->task->responsibilityDescription->title . '</a>'
     //     ]);
     // }
     

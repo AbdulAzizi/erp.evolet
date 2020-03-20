@@ -87,9 +87,7 @@
                             :key="subIndex"
                         >
                             <v-hover v-slot:default="{ hover }">
-                                <v-row
-                                    style="border-bottom: 1px solid #e0e0e0;" class="pa-0 ma-0"
-                                >
+                                <v-row style="border-bottom: 1px solid #e0e0e0;" class="pa-0 ma-0">
                                     <v-col cols="9">
                                         <div class="float-left">{{index + 1}}.{{subIndex + 1}}.</div>
                                         <div
@@ -336,10 +334,7 @@ export default {
             }
         },
         moveDescriptionDown(position, responsibility, description) {
-            if (
-                description.order <
-                responsibility.descriptions.length
-            ) {
+            if (description.order < responsibility.descriptions.length) {
                 axios
                     .post(
                         this.appPath(
@@ -423,6 +418,19 @@ export default {
             this.localPosition.responsibilities.forEach(
                 (responsibility, index) => {
                     if (responsibility.id == responsibilityId) {
+                        // get the order number of item that is deleted
+                        let order = responsibility.order;
+                        // loop through all of them
+                        this.localPosition.responsibilities.forEach(
+                            (resp, index) => {
+                                // if order is lower than the deleted one
+                                if (resp.order > order) {
+                                    // decrease order number by one
+                                    resp.order = resp.order - 1;
+                                }
+                            }
+                        );
+                        // delete item
                         this.localPosition.responsibilities.splice(index, 1);
                     }
                 }
@@ -464,6 +472,17 @@ export default {
             this.localPosition.responsibilities.forEach(responsibility => {
                 responsibility.descriptions.forEach((description, index) => {
                     if (description.id == descriptionId) {
+                        // get the order number of item that is deleted
+                        let order = description.order;
+                        // loop through all of them
+                        responsibility.descriptions.forEach((desc, index) => {
+                            // if order is lower than the deleted one
+                            if (desc.order > order) {
+                                // decrease order number by one
+                                desc.order = desc.order - 1;
+                            }
+                        });
+                        // delete item
                         responsibility.descriptions.splice(index, 1);
                     }
                 });
