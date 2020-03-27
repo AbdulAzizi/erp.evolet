@@ -86,6 +86,21 @@
                 </v-list-item-content>
               </template>
             </v-select>
+            <v-select
+              v-model="status"
+              :items="taskStatuses"
+              label="Статус задачи"
+              class="mb-4"
+              item-text="name"
+              item-value="url"
+              height="38"
+              outlined
+              flat
+              dense
+              hide-details
+              single-line
+              return-object
+            ></v-select>
             <v-autocomplete
               v-model="selectedTags"
               :items="tasksTags"
@@ -190,6 +205,7 @@ export default {
       filters: {
         all: true
       },
+      status: null,
       taskCategory: null,
       filtersMenu: false,
       selectEmployee: false,
@@ -219,6 +235,28 @@ export default {
           name: "Все задачи",
           query: "all",
           user: true
+        }
+      ],
+      taskStatuses: [
+        {
+          name: "Новый",
+          query: "status_id",
+          id: 1
+        },
+        {
+          name: "В процессе",
+          query: "status_id",
+          id: 2
+        },
+        {
+          name: "Приостановлен",
+          query: "status_id",
+          id: 3
+        },
+        {
+          name: "Закрытый",
+          query: "status_id",
+          id: 4
         }
       ],
       priorityItems: [
@@ -371,10 +409,10 @@ export default {
         : this.setFilter("title", title);
     },
     taskCategory(newVal, oldVal) {
-      if (oldVal && oldVal.query !== 'all') {
+      if (oldVal && oldVal.query !== "all") {
         this.deleteFilter(oldVal.query);
       }
-      if(newVal){
+      if (newVal) {
         this.setFilter(newVal.query, newVal.user);
       }
       console.log(this.filters);
@@ -382,25 +420,32 @@ export default {
     employee(newVal) {
       if (newVal !== null) {
         if (this.filters["employee_id"]) {
-          this.deleteFilter('employee_id');
+          this.deleteFilter("employee_id");
         }
         this.page = false;
-        this.deleteFilter('all');
-        this.setFilter('employee_id', newVal.id);
+        this.deleteFilter("all");
+        this.setFilter("employee_id", newVal.id);
       }
     },
     priority(item) {
       if (this.priority == null) {
-        delete this.filters["priority"];
+        this.deleteFilter("priority");
       } else {
-        this.filters[item.query] = item.priority;
+        this.setFilter("priority", item.priority)
+      }
+    },
+    status(item){
+      if (this.status == null) {
+        this.deleteFilter("status_id");
+      } else {
+        this.setFilter("status_id", item.id)
       }
     },
     selectEmployee(val) {
       if (val && this.taskCategory) {
         this.deleteFilter(this.taskCategory.query);
       }
-      if(!val){
+      if (!val) {
         this.employee = null;
         this.setFilter("all", true);
         this.taskCategory = null;
