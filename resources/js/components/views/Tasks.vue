@@ -36,6 +36,7 @@
         <v-card flat tile>
           <v-card-text>
             <v-select
+              v-if="!selectEmployee"
               v-model="taskCategory"
               :items="filterItems"
               label="Задачи"
@@ -131,6 +132,7 @@
                 {{ data.item.name }}
               </template>
             </v-select>
+            <v-switch label="Задачи сотрудника" v-model="selectEmployee" />
             <v-btn block dark depressed color="primary" @click="filterTask()">Фильтр</v-btn>
           </v-card-text>
         </v-card>
@@ -158,7 +160,7 @@
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn small text :value="activeBtn.KANBAN" dark v-on="on" height="38" @click="loadKanbanData()">
+            <v-btn small text :value="activeBtn.KANBAN" dark v-on="on" height="38">
               <v-icon :color="isKanban ? 'white' : 'grey lighten-0'">mdi-view-dashboard</v-icon>
             </v-btn>
           </template>
@@ -169,7 +171,7 @@
 
     <tasks-table :tasks="filteredTasks" v-show="isTable"></tasks-table>
     <!-- <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar> -->
-    <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser"/>
+    <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser" />
     <tasks-add :divisions="divisions" :users="users" :errors="errors" />
     <v-overlay v-if="loading" light opacity="0">
       <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
@@ -185,15 +187,13 @@ export default {
       currentView: null,
       selectedTags: [],
       filteredTasks: [],
-      myTasks: null,
-      filter: {
+      filters: {
         all: true
       },
       taskCategory: null,
       filtersMenu: false,
       selectEmployee: false,
       searchTask: "",
-      localPriorityColor: "grey",
       employee: null,
       employeeItems: [],
       priority: null,
@@ -214,11 +214,6 @@ export default {
           name: "Наблюдаю задачи",
           query: "watcher_id",
           user: this.authuser.id
-        },
-        {
-          name: "Сотрудник",
-          query: "",
-          user: ""
         },
         {
           name: "Все задачи",
@@ -246,7 +241,6 @@ export default {
           priority: 0
         }
       ],
-      search: null,
       loading: false
     };
   },
@@ -255,27 +249,28 @@ export default {
   },
   methods: {
     filterTask() {
-      if (Object.keys(this.filter).length > 1) {
-        this.loading = true;
+      const filtersLen = Object.keys(this.filters).length;
+
+      if (filtersLen > 1 || this.selectEmployee) {
+        this.loading = !this.loading;
         axios
           .get(this.appPath("api/tasks/filter"), {
             params: {
-              ...this.filter
+              ...this.filters
             }
           })
           .then(res => {
-            this.filtersMenu = false;
+            this.filtersMenu = !this.filtersMenu;
             this.filteredTasks = res.data;
-            this.page = false;
-            this.loading = false;
+            this.page = this.loading = false;
           });
       } else {
         this.filteredTasks = [];
         this.page = 1;
         this.paginate();
-        this.filtersMenu = false;
+        this.filtersMenu = !this.filtersMenu;
       }
-      Event.fire("kanbanFilter", this.filter);
+      Event.fire("kanbanFilter", this.filters);
     },
     paginate() {
       if (this.page) {
@@ -289,17 +284,16 @@ export default {
           })
           .then(res => {
             this.filteredTasks.push(...res.data.data);
-            if (this.page >= res.data.last_page) {
-              this.page = false;
-            } else {
-              this.page++;
-            }
+            this.page >= res.data.last_page ? (this.page = false) : this.page++;
             this.loading = false;
           });
       }
     },
-    loadKanbanData(){
-       Event.fire('isKanbanTasks');
+    deleteFilter(param) {
+      return delete this.filters[param];
+    },
+    setFilter(param, value) {
+      return (this.filters[param] = value);
     }
   },
   computed: {
@@ -356,66 +350,61 @@ export default {
           });
         })
         .catch(err => err.messages);
-
       return users;
     }
   },
   watch: {
     currentView(value) {
       localStorage.currentView = value;
+
+      if (value == 3) {
+        Event.fire("isKanbanTasks");
+      }
     },
     selectedTags(tags) {
-      if (tags.length == 0) {
-        delete this.filter["tags"];
-      } else {
-        this.filter["tags"] = JSON.stringify(tags.map(tag => tag.id));
-      }
+      let tagsId = JSON.stringify(tags.map(tag => tag.id));
+      !tags.length ? this.deleteFilter("tags") : this.setFilter("tags", tagsId);
     },
-    // function to find task by title
     searchTask(title) {
-      // collect filtered tasks in filteredTasks
-      if (title == "" || this.filter["title"]) {
-        delete this.filter["title"];
-      } else {
-        this.filter["title"] = title;
-      }
+      title === "" || this.filters["title"]
+        ? this.deleteFilter("title")
+        : this.setFilter("title", title);
     },
-    myTasks(id) {
-      this.tasks.forEach(task => {
-        if (task.from_id == 5) {
-          this.filteredTasks.push(task);
+    taskCategory(newVal, oldVal) {
+      if (oldVal && oldVal.query !== 'all') {
+        this.deleteFilter(oldVal.query);
+      }
+      if(newVal){
+        this.setFilter(newVal.query, newVal.user);
+      }
+      console.log(this.filters);
+    },
+    employee(newVal) {
+      if (newVal !== null) {
+        if (this.filters["employee_id"]) {
+          this.deleteFilter('employee_id');
         }
-      });
-    },
-    taskCategory(task) {
-      if (this.filter[this.taskCategoryQuery]) {
-        delete this.filter[this.taskCategoryQuery];
-      }
-      this.filter[task.query] = task.user;
-      this.taskCategoryQuery = task.query;
-      if (task.name === "Сотрудник") {
-        this.selectEmployee = true;
-        delete this.filter["all"];
-      } else {
-        this.selectEmployee = false;
-        this.employee = null;
-        delete this.filter["employee_id"];
-        this.filter["all"] = true;
-      }
-    },
-    employee(employee) {
-      if (employee !== null) {
-        if (this.filter["employee_id"]) {
-          delete this.filter["employee_id"];
-        }
-        this.filter["employee_id"] = employee.id;
+        this.page = false;
+        this.deleteFilter('all');
+        this.setFilter('employee_id', newVal.id);
       }
     },
     priority(item) {
       if (this.priority == null) {
-        delete this.filter["priority"];
+        delete this.filters["priority"];
       } else {
-        this.filter[item.query] = item.priority;
+        this.filters[item.query] = item.priority;
+      }
+    },
+    selectEmployee(val) {
+      if (val && this.taskCategory) {
+        this.deleteFilter(this.taskCategory.query);
+      }
+      if(!val){
+        this.employee = null;
+        this.setFilter("all", true);
+        this.taskCategory = null;
+        this.deleteFilter("employee_id");
       }
     }
   },

@@ -403,7 +403,6 @@ export default {
           }
         });
         this.localTasks = await data;
-        console.log("kanban tasks loaded");
       } catch (e) {
         console.error(e);
       }
@@ -432,10 +431,6 @@ export default {
       this.prepareStats();
       this.loading = false;
     });
-    if(localStorage.currentView == 3){
-      await this.loadTasks();
-      this.prepareCards();
-    }
   }
 };
 </script>

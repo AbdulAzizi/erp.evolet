@@ -44,7 +44,7 @@ class TaskController extends Controller
         $divisions = Division::with('users')->whereHas('users')->get();
 
         // $notifications = $authUser->notifications;
-
+        
         return view('tasks.index', compact(
             // 'tasks',
             'users',
