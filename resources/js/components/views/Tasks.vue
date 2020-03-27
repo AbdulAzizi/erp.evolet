@@ -26,7 +26,7 @@
         </template>
         <span>Фильтры</span>
       </v-tooltip>
-      <v-navigation-drawer v-model="filtersMenu" right fixed temporary>
+      <v-navigation-drawer v-model="filtersMenu" right fixed temporary width="300">
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="title">Фильтры</v-list-item-title>
@@ -39,7 +39,7 @@
               v-if="!selectEmployee"
               v-model="taskCategory"
               :items="filterItems"
-              label="Задачи"
+              label="Все задачи"
               class="mb-4"
               item-text="name"
               item-value="url"
@@ -50,6 +50,7 @@
               hide-details
               single-line
               return-object
+              clearable
             ></v-select>
             <v-select
               v-if="selectEmployee"
@@ -67,10 +68,17 @@
               single-line
               return-object
               chips
+              deletable-chips
               no-data-text="Нет сотрудников"
             >
               <template v-slot:selection="data">
-                <v-chip v-bind="data.attrs" :input-value="data.selected" @click="data.select">
+                <v-chip
+                  @click="data.select"
+                  @click:close="employee = null"
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                  close
+                >
                   <v-avatar left>
                     <v-img :src="thumb(data.item.img)"></v-img>
                   </v-avatar>
@@ -100,6 +108,7 @@
               hide-details
               single-line
               return-object
+              clearable
             ></v-select>
             <v-autocomplete
               v-model="selectedTags"
@@ -148,7 +157,13 @@
               </template>
             </v-select>
             <v-switch label="Задачи сотрудника" v-model="selectEmployee" />
-            <v-btn block dark depressed color="primary" @click="filterTask()">Фильтр</v-btn>
+            <v-btn
+              block
+              dark
+              depressed
+              color="primary"
+              @click="filterTask()"
+            >Фильтр</v-btn>
           </v-card-text>
         </v-card>
       </v-navigation-drawer>
@@ -230,11 +245,6 @@ export default {
           name: "Наблюдаю задачи",
           query: "watcher_id",
           user: this.authuser.id
-        },
-        {
-          name: "Все задачи",
-          query: "all",
-          user: true
         }
       ],
       taskStatuses: [
@@ -376,7 +386,6 @@ export default {
       // return array of tags
       return localTags;
     },
-
     divisionUsers() {
       let users = [];
 
@@ -394,7 +403,6 @@ export default {
   watch: {
     currentView(value) {
       localStorage.currentView = value;
-
       if (value == 3) {
         Event.fire("isKanbanTasks");
       }
@@ -409,36 +417,38 @@ export default {
         : this.setFilter("title", title);
     },
     taskCategory(newVal, oldVal) {
-      if (oldVal && oldVal.query !== "all") {
+      if (oldVal) {
         this.deleteFilter(oldVal.query);
       }
       if (newVal) {
         this.setFilter(newVal.query, newVal.user);
       }
-      console.log(this.filters);
     },
     employee(newVal) {
-      if (newVal !== null) {
+      if (newVal) {
         if (this.filters["employee_id"]) {
           this.deleteFilter("employee_id");
         }
         this.page = false;
         this.deleteFilter("all");
         this.setFilter("employee_id", newVal.id);
+      } else {
+        this.deleteFilter("employee_id");
+        this.setFilter("all", true);
       }
     },
     priority(item) {
-      if (this.priority == null) {
+      if (!item) {
         this.deleteFilter("priority");
       } else {
-        this.setFilter("priority", item.priority)
+        this.setFilter("priority", item.priority);
       }
     },
-    status(item){
-      if (this.status == null) {
+    status(item) {
+      if (!item) {
         this.deleteFilter("status_id");
       } else {
-        this.setFilter("status_id", item.id)
+        this.setFilter("status_id", item.id);
       }
     },
     selectEmployee(val) {
