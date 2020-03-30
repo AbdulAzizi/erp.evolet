@@ -60,6 +60,13 @@ class TaskFilters extends QueryFilters
 
     }
 
+    public function status_id($term)
+    {   
+
+        return $this->builder->having('status_id', $term);
+
+    }
+
     public function tags($term)
     {
         $localTerm = json_decode($term);
