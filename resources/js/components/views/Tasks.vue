@@ -157,13 +157,7 @@
               </template>
             </v-select>
             <v-switch label="Задачи сотрудника" v-model="selectEmployee" />
-            <v-btn
-              block
-              dark
-              depressed
-              color="primary"
-              @click="filterTask()"
-            >Фильтр</v-btn>
+            <v-btn block dark depressed color="primary" @click="filterTask()">Фильтр</v-btn>
           </v-card-text>
         </v-card>
       </v-navigation-drawer>
@@ -214,21 +208,20 @@ export default {
   props: ["divisions", "users", "errors", "statuses", "authuser"],
   data() {
     return {
-      currentView: null,
       selectedTags: [],
       filteredTasks: [],
+      employeeItems: [],
       filters: {
         all: true
       },
+      currentView: null,
       status: null,
       taskCategory: null,
-      filtersMenu: false,
-      selectEmployee: false,
-      searchTask: "",
       employee: null,
-      employeeItems: [],
       priority: null,
-      taskCategoryQuery: null,
+      selectEmployee: false,
+      filtersMenu: false,
+      searchTask: "",
       page: 1,
       filterItems: [
         {
@@ -294,11 +287,18 @@ export default {
   },
   mounted() {
     this.currentView = this.localCurrentView;
+    this.filters = this.setLocalFilter("filters", this.filters);
+    this.priority = this.setLocalFilter("priority", this.priority);
+    this.taskCategory = this.setLocalFilter("taskCategory", this.taskCategory);
+    this.status = this.setLocalFilter("status", this.status);
+    this.selectedTags = this.setLocalFilter("tags", this.selectedTags);
+    this.selectEmployee = this.setLocalFilter("selectEmployee", this.selectEmployee);
+    this.employee = this.setLocalFilter("employee", this.employee);
+    this.filterTask();
   },
   methods: {
     filterTask() {
       const filtersLen = Object.keys(this.filters).length;
-
       if (filtersLen > 1 || this.selectEmployee) {
         this.loading = !this.loading;
         axios
@@ -308,15 +308,17 @@ export default {
             }
           })
           .then(res => {
-            this.filtersMenu = !this.filtersMenu;
+            this.filtersMenu = false;
             this.filteredTasks = res.data;
             this.page = this.loading = false;
+            localStorage.setItem("filters", JSON.stringify(this.filters));
           });
       } else {
         this.filteredTasks = [];
         this.page = 1;
         this.paginate();
-        this.filtersMenu = !this.filtersMenu;
+        this.filtersMenu = false;
+        localStorage.setItem("filters", JSON.stringify(this.filters));
       }
       Event.fire("kanbanFilter", this.filters);
     },
@@ -342,6 +344,13 @@ export default {
     },
     setFilter(param, value) {
       return (this.filters[param] = value);
+    },
+    setLocalFilter(filterName, filterItem) {
+      if (localStorage.hasOwnProperty(filterName)) {
+        const data = localStorage.getItem(filterName);
+        return JSON.parse(data);
+      }
+      return filterItem;
     }
   },
   computed: {
@@ -356,7 +365,7 @@ export default {
       if (!localStorage.hasOwnProperty("currentView")) {
         return this.activeBtn.TABLE;
       }
-      return parseInt(localStorage.currentView);
+      return +localStorage.currentView;
     },
     isTable() {
       return this.currentView === this.activeBtn.TABLE;
@@ -409,7 +418,13 @@ export default {
     },
     selectedTags(tags) {
       let tagsId = JSON.stringify(tags.map(tag => tag.id));
-      !tags.length ? this.deleteFilter("tags") : this.setFilter("tags", tagsId);
+      if (!tags.length) {
+        localStorage.tags = [];
+        this.deleteFilter("tags");
+      } else {
+        this.setFilter("tags", tagsId);
+        localStorage.setItem("tags", JSON.stringify(tags));
+      }
     },
     searchTask(title) {
       title === "" || this.filters["title"]
@@ -422,6 +437,9 @@ export default {
       }
       if (newVal) {
         this.setFilter(newVal.query, newVal.user);
+        localStorage.setItem("taskCategory", JSON.stringify(newVal));
+      } else {
+        localStorage.setItem("taskCategory", JSON.stringify(null));
       }
     },
     employee(newVal) {
@@ -432,23 +450,29 @@ export default {
         this.page = false;
         this.deleteFilter("all");
         this.setFilter("employee_id", newVal.id);
+        localStorage.setItem("employee", JSON.stringify(newVal));
       } else {
         this.deleteFilter("employee_id");
         this.setFilter("all", true);
+        localStorage.setItem("employee", JSON.stringify(null));
       }
     },
     priority(item) {
       if (!item) {
+        localStorage.priority = null;
         this.deleteFilter("priority");
       } else {
         this.setFilter("priority", item.priority);
+        localStorage.setItem("priority", JSON.stringify(item));
       }
     },
     status(item) {
       if (!item) {
+        localStorage.status = null;
         this.deleteFilter("status_id");
       } else {
         this.setFilter("status_id", item.id);
+        localStorage.setItem("status", JSON.stringify(item));
       }
     },
     selectEmployee(val) {
@@ -460,6 +484,9 @@ export default {
         this.setFilter("all", true);
         this.taskCategory = null;
         this.deleteFilter("employee_id");
+        localStorage.setItem("selectEmployee", null)
+      }else {
+        localStorage.setItem("selectEmployee", JSON.stringify(true));
       }
     }
   },
