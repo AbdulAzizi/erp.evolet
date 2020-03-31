@@ -102,5 +102,6 @@ Route::get('/divisions/{id}/users', 'DivisionController@getUsers')->name('divisi
 Route::get('/tasks/{id}/start', 'TaskController@start')->name('api.tasks.start');
 Route::get('/tasks/{id}/pause', 'TaskController@pause')->name('api.tasks.pause');
 Route::get('/tasks/{id}/stop', 'TaskController@stop')->name('api.tasks.stop');
+Route::delete('/tasks/{id}', 'TaskController@delete')->name('api.tasks.delete');
 
 

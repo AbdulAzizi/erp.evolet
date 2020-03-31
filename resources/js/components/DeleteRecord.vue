@@ -33,13 +33,16 @@ export default {
     },
     cautionMsg: {
       required: false
+    },
+    redirect: {
+      required: false
     }
   },
   methods: {
     deleteRecord() {
       axios
         .delete(this.route)
-        .then(res => window.location.reload())
+        .then(res => this.redirect ? window.location.replace(this.redirect) : window.location.reload())
         .catch(err => err.message);
     }
   },

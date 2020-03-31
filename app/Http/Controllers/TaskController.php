@@ -430,4 +430,20 @@ class TaskController extends Controller
 
         return $tasks;
     }
+
+    public function delete(Request $request)
+    {
+        $task = Task::find($request->id);
+
+        $task->timeSets()->delete();
+        $task->history()->delete();
+        $task->polls()->delete();
+        $task->tags()->detach();
+        $task->watchers()->detach();
+        $task->forms()->delete();
+        $task->questionTasks()->delete();
+
+        $task->delete();
+        
+    }
 }
