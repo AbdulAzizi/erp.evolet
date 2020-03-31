@@ -120,4 +120,6 @@ Route::prefix('api')->group(function () {
     Route::post('/responsibility_descriptions/movedown', 'ResponsibilityDescriptionController@movedown')->name('api.responsibilityDescription.movedown');
     Route::get('/tasks/filter', 'TaskController@filter')->name('api.tasks.filter');
     Route::get('/tasks/paginate', 'TaskController@paginate')->name('api.tasks.paginate');
+    Route::post('/users/{id}/tasks', 'ProfileController@getTasks')->name('api.profile.getTasks');
+    Route::post('/users/{id}/timesets', 'ProfileController@getTimeSets')->name('api.profile.getTimeSets');
 });

@@ -1,5 +1,36 @@
 <template>
-    <v-row>
+    <v-row class="profileTasks">
+        <v-col cols="4" class="pt-0">
+            <v-dialog
+                ref="dialog"
+                v-model="dateRangeDialog"
+                :return-value.sync="dateRange"
+                persistent
+                width="290px"
+            >
+                <template v-slot:activator="{ on }">
+                    <v-text-field
+                        v-model="dateRange"
+                        label="Промежуток времени"
+                        prepend-inner-icon="mdi-calendar-range"
+                        readonly
+                        v-on="on"
+                        solo
+                        dense
+                        hide-details
+                    ></v-text-field>
+                </template>
+                <v-date-picker v-model="dateRange" scrollable range>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="dateRangeDialog = false">Cancel</v-btn>
+                    <v-btn text color="primary" @click="$refs.dialog.save(dateRange)">OK</v-btn>
+                </v-date-picker>
+            </v-dialog>
+        </v-col>
+        <v-col cols="4" class="pt-0">
+            <v-btn color="primary" @click="filter">Filter</v-btn>
+        </v-col>
+
         <v-col cols="12" class="pt-0">
             <v-data-table
                 :headers="timesetHeaders"
@@ -59,7 +90,7 @@
                         <td>{{item.deadline}}</td>
                         <td>{{item.ended_time}}</td>
                         <td
-                            :class="item.deadline > item.time_sets[item.time_sets.length-1].end_time ? 'green--text' : 'red--text'"
+                            :class="item.deadline > item.end_time ? 'green--text' : 'red--text'"
                         >{{ item.deadline_endtime }}</td>
                         <td>{{durObj(item.planned_time)}}</td>
                         <td>{{durObj(item.spent_time)}}</td>
@@ -78,10 +109,15 @@ export default {
         },
         tasks: {
             required: true
+        },
+        user: {
+            required: true
         }
     },
     data() {
         return {
+            dateRange: [],
+            dateRangeDialog: false,
             localTimesets: this.timesets,
             localTasks: this.tasks,
             timesetHeaders: [
@@ -99,7 +135,7 @@ export default {
                 },
                 { text: "Дедлайн", value: "deadline" },
                 { text: "Завершено", value: "ended_time" },
-                { text: "Учпеваймось", value: "deadline_endtime" },
+                { text: "Успеваймось", value: "deadline_endtime" },
                 { text: "Дано", value: "planned_time" },
                 { text: "Потрачено", value: "spent_time" },
                 { text: "Потрачено %", value: "ratio" }
@@ -157,6 +193,26 @@ export default {
             let t2 = this.moment(time2);
             let diffInMill = this.moment.duration(t2.diff(t1));
             return `${diffInMill.days()}д ${diffInMill.hours()}ч ${diffInMill.minutes()}м`;
+        },
+        filter() {
+            let request = {
+                userID: this.user.id,
+                from: this.dateRange[0],
+                to: this.dateRange[1]
+            };
+            axios
+                .post(this.appPath(`api/users/${this.user.id}/tasks`), request)
+                .then(resp => {
+                    this.localTasks = resp.data;
+                });
+            axios
+                .post(
+                    this.appPath(`api/users/${this.user.id}/timesets`),
+                    request
+                )
+                .then(resp => {
+                    this.localTimesets = resp.data;
+                });
         }
     },
     created() {
@@ -164,6 +220,22 @@ export default {
             timeSet.diff = this.getTimeSetsDiff(timeSet);
         });
         this.prepareTasks();
+    },
+    watch: {
+        localTimesets(timesets) {
+            timesets.forEach(timeSet => {
+                timeSet.diff = this.getTimeSetsDiff(timeSet);
+            });
+        },
+        localTasks(tasks){
+            this.prepareTasks();
+        }
     }
 };
 </script>
+<style>
+.profileTasks th{
+    background-color: #6897f5 !important;
+    color: #fff !important;
+}
+</style>

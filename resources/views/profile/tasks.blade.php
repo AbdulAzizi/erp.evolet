@@ -2,5 +2,9 @@
 
 @section('content')
 
-        <views-profile-tasks :timesets="{{$timesets}}" :tasks="{{$tasks}}" ></profile-tasks>
+        <views-profile-tasks 
+        :timesets="{{$timesets}}" 
+        :tasks="{{$tasks}}"
+        :user="{{$user}}"
+        ></profile-tasks>
 @endsection 

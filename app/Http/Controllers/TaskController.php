@@ -380,6 +380,7 @@ class TaskController extends Controller
 
         $task = Task::with('timeSets')->find($id);
         $task->status()->associate($stop);
+        $task->end_time = date(now());
         $task->save();
 
         $lastTimeSet = $task->timeSets->last();
