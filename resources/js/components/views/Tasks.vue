@@ -222,7 +222,7 @@ export default {
       selectEmployee: false,
       filtersMenu: false,
       searchTask: "",
-      page: 1,
+      page: false,
       filterItems: [
         {
           name: "Мои задачи",
@@ -434,12 +434,11 @@ export default {
     taskCategory(newVal, oldVal) {
       if (oldVal) {
         this.deleteFilter(oldVal.query);
+        localStorage.taskCategory = null;
       }
       if (newVal) {
         this.setFilter(newVal.query, newVal.user);
         localStorage.setItem("taskCategory", JSON.stringify(newVal));
-      } else {
-        localStorage.setItem("taskCategory", JSON.stringify(null));
       }
     },
     employee(newVal) {
@@ -482,10 +481,10 @@ export default {
       if (!val) {
         this.employee = null;
         this.setFilter("all", true);
-        this.taskCategory = null;
         this.deleteFilter("employee_id");
         localStorage.setItem("selectEmployee", null)
       }else {
+        this.taskCategory = null;
         localStorage.setItem("selectEmployee", JSON.stringify(true));
       }
     }
