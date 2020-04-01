@@ -281,7 +281,7 @@ export default {
         },
         synch() {
             if (this.item) {
-                this.task = this.item;
+                Object.assign(this.task, this.item);
             }
         },
         preparedFields(form) {
@@ -322,7 +322,7 @@ export default {
                     user_id: this.item.responsible.id
                 })
                 .then(res => {
-                    this.item.readed = 1;
+                    this.task.readed = 1;
                 });
         }
     },
