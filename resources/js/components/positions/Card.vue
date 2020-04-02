@@ -21,6 +21,26 @@
                 </v-toolbar-title>
                 <v-spacer />
                 <edit-add-actions :position="localPosition" v-if="editable" />
+                <!-- TODO Must be seperate component -->
+                <v-dialog v-if="detachable" v-model="detachDialog" eager width="600">
+                    <template v-slot:activator="{ on }">
+                        <v-btn v-on="on"  dark icon @click="detachDialog = true">
+                            <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-card>
+                        <v-card-title>
+                            Вы уверены, что хотите снять эту должность
+                            <br />
+                            с {{user.fullname}} ?
+                        </v-card-title>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn @click="detachDialog = false" text>Отмена</v-btn>
+                            <v-btn @click="detachPosition()" dark color="red" text>Cнять</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
             </v-toolbar>
             <v-card-text
                 class="pa-0"
@@ -191,6 +211,10 @@ export default {
         },
         user: {
             required: false
+        },
+        detachable: {
+            required: false,
+            default: false
         }
     },
     data() {
@@ -205,10 +229,23 @@ export default {
             responsibilityForEdit: null,
             addResponsibilityDescriptionDialog: false,
             editResponsibilityDescriptionDialog: false,
-            deleteResponsibilityDescriptionDialog: false
+            deleteResponsibilityDescriptionDialog: false,
+            detachDialog: false
         };
     },
     methods: {
+        detachPosition() {
+            axios
+                .delete(
+                    this.appPath(
+                        `api/users/${this.user.id}/positions/${this.position.id}`
+                    )
+                )
+                .then(resp => {
+                    this.detachDialog = false;
+                    Event.fire("positionDetached", this.position.id);
+                });
+        },
         resetPositionEditForm() {
             this.edit = false;
             this.positionLabel = this.position.label;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Division;
 use App\File;
+use App\Position;
 use App\PositionLevel;
 use App\ResponsibilityDescription;
 use App\Task;
@@ -212,5 +213,16 @@ class UserController extends Controller
         $intersactions->push($others);
         
         return $intersactions->all();
+    }
+
+    public function detachPosition($userID, $positionID)
+    {
+        $user = User::find($userID);
+        $user->positions()->detach($positionID);
+
+        $respsToDetach = Position::find($positionID)->responsibilities->pluck('id');
+        $user->responsibilities()->detach($respsToDetach);
+
+        return 'success';
     }
 }
