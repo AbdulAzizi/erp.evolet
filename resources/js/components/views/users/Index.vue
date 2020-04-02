@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+    <v-container fluid class="py-0">
         <v-row>
             <v-col cols="12" class="pa-1">
                 <v-text-field
@@ -19,7 +19,7 @@
                 cols="12"
                 sm="6"
                 md="4"
-                lg="3"
+                lg="4"
                 xl="3"
                 class="pa-1 d-flex align-content-stretch"
             >
