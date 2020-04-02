@@ -26,19 +26,20 @@ class DivisionController extends Controller
         $userDivisionId = auth()->user()->division_id;
 
         $division = Division::with([
-                            'head', 'users','tags',
-                            'positions.responsibilities' => function ($query) {
-                                $query->orderBy('order')->with(['descriptions' => function ($query) {
-                                    $query->orderBy('order');
-                                }]);
-                            }])
-                            ->withDepth()
-                            ->descendantsAndSelf($userDivisionId)
-                            ->toTree()
-                            ->first();
-        
+            'head', 'users', 'tags',
+            'positions.responsibilities' => function ($query) {
+                $query->orderBy('order')->with(['descriptions' => function ($query) {
+                    $query->orderBy('order');
+                }]);
+            }
+        ])
+            ->withDepth()
+            ->descendantsAndSelf($userDivisionId)
+            ->toTree()
+            ->first();
+
         $positionLevels = PositionLevel::where('name', '!=', 'Руководитель')
-                                        ->get();
+            ->get();
 
         $authUser = \Auth::user();
 
@@ -54,12 +55,12 @@ class DivisionController extends Controller
         $jsonPositions = json_encode($division->positions);
 
         return view('division', compact(
-            'division', 
-            'positionLevels', 
-            'isUserHead', 
-            'oldInputs', 
-            'jsonPositionLevels', 
-            'jsonPositions', 
+            'division',
+            'positionLevels',
+            'isUserHead',
+            'oldInputs',
+            'jsonPositionLevels',
+            'jsonPositions',
             'authUser'
         ));
     }
@@ -72,7 +73,7 @@ class DivisionController extends Controller
             'abbreviation' => $request->abbreviation,
             'parent_id' => $request->parent_id
         ]);
-        
+
         $divisionWithRelations = Division::with('users', 'head', 'children')->withDepth()->find($division->id);
 
         return $divisionWithRelations;
@@ -101,34 +102,40 @@ class DivisionController extends Controller
         return $division->tags;
     }
 
-    public function edit(Request $request){
+    public function edit(Request $request)
+    {
         $division = Division::find($request->id);
 
-        foreach($request->data as $data){
+        foreach ($request->data as $data) {
             $division->update([
-               $data['name'] => $data['value'] 
+                $data['name'] => $data['value']
             ]);
         }
 
         return $division;
     }
 
-    public function getUsers(Request $request){
-
+    public function getUsers()
+    {
         $users = [];
 
-        $division = Division::where('head_id', $request->id)->first();
+        $authUserId = auth()->id();
+
+        $division = Division::where('head_id', $authUserId)->first();
         
-        $divisionWithDepth = $division->withDepth()->descendantsAndSelf($division->id);
-        
-        foreach($divisionWithDepth as $division){
-            foreach($division->users as $user){
-                if($user->id != $request->id){
-                    $users[] = $user;
+        if ($division) {
+
+            $divisionWithDepth = $division->withDepth()->descendantsAndSelf($division->id);
+
+            foreach ($divisionWithDepth as $division) {
+                foreach ($division->users as $user) {
+                    if ($user->id != $authUserId) {
+                        $users[] = $user;
+                    }
                 }
             }
-        }
 
-        return $users;
+            return $users;
+        }
     }
 }

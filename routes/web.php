@@ -122,4 +122,5 @@ Route::prefix('api')->group(function () {
     Route::get('/tasks/paginate', 'TaskController@paginate')->name('api.tasks.paginate');
     Route::post('/users/{id}/tasks', 'ProfileController@getTasks')->name('api.profile.getTasks');
     Route::post('/users/{id}/timesets', 'ProfileController@getTimeSets')->name('api.profile.getTimeSets');
+    Route::get('/divisions/users', 'DivisionController@getUsers')->name('api.divisions.getUsers');
 });
