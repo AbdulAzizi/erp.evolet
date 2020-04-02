@@ -269,7 +269,7 @@ export default {
     },
     synch() {
       if (this.item) {
-        this.task = this.item;
+        Object.assign(this.task, this.item);
       }
     },
     preparedFields(form) {

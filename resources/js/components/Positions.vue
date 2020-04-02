@@ -1,20 +1,14 @@
 <template>
     <div class="positionsPage">
-
-
+        <!-- Display Attach and Detavh button -->
         <v-row class="ma-0" justify="end" align="start">
-            <!-- <add-position
-                v-if="createable && localDivisions.length == 1  "
-                :divisionId="divisions[0].id"
-            />-->
             <attach-responsibilities-btn
                 :positions="localUser.division.positions"
                 :user="localUser"
                 v-if="localUser && editable"
             />
         </v-row>
-
-
+        <!-- Display 'User doesnt have positions' message -->
         <v-row
             v-if="(divisions.length == 1 && divisions[0].positions.length == 0) || (localUser && localUser.positions.length == 0)"
         >
@@ -28,15 +22,17 @@
                 >Должности отсутствуют</v-alert>
             </v-col>
         </v-row>
-
-
+        <!-- Display users Positions -->
         <v-row v-if="localUser && localUser.positions.length">
             <v-col cols="6" v-for="(position, index) in localUser.positions" :key="index">
-                <position-card :user="localUser" :position="position" :division="divisions" />
+                <position-card
+                    :user="localUser"
+                    :position="position"
+                    :detachable="localUser && editable"
+                />
             </v-col>
         </v-row>
-
-
+        <!-- Display Divisions poistions -->
         <v-expansion-panels>
             <v-expansion-panel
                 v-for="(division, index) in divisionsThatHasPositions"
@@ -63,31 +59,6 @@
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
-
-        <!-- <template v-for="(division, index) in localDivisions">
-            <v-row
-                v-if="division.positions.length > 0 && localDivisions.length > 1"
-                :key="'name' + index"
-            >
-                <v-col cols="12" class="py-0">
-                    <v-card flat>
-                        <v-toolbar flat dense>
-                            <v-toolbar-title>{{ division.name }}</v-toolbar-title>
-                            <v-spacer></v-spacer>
-                            <add-position
-                                v-if="divisions !== undefined && editable"
-                                :divisionId="division.id"
-                            />
-                        </v-toolbar>
-                    </v-card>
-                </v-col>
-            </v-row>
-            <v-row v-if="division.positions.length > 0" :key="'position' + index">
-                <v-col cols="6" v-for="(position, index ) in division.positions" :key="index">
-                    <position-card :position="position" :editable="editable" />
-                </v-col>
-            </v-row>
-        </template> -->
     </div>
 </template>
 <script>
@@ -124,6 +95,13 @@ export default {
         }
     },
     created() {
+        Event.listen("positionDetached", positionId => {
+            this.localUser.positions.forEach((position, index) => {
+                if (position.id == positionId) {
+                    this.localUser.positions.splice(index, 1);
+                }
+            });
+        });
         Event.listen("deletePosition", positionId => {
             this.localDivisions.forEach(division => {
                 division.positions.forEach((position, index) => {

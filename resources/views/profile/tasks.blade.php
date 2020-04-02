@@ -6,5 +6,5 @@
         :timesets="{{$timesets}}" 
         :tasks="{{$tasks}}"
         :user="{{$user}}"
-        ></profile-tasks>
+        ></views-profile-tasks>
 @endsection 

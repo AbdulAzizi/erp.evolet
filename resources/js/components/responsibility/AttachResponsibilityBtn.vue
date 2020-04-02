@@ -1,7 +1,7 @@
 <template>
     <v-dialog eager width="600" v-model="dialog">
         <template v-slot:activator="{ on }">
-            <v-btn v-on="on" depressed color="primary">Добавить должность</v-btn>
+            <v-btn v-on="on" depressed color="primary">Редактировать</v-btn>
         </template>
         <v-form ref="form">
             <v-card>
@@ -10,7 +10,7 @@
                     dark
                     color="primary"
                     dense
-                >Добавить должность {{user.name}} {{user.surname}}</v-toolbar>
+                >Редактировать</v-toolbar>
                 <v-card-text class="pa-4">
                     <v-select
                         :rules="[!!selectedPosition||'Обязательное поле']"
