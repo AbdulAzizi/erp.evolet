@@ -292,7 +292,10 @@ export default {
     this.taskCategory = this.setLocalFilter("taskCategory", this.taskCategory);
     this.status = this.setLocalFilter("status", this.status);
     this.selectedTags = this.setLocalFilter("tags", this.selectedTags);
-    this.selectEmployee = this.setLocalFilter("selectEmployee", this.selectEmployee);
+    this.selectEmployee = this.setLocalFilter(
+      "selectEmployee",
+      this.selectEmployee
+    );
     this.employee = this.setLocalFilter("employee", this.employee);
     this.filterTask();
   },
@@ -351,6 +354,20 @@ export default {
         return JSON.parse(data);
       }
       return filterItem;
+    },
+    divisionUsers() {
+      let users = [];
+      if(this.employeeItems.length == 0){
+        axios
+          .get(`/api/divisions/users`)
+          .then(res => {
+            res.data.forEach(item => {
+              this.employeeItems.push(item);
+            });
+          })
+          .catch(e => e.message);
+        return users;
+      }
     }
   },
   computed: {
@@ -394,19 +411,6 @@ export default {
       });
       // return array of tags
       return localTags;
-    },
-    divisionUsers() {
-      let users = [];
-
-      axios
-        .get(`/api/divisions/${this.auth.id}/users`)
-        .then(res => {
-          res.data.forEach(item => {
-            this.employeeItems.push(item);
-          });
-        })
-        .catch(err => err.messages);
-      return users;
     }
   },
   watch: {
@@ -482,15 +486,15 @@ export default {
         this.employee = null;
         this.setFilter("all", true);
         this.deleteFilter("employee_id");
-        localStorage.setItem("selectEmployee", null)
-      }else {
+        localStorage.setItem("selectEmployee", null);
+      } else {
         this.taskCategory = null;
         localStorage.setItem("selectEmployee", JSON.stringify(true));
+        this.divisionUsers();
       }
     }
   },
   created() {
-    this.divisionUsers;
     this.paginate();
     Event.listen("loadTasks", data => this.paginate());
   }

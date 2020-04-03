@@ -103,7 +103,6 @@ Route::delete('/users/{id}', 'UserController@delete')->name('users.delete');
 Route::post('/users/responsibilities', 'UserController@responsibilities')->name('api.users.responsibilities');
 
 Route::post('/divisions/{id}/edit', 'DivisionController@edit')->name('divisions.edit');
-Route::get('/divisions/{userID}/users', 'DivisionController@getUsers')->name('divisions.getUsers');
 
 Route::get('/tasks/{id}/start', 'TaskController@start')->name('api.tasks.start');
 Route::get('/tasks/{id}/pause', 'TaskController@pause')->name('api.tasks.pause');
