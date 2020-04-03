@@ -182,20 +182,20 @@
                         <span>календарь</span>
         </v-tooltip>-->
 
-        <v-tooltip bottom>
+        <!-- <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn small text :value="activeBtn.KANBAN" dark v-on="on" height="38">
               <v-icon :color="isKanban ? 'white' : 'grey lighten-0'">mdi-view-dashboard</v-icon>
             </v-btn>
           </template>
           <span>Канбан доска</span>
-        </v-tooltip>
+        </v-tooltip> -->
       </v-btn-toggle>
     </v-row>
 
     <tasks-table :tasks="filteredTasks" v-show="isTable"></tasks-table>
     <!-- <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar> -->
-    <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser" />
+    <!-- <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser" /> -->
     <tasks-add :divisions="divisions" :users="users" :errors="errors" />
     <v-overlay v-if="loading" light opacity="0">
       <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
@@ -267,19 +267,19 @@ export default {
           name: "Высокий",
           color: "red lighten-1",
           query: "priority",
-          priority: 2
+          id: 2
         },
         {
           name: "Средний",
           color: "blue lighten-1",
           query: "priority",
-          priority: 1
+          id: 1
         },
         {
           name: "Низкий",
           color: "green lighten-1",
           query: "priority",
-          priority: 0
+          id: 0
         }
       ],
       loading: false
@@ -465,7 +465,7 @@ export default {
         localStorage.priority = null;
         this.deleteFilter("priority");
       } else {
-        this.setFilter("priority", item.priority);
+        this.setFilter("priority", item.id);
         localStorage.setItem("priority", JSON.stringify(item));
       }
     },
@@ -497,6 +497,30 @@ export default {
   created() {
     this.paginate();
     Event.listen("loadTasks", data => this.paginate());
+    Event.listen("filterByPriority", data => {
+      this.priorityItems.forEach(item => {
+        if(item.id == data){
+          this.priority = item;
+        }
+      });
+      this.filters.priority = data;
+      this.filterTask();
+    });
+    Event.listen("filterByStatus", statusId => {
+      this.taskStatuses.forEach(item => {
+        if(item.id == statusId){
+          this.status = item;
+        }
+      });
+      this.filters.status_id = statusId;
+      this.filterTask();
+    });
+    Event.listen("filterByTag", tag => {
+      this.selectedTags = [];
+      this.selectedTags.push(tag);
+      this.filters.tags = JSON.stringify(this.selectedTags.map(tag => tag.id));
+      this.filterTask();
+    })
   }
 };
 </script>
