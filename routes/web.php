@@ -113,7 +113,6 @@ Route::prefix('api')->group(function () {
     Route::put('/fields/edit/{id}', 'FieldController@edit')->name('fields.edit');
     Route::get('/fieldtypes', 'FieldController@getFieldTypes')->name('api.getFieldTypes');
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
-    Route::post('/users/responsibility_description', 'UserController@responsibilityDescription')->name('api.users.responsibilityDescription');
     Route::get('/responsibilities/{id}/moveup', 'ResponsibilityController@moveup')->name('api.responsibilities.moveup');
     Route::get('/responsibilities/{id}/movedown', 'ResponsibilityController@movedown')->name('api.responsibilities.movedown');
     Route::post('/responsibility_descriptions/moveup', 'ResponsibilityDescriptionController@moveup')->name('api.responsibilityDescription.moveup');

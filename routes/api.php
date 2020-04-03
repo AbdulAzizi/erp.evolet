@@ -96,9 +96,12 @@ Route::delete('/divisions/{id}', 'DivisionController@delete')->name('division.de
 Route::post('/users/edit/{id}', 'UserController@edit')->name('user.edit');
 Route::post('/tags/create', 'TagController@create')->name('tag.create');
 Route::delete('/tags/{id}', 'TagController@delete')->name('tag.delete');
+
 Route::get('/divisions/{id}/tags', 'DivisionController@tags')->name('division.tags');
 Route::post('/users', 'UserController@store')->name('users.store');
 Route::delete('/users/{id}', 'UserController@delete')->name('users.delete');
+Route::post('/users/responsibilities', 'UserController@responsibilities')->name('api.users.responsibilities');
+
 Route::post('/divisions/{id}/edit', 'DivisionController@edit')->name('divisions.edit');
 
 Route::get('/tasks/{id}/start', 'TaskController@start')->name('api.tasks.start');
