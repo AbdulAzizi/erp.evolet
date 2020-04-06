@@ -39,7 +39,7 @@
               </v-menu>
             </td>
             <td>{{item.responsibility_description.title}}</td>
-            <td>
+            <td @click.stop="filterByPriority(item.priority)">
               <priority :id="item.priority" icon></priority>
             </td>
             <td>
@@ -53,13 +53,14 @@
               <avatar size="30" :user="item.responsible" />
             </td>
             <td>{{ moment(item.created_at).format('L') }}</td>
-            <td>{{ item.status.name }}</td>
+            <td @click.stop="filterByStatus(item.status.id)">{{ item.status.name }}</td>
             <td>
               <v-chip
                 class="primary mr-1"
                 small
                 v-for="(tag,index) in item.tags"
                 :key="'tag-'+index"
+                @click.stop="filterByTag(tag)"
               >{{tag.name}}</v-chip>
             </td>
           </tr>
@@ -115,6 +116,15 @@ export default {
   methods: {
     displayTask(item) {
       window.location.href = "tasks/" + item.id;
+    },
+    filterByPriority(priority){
+      Event.fire("filterByPriority", priority)
+    },
+    filterByStatus(status){
+      Event.fire("filterByStatus", status)
+    },
+    filterByTag(tag){
+      Event.fire("filterByTag", tag);
     },
     mark(task) {
       let dataToSend = task.readed ? 0 : 1;
