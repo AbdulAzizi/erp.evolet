@@ -35,7 +35,7 @@
         <!-- Display Divisions poistions -->
         <v-expansion-panels>
             <v-expansion-panel
-                v-for="(division, index) in divisionsThatHasPositions"
+                v-for="(division, index) in divisions"
                 :key="'panels-'+index"
             >
                 <v-expansion-panel-header>{{ division.name }}</v-expansion-panel-header>
@@ -124,11 +124,11 @@ export default {
         });
     },
     computed: {
-        divisionsThatHasPositions() {
-            return this.localDivisions.filter(div => {
-                return div.positions && div.positions.length;
-            });
-        }
+        // divisionsThatHasPositions() {
+        //     return this.localDivisions.filter(div => {
+        //         return div.positions && div.positions.length;
+        //     });
+        // }
     }
 };
 </script>
