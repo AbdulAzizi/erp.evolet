@@ -8,6 +8,8 @@ use App\Events\TaskForwardedEvent;
 use App\Filters\TaskFilters;
 use App\Option;
 use App\Question;
+use App\Responsibility;
+use App\ResponsibilityDescription;
 use App\Status;
 use App\Task;
 use App\Timeset;
@@ -44,7 +46,7 @@ class TaskController extends Controller
         $divisions = Division::with('users')->whereHas('users')->get();
 
         // $notifications = $authUser->notifications;
-        
+
         return view('tasks.index', compact(
             // 'tasks',
             'users',
@@ -58,11 +60,19 @@ class TaskController extends Controller
     {
         // validate obligatory fields
         $validatedData = $request->validate([
-            'responsibility_description' => 'required',
+            'responsibility_description' => 'required_without:responsibility',
+            'responsibility' => 'required_without:responsibility_description',
             'assignees' => 'required',
             'deadline' => 'required',
             'estimatedTaskTime' => 'required',
         ]);
+
+        if ($request->responsibility) {
+            $descriptions = Responsibility::find($request->responsibility)->descriptions->pluck('id');
+        } else {
+            $descriptions[] = $request->responsibility_description;
+        }
+
         // Decode things that must be decoded
         $assignees = json_decode($request->assignees);
 
@@ -70,23 +80,28 @@ class TaskController extends Controller
         $newStatus = \App\Status::where('name', 'Новый')->first();
         // Empty array to keep query
         $tasks = [];
-        // Loop through assignees
-        foreach ($assignees as $key => $assigneeID) {
-            // Push each query array to one that must be executed for Tasks
-            $tasks[] = Task::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'status_id' => $newStatus->id,
-                'priority' => $request->priority === null ? 1 : $request->priority,
-                'planned_time' => $request->estimatedTaskTime,
-                'start_date' => $request->start_date,
-                'deadline' => $request->deadline,
-                'responsible_id' => $assigneeID,
-                'from_id' => auth()->id(),
-                'from_type' => User::class,
-                'responsibility_description_id' => $request->responsibility_description,
-            ]);
+
+        // Loop through responsibility descriptions
+        foreach ($descriptions as $description) {
+            // Loop through assignees
+            foreach ($assignees as $key => $assigneeID) {
+                // Push each query array to one that must be executed for Tasks
+                $tasks[] = Task::create([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'status_id' => $newStatus->id,
+                    'priority' => $request->priority === null ? 1 : $request->priority,
+                    'planned_time' => $request->estimatedTaskTime / count($descriptions),
+                    'start_date' => $request->start_date,
+                    'deadline' => $request->deadline,
+                    'responsible_id' => $assigneeID,
+                    'from_id' => auth()->id(),
+                    'from_type' => User::class,
+                    'responsibility_description_id' => $description,
+                ]);
+            }
         }
+
         // Decode watchers
         $watchers = json_decode($request->watchers);
         if (count($watchers)) {
@@ -117,7 +132,7 @@ class TaskController extends Controller
             event(new TaskCreatedEvent($task));
         }
         // Redirect to Tasks Index page
-        return redirect()->route('tasks.show', $task->id);
+        return redirect()->back();
     }
 
     public function show($id)
@@ -138,27 +153,26 @@ class TaskController extends Controller
             'responsibilityDescription'
         )->find($id);
         // check if task exists
-        if($task){
+        if ($task) {
             if ($task->from_type == "App\Process") {
                 $task->load('products.messages');
             } else {
                 $task->load('messages');
             }
-    
+
             // if has front tether load it
             if ($task->from_type == "App\Process") {
                 $task->from->load('frontTethers.forms.fields');
             }
-    
+
             $task->readed = 1;
             $task->save();
-    
+
             return view('tasks.show', compact('task'));
-        }else{
+        } else {
             abort(404);
         }
 
-        
     }
 
     public function update($id, Request $request)
@@ -332,7 +346,7 @@ class TaskController extends Controller
         })->get();
         // Pause all tasks
         foreach ($activeTasks as $task) {
-            
+
             $lastTimeSet = $task->timeSets->last();
             $lastTimeSet->end_time = date(now());
             $lastTimeSet->save();
@@ -340,7 +354,7 @@ class TaskController extends Controller
             $task->status()->associate($paused);
             $task->save();
         }
-        // New time set 
+        // New time set
         $timeset = Timeset::create([
             'task_id' => $id,
             'start_time' => date(now()),
@@ -417,7 +431,7 @@ class TaskController extends Controller
         return $tasks;
     }
 
-    public function filter(TaskFilters $filters) 
+    public function filter(TaskFilters $filters)
     {
         $tasks = Task::filter($filters)->with(
             'from',
@@ -444,6 +458,6 @@ class TaskController extends Controller
         $task->questionTasks()->delete();
 
         $task->delete();
-        
+
     }
 }

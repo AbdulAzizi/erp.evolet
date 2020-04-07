@@ -112,7 +112,7 @@
                                         <div class="float-left">{{index + 1}}.{{subIndex + 1}}.</div>
                                         <div
                                             class="grey--text text--darken-4 ml-7"
-                                        >{{ description.title }}</div>
+                                        >{{ description.text }}</div>
                                         <div
                                             class="grey--text text--darken-2 pl-7"
                                         >{{ description.description }}</div>

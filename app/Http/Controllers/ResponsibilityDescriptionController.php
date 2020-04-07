@@ -12,7 +12,7 @@ class ResponsibilityDescriptionController extends Controller
     public function create(Request $request)
     {
         $description = ResponsibilityDescription::create([
-            'title' => $request->title,
+            'text' => $request->title,
             'description' => $request->description,
             'responsibility_id' => $request->responsibility_id,
             'order' => Responsibility::find( $request->responsibility_id)->descriptions()->count() + 1,
@@ -26,7 +26,7 @@ class ResponsibilityDescriptionController extends Controller
         $description = ResponsibilityDescription::find($request->id);
 
         $description->update([
-            'title' => $request->title,
+            'text' => $request->title,
             'description' => $request->description,
         ]);
 

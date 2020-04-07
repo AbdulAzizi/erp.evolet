@@ -42,21 +42,28 @@
                         <v-col cols="12" class="pb-0">
                             <input
                                 type="hidden"
-                                name="responsibility_description"
-                                :value="selectedResponsibility"
+                                :name="'descriptions' in selectedRespOrDescrip ? 'responsibility' : 'responsibility_description'"
+                                :value="selectedRespOrDescrip.id"
                             />
-                            <v-select
-                                v-model="selectedResponsibility"
+                            <v-autocomplete
+                                v-model="selectedRespOrDescrip"
                                 prepend-icon="mdi-rename-box"
                                 rounded
                                 filled
                                 label="Должностные задачи"
-                                :disabled="userRespDescriptions.length == 0"
-                                :items="userRespDescriptions"
-                                item-text="title"
+                                :disabled="userResponsibilityDescriptions.length == 0"
+                                :items="userResponsibilityDescriptions"
+                                item-text="text"
                                 item-value="id"
-                                :rules="[required=>!!selectedResponsibility || 'Обязательное поле']"
-                            />
+                                :rules="[required=>!!selectedRespOrDescrip || 'Обязательное поле']"
+                                return-object
+                            >
+                                <template v-slot:item="data">
+                                    <v-list-item-content
+                                        :class="'descriptions' in data.item ? 'font-weight-bold' : 'pl-5'"
+                                    >{{data.item.text}}</v-list-item-content>
+                                </template>
+                            </v-autocomplete>
                         </v-col>
                         <v-col cols="12" class="py-0">
                             <form-field
@@ -468,8 +475,7 @@ export default {
                 taskTimeRule: () => !!this.estimateTime || "Обязательное поле",
                 day: val => val < 366 || "Должно быть меньше 366",
                 hour: val => val < 24 || "Должно быть меньше 24",
-                minute: val => val < 60 || "Должно быть меньше 60",
-
+                minute: val => val < 60 || "Должно быть меньше 60"
             },
             formHasErrors: false,
             csrf_token: window.Laravel.csrf_token,
@@ -544,8 +550,8 @@ export default {
 
             selectedAssignee: [],
 
-            selectedResponsibility: null,
-            userRespDescriptions: []
+            selectedRespOrDescrip: {},
+            userResponsibilityDescriptions: []
         };
     },
     created() {
@@ -561,10 +567,16 @@ export default {
             this.fetchResponsibilities(userIDs);
 
             // console.log("user responsibilities");
-            // console.log(this.userRespDescriptions);
+            // console.log(this.userResponsibilityDescriptions);
         });
     },
     watch: {
+        selectedRespOrDescrip(val) {
+            console.log(val);
+        },
+        userResponsibilityDescriptions(val) {
+            console.log(val);
+        },
         intervalNumber(value) {
             let reminder = value < 20 ? value : (value - 10) % 10;
             if (reminder == 1) {
@@ -576,8 +588,6 @@ export default {
             }
         },
         estimateTime(value) {
-            console.log(value);
-
             this.$refs["estimateDays"].validate(true);
             this.$refs["estimateHours"].validate(true);
             this.$refs["estimateMinutes"].validate(true);
@@ -607,14 +617,17 @@ export default {
     methods: {
         fetchResponsibilities(userIDs) {
             axios
-                .post(this.appPath(`api/users/responsibility_description`), {
+                .post(this.appPath(`api/users/responsibilities`), {
                     userIDs: userIDs
                 })
-                .then(resp => {
-                    console.log("axios data");
-                    console.log(Object.values(resp.data));
-
-                    this.userRespDescriptions = Object.values(resp.data);
+                .then(response => {
+                    this.userResponsibilityDescriptions = [];
+                    response.data.forEach(resp => {
+                        this.userResponsibilityDescriptions.push(resp);
+                        resp.descriptions.forEach(descr => {
+                            this.userResponsibilityDescriptions.push(descr);
+                        });
+                    });
                 });
         },
         toMilliseconds(days, hours, minutes) {
