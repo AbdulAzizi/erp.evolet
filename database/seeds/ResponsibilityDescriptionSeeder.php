@@ -1,5 +1,6 @@
 <?php
 
+use App\Responsibility;
 use App\ResponsibilityDescription;
 use Illuminate\Database\Seeder;
 
@@ -13,8 +14,8 @@ class ResponsibilityDescriptionSeeder extends Seeder
     public function run()
     {
         ResponsibilityDescription::create([
-            'title' => 'Прочее',
-            'responsibility_id' => 0,
+            'text' => 'Прочее',
+            'responsibility_id' => Responsibility::where('text', 'Прочее')->first()->id,
         ]);
     }
 }

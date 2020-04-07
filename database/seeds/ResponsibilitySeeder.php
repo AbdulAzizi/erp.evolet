@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Responsibility;
+use Illuminate\Database\Seeder;
 
 class ResponsibilitySeeder extends Seeder
 {
@@ -12,7 +12,10 @@ class ResponsibilitySeeder extends Seeder
      */
     public function run()
     {
-        Responsibility::truncate();
-        factory(Responsibility::class, 20)->create();
+        // Responsibility::truncate();
+        // factory(Responsibility::class, 20)->create();
+        Responsibility::insert([
+            ['text' => 'Прочее', 'position_id' => 0],
+        ]);
     }
 }
