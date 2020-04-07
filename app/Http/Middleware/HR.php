@@ -15,15 +15,7 @@ class HR
      */
     public function handle($request, Closure $next)
     {
-        $isHR = false;
-
-        foreach (auth()->user()->positions as $position) {
-            if ($position->name == 'HR') {
-                $isHR = true;
-            }
-        }
-        
-        if ($isHR) {
+        if (auth()->user()->division->abbreviation == "ОУПС") {
             return $next($request);
         } else {
             return redirect()->route('tasks.index');
