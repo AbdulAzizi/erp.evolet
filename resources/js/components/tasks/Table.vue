@@ -38,7 +38,7 @@
                 </v-list>
               </v-menu>
             </td>
-            <td>{{item.responsibility_description.title}}</td>
+            <td>{{item.responsibility_description.text}}</td>
             <td @click.stop="filter(item.priority, 'filterByPriority')">
               <priority :id="item.priority" icon></priority>
             </td>

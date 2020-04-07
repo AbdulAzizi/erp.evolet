@@ -6,6 +6,7 @@ use App\Division;
 use App\File;
 use App\Position;
 use App\PositionLevel;
+use App\Responsibility;
 use App\ResponsibilityDescription;
 use App\Task;
 use App\User;
@@ -186,33 +187,41 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function responsibilityDescription(Request $request)
+    public function responsibilities(Request $request)
     {
-        $userIDs = $request->userIDs;
-        $users = User::with(['responsibilities.descriptions'])->find($userIDs);
-        $descriptionGroups = [];
+        // $userIDs = $request->userIDs;
+        // $users = User::with(['responsibilities.descriptions'])->find($userIDs);
+        // $descriptionGroups = [];
 
-        foreach ($users as $key => $user) {
-            foreach ($user->responsibilities as $responsibility) {
-                foreach ($responsibility->descriptions as $description) {
-                    $descriptionGroups[$key][] = $description;
-                }
-            }
-        }
+        // foreach ($users as $key => $user) {
+        //     foreach ($user->responsibilities as $responsibility) {
+        //         foreach ($responsibility->descriptions as $description) {
+        //             $descriptionGroups[$key][] = $description;
+        //         }
+        //     }
+        // }
 
-        $intersactions = collect([]);
+        // $intersactions = collect([]);
 
-        if (count($descriptionGroups)) {
-            $intersactions = collect($descriptionGroups[0]);
-            foreach ($descriptionGroups as $descriptionGroup) {
-                $intersactions = $intersactions->intersect($descriptionGroup);
-            }
-        }
+        // if (count($descriptionGroups)) {
+        //     $intersactions = collect($descriptionGroups[0]);
+        //     foreach ($descriptionGroups as $descriptionGroup) {
+        //         $intersactions = $intersactions->intersect($descriptionGroup);
+        //     }
+        // }
 
-        $others = ResponsibilityDescription::where('title', 'Прочее')->first();
-        $intersactions->push($others);
+        // $others = ResponsibilityDescription::where('title', 'Прочее')->first();
+        // $intersactions->push($others);
         
-        return $intersactions->all();
+        // return $intersactions->all();
+        $userIDs = $request->userIDs;
+        $responsibilitiesToReturn = collect([]);
+        if (count($userIDs) == 1) {
+            $responsibilitiesToReturn = User::with(['responsibilities.descriptions'])->find($userIDs)->first()->responsibilities;
+        } 
+        $others = Responsibility::with('descriptions')->where('text', 'Прочее')->first();
+        $responsibilitiesToReturn->push($others);
+        return $responsibilitiesToReturn;
     }
 
     public function detachPosition($userID, $positionID)

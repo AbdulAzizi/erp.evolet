@@ -74,14 +74,21 @@ export default {
                 //         "Руководитель ЭН",
                 //         "ПК"
                 //     ],
-                //     divisions: ["Evolet", "НАП", "ОМАР"]
+                //     headOf: ["Evolet", "НАП", "ОМАР"],
+                //     divisions:[]
                 // },
                 {
                     icon: "mdi-attachment",
                     text: "ЭП",
                     url: "/projects?sortBy=country",
-                    positions: ["Программист", "Куратор Портфеля ПК стран", "НО", "ПК"],
-                    divisions: ["Evolet", "НАП","ОМАР"]
+                    positions: [
+                        "Программист",
+                        "Куратор Портфеля ПК стран",
+                        "НО",
+                        "ПК"
+                    ],
+                    headOf: ["Evolet", "НАП", "ОМАР"],
+                    divisions: []
                 },
                 // {
                 //     icon: "mdi-attachment",
@@ -92,63 +99,72 @@ export default {
                 //         "Руководитель ЭН",
                 //         "ПК"
                 //     ],
-                //     divisions: ["Evolet", "НАП", "ОМАР"]
+                //     headOf: ["Evolet", "НАП", "ОМАР"],
+                //     divisions:[]
                 // },
                 {
                     icon: "mdi-sitemap",
                     text: "Бизнес процессы",
                     url: "/bp",
                     positions: ["Программист"],
-                    divisions: ["ОРПО","ОМАР"]
+                    headOf: ["ОРПО", "ОМАР"],
+                    divisions: []
                 },
                 {
                     icon: "mdi-account-tie",
                     text: "HR",
                     url: "/human-resources",
                     positions: ["Программист"],
-                    divisions: ["ОРПО", "ДЧ","ОМАР"]
+                    headOf: ["ОРПО", "ДЧ", "ОМАР"],
+                    divisions: []
                 },
                 {
                     icon: "mdi-account-box-multiple",
                     text: "Резерв кандидатов",
                     url: "/head-resumes",
                     positions: ["Программист"],
-                    divisions: ["*","ОМАР"]
+                    headOf: ["*", "ОМАР"],
+                    divisions: []
                 },
                 {
                     icon: "mdi-sort-variant",
                     text: "Фильтры",
                     url: "/admin/products",
-                    positions: ["Программист","РВЗ"],
-                    divisions: ["НАП","ОМАР"]
+                    positions: ["Программист", "РВЗ"],
+                    headOf: ["НАП", "ОМАР"],
+                    divisions: []
                 },
                 {
                     icon: "mdi-file-document-box-multiple",
                     text: "Файлы",
                     url: "/admin/files",
-                    positions: ["Программист","РВЗ"],
-                    divisions: ["НАП","ОМАР"]
+                    positions: ["Программист", "РВЗ"],
+                    headOf: ["НАП", "ОМАР"],
+                    divisions: []
                 },
                 {
                     icon: "mdi-factory",
                     text: "Заводы",
                     url: "/factories",
-                    positions: ["Программист","МРБ"],
-                    divisions: ["ОМАР"]
+                    positions: ["Программист", "МРБ"],
+                    headOf: ["ОМАР"],
+                    divisions: []
                 },
                 {
                     icon: "mdi-script-text",
                     text: "ДО Компании",
                     url: "/hr/positions",
-                    positions: ["РВЗ","HR"],
-                    divisions: []
+                    positions: ["РВЗ", ],
+                    headOf: [],
+                    divisions: ["ОУПС"]
                 },
                 {
                     icon: "mdi-account-group",
                     text: "Сотрудники",
                     url: "/hr/users",
-                    positions: ["HR"],
-                    divisions: []
+                    positions: [],
+                    headOf: [],
+                    divisions: ["ОУПС"]
                 }
             ]
         };
@@ -160,20 +176,37 @@ export default {
             let userResps = user.positions.map(resp => resp.name);
             // loop through dynamicLinks
             return this.dynamicLinks.filter(link => {
-                // if link division has users division or *
-                if (
-                    link.divisions.includes(user.division.abbreviation) ||
-                    link.divisions.includes("*")
-                )
-                    if (user.position_level.name == "Руководитель")
-                        // if user has the positionLevel of "Руководитель"
-                        return link;
+                //------------------------------------------------------------------------------
+
                 // get union elements of two arrays (link.positions,userResps)
                 let unionLinks = link.positions.filter(resp =>
                     userResps.includes(resp)
                 );
                 // return if there is union element
                 if (unionLinks.length) return link;
+
+                //------------------------------------------------------------------------------
+
+                // if link headOf has users division or *
+                if (
+                    link.headOf.includes(user.division.abbreviation) ||
+                    link.headOf.includes("*")
+                ) {
+                    // if user has the positionLevel of "Руководитель"
+                    if (user.position_level.name == "Руководитель") return link;
+                }
+
+                //------------------------------------------------------------------------------
+
+                // if link division has users division or *
+                if (
+                    link.divisions.includes(user.division.abbreviation) ||
+                    link.divisions.includes("*")
+                ) {
+                    return link;
+                }
+
+                //------------------------------------------------------------------------------
             });
         }
     },

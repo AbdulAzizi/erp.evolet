@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col cols="9">
         <v-toolbar dense flat>
-          <v-toolbar-title>{{task.responsibility_description.title}}</v-toolbar-title>
+          <v-toolbar-title>{{task.responsibility_description.text}}</v-toolbar-title>
           <div class="flex-grow-1"></div>
           <v-menu bottom left :offset-y="true">
             <template v-slot:activator="{ on }">
