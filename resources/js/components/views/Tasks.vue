@@ -12,17 +12,24 @@
       ></v-text-field>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <v-btn
-            depressed
-            solo
-            color="white"
-            height="38"
-            class="ml-3"
-            @click="filtersMenu = !filtersMenu"
-            v-on="on"
-          >
-            <v-icon color="grey">mdi-tune</v-icon>
-          </v-btn>
+          <div>
+            <v-badge overlap>
+              <template v-slot:badge v-if="filtersLen">
+                <span>{{ filtersLen }}</span>
+              </template>
+              <v-btn
+                depressed
+                solo
+                color="white"
+                height="38"
+                class="ml-3"
+                @click="filtersMenu = !filtersMenu"
+                v-on="on"
+              >
+                <v-icon color="grey">mdi-tune</v-icon>
+              </v-btn>
+            </v-badge>
+          </div>
         </template>
         <span>Фильтры</span>
       </v-tooltip>
@@ -156,6 +163,40 @@
                 {{ data.item.name }}
               </template>
             </v-select>
+           <v-select
+              v-if="author"
+              v-model="author"
+              :items="authorItems"
+              label="От"
+              class="mb-4"
+              item-text="fullname"
+              item-value="id"
+              height="38"
+              outlined
+              flat
+              dense
+              hide-details
+              single-line
+              return-object
+              clearable
+            ></v-select>
+            <v-select
+              v-if="responsible"
+              v-model="responsible"
+              :items="responsibleItems"
+              label="От"
+              class="mb-4"
+              item-text="fullname"
+              item-value="id"
+              height="38"
+              outlined
+              flat
+              dense
+              hide-details
+              single-line
+              return-object
+              clearable
+            ></v-select>
             <v-switch label="Задачи сотрудника" v-model="selectEmployee" />
             <v-btn block dark depressed color="primary" @click="filterTask()">Фильтр</v-btn>
           </v-card-text>
@@ -189,7 +230,7 @@
             </v-btn>
           </template>
           <span>Канбан доска</span>
-        </v-tooltip> -->
+        </v-tooltip>-->
       </v-btn-toggle>
     </v-row>
 
@@ -211,6 +252,10 @@ export default {
       selectedTags: [],
       filteredTasks: [],
       employeeItems: [],
+      authorItems: [],
+      responsibleItems: [],
+      author: null,
+      responsible: null,
       filters: {
         all: true
       },
@@ -223,6 +268,7 @@ export default {
       filtersMenu: false,
       searchTask: "",
       page: false,
+      filtersLen: null,
       filterItems: [
         {
           name: "Мои задачи",
@@ -297,6 +343,8 @@ export default {
       this.selectEmployee
     );
     this.employee = this.setLocalFilter("employee", this.employee);
+    this.author = this.setLocalFilter("author", this.author);
+    this.responsible = this.setLocalFilter("responsible", this.author);
     this.filterTask();
   },
   methods: {
@@ -314,6 +362,7 @@ export default {
             this.filtersMenu = false;
             this.filteredTasks = res.data;
             this.page = this.loading = false;
+            this.countFilters();
             localStorage.setItem("filters", JSON.stringify(this.filters));
           });
       } else {
@@ -321,6 +370,7 @@ export default {
         this.page = 1;
         this.paginate();
         this.filtersMenu = false;
+        this.countFilters();
         localStorage.setItem("filters", JSON.stringify(this.filters));
       }
       Event.fire("kanbanFilter", this.filters);
@@ -357,7 +407,7 @@ export default {
     },
     divisionUsers() {
       let users = [];
-      if(this.employeeItems.length == 0){
+      if (this.employeeItems.length == 0) {
         axios
           .get(`/api/divisions/users`)
           .then(res => {
@@ -367,6 +417,14 @@ export default {
           })
           .catch(e => e.message);
         return users;
+      }
+    },
+    countFilters() {
+      let filtersLen = Object.keys(this.filters).length;
+      if (this.filters.all) {
+        this.filtersLen = filtersLen - 1;
+      } else {
+        this.filtersLen = filtersLen;
       }
     }
   },
@@ -423,7 +481,7 @@ export default {
     selectedTags(tags) {
       let tagsId = JSON.stringify(tags.map(tag => tag.id));
       if (!tags.length) {
-        localStorage.tags = [];
+        localStorage.tags = JSON.stringify([]);
         this.deleteFilter("tags");
       } else {
         this.setFilter("tags", tagsId);
@@ -492,6 +550,24 @@ export default {
         localStorage.setItem("selectEmployee", JSON.stringify(true));
         this.divisionUsers();
       }
+    },
+    author(item){
+      if(!item){
+        localStorage.author = null;
+        this.deleteFilter("author_id");
+      }else {
+        this.setFilter("author_id", item.id);
+        localStorage.setItem("author", JSON.stringify(item));
+      }
+    },
+      responsible(item){
+      if(!item){
+        localStorage.responsible = null;
+        this.deleteFilter("task_responsible_id");
+      }else {
+        this.setFilter("task_responsible_id", item.id);
+        localStorage.setItem("responsible", JSON.stringify(item));
+      }
     }
   },
   created() {
@@ -499,7 +575,7 @@ export default {
     Event.listen("loadTasks", data => this.paginate());
     Event.listen("filterByPriority", data => {
       this.priorityItems.forEach(item => {
-        if(item.id == data){
+        if (item.id == data) {
           this.priority = item;
         }
       });
@@ -508,7 +584,7 @@ export default {
     });
     Event.listen("filterByStatus", statusId => {
       this.taskStatuses.forEach(item => {
-        if(item.id == statusId){
+        if (item.id == statusId) {
           this.status = item;
         }
       });
@@ -520,7 +596,29 @@ export default {
       this.selectedTags.push(tag);
       this.filters.tags = JSON.stringify(this.selectedTags.map(tag => tag.id));
       this.filterTask();
-    })
+    });
+    Event.listen("filterByResponsible", user => {
+       if(user.id == this.auth.id){
+        this.taskCategory = this.filterItems.find(item => item.name == "Мои задачи");
+        this.filters.responsible_id = user.id;
+      }else {
+        this.responsibleItems.push(user);
+        this.responsible = user;
+        this.filters.task_responsible_id = user.id;
+      }
+        this.filterTask();
+    });
+    Event.listen("filterByAuthor", user => {
+      if(user.id == this.auth.id){
+        this.taskCategory = this.filterItems.find(item => item.name == "Поставленные задачи");
+        this.filters.from_id = user.id;
+      }else {
+        this.authorItems.push(user);
+        this.author = user;
+        this.filters.author_id = user.id;
+      }
+        this.filterTask();
+    });
   }
 };
 </script>

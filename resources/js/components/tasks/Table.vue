@@ -39,28 +39,28 @@
               </v-menu>
             </td>
             <td>{{item.responsibility_description.title}}</td>
-            <td @click.stop="filterByPriority(item.priority)">
+            <td @click.stop="filter(item.priority, 'filterByPriority')">
               <priority :id="item.priority" icon></priority>
             </td>
             <td>
               <span>{{durObj(item.planned_time)}}</span>
             </td>
             <td>{{ moment(item.deadline).format('L') }}</td>
-            <td>
-              <avatar size="30" :user="item.from" />
+            <td @click.stop="filter(item.from, 'filterByAuthor')">
+              <avatar size="30" :user="item.from" :link="false" />
             </td>
-            <td>
-              <avatar size="30" :user="item.responsible" />
+            <td @click.stop="filter(item.responsible, 'filterByResponsible')">
+              <avatar size="30" :user="item.responsible" :link="false"/>
             </td>
             <td>{{ moment(item.created_at).format('L') }}</td>
-            <td @click.stop="filterByStatus(item.status.id)">{{ item.status.name }}</td>
+            <td @click.stop="filter(item.status.id, 'filterByStatus')">{{ item.status.name }}</td>
             <td>
               <v-chip
                 class="primary mr-1"
                 small
                 v-for="(tag,index) in item.tags"
                 :key="'tag-'+index"
-                @click.stop="filterByTag(tag)"
+                @click.stop="filter(tag, 'filterByTag')"
               >{{tag.name}}</v-chip>
             </td>
           </tr>
@@ -117,14 +117,8 @@ export default {
     displayTask(item) {
       window.location.href = "tasks/" + item.id;
     },
-    filterByPriority(priority){
-      Event.fire("filterByPriority", priority)
-    },
-    filterByStatus(status){
-      Event.fire("filterByStatus", status)
-    },
-    filterByTag(tag){
-      Event.fire("filterByTag", tag);
+    filter(item, eventName){
+      Event.fire(eventName, item);
     },
     mark(task) {
       let dataToSend = task.readed ? 0 : 1;
