@@ -156,7 +156,7 @@ export default {
                     url: "/hr/positions",
                     positions: ["РВЗ", ],
                     headOf: [],
-                    divisions: ["HR"]
+                    divisions: ["ОУПС"]
                 },
                 {
                     icon: "mdi-account-group",
@@ -164,7 +164,7 @@ export default {
                     url: "/hr/users",
                     positions: [],
                     headOf: [],
-                    divisions: ["HR"]
+                    divisions: ["ОУПС"]
                 }
             ]
         };
