@@ -132,7 +132,7 @@ class TaskController extends Controller
             event(new TaskCreatedEvent($task));
         }
         // Redirect to Tasks Index page
-        return redirect()->back();
+        return redirect()->route('tasks.index');
     }
 
     public function show($id)
