@@ -83,4 +83,17 @@ class TaskFilters extends QueryFilters
             $q->where("title", "LIKE", "%$term%");
         });
     }
+
+    public function author_id($term)
+    {
+        return $this->builder->where([
+            'from_id' => $term,
+            'from_type' => "App\User",
+        ]);
+    }
+
+    public function task_responsible_id($term)
+    {
+        return $this->builder->where('responsible_id', $term);
+    }
 }
