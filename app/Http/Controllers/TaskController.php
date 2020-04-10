@@ -343,9 +343,9 @@ class TaskController extends Controller
         $activeTasks = Task::whereHas('status', function (Builder $query) {
             $query->where('name', 'В процессе');
         })
-        ->where('responsible_id', auth()->user()->id )
+        ->where('responsible_id', auth()->id() )
         ->get();
-        
+
         // Pause all tasks
         foreach ($activeTasks as $task) {
 
