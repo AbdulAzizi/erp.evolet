@@ -46,6 +46,7 @@
                                 :value="selectedRespOrDescrip.id"
                             />
                             <v-autocomplete
+                                ref="selectedRespOrDescrip"
                                 v-model="selectedRespOrDescrip"
                                 prepend-icon="mdi-rename-box"
                                 rounded
@@ -55,7 +56,7 @@
                                 :items="userResponsibilityDescriptions"
                                 item-text="text"
                                 item-value="id"
-                                :rules="[required=>!!selectedRespOrDescrip || 'Обязательное поле']"
+                                :rules="[v=> Object.keys(v).length != 0 || 'Обязательное поле']"
                                 return-object
                             >
                                 <template v-slot:item="data">
@@ -68,23 +69,27 @@
                         <v-col cols="12" class="py-0">
                             <form-field
                                 :field="{
-                    type: 'text',
-                    name: 'description',
-                    label: 'Описание',
-                    icon: 'mdi-text-subject',
-                }"
+                                    type: 'text',
+                                    name: 'description',
+                                    label: 'Описание',
+                                    icon: 'mdi-text-subject',
+                                    counter: '300',
+                                    maxLength:300,
+                                    rows:5,
+                                    rules: ['required'],
+                                }"
                             />
                         </v-col>
 
                         <v-col cols="12" class="py-0">
                             <form-field
                                 :field="{
-                    type: 'date-time',
-                    name: 'deadline',
-                    label: 'Дедлайн',
-                    icon: 'mdi-calendar-clock',
-                    rules: ['required'],
-                }"
+                                    type: 'date-time',
+                                    name: 'deadline',
+                                    label: 'Дедлайн',
+                                    icon: 'mdi-calendar-clock',
+                                    rules: ['required'],
+                                }"
                             />
                         </v-col>
                         <v-col cols="12" class="py-0">
