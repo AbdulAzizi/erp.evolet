@@ -341,9 +341,11 @@ class TaskController extends Controller
         $paused = Status::where('name', 'Приостановлен')->first();
         // Get all tasks that are active
         $activeTasks = Task::whereHas('status', function (Builder $query) {
-            $query->where('name', 'В процессе')
-                  ->where('responsible_id', auth()->user()->id );
-        })->get();
+            $query->where('name', 'В процессе');
+        })
+        ->where('responsible_id', auth()->user()->id )
+        ->get();
+        
         // Pause all tasks
         foreach ($activeTasks as $task) {
 
