@@ -9,7 +9,6 @@ use App\Filters\TaskFilters;
 use App\Option;
 use App\Question;
 use App\Responsibility;
-use App\ResponsibilityDescription;
 use App\Status;
 use App\Task;
 use App\Timeset;
@@ -342,7 +341,8 @@ class TaskController extends Controller
         $paused = Status::where('name', 'Приостановлен')->first();
         // Get all tasks that are active
         $activeTasks = Task::whereHas('status', function (Builder $query) {
-            $query->where('name', 'В процессе');
+            $query->where('name', 'В процессе')
+                  ->where('responsible_id', auth()->user()->id );
         })->get();
         // Pause all tasks
         foreach ($activeTasks as $task) {
