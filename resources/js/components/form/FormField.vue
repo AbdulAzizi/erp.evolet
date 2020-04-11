@@ -102,7 +102,7 @@ const getTextField = field => {
 
     //Default props for textarea
     baseField.component = "v-textarea";
-    baseField.props["rows"] = 3;
+    baseField.props["rows"] = baseField.props["rows"] ? baseField.props["rows"] : 3;
 
     return baseField;
 };

@@ -34,10 +34,7 @@
         </v-row>
         <!-- Display Divisions poistions -->
         <v-expansion-panels>
-            <v-expansion-panel
-                v-for="(division, index) in divisions"
-                :key="'panels-'+index"
-            >
+            <v-expansion-panel v-for="(division, index) in divisions" :key="'panels-'+index">
                 <v-expansion-panel-header>{{ division.name }}</v-expansion-panel-header>
                 <v-expansion-panel-content class="grey lighten-2">
                     <v-row class="pa-0 ma-0 pb-3">
@@ -56,6 +53,7 @@
                             <position-card :position="position" :editable="editable" />
                         </v-col>
                     </v-row>
+                    <positions class="pl-10" :divisions="division.children" :editable="true"></positions>
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
@@ -95,6 +93,8 @@ export default {
         }
     },
     created() {
+        console.log(this.divisions);
+
         Event.listen("positionDetached", positionId => {
             this.localUser.positions.forEach((position, index) => {
                 if (position.id == positionId) {

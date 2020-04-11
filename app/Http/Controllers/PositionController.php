@@ -15,7 +15,8 @@ class PositionController extends Controller
             $query->orderBy('order')->with(['descriptions' => function ($query) {
                 $query->orderBy('order');
             }]);
-        }])->get();
+        }])->get()->toTree();
+
         return view('positions', compact('divisions'));
     }
 
