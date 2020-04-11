@@ -24,14 +24,14 @@ class TaskController extends Controller
         $authUser = \Auth::user();
         $statuses = Status::all();
 
-        // $tasks = Task::filter($filters)->with(
+        // $groupTasks = Task::filter($filters)->with(
         //     'from',
         //     'responsible',
         //     'watchers',
         //     'status',
         //     'tags',
         //     'responsibilityDescription'
-        // )->get();
+        // )->get()->groupBy('responsibility_description_id')->all();
 
         // foreach ($tasks as $task) {
         //     // If task is from process
@@ -46,9 +46,8 @@ class TaskController extends Controller
         $divisions = Division::with('users')->whereHas('users')->get();
 
         // $notifications = $authUser->notifications;
-
+        
         return view('tasks.index', compact(
-            // 'tasks',
             'users',
             'statuses',
             'authUser',
@@ -428,6 +427,15 @@ class TaskController extends Controller
             'responsibilityDescription'
         )->paginate(30);
 
+        // $tasks = Task::filter($filters)->with(
+        //     'from',
+        //     'responsible',
+        //     'watchers',
+        //     'status',
+        //     'tags',
+        //     'responsibilityDescription'
+        // )->get()->groupBy('responsibility_description_id')->all();
+        // dd($tasks);
         return $tasks;
     }
 
@@ -441,6 +449,37 @@ class TaskController extends Controller
             'tags',
             'responsibilityDescription'
         )->get();
+        
+        // $tasks = Task::filter($filters)->with(
+        //     'from',
+        //     'responsible',
+        //     'watchers',
+        //     'status',
+        //     'tags',
+        //     'responsibilityDescription'
+        // )->get()->groupBy('responsibility_description_id')->all();
+
+        return $tasks;
+    }
+
+    public function group(TaskFilters $filters, $field)
+    {
+        // $tasks = Task::filter($filters)->with(
+        //     'from',
+        //     'responsible',
+        //     'watchers',
+        //     'status',
+        //     'tags',
+        //     'responsibilityDescription'
+        // )->get();
+        $tasks = Task::filter($filters)->with(
+            'from',
+            'responsible',
+            'watchers',
+            'status',
+            'tags',
+            'responsibilityDescription'
+        )->get()->groupBy($field)->all();
 
         return $tasks;
     }

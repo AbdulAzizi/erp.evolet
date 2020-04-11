@@ -38,10 +38,11 @@
                 </v-list>
               </v-menu>
             </td>
-            <td>{{item.responsibility_description.text}}</td>
             <td @click.stop="filter(item.priority, 'filterByPriority')">
               <priority :id="item.priority" icon></priority>
             </td>
+            <td>{{item.responsibility_description.text}}</td>
+            <td>{{ item.description.substring(0, 30) + '...' }}</td>
             <td>
               <span>{{durObj(item.planned_time)}}</span>
             </td>
@@ -83,7 +84,9 @@ import "v-infinite-scroll/dist/v-infinite-scroll.css";
 
 export default {
   props: {
-    tasks: Array
+    tasks: {
+      required: true
+    }
   },
   components: {
     "v-infinite-scroll": InfiniteScroll
@@ -93,13 +96,14 @@ export default {
       localTasks: this.tasks,
       headers: [
         { text: "" },
+        { text: "", value: "priority" },
         { text: "Задача", value: "title" },
-        { text: "Приоритет", value: "priority" },
+        { text: "Описание", value: "description" },
         { text: "Время на задачу", value: "planned_time" },
         { text: "Дедлайн", value: "deadline" },
         { text: "От", value: "from", sort: false },
-        { text: "Исполнитель", value: "responsible", sort: false },
-        { text: "Поставленна", value: "created_at" },
+        { text: "Испол", value: "responsible", sort: false },
+        { text: "Поставлена", value: "created_at" },
         { text: "Статус", value: "status" },
         { text: "Теги", value: "tags", width: 100 }
       ],
