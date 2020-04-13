@@ -213,7 +213,7 @@
               return-object
               clearable
             ></v-select>
-            <v-switch label="Задачи сотрудника" hide-details v-model="selectEmployee" />
+            <v-switch v-if="auth.id == auth.division.head_id" label="Задачи сотрудника" hide-details v-model="selectEmployee" />
             <v-btn block dark depressed color="primary" class="my-5" @click="filterTask()">Фильтр</v-btn>
           </v-card-text>
         </v-card>

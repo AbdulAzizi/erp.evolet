@@ -45,7 +45,7 @@ class TaskController extends Controller
         $divisions = Division::with('users')->whereHas('users')->get();
 
         // $notifications = $authUser->notifications;
-        
+
         return view('tasks.index', compact(
             'users',
             'statuses',
@@ -135,6 +135,7 @@ class TaskController extends Controller
 
     public function show($id)
     {
+        $authUser = \Auth::user();
         $task = Task::with(
             'watchers',
             'responsible',
@@ -163,14 +164,18 @@ class TaskController extends Controller
                 $task->from->load('frontTethers.forms.fields');
             }
 
-            $task->readed = 1;
-            $task->save();
+            if ($authUser->id == $task->responsible_id) {
+                $task->readed = 1;
+                if ($task->read_at == null) {
+                    $task->read_at = date(now());
+                }
+                $task->save();
+            }
 
             return view('tasks.show', compact('task'));
         } else {
             abort(404);
         }
-
     }
 
     public function update($id, Request $request)
@@ -342,8 +347,8 @@ class TaskController extends Controller
         $activeTasks = Task::whereHas('status', function (Builder $query) {
             $query->where('name', 'В процессе');
         })
-        ->where('responsible_id', auth()->id() )
-        ->get();
+            ->where('responsible_id', auth()->id())
+            ->get();
 
         // Pause all tasks
         foreach ($activeTasks as $task) {
@@ -413,6 +418,11 @@ class TaskController extends Controller
         $task = Task::find($request->id);
 
         $task->readed = $request->readed;
+
+        if ($task->read_at == null) {
+            $task->read_at = date(now());
+        }
+
         $task->save();
 
         return $task;
@@ -451,7 +461,7 @@ class TaskController extends Controller
             'tags',
             'responsibilityDescription'
         )->get();
-        
+
         // $tasks = Task::filter($filters)->with(
         //     'from',
         //     'responsible',
@@ -499,6 +509,5 @@ class TaskController extends Controller
         $task->questionTasks()->delete();
 
         $task->delete();
-
     }
 }

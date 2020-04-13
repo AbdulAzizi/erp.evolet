@@ -14,7 +14,11 @@
             <v-card>
               <v-list dense>
                 <v-list-item class="body-2" @click="forwardTask" v-if="userCanForward">Делегировать</v-list-item>
-                <v-list-item class="body-2" @click="markAsUnread(task)">Отметить как непрочитанное</v-list-item>
+                <v-list-item
+                  class="body-2"
+                  @click="markAsUnread(task)"
+                  v-if="auth.id == task.responsible.id"
+                >Отметить как непрочитанное</v-list-item>
                 <v-list-item
                   class="body-2"
                   v-if="taskAuthor()"
@@ -44,6 +48,11 @@
         <v-tabs-items v-model="tab" style="background-color:#f4f5f7;" class="task-main-content">
           <v-tab-item value="task">
             <v-card-text>
+              <div v-if="task.read_at" class="pb-3">
+                <div
+                  class="font-weight-medium pb-1 grey--text"
+                >Просмотрено: {{ moment(item.read_at).local().format('lll') }}</div>
+              </div>
               <div v-if="task.description" class="pb-3">
                 <div class="font-weight-medium pb-1">Описание</div>
                 <div v-html="task.description"></div>
@@ -250,7 +259,6 @@ export default {
     Event.listen(`tasks/${this.task.id}/status/changed`, status => {
       this.task.status = status;
     });
-    this.markTaskAsRead();
   },
   watch: {
     item(v) {
@@ -299,16 +307,6 @@ export default {
         .put(`/api/task/mark/${task.id}`, { readed: 0 })
         .then(res => res.data)
         .catch(err => err.messages);
-    },
-    markTaskAsRead() {
-      axios
-        .post("/api/notifications/mark", {
-          task_id: this.item.id,
-          user_id: this.item.responsible.id
-        })
-        .then(res => {
-          this.item.readed = 1;
-        });
     },
     taskAuthor() {
       return this.auth.id === this.task.from_id;

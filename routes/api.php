@@ -40,7 +40,6 @@ Route::delete('/deleteLanguage/{id}', 'LanguageController@delete')->name('langua
 Route::post('/achievment', 'AchievmentController@create')->name('achievment.create');
 Route::delete('/deleteAchievment/{id}', 'AchievmentController@delete')->name('achievment.delete');
 Route::post('/notifications', 'UserController@markAsRead')->name('user.markAsRead');
-Route::post('/notifications/mark', 'UserController@mark')->name('user.mark');
 Route::put('/change-task-status/{id}', 'TaskController@changeStatus')->name('change.task.status');
 Route::post('/addStatus', 'TaskController@addStatus')->name('add.status');
 Route::put('/change-status-name/{id}', 'TaskController@changeStatusName')->name('change.status.name');

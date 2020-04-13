@@ -28,7 +28,7 @@
                   </v-btn>
                 </template>
                 <v-list dense>
-                  <v-list-item @click="mark(item)">
+                  <v-list-item @click="mark(item)" v-if="auth.id == item.responsible.id">
                     <v-list-item-title v-if="item.readed">Отметить как не прочитанное</v-list-item-title>
                     <v-list-item-title v-if="!item.readed">Отметить как прочитанное</v-list-item-title>
                   </v-list-item>
@@ -41,7 +41,9 @@
             <td @click.stop="filter(item.priority, 'filterByPriority')">
               <priority :id="item.priority" icon></priority>
             </td>
-            <td>{{item.responsibility_description.text}}</td>
+            <td>{{item.responsibility_description.text}} 
+              <v-icon small v-if="item.read_at" color="green">mdi-check-all</v-icon>
+            </td>
             <td>{{ item.description.substring(0, 30) + '...' }}</td>
             <td>
               <span>{{durObj(item.planned_time)}}</span>
@@ -134,6 +136,7 @@ export default {
           this.localTasks.forEach(elem => {
             if (elem.id == res.data.id) {
               elem.readed = res.data.readed;
+              elem.read_at = res.data.read_at;
             }
           });
         })
