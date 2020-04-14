@@ -83,6 +83,11 @@ export default {
             if (val) {
                 this.fetchResponsibilityDescription();
             }
+        },
+        edit(val){
+            if(!val){
+                this.editing = false;
+            }
         }
     }
 };
