@@ -9,6 +9,7 @@ use App\Filters\TaskFilters;
 use App\Option;
 use App\Question;
 use App\Responsibility;
+use App\ResponsibilityDescription;
 use App\Status;
 use App\Task;
 use App\Timeset;
@@ -343,8 +344,8 @@ class TaskController extends Controller
         $activeTasks = Task::whereHas('status', function (Builder $query) {
             $query->where('name', 'В процессе');
         })
-        ->where('responsible_id', auth()->id() )
-        ->get();
+            ->where('responsible_id', auth()->id())
+            ->get();
 
         // Pause all tasks
         foreach ($activeTasks as $task) {
@@ -460,6 +461,16 @@ class TaskController extends Controller
         $task->questionTasks()->delete();
 
         $task->delete();
+
+    }
+
+    public function updateResponsibilityDescription($id, Request $request)
+    {
+        $task = Task::find($id);
+        $task->responsibilityDescription()->associate($request->responsibility_description_id);
+        $task->save();
+
+        return ResponsibilityDescription::find($request->responsibility_description_id);
 
     }
 }
