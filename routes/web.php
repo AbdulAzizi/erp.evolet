@@ -112,19 +112,20 @@ Route::prefix('api')->group(function () {
     Route::get('/lists/{id}/items', 'ListController@items')->name('api.lists.items');
     Route::put('/fields/edit/{id}', 'FieldController@edit')->name('fields.edit');
     Route::get('/fieldtypes', 'FieldController@getFieldTypes')->name('api.getFieldTypes');
-    
+
     Route::get('/responsibilities/{id}/moveup', 'ResponsibilityController@moveup')->name('api.responsibilities.moveup');
     Route::get('/responsibilities/{id}/movedown', 'ResponsibilityController@movedown')->name('api.responsibilities.movedown');
     Route::post('/responsibility_descriptions/moveup', 'ResponsibilityDescriptionController@moveup')->name('api.responsibilityDescription.moveup');
     Route::post('/responsibility_descriptions/movedown', 'ResponsibilityDescriptionController@movedown')->name('api.responsibilityDescription.movedown');
-    
+
     Route::get('/tasks/filter', 'TaskController@filter')->name('api.tasks.filter');
     Route::get('/tasks/paginate', 'TaskController@paginate')->name('api.tasks.paginate');
     Route::put('/tasks/{id}/responsibilitydescription', 'TaskController@updateResponsibilityDescription')->name('api.tasks.paginate');
-    
+
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
+    Route::get('/tasks/groupBy/{field}', 'TaskController@group')->name('api.tasks.group');
     Route::post('/users/{id}/tasks', 'ProfileController@getTasks')->name('api.profile.getTasks');
     Route::post('/users/{id}/timesets', 'ProfileController@getTimeSets')->name('api.profile.getTimeSets');
-    
+
     Route::get('/divisions/users', 'DivisionController@getUsers')->name('api.divisions.getUsers');
 });

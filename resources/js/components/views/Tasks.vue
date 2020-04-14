@@ -163,7 +163,7 @@
                 {{ data.item.name }}
               </template>
             </v-select>
-           <v-select
+            <v-select
               v-if="author"
               v-model="author"
               :items="authorItems"
@@ -197,8 +197,24 @@
               return-object
               clearable
             ></v-select>
-            <v-switch label="Задачи сотрудника" v-model="selectEmployee" />
-            <v-btn block dark depressed color="primary" @click="filterTask()">Фильтр</v-btn>
+            <v-select
+              v-model="groupTask"
+              :items="groupTaskItems"
+              label="Группа задач по"
+              class="mb-4"
+              item-text="name"
+              item-value="value"
+              height="38"
+              outlined
+              flat
+              dense
+              hide-details
+              single-line
+              return-object
+              clearable
+            ></v-select>
+            <v-switch label="Задачи сотрудника" hide-details v-model="selectEmployee" />
+            <v-btn block dark depressed color="primary" class="my-5" @click="filterTask()">Фильтр</v-btn>
           </v-card-text>
         </v-card>
       </v-navigation-drawer>
@@ -223,20 +239,21 @@
                         <span>календарь</span>
         </v-tooltip>-->
 
-        <!-- <v-tooltip bottom>
+        <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn small text :value="activeBtn.KANBAN" dark v-on="on" height="38">
               <v-icon :color="isKanban ? 'white' : 'grey lighten-0'">mdi-view-dashboard</v-icon>
             </v-btn>
           </template>
           <span>Канбан доска</span>
-        </v-tooltip>-->
+        </v-tooltip>
       </v-btn-toggle>
     </v-row>
 
-    <tasks-table :tasks="filteredTasks" v-show="isTable"></tasks-table>
+    <tasks-table :tasks="filteredTasks" v-if="isTable && !displayGroupTasks"></tasks-table>
     <!-- <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar> -->
     <!-- <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser" /> -->
+    <tasks-group-view :tasks="filteredTasks" v-if="displayGroupTasks"/>
     <tasks-add :divisions="divisions" :users="users" :errors="errors" />
     <v-overlay v-if="loading" light opacity="0">
       <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
@@ -254,7 +271,9 @@ export default {
       employeeItems: [],
       authorItems: [],
       responsibleItems: [],
+      localTags: [],
       author: null,
+      groupTask: null,
       responsible: null,
       filters: {
         all: true
@@ -269,6 +288,7 @@ export default {
       searchTask: "",
       page: false,
       filtersLen: null,
+      displayGroupTasks: false,
       filterItems: [
         {
           name: "Мои задачи",
@@ -328,6 +348,16 @@ export default {
           id: 0
         }
       ],
+      groupTaskItems: [
+        {
+          name: "Тип задачи",
+          value: "responsibility_description_id"
+        },
+        {
+          name: "Описание задачи",
+          value: "description"
+        }
+      ],
       loading: false
     };
   },
@@ -351,27 +381,37 @@ export default {
     filterTask() {
       const filtersLen = Object.keys(this.filters).length;
       if (filtersLen > 1 || this.selectEmployee) {
-        this.loading = !this.loading;
-        axios
-          .get(this.appPath("api/tasks/filter"), {
-            params: {
-              ...this.filters
-            }
-          })
-          .then(res => {
-            this.filtersMenu = false;
-            this.filteredTasks = res.data;
-            this.page = this.loading = false;
-            this.countFilters();
-            localStorage.setItem("filters", JSON.stringify(this.filters));
-          });
+        if (this.groupTask) {
+          this.loadGroupTasks();
+        } else {
+          this.loading = !this.loading;
+          axios
+            .get(this.appPath("api/tasks/filter"), {
+              params: {
+                ...this.filters
+              }
+            })
+            .then(res => {
+              this.filtersMenu = false;
+              this.filteredTasks = res.data;
+              this.page = this.loading = false;
+              this.countFilters();
+              localStorage.setItem("filters", JSON.stringify(this.filters));
+              this.displayGroupTasks = false;
+            });
+        }
       } else {
-        this.filteredTasks = [];
-        this.page = 1;
-        this.paginate();
-        this.filtersMenu = false;
-        this.countFilters();
-        localStorage.setItem("filters", JSON.stringify(this.filters));
+        if (this.groupTask) {
+          this.loadGroupTasks();
+        } else {
+          this.filteredTasks = [];
+          this.page = 1;
+          this.paginate();
+          this.filtersMenu = false;
+          this.countFilters();
+          localStorage.setItem("filters", JSON.stringify(this.filters));
+          this.displayGroupTasks = false;
+        }
       }
       Event.fire("kanbanFilter", this.filters);
     },
@@ -426,6 +466,22 @@ export default {
       } else {
         this.filtersLen = filtersLen;
       }
+    },
+    loadGroupTasks() {
+      this.loading = true;
+      axios
+        .get(this.appPath(`api/tasks/groupBy/${this.groupTask.value}`), {
+          params: {
+            ...this.filters
+          }
+        })
+        .then(res => {
+          this.filtersMenu = false;
+          this.filteredTasks = res.data;
+          this.page = this.loading = false;
+          this.displayGroupTasks = true;
+          this.loading = false;
+        });
     }
   },
   computed: {
@@ -453,22 +509,27 @@ export default {
     },
     tasksTags() {
       // Make empty array to collect all tags
-      let localTags = [];
-      // Loop through tasks
-      this.filteredTasks.forEach(task => {
-        // Loop through tags of task
-        task.tags.forEach(tag => {
-          // Get tag that matches from localTags
-          let foundTag = localTags.filter(localTag => localTag.id == tag.id);
-          // Check if didnt find any matches
-          if (foundTag.length == 0) {
-            // Push tag to localTags
-            localTags.push(tag);
-          }
+      // let localTags = [];
+
+      if (this.localTags.length == 0) {
+        // Loop through tasks
+        this.filteredTasks.forEach(task => {
+          // Loop through tags of task
+          task.tags.forEach(tag => {
+            // Get tag that matches from localTags
+            let foundTag = this.localTags.filter(
+              localTag => localTag.id == tag.id
+            );
+            // Check if didnt find any matches
+            if (foundTag.length == 0) {
+              // Push tag to localTags
+              this.localTags.push(tag);
+            }
+          });
         });
-      });
+      }
+      return this.localTags;
       // return array of tags
-      return localTags;
     }
   },
   watch: {
@@ -551,22 +612,27 @@ export default {
         this.divisionUsers();
       }
     },
-    author(item){
-      if(!item){
+    author(item) {
+      if (!item) {
         localStorage.author = null;
         this.deleteFilter("author_id");
-      }else {
+      } else {
         this.setFilter("author_id", item.id);
         localStorage.setItem("author", JSON.stringify(item));
       }
     },
-      responsible(item){
-      if(!item){
+    responsible(item) {
+      if (!item) {
         localStorage.responsible = null;
         this.deleteFilter("task_responsible_id");
-      }else {
+      } else {
         this.setFilter("task_responsible_id", item.id);
         localStorage.setItem("responsible", JSON.stringify(item));
+      }
+    },
+    groupTask(item){
+      if(item){
+        Event.fire("groupType", item.value)
       }
     }
   },
@@ -598,26 +664,30 @@ export default {
       this.filterTask();
     });
     Event.listen("filterByResponsible", user => {
-       if(user.id == this.auth.id){
-        this.taskCategory = this.filterItems.find(item => item.name == "Мои задачи");
+      if (user.id == this.auth.id) {
+        this.taskCategory = this.filterItems.find(
+          item => item.name == "Мои задачи"
+        );
         this.filters.responsible_id = user.id;
-      }else {
+      } else {
         this.responsibleItems.push(user);
         this.responsible = user;
         this.filters.task_responsible_id = user.id;
       }
-        this.filterTask();
+      this.filterTask();
     });
     Event.listen("filterByAuthor", user => {
-      if(user.id == this.auth.id){
-        this.taskCategory = this.filterItems.find(item => item.name == "Поставленные задачи");
+      if (user.id == this.auth.id) {
+        this.taskCategory = this.filterItems.find(
+          item => item.name == "Поставленные задачи"
+        );
         this.filters.from_id = user.id;
-      }else {
+      } else {
         this.authorItems.push(user);
         this.author = user;
         this.filters.author_id = user.id;
       }
-        this.filterTask();
+      this.filterTask();
     });
   }
 };

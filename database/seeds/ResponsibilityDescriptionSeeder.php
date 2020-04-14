@@ -13,9 +13,27 @@ class ResponsibilityDescriptionSeeder extends Seeder
      */
     public function run()
     {
-        ResponsibilityDescription::create([
-            'text' => 'Прочее',
-            'responsibility_id' => Responsibility::where('text', 'Прочее')->first()->id,
+        ResponsibilityDescription::insert([
+            [
+                'text' => 'Прочее',
+                'responsibility_id' => Responsibility::where('text', 'Прочее')->first()->id,
+            ], 
+            [
+                'text' => 'Исправить ошибку',
+                'responsibility_id' => Responsibility::where('text', 'Исправить ошибку')->first()->id,
+            ],
+            [
+                'text' => 'SMM',
+                'responsibility_id' => Responsibility::where('text', 'SMM')->first()->id,
+            ],
+            [
+                'text' => 'Test',
+                'responsibility_id' => Responsibility::where('text', 'Test')->first()->id,
+            ],
+            [
+                'text' => 'Content',
+                'responsibility_id' => Responsibility::where('text', 'Content')->first()->id,
+            ]
         ]);
     }
 }

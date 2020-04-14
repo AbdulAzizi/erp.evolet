@@ -16,6 +16,10 @@ class ResponsibilitySeeder extends Seeder
         // factory(Responsibility::class, 20)->create();
         Responsibility::insert([
             ['text' => 'Прочее', 'position_id' => 0],
+            ['text' => 'Исправить ошибку', 'position_id' => 0],
+            ['text' => 'SMM', 'position_id' => 0],
+            ['text' => 'Test', 'position_id' => 0],
+            ['text' => 'Content', 'position_id' => 0]
         ]);
     }
 }
