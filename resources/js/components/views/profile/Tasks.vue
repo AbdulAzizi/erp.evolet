@@ -51,11 +51,11 @@
                     <tr>
                         <td>{{item.task.responsibility_description.title}}</td>
                         <td>{{item.task.description}}</td>
-                        <td>{{moment(item.start_time).local().format('LTS') }}</td>
+                        <td>{{moment(item.start_time).local().format('LLL') }}</td>
                         <td>
                             <template
                                 v-if="item.end_time"
-                            >{{moment(item.end_time).local().format('LTS') }}</template>
+                            >{{moment(item.end_time).local().format('LLL') }}</template>
                             <template v-else></template>
                         </td>
                         <td>
