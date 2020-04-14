@@ -16,7 +16,7 @@
                                 <v-list-item
                                     class="body-2"
                                     @click="forwardTask"
-                                    v-if="userCanForward"
+                                    v-if="isHisHead"
                                 >Делегировать</v-list-item>
                                 <v-list-item
                                     class="body-2"
@@ -24,10 +24,11 @@
                                 >Отметить как непрочитанное</v-list-item>
                                 <v-list-item
                                     class="body-2"
-                                    v-if="taskAuthor()"
+                                    v-if="isTaskAuthor"
                                     @click="deleteTaskDialog = true"
                                 >Удалить задачу</v-list-item>
                                 <v-list-item
+                                    v-if="isTaskResponsible"
                                     class="body-2"
                                     @click="edit = !edit"
                                 >{{edit?'Закончить изменения':'Изменить'}}</v-list-item>
@@ -41,7 +42,7 @@
                             <v-tab href="#history">История</v-tab>
 
                             <dynamic-form
-                                v-if="userCanForward"
+                                v-if="isHisHead"
                                 dialog
                                 :fields="[forwardField]"
                                 title="Выберите сотрудника"
@@ -188,7 +189,7 @@
 
                     <priority :id="task.priority" classes=" lighten-3"></priority>
 
-                    <task-control-buttons v-if="userIsTaskOwner" class="mr-5" :task="task" />
+                    <task-control-buttons v-if="isTaskResponsible" class="mr-5" :task="task" />
 
                     <v-subheader v-if="task.tags.length">Теги</v-subheader>
                     <div class="px-3">
@@ -348,23 +349,14 @@ export default {
                 .then(res => {
                     this.item.readed = 1;
                 });
-        },
-        taskAuthor() {
-            return this.auth.id === this.task.from_id;
         }
     },
     computed: {
         taskHasActions() {
-            return this.taskHasBPActions || this.userCanForward;
+            return this.taskHasBPActions || this.isHisHead;
         },
         taskHasBPActions() {
             return this.task.from.front_tethers;
-        },
-        userCanForward() {
-            return (
-                this.task.responsible.position_level.id ===
-                DIVISION_HEAD_POSITION__LEVEL_ID
-            );
         },
         usersForAvatar() {
             let users = this.task.watchers.map(watcher => {
@@ -379,8 +371,16 @@ export default {
 
             return users;
         },
-        userIsTaskOwner() {
-            return this.auth.id == this.task.responsible_id;
+        isTaskAuthor() {
+            return this.auth.id === this.task.from_id;
+        },
+        isTaskResponsible() {
+            return this.auth.id === this.task.responsible_id;
+        },
+        isHisHead() {
+            return (this.auth.position_level.name =
+                "Руководитель" &&
+                this.task.responsible.division_id == this.auth.division_id);
         }
     }
 };
