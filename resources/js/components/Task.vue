@@ -324,8 +324,6 @@ export default {
     //         this.task.responsibilityDescription = description;
     //     }
     // );
-
-    this.markTaskAsRead();
   },
   watch: {
     item(v) {
@@ -406,7 +404,7 @@ export default {
       return this.auth.id === this.task.responsible_id;
     },
     isHisHead() {
-      return (this.auth.position_level.name =
+      return (this.auth.position_level.name ==
         "Руководитель" &&
         this.task.responsible.division_id == this.auth.division_id);
     }
