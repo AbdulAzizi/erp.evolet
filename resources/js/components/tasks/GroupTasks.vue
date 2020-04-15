@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-expansion-panels v-for="(task, index) in localTasks" :key="index" class="pa-0">
+  <div class="group_tasks">
+    <v-expansion-panels v-for="(task, index) in localTasks" :key="index">
       <v-expansion-panel class="mb-3">
         <v-expansion-panel-header>{{ groupType == "description" ? task[0].description : task[0].responsibility_description.text}}</v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -112,8 +112,12 @@ export default {
       Event.fire("loadTasks");
     }
   },
+  mounted() {
+    this.groupType = localStorage.groupType ? localStorage.groupType : this.groupType;
+  },
   created() {
     Event.listen("groupType", data => {
+      localStorage.setItem("groupType", data);
       this.groupType = data;
     });
   },
@@ -125,7 +129,7 @@ export default {
 };
 </script>
 <style>
-.v-expansion-panel-content__wrap {
+.group_tasks .v-expansion-panel-content__wrap {
   padding: 0 !important;
 }
 </style>

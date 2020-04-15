@@ -439,15 +439,6 @@ class TaskController extends Controller
             'responsibilityDescription'
         )->paginate(30);
 
-        // $tasks = Task::filter($filters)->with(
-        //     'from',
-        //     'responsible',
-        //     'watchers',
-        //     'status',
-        //     'tags',
-        //     'responsibilityDescription'
-        // )->get()->groupBy('responsibility_description_id')->all();
-        // dd($tasks);
         return $tasks;
     }
 
@@ -462,28 +453,11 @@ class TaskController extends Controller
             'responsibilityDescription'
         )->get();
 
-        // $tasks = Task::filter($filters)->with(
-        //     'from',
-        //     'responsible',
-        //     'watchers',
-        //     'status',
-        //     'tags',
-        //     'responsibilityDescription'
-        // )->get()->groupBy('responsibility_description_id')->all();
-
         return $tasks;
     }
 
     public function group(TaskFilters $filters, $field)
     {
-        // $tasks = Task::filter($filters)->with(
-        //     'from',
-        //     'responsible',
-        //     'watchers',
-        //     'status',
-        //     'tags',
-        //     'responsibilityDescription'
-        // )->get();
         $tasks = Task::filter($filters)->with(
             'from',
             'responsible',
