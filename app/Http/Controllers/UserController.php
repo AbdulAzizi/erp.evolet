@@ -225,4 +225,21 @@ class UserController extends Controller
 
         return 'success';
     }
+
+    public function responsibilitydescriptions($id)
+    {
+        $user = User::with('responsibilities.descriptions')->find($id);
+        $descriptions = [];
+
+        $others = Responsibility::with('descriptions')->where('text', 'Прочее')->first();
+        $descriptions[] = $others->descriptions->first();
+        
+        
+        foreach($user->responsibilities as $responsibility){
+            foreach($responsibility->descriptions as $description){
+                $descriptions[] = $description;
+            }
+        }
+        return $descriptions;
+    }
 }

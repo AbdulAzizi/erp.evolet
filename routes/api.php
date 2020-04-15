@@ -87,8 +87,6 @@ Route::post('/edit/responsibility/description/{id}', 'ResponsibilityDescriptionC
 Route::delete('/delete/responsibility/description/{id}', 'ResponsibilityDescriptionController@delete')->name('responsibilityDescription.delete');
 Route::get('/divisions', 'DivisionController@loadDivisions')->name('division.load');
 
-Route::post('/users/{id}/responsibilities', 'ResponsibilityController@attachUser')->name('responsibilities.attachUser');
-Route::delete('/users/{userID}/positions/{positionID}', 'UserController@detachPosition')->name('users.detachPosition');
 
 Route::post('/divisions/create', 'DivisionController@store')->name('division.store');
 Route::delete('/divisions/{id}', 'DivisionController@delete')->name('division.delete');
@@ -97,9 +95,13 @@ Route::post('/tags/create', 'TagController@create')->name('tag.create');
 Route::delete('/tags/{id}', 'TagController@delete')->name('tag.delete');
 
 Route::get('/divisions/{id}/tags', 'DivisionController@tags')->name('division.tags');
+
+Route::post('/users/{id}/responsibilities', 'ResponsibilityController@attachUser')->name('responsibilities.attachUser');
+Route::delete('/users/{userID}/positions/{positionID}', 'UserController@detachPosition')->name('users.detachPosition');
 Route::post('/users', 'UserController@store')->name('users.store');
 Route::delete('/users/{id}', 'UserController@delete')->name('users.delete');
 Route::post('/users/responsibilities', 'UserController@responsibilities')->name('api.users.responsibilities');
+Route::get('/users/{id}/responsibilitydescriptions', 'UserController@responsibilitydescriptions')->name('api.users.responsibilitydescriptions');
 
 Route::post('/divisions/{id}/edit', 'DivisionController@edit')->name('divisions.edit');
 

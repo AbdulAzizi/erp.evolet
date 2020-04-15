@@ -370,6 +370,7 @@ Vue.component("bp-form", require('./components/BP/BPForm.vue').default);
 Vue.component("division-tags", require("./components/division/Tags.vue").default);
 
 /****************************TASKS********************************/
+Vue.component("task-title", require("./components/tasks/TaskTitle.vue").default);
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
 Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
 Vue.component("tasks-calendar", require("./components/tasks/Calendar.vue").default);

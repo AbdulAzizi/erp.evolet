@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col cols="9">
         <v-toolbar dense flat>
-          <v-toolbar-title>{{task.responsibility_description.text}}</v-toolbar-title>
+          <task-title :task="task" :edit="edit" />
           <div class="flex-grow-1"></div>
           <v-menu bottom left :offset-y="true">
             <template v-slot:activator="{ on }">
@@ -13,17 +13,18 @@
             </template>
             <v-card>
               <v-list dense>
-                <v-list-item class="body-2" @click="forwardTask" v-if="userCanForward">Делегировать</v-list-item>
+                <v-list-item class="body-2" @click="forwardTask" v-if="isHisHead">Делегировать</v-list-item>
+                <v-list-item class="body-2" @click="markAsUnread(task)">Отметить как непрочитанное</v-list-item>
                 <v-list-item
                   class="body-2"
-                  @click="markAsUnread(task)"
-                  v-if="auth.id == task.responsible.id"
-                >Отметить как непрочитанное</v-list-item>
-                <v-list-item
-                  class="body-2"
-                  v-if="taskAuthor()"
+                  v-if="isTaskAuthor"
                   @click="deleteTaskDialog = true"
                 >Удалить задачу</v-list-item>
+                <v-list-item
+                  v-if="isTaskResponsible"
+                  class="body-2"
+                  @click="edit = !edit"
+                >{{edit?'Закончить изменения':'Изменить'}}</v-list-item>
               </v-list>
             </v-card>
           </v-menu>
@@ -34,7 +35,7 @@
               <v-tab href="#history">История</v-tab>
 
               <dynamic-form
-                v-if="userCanForward"
+                v-if="isHisHead"
                 dialog
                 :fields="[forwardField]"
                 title="Выберите сотрудника"
@@ -169,7 +170,7 @@
 
           <priority :id="task.priority" classes=" lighten-3"></priority>
 
-          <task-control-buttons v-if="userIsTaskOwner" class="mr-5" :task="task" />
+          <task-control-buttons v-if="isTaskResponsible" class="mr-5" :task="task" />
 
           <v-subheader v-if="task.tags.length">Теги</v-subheader>
           <div class="px-3">
@@ -265,6 +266,72 @@ export default {
       this.synch();
     }
   },
+  data() {
+    return {
+      task: {
+        watchers: [],
+        title: null,
+        description: null,
+        status: {
+          name: null
+        },
+        priority: null,
+        spent_time: null,
+        planned_time: null,
+        deadline: null,
+
+        tags: [],
+        responsible_id: null,
+        responsible: {
+          user: {
+            name: null,
+            surname: null,
+            img: null
+          }
+        },
+        from: {
+          user: {
+            name: null,
+            surname: null,
+            img: null
+          }
+        },
+        polls: []
+      },
+      dialog: false,
+      preparedForm: null,
+      tab: null,
+      forwardField: {
+        name: "responsible_id",
+        type: "users",
+        label: "Сотрудники",
+        users: [],
+        rules: ["required"]
+      },
+      deleteTaskDialog: false,
+      edit: false
+    };
+  },
+  created() {
+    this.synch();
+
+    Event.listen(`tasks/${this.task.id}/status/changed`, status => {
+      this.task.status = status;
+    });
+    // Event.listen(
+    //     `tasks/${this.task.id}/responsibilitydescription/changed`, description =>{
+    //         this.task.responsibility_description_id = description.id;
+    //         this.task.responsibilityDescription = description;
+    //     }
+    // );
+
+    this.markTaskAsRead();
+  },
+  watch: {
+    item(v) {
+      this.synch();
+    }
+  },
   methods: {
     displayForm(index) {
       Event.fire(`display_form_${index}`);
@@ -308,22 +375,16 @@ export default {
         .then(res => res.data)
         .catch(err => err.messages);
     },
-    taskAuthor() {
-      return this.auth.id === this.task.from_id;
+    displayForm(index) {
+      Event.fire(`display_form_${index}`);
     }
   },
   computed: {
     taskHasActions() {
-      return this.taskHasBPActions || this.userCanForward;
+      return this.taskHasBPActions || this.isHisHead;
     },
     taskHasBPActions() {
       return this.task.from.front_tethers;
-    },
-    userCanForward() {
-      return (
-        this.task.responsible.position_level.id ===
-        DIVISION_HEAD_POSITION__LEVEL_ID
-      );
     },
     usersForAvatar() {
       let users = this.task.watchers.map(watcher => {
@@ -338,8 +399,16 @@ export default {
 
       return users;
     },
-    userIsTaskOwner() {
-      return this.auth.id == this.task.responsible_id;
+    isTaskAuthor() {
+      return this.auth.id === this.task.from_id;
+    },
+    isTaskResponsible() {
+      return this.auth.id === this.task.responsible_id;
+    },
+    isHisHead() {
+      return (this.auth.position_level.name =
+        "Руководитель" &&
+        this.task.responsible.division_id == this.auth.division_id);
     }
   }
 };
