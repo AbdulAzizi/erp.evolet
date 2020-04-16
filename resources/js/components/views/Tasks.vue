@@ -9,6 +9,7 @@
         solo
         hide-details
         label="Название задачи"
+        :disabled="groupTask ? true : false"
       ></v-text-field>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -23,7 +24,7 @@
                 color="white"
                 height="38"
                 class="ml-3"
-                @click="filtersMenu = !filtersMenu"
+                @click="filtersMenu = !filtersMenu, getStatuses()"
                 v-on="on"
               >
                 <v-icon color="grey">mdi-tune</v-icon>
@@ -107,7 +108,7 @@
               label="Статус задачи"
               class="mb-4"
               item-text="name"
-              item-value="url"
+              item-value="id"
               height="38"
               outlined
               flat
@@ -119,13 +120,13 @@
             ></v-select>
             <v-autocomplete
               v-model="selectedTags"
-              :items="tasksTags"
+              :items="localTags"
               class="mb-4"
               item-text="name"
               item-value="id"
               dense
               outlined
-              no-data-text="У вас нет задачи с таким тегом"
+              no-data-text="У вас нет тегов"
               chips
               hide-details
               small-chips
@@ -136,6 +137,7 @@
               deletable-chips
               return-object
               flat
+              @click="tasksTags"
             />
             <v-select
               v-model="priority"
@@ -213,7 +215,12 @@
               return-object
               clearable
             ></v-select>
-            <v-switch label="Задачи сотрудника" hide-details v-model="selectEmployee" />
+            <v-switch
+              v-if="auth.id == auth.division.head_id"
+              label="Задачи сотрудника"
+              hide-details
+              v-model="selectEmployee"
+            />
             <v-btn block dark depressed color="primary" class="my-5" @click="filterTask()">Фильтр</v-btn>
           </v-card-text>
         </v-card>
@@ -239,21 +246,21 @@
                         <span>календарь</span>
         </v-tooltip>-->
 
-        <v-tooltip bottom>
+        <!-- <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn small text :value="activeBtn.KANBAN" dark v-on="on" height="38">
               <v-icon :color="isKanban ? 'white' : 'grey lighten-0'">mdi-view-dashboard</v-icon>
             </v-btn>
           </template>
           <span>Канбан доска</span>
-        </v-tooltip>
+        </v-tooltip> -->
       </v-btn-toggle>
     </v-row>
 
     <tasks-table :tasks="filteredTasks" v-if="isTable && !displayGroupTasks"></tasks-table>
     <!-- <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar> -->
     <!-- <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser" /> -->
-    <tasks-group-view :tasks="filteredTasks" v-if="displayGroupTasks"/>
+    <tasks-group-view :tasks="filteredTasks" v-if="displayGroupTasks" />
     <tasks-add :divisions="divisions" :users="users" :errors="errors" />
     <v-overlay v-if="loading" light opacity="0">
       <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
@@ -272,6 +279,7 @@ export default {
       authorItems: [],
       responsibleItems: [],
       localTags: [],
+      taskStatuses: [],
       author: null,
       groupTask: null,
       responsible: null,
@@ -304,28 +312,6 @@ export default {
           name: "Наблюдаю задачи",
           query: "watcher_id",
           user: this.authuser.id
-        }
-      ],
-      taskStatuses: [
-        {
-          name: "Новый",
-          query: "status_id",
-          id: 1
-        },
-        {
-          name: "В процессе",
-          query: "status_id",
-          id: 2
-        },
-        {
-          name: "Приостановлен",
-          query: "status_id",
-          id: 3
-        },
-        {
-          name: "Закрытый",
-          query: "status_id",
-          id: 4
         }
       ],
       priorityItems: [
@@ -374,7 +360,13 @@ export default {
     );
     this.employee = this.setLocalFilter("employee", this.employee);
     this.author = this.setLocalFilter("author", this.author);
-    this.responsible = this.setLocalFilter("responsible", this.author);
+    this.responsible = this.setLocalFilter("responsible", this.responsible);
+    this.responsibleItems = this.setLocalFilter(
+      "responsibleItems",
+      this.responsibleItems
+    );
+    this.authorItems = this.setLocalFilter("authorItems", this.authorItems);
+    this.groupTask = this.setLocalFilter("groupTask", this.groupTask);
     this.filterTask();
   },
   methods: {
@@ -382,6 +374,7 @@ export default {
       const filtersLen = Object.keys(this.filters).length;
       if (filtersLen > 1 || this.selectEmployee) {
         if (this.groupTask) {
+          this.countFilters();
           this.loadGroupTasks();
         } else {
           this.loading = !this.loading;
@@ -402,6 +395,7 @@ export default {
         }
       } else {
         if (this.groupTask) {
+          this.countFilters();
           this.loadGroupTasks();
         } else {
           this.filteredTasks = [];
@@ -461,7 +455,10 @@ export default {
     },
     countFilters() {
       let filtersLen = Object.keys(this.filters).length;
-      if (this.filters.all) {
+      if (this.groupTask && this.filters.all) {
+        this.filtersLen = filtersLen;
+      } 
+      else if (this.filters.all) {
         this.filtersLen = filtersLen - 1;
       } else {
         this.filtersLen = filtersLen;
@@ -482,6 +479,28 @@ export default {
           this.displayGroupTasks = true;
           this.loading = false;
         });
+    },
+    getStatuses() {
+      if (this.taskStatuses.length == 0) {
+        axios.get("api/statuses").then(res => {
+          res.data.forEach(status => {
+            this.taskStatuses.push({
+              name: status.name,
+              query: "status_id",
+              id: status.id
+            });
+          });
+        });
+      }
+    },
+    tasksTags() {
+      if (this.localTags.length == 0) {
+        axios
+          .get(this.appPath(`api/divisions/${this.auth.division.id}/tags`))
+          .then(res => {
+            this.localTags.push(...res.data);
+          });
+      }
     }
   },
   computed: {
@@ -506,30 +525,6 @@ export default {
     },
     isKanban() {
       return this.currentView === this.activeBtn.KANBAN;
-    },
-    tasksTags() {
-      // Make empty array to collect all tags
-      // let localTags = [];
-
-      if (this.localTags.length == 0) {
-        // Loop through tasks
-        this.filteredTasks.forEach(task => {
-          // Loop through tags of task
-          task.tags.forEach(tag => {
-            // Get tag that matches from localTags
-            let foundTag = this.localTags.filter(
-              localTag => localTag.id == tag.id
-            );
-            // Check if didnt find any matches
-            if (foundTag.length == 0) {
-              // Push tag to localTags
-              this.localTags.push(tag);
-            }
-          });
-        });
-      }
-      return this.localTags;
-      // return array of tags
     }
   },
   watch: {
@@ -615,24 +610,43 @@ export default {
     author(item) {
       if (!item) {
         localStorage.author = null;
+        localStorage.authorItems = JSON.stringify([]);
         this.deleteFilter("author_id");
       } else {
         this.setFilter("author_id", item.id);
-        localStorage.setItem("author", JSON.stringify(item));
+        localStorage.setItem(
+          "author",
+          JSON.stringify({ id: item.id, fullname: item.fullname })
+        );
+        localStorage.setItem(
+          "authorItems",
+          JSON.stringify([{ id: item.id, fullname: item.fullname }])
+        );
       }
     },
     responsible(item) {
       if (!item) {
         localStorage.responsible = null;
+        localStorage.responsibleItems = JSON.stringify([]);
         this.deleteFilter("task_responsible_id");
       } else {
         this.setFilter("task_responsible_id", item.id);
-        localStorage.setItem("responsible", JSON.stringify(item));
+        localStorage.setItem(
+          "responsible",
+          JSON.stringify({ id: item.id, fullname: item.fullname })
+        );
+        localStorage.setItem(
+          "responsibleItems",
+          JSON.stringify([{ id: item.id, fullname: item.fullname }])
+        );
       }
     },
-    groupTask(item){
-      if(item){
-        Event.fire("groupType", item.value)
+    groupTask(item) {
+      if (!item) {
+        localStorage.groupTask = null;
+      } else {
+        localStorage.setItem("groupTask", JSON.stringify(item));
+        Event.fire("groupType", item.value);
       }
     }
   },

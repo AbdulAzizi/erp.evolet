@@ -131,22 +131,13 @@ class UserController extends Controller
         if ($request->toggle == true) {
 
             $notification->read_at !== null ? $notification->markAsUnread() : $notification->markAsRead();
+
         } else if ($request->toggle == false) {
 
             $notification->markAsRead();
         }
 
         return $notification;
-    }
-
-    public function mark(Request $request)
-    {
-        $task = Task::find($request->task_id);
-
-        $task->readed = 1;
-        $task->save();
-
-        return 'success';
     }
 
     public function markAllNotificationsAsRead(Request $request)

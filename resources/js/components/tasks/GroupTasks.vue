@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <v-expansion-panels v-for="(task, index) in localTasks" :key="index" class="pa-0">
+  <div class="group_tasks">
+    <v-expansion-panels v-for="(task, index) in localTasks" :key="index">
       <v-expansion-panel class="mb-3">
         <v-expansion-panel-header>{{ groupType == "description" ? task[0].description : task[0].responsibility_description.text}}</v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-infinite-scroll  style="max-height: 80vh; overflow-y: scroll;">
+          <v-infinite-scroll style="max-height: 80vh; overflow-y: scroll;">
             <v-data-table
               v-if="localTasks"
               :headers="headers"
@@ -40,7 +40,10 @@
                   <td>
                     <priority :id="item.priority" icon></priority>
                   </td>
-                  <td>{{item.responsibility_description.text}}</td>
+                  <td>
+                    {{item.responsibility_description.text}}
+                    <v-icon small v-if="item.read_at" color="green">mdi-check-all</v-icon>
+                  </td>
                   <td>{{ item.description.substring(0, 30) + '...' }}</td>
                   <td>
                     <span>{{durObj(item.planned_time)}}</span>
@@ -107,14 +110,18 @@ export default {
     nextPage() {
       this.perPage += 30;
       Event.fire("loadTasks");
-    },
+    }
   },
-  created(){
+  mounted() {
+    this.groupType = localStorage.groupType ? localStorage.groupType : this.groupType;
+  },
+  created() {
     Event.listen("groupType", data => {
+      localStorage.setItem("groupType", data);
       this.groupType = data;
-    }); 
+    });
   },
-   watch: {
+  watch: {
     tasks(val) {
       this.localTasks = val;
     }
@@ -122,7 +129,7 @@ export default {
 };
 </script>
 <style>
-.v-expansion-panel-content__wrap {
+.group_tasks .v-expansion-panel-content__wrap {
   padding: 0 !important;
 }
 </style>

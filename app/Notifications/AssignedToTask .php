@@ -4,9 +4,9 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use \Illuminate\Support\Str;
 
 class AssignedToTask extends Notification
 {
@@ -40,6 +40,7 @@ class AssignedToTask extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
+
     public function toMail($notifiable)
     {
         return (new MailMessage)
@@ -63,7 +64,7 @@ class AssignedToTask extends Notification
                 'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
                     ' поставил(a) вам новую задачу',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                            $this->task->responsibilityDescription->title . '</a>',
+                    Str::limit($this->task->description, 40, '...') . '</a>',
                 'task' => $this->task->id
             ];
         // if procces
@@ -73,7 +74,7 @@ class AssignedToTask extends Notification
                 'title' =>  'Процесс <a href="#">' . $this->from->name . '</a>' .
                     ' поставил вам новую задачу',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                            $this->task->responsibilityDescription->title . '</a>',
+                    Str::limit($this->task->description, 40, '...') . '</a>',
                 'task' => $this->task->id
             ];
     }
@@ -84,10 +85,10 @@ class AssignedToTask extends Notification
             return new BroadcastMessage([
                 'avatar' => $this->from->img,
                 'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                            ' поставил(a) вам новую задачу',
+                    ' поставил(a) вам новую задачу',
                 'notification' => $notifiable->notifications()->find($this->id),
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                            $this->task->responsibilityDescription->title . '</a>',
+                    Str::limit($this->task->description, 40, '...') . '</a>',
                 'task' => $this->task->id
             ]);
         // if procces
@@ -98,7 +99,7 @@ class AssignedToTask extends Notification
                     ' поставил вам новую задачу',
                 'notification' => $notifiable->notifications()->find($this->id),
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                            $this->task->responsibilityDescription->title . '</a>',
+                    Str::limit($this->task->description, 40, '...') . '</a>',
                 'task' => $this->task->id
             ]);
     }

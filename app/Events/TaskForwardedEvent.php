@@ -6,7 +6,7 @@ use App\Task;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 
-class TaskForwardedEvent extends HistoryEvent
+class TaskForwardedEvent
 {
     use Dispatchable, SerializesModels;
 
