@@ -11,6 +11,7 @@ use App\Question;
 use App\Responsibility;
 use App\ResponsibilityDescription;
 use App\Status;
+use App\Tag;
 use App\Task;
 use App\Timeset;
 use App\User;
@@ -80,6 +81,7 @@ class TaskController extends Controller
         // Empty array to keep query
         $tasks = [];
 
+
         // Loop through responsibility descriptions
         foreach ($descriptions as $description) {
             // Loop through assignees
@@ -107,8 +109,22 @@ class TaskController extends Controller
             // Get all Watcher Users
             $watchers = User::alone()->find($watchers);
         }
+
+        $newTags = json_decode($request->newTags);
         $tags = json_decode($request->existingTags);
         $poll = json_decode($request->poll);
+
+        
+        foreach ($newTags as $newTag) {
+            // Create new tags and merge them to existing tags array
+            $tag = Tag::create(['name' => $newTag]);
+
+            $division = Division::find(auth()->user()->division->id);
+
+            $division->tags()->attach($tag);
+
+            $tags[] = $tag->id;
+        }
         // if there is a poll
         if ($poll) {
             $this->createPoll($poll, $tasks);
@@ -493,6 +509,5 @@ class TaskController extends Controller
         $task->save();
 
         return ResponsibilityDescription::find($request->responsibility_description_id);
-
     }
 }
