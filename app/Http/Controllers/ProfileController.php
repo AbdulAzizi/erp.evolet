@@ -60,9 +60,16 @@ class ProfileController extends Controller
     {
         $closedStatus = Status::where('name', 'Закрытый')->first();
 
+        $from = new Carbon($request->from);
+        $from = $from->startOfDay();
+
+        $to = new Carbon($request->to);
+        $to = $to->endOfDay();
+
         $tasks = Task::where('status_id', $closedStatus->id)
             ->where('responsible_id', $request->userID)
-            ->whereBetween('end_time', [$request->from, $request->to])
+            ->where('end_time', '>=', $from)
+            ->where('end_time', '<=', $to)
             ->with('timeSets', 'responsibilityDescription')
             ->get();
 
@@ -73,10 +80,17 @@ class ProfileController extends Controller
     {
         $userID = $request->userID;
 
+        $from = new Carbon($request->from);
+        $from = $from->startOfDay();
+
+        $to = new Carbon($request->to);
+        $to = $to->endOfDay();
+
         $timesets = Timeset::whereHas('task', function (Builder $taskQuery) use ($userID) {
             $taskQuery->where('responsible_id', $userID);
         })
-            ->whereBetween('end_time', [$request->from, $request->to])
+            ->where('end_time', '>=', $from)
+            ->where('end_time', '<=', $to)
             ->with('task.responsibilityDescription')
             ->get();
 
