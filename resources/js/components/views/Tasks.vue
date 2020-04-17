@@ -127,18 +127,26 @@
               dense
               outlined
               no-data-text="У вас нет тегов"
-              chips
               hide-details
-              small-chips
               color="primary"
               label="Тег"
               multiple
+              chips
               hide-selected
-              deletable-chips
               return-object
               flat
-              @click="tasksTags"
-            />
+            >
+              <template v-slot:selection="data">
+                <v-chip
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                  close
+                  small
+                  color="primary"
+                  @click:close="removeItem(data.item)"
+                >{{data.item.name}}</v-chip>
+              </template>
+            </v-autocomplete>
             <v-select
               v-model="priority"
               :items="priorityItems"
@@ -253,7 +261,7 @@
             </v-btn>
           </template>
           <span>Канбан доска</span>
-        </v-tooltip> -->
+        </v-tooltip>-->
       </v-btn-toggle>
     </v-row>
 
@@ -457,8 +465,7 @@ export default {
       let filtersLen = Object.keys(this.filters).length;
       if (this.groupTask && this.filters.all) {
         this.filtersLen = filtersLen;
-      } 
-      else if (this.filters.all) {
+      } else if (this.filters.all) {
         this.filtersLen = filtersLen - 1;
       } else {
         this.filtersLen = filtersLen;
@@ -495,12 +502,17 @@ export default {
     },
     tasksTags() {
       if (this.localTags.length == 0) {
-        axios
-          .get(this.appPath(`api/divisions/${this.auth.division.id}/tags`))
-          .then(res => {
-            this.localTags.push(...res.data);
-          });
+        axios.get(this.appPath(`api/tasks/tags`)).then(res => {
+          this.localTags.push(...res.data);
+        });
       }
+    },
+    removeItem(item) {
+      this.selectedTags.forEach((tag, index) => {
+        if(item.id == tag.id){
+          this.selectedTags.splice(index, 1);
+        }
+      });
     }
   },
   computed: {
@@ -652,6 +664,7 @@ export default {
   },
   created() {
     this.paginate();
+    this.tasksTags();
     Event.listen("loadTasks", data => this.paginate());
     Event.listen("filterByPriority", data => {
       this.priorityItems.forEach(item => {

@@ -510,4 +510,29 @@ class TaskController extends Controller
 
         return ResponsibilityDescription::find($request->responsibility_description_id);
     }
+
+    public function tags()
+    {
+        $authUser = auth()->user();
+
+        $tags = [];
+
+        $tasks = Task::where(function ($q) use ($authUser){
+            $q->where('from_id', $authUser->id)
+              ->orWhere('responsible_id', $authUser->id)
+              ->orWhereHas('watchers', function ($watcher) use ($authUser) {
+                  $watcher->where('user_id', $authUser->id);
+              });
+        })->with('tags')->get();
+
+        foreach($tasks as $task){
+           foreach(collect($task->tags)->unique() as $tag){
+               $tags[] = $tag;
+           }
+        }
+
+        $uniqueTags = collect($tags)->unique('id');
+
+        return $uniqueTags->values()->all();
+    }
 }
