@@ -315,7 +315,7 @@
                                             :field="{
                                             type: 'combobox',
                                             name: 'tags',
-                                            label: 'Теги',
+                                            label: 'Выберите тег (Enter для создания нового)',
                                             items: tags,
                                             icon: 'mdi-tag',
                                             multiple: true,
@@ -328,7 +328,7 @@
                                             :field="{
                                             type: 'autocomplete',
                                             name: 'tags',
-                                            label: 'Теги',
+                                            label: 'Выберите тег',
                                             items: tags,
                                             icon: 'mdi-tag',
                                             multiple: true,
