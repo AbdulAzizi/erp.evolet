@@ -6,7 +6,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use \Illuminate\Support\Str;
 
 class AssignedToTask extends Notification
 {
@@ -64,7 +63,7 @@ class AssignedToTask extends Notification
                 'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
                     ' поставил(a) вам новую задачу',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                    Str::limit($this->task->description, 40, '...') . '</a>',
+                    mb_strimwidth($this->task->description, 0, 40, "...") . '</a>',
                 'task' => $this->task->id
             ];
         // if procces
@@ -74,7 +73,7 @@ class AssignedToTask extends Notification
                 'title' =>  'Процесс <a href="#">' . $this->from->name . '</a>' .
                     ' поставил вам новую задачу',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                    Str::limit($this->task->description, 40, '...') . '</a>',
+                    mb_strimwidth($this->task->description, 0, 40, "...") . '</a>',
                 'task' => $this->task->id
             ];
     }
@@ -88,7 +87,7 @@ class AssignedToTask extends Notification
                     ' поставил(a) вам новую задачу',
                 'notification' => $notifiable->notifications()->find($this->id),
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                    Str::limit($this->task->description, 40, '...') . '</a>',
+                    mb_strimwidth($this->task->description, 0, 40, "...") . '</a>',
                 'task' => $this->task->id
             ]);
         // if procces
@@ -99,7 +98,7 @@ class AssignedToTask extends Notification
                     ' поставил вам новую задачу',
                 'notification' => $notifiable->notifications()->find($this->id),
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                    Str::limit($this->task->description, 40, '...') . '</a>',
+                    mb_strimwidth($this->task->description, 0, 40, "...") . '</a>',
                 'task' => $this->task->id
             ]);
     }
