@@ -41,8 +41,13 @@
             <td @click.stop="filter(item.priority, 'filterByPriority')">
               <priority :id="item.priority" icon></priority>
             </td>
-            <td>{{item.responsibility_description.text}} 
-              <v-icon small v-if="item.read_at" color="green">mdi-check-all</v-icon>
+            <td>{{item.responsibility_description.text}}
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                <v-icon small v-if="item.read_at" color="green" v-on="on">mdi-check-all</v-icon>
+                </template>
+                <span>Просмотрено {{ moment(item.read_at).local().format('lll') }}</span>
+              </v-tooltip>
             </td>
             <td>{{ item.description.length >= 30 ? item.description.substring(0, 30) + '...' : item.description }}</td>
             <td>
