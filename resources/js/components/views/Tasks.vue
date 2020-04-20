@@ -85,12 +85,13 @@
                   @click:close="employee = null"
                   v-bind="data.attrs"
                   :input-value="data.selected"
+                  color="primary"
                   close
                 >
                   <v-avatar left>
                     <v-img :src="thumb(data.item.img)"></v-img>
                   </v-avatar>
-                  {{ data.item.name }} {{ data.item.surname }}
+                  {{ data.item.fullname }}
                 </v-chip>
               </template>
               <template v-slot:item="data">
@@ -98,7 +99,7 @@
                   <img :src="photo(data.item.img)" />
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title>{{ data.item.name }} {{ data.item.surname }}</v-list-item-title>
+                  <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
                 </v-list-item-content>
               </template>
             </v-select>
@@ -174,9 +175,8 @@
               </template>
             </v-select>
             <v-select
-              v-if="author"
               v-model="author"
-              :items="authorItems"
+              :items="localUsers"
               label="От"
               class="mb-4"
               item-text="fullname"
@@ -188,13 +188,35 @@
               hide-details
               single-line
               return-object
-              clearable
-            ></v-select>
+            >
+              <template v-slot:selection="data">
+                <v-chip
+                  @click="data.select"
+                  @click:close="author = null"
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                  close
+                  color="primary"
+                >
+                  <v-avatar left>
+                    <v-img :src="thumb(data.item.img)"></v-img>
+                  </v-avatar>
+                  {{ data.item.fullname }}
+                </v-chip>
+              </template>
+              <template v-slot:item="data">
+                <v-list-item-avatar>
+                  <img :src="photo(data.item.img)" />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
+                </v-list-item-content>
+              </template>
+            </v-select>
             <v-select
-              v-if="responsible"
               v-model="responsible"
-              :items="responsibleItems"
-              label="От"
+              :items="localUsers"
+              label="Исполнитель"
               class="mb-4"
               item-text="fullname"
               item-value="id"
@@ -205,8 +227,31 @@
               hide-details
               single-line
               return-object
-              clearable
-            ></v-select>
+            >
+              <template v-slot:selection="data">
+                <v-chip
+                  @click="data.select"
+                  @click:close="responsible = null"
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                  close
+                  color="primary"
+                >
+                  <v-avatar left>
+                    <v-img :src="thumb(data.item.img)"></v-img>
+                  </v-avatar>
+                  {{ data.item.fullname }}
+                </v-chip>
+              </template>
+              <template v-slot:item="data">
+                <v-list-item-avatar>
+                  <img :src="photo(data.item.img)" />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
+                </v-list-item-content>
+              </template>
+            </v-select>
             <v-select
               v-model="groupTask"
               :items="groupTaskItems"
@@ -288,6 +333,7 @@ export default {
       responsibleItems: [],
       localTags: [],
       taskStatuses: [],
+      localUsers: this.users,
       author: null,
       groupTask: null,
       responsible: null,
@@ -369,11 +415,6 @@ export default {
     this.employee = this.setLocalFilter("employee", this.employee);
     this.author = this.setLocalFilter("author", this.author);
     this.responsible = this.setLocalFilter("responsible", this.responsible);
-    this.responsibleItems = this.setLocalFilter(
-      "responsibleItems",
-      this.responsibleItems
-    );
-    this.authorItems = this.setLocalFilter("authorItems", this.authorItems);
     this.groupTask = this.setLocalFilter("groupTask", this.groupTask);
     this.filterTask();
   },
@@ -509,11 +550,16 @@ export default {
     },
     removeItem(item) {
       this.selectedTags.forEach((tag, index) => {
-        if(item.id == tag.id){
+        if (item.id == tag.id) {
           this.selectedTags.splice(index, 1);
         }
       });
     }
+    // getUsers(){
+    //   axios.get(this.appPath('api/users')).then(res => {
+    //     this.users = res.data;
+    //   }).catch(e => this.users = null);
+    // }
   },
   computed: {
     activeBtn() {
@@ -622,7 +668,6 @@ export default {
     author(item) {
       if (!item) {
         localStorage.author = null;
-        localStorage.authorItems = JSON.stringify([]);
         this.deleteFilter("author_id");
       } else {
         this.setFilter("author_id", item.id);
@@ -630,26 +675,17 @@ export default {
           "author",
           JSON.stringify({ id: item.id, fullname: item.fullname })
         );
-        localStorage.setItem(
-          "authorItems",
-          JSON.stringify([{ id: item.id, fullname: item.fullname }])
-        );
       }
     },
     responsible(item) {
       if (!item) {
         localStorage.responsible = null;
-        localStorage.responsibleItems = JSON.stringify([]);
         this.deleteFilter("task_responsible_id");
       } else {
         this.setFilter("task_responsible_id", item.id);
         localStorage.setItem(
           "responsible",
           JSON.stringify({ id: item.id, fullname: item.fullname })
-        );
-        localStorage.setItem(
-          "responsibleItems",
-          JSON.stringify([{ id: item.id, fullname: item.fullname }])
         );
       }
     },
@@ -716,6 +752,7 @@ export default {
       }
       this.filterTask();
     });
+    console.log(this.users);
   }
 };
 </script>
