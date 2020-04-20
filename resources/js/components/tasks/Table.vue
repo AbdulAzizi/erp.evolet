@@ -44,7 +44,7 @@
             <td>{{item.responsibility_description.text}} 
               <v-icon small v-if="item.read_at" color="green">mdi-check-all</v-icon>
             </td>
-            <td>{{ item.description.substring(0, 30) + '...' }}</td>
+            <td>{{ item.description.length >= 30 ? item.description.substring(0, 30) + '...' : item.description }}</td>
             <td>
               <span>{{durObj(item.planned_time)}}</span>
             </td>
