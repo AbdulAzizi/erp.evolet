@@ -752,7 +752,6 @@ export default {
       }
       this.filterTask();
     });
-    console.log(this.users);
   }
 };
 </script>
