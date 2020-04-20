@@ -454,7 +454,7 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->paginate(30);
+        )->orderBy('created_at', 'desc')->paginate(30);
 
         return $tasks;
     }
@@ -468,7 +468,7 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->get();
+        )->orderBy('created_at', 'desc')->get();
 
         return $tasks;
     }
@@ -482,7 +482,7 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->get()->groupBy($field)->all();
+        )->orderBy('created_at', 'desc')->get()->groupBy($field)->all();
 
         return $tasks;
     }
