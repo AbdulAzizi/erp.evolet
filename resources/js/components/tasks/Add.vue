@@ -249,7 +249,7 @@
                                 </v-card>
                             </v-dialog>
 
-                            <v-dialog v-model="startTime" width="500">
+                            <v-dialog v-model="startTime" width="500" v-if="false">
                                 <template v-slot:activator="{ on:dialog }">
                                     <v-tooltip top>
                                         <template v-slot:activator="{ on:tooltip }">
@@ -278,11 +278,11 @@
                                     <v-card-text>
                                         <form-field
                                             :field="{
-                        type: 'date-time',
-                        name: 'start_date',
-                        label: 'Когда планируете начать ?',
-                        icon: 'mdi-clock',
-                        }"
+                                                type: 'date-time',
+                                                name: 'start_date',
+                                                label: 'Когда планируете начать ?',
+                                                icon: 'mdi-clock',
+                                                }"
                                             v-model="startTimeValue"
                                         />
                                     </v-card-text>
