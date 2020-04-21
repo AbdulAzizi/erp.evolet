@@ -42,7 +42,12 @@
                   </td>
                   <td>
                     {{item.responsibility_description.text}}
-                    <v-icon small v-if="item.read_at" color="green">mdi-check-all</v-icon>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on }">
+                        <v-icon small v-if="item.read_at" color="green" v-on="on">mdi-check-all</v-icon>
+                      </template>
+                      <span>Просмотрено {{ moment(item.read_at).local().format('lll') }}</span>
+                    </v-tooltip>
                   </td>
                   <td>{{ item.description.substring(0, 30) + '...' }}</td>
                   <td>
@@ -113,7 +118,9 @@ export default {
     }
   },
   mounted() {
-    this.groupType = localStorage.groupType ? localStorage.groupType : this.groupType;
+    this.groupType = localStorage.groupType
+      ? localStorage.groupType
+      : this.groupType;
   },
   created() {
     Event.listen("groupType", data => {

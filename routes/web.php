@@ -128,4 +128,6 @@ Route::prefix('api')->group(function () {
     Route::post('/users/{id}/timesets', 'ProfileController@getTimeSets')->name('api.profile.getTimeSets');
 
     Route::get('/divisions/users', 'DivisionController@getUsers')->name('api.divisions.getUsers');
+
+    Route::get('/tasks/tags', 'TaskController@tags')->name('api.tasks.tags');
 });

@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use \Illuminate\Support\Str;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class AssignedAsAuthor extends Notification
@@ -44,7 +43,7 @@ class AssignedAsAuthor extends Notification
         return [
             'avatar' => $this->task->responsible->img,
             'title' =>  'Вы автор задачи:',
-            'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' . Str::limit($this->task->description, 40, '...') . '</a>',
+            'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' . mb_strimwidth($this->task->description, 0, 40, "...") . '</a>',
             'task' => $this->task->id
         ];
     }

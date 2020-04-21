@@ -11,6 +11,7 @@ use App\Question;
 use App\Responsibility;
 use App\ResponsibilityDescription;
 use App\Status;
+use App\Tag;
 use App\Task;
 use App\Timeset;
 use App\User;
@@ -76,6 +77,7 @@ class TaskController extends Controller
         // Empty array to keep query
         $tasks = [];
 
+
         // Loop through responsibility descriptions
         foreach ($descriptions as $description) {
             // Loop through assignees
@@ -103,8 +105,22 @@ class TaskController extends Controller
             // Get all Watcher Users
             $watchers = User::alone()->find($watchers);
         }
+
+        $newTags = json_decode($request->newTags);
         $tags = json_decode($request->existingTags);
         $poll = json_decode($request->poll);
+
+        
+        foreach ($newTags as $newTag) {
+            // Create new tags and merge them to existing tags array
+            $tag = Tag::create(['name' => $newTag]);
+
+            $division = Division::find(auth()->user()->division->id);
+
+            $division->tags()->attach($tag);
+
+            $tags[] = $tag->id;
+        }
         // if there is a poll
         if ($poll) {
             $this->createPoll($poll, $tasks);
@@ -434,7 +450,7 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->paginate(30);
+        )->orderBy('created_at', 'desc')->paginate(30);
 
         return $tasks;
     }
@@ -448,7 +464,7 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->get();
+        )->orderBy('created_at', 'desc')->get();
 
         return $tasks;
     }
@@ -462,7 +478,7 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->get()->groupBy($field)->all();
+        )->orderBy('created_at', 'desc')->get()->groupBy($field)->all();
 
         return $tasks;
     }
@@ -489,6 +505,30 @@ class TaskController extends Controller
         $task->save();
 
         return ResponsibilityDescription::find($request->responsibility_description_id);
+    }
 
+    public function tags()
+    {
+        $authUser = auth()->user();
+
+        $tags = [];
+
+        $tasks = Task::where(function ($q) use ($authUser){
+            $q->where('from_id', $authUser->id)
+              ->orWhere('responsible_id', $authUser->id)
+              ->orWhereHas('watchers', function ($watcher) use ($authUser) {
+                  $watcher->where('user_id', $authUser->id);
+              });
+        })->with('tags')->get();
+
+        foreach($tasks as $task){
+           foreach(collect($task->tags)->unique() as $tag){
+               $tags[] = $tag;
+           }
+        }
+
+        $uniqueTags = collect($tags)->unique('id');
+
+        return $uniqueTags->values()->all();
     }
 }

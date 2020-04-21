@@ -229,7 +229,7 @@
                         }"
                                             v-model="selectedPriority"
                                         >
-                                            <template v-slot:item="{ item, index }">
+                                            <template v-slot:item="{ item }">
                                                 <v-icon
                                                     :color="item.color"
                                                     class="mr-2"
@@ -237,7 +237,7 @@
                                                 <span>{{ item.label }}</span>
                                             </template>
 
-                                            <template v-slot:selection="{ item, index }">
+                                            <template v-slot:selection="{ item }">
                                                 <v-icon
                                                     class="mr-2"
                                                     :color="item.color"
@@ -320,7 +320,6 @@
                                                 min-width="0"
                                                 style="min-width:0"
                                                 class="ma-0 grey--text px-2 text--darken-1"
-                                                x-small
                                             >
                                                 <v-icon
                                                     :color="selectedTags.length ? 'primary' : '' "
@@ -338,6 +337,11 @@
 
                                             <input
                                                 type="hidden"
+                                                name="newTags"
+                                                :value="JSON.stringify(newTags)"
+                                            />
+                                            <input
+                                                type="hidden"
                                                 name="existingTags"
                                                 :value="JSON.stringify(existingTags)"
                                             />
@@ -346,26 +350,49 @@
                                     </v-tooltip>
                                 </template>
                                 <v-card>
+                                    <v-toolbar dense flat dark color="primary">
+                                        <v-toolbar-title>
+                                            Добавить теги к задаче
+                                        </v-toolbar-title>
+                                    </v-toolbar>
                                     <v-card-text class="pt-5">
-                                        <form-field
+                                        <v-form ref="tagForm">
+                                            <form-field
                                             :field="{
-                        type: 'autocomplete',
-                        name: 'tags',
-                        label: 'Теги',
-                        items: tags,
-                        icon: 'mdi-tag',
-                        multiple: true,
-                        returnObject: true
-                    }"
-                                            v-model="selectedTags"
-                                        />
+                                            type: 'combobox',
+                                            name: 'tags',
+                                            label: 'Выберите тег (Enter для создания нового)',
+                                            items: tags,
+                                            icon: 'mdi-tag',
+                                            multiple: true,
+                                            returnObject: true
+                                        }"
+                                        v-model="selectedTags"
+                                        v-if="auth.position_level.name == 'Руководитель'"
+                                            />
+                                            <form-field
+                                            :field="{
+                                            type: 'autocomplete',
+                                            name: 'tags',
+                                            label: 'Выберите тег',
+                                            items: tags,
+                                            icon: 'mdi-tag',
+                                            multiple: true,
+                                            returnObject: true
+                                        }"
+                                        v-else
+                                        v-model="selectedTags"
+                                            />
+                                        </v-form>
                                     </v-card-text>
                                     <v-card-actions>
                                         <v-spacer />
-                                        <v-btn color="primary" @click="tagsDialog = false">добавить</v-btn>
+                                        <v-btn text color="primary" @click="cancel('tagForm')">отмена</v-btn>
+                                        <v-btn depressed color="primary" @click="tagsDialog = false">добавить</v-btn>
                                     </v-card-actions>
                                 </v-card>
                             </v-dialog>
+
 
                             <input type="hidden" name="poll" :value="JSON.stringify(poll)" />
 
@@ -722,6 +749,13 @@ export default {
             if (!this.formHasErrors) return;
 
             e.preventDefault();
+        },
+        cancel(form){
+            const localForm = this.$refs[form];
+
+            localForm.reset();
+
+            this.tagsDialog = false;
         }
     },
     computed: {
@@ -731,6 +765,12 @@ export default {
                 hours: this.estimateHours,
                 minutes: this.estimateMinutes
             };
+        },
+         newTags() {
+            const filteredNewTags = this.selectedTags.filter(
+                tag => tag.id === -1
+            );
+            return this.pluck(filteredNewTags, "name");
         },
         existingTags() {
             const filteredExistingTags = this.selectedTags.filter(
