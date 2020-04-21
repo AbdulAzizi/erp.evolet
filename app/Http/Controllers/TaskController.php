@@ -66,11 +66,7 @@ class TaskController extends Controller
             'estimatedTaskTime' => 'required',
         ]);
 
-        if ($request->responsibility) {
-            $descriptions = Responsibility::find($request->responsibility)->descriptions->pluck('id');
-        } else {
-            $descriptions[] = $request->responsibility_description;
-        }
+        $descriptions = json_decode( $request->responsibility_description );
 
         // Decode things that must be decoded
         $assignees = json_decode($request->assignees);
