@@ -8,17 +8,17 @@
         <form-field
           :field="{
                 label: 'Должностная задача',
-                name: 'title',
+                name: 'text',
                 rules: ['required'],
                 type: 'string',
-                value: title
+                value: text
             }"
-          v-model="title"
+          v-model="text"
         />
         <form-field
           :field="{
                 label: 'Описание',
-                name: 'title',
+                name: 'text',
                 type: 'text',
                 value: description
             }"
@@ -38,14 +38,14 @@
 export default {
   data() {
     return {
-      title: null,
+      text: null,
       description: null,
       descriptionId: null
     };
   },
   created() {
     Event.listen("editResponsibilityDescription", description => {
-      this.title = description.title;
+      this.text = description.text;
       this.description = description.description;
       this.descriptionId = description.id
     });
@@ -55,7 +55,7 @@ export default {
           const form = this.$refs.form;
           if(form.validate){
               axios.post(`/api/edit/responsibility/description/${this.descriptionId}`, {
-                  title: this.title,
+                  text: this.text,
                   description: this.description
               }).then(res => {
                   Event.fire("responsibilityDescriptionEdited", res.data);
