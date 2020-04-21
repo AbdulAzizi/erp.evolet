@@ -219,14 +219,15 @@
                                     </v-tooltip>
                                 </template>
                                 <v-card>
-                                    <v-card-text>
+                                    <v-card-text class="pa-6">
                                         <form-field
                                             :field="{
-                            type: 'select',
-                            items: priorities,
-                            label: 'Приоритет',
-                            props: {'item-text': 'label'}
-                        }"
+                                                type: 'select',
+                                                items: priorities,
+                                                label: 'Приоритет',
+                                                props: {'item-text': 'label'},
+                                                hideDetails: true
+                                            }"
                                             v-model="selectedPriority"
                                         >
                                             <template v-slot:item="{ item }">
@@ -365,7 +366,8 @@
                                             items: tags,
                                             icon: 'mdi-tag',
                                             multiple: true,
-                                            returnObject: true
+                                            returnObject: true,
+                                            hideDetails: true
                                         }"
                                         v-model="selectedTags"
                                         v-if="auth.position_level.name == 'Руководитель'"
