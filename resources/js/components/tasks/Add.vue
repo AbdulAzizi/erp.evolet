@@ -43,7 +43,7 @@
                             <input
                                 v-if="selectedRespOrDescrip.length"
                                 type="hidden"
-                                :name="'descriptions' in selectedRespOrDescrip[0] ? 'responsibility' : 'responsibility_description'"
+                                name="responsibility_description"
                                 :value="JSON.stringify(selectedRespOrDescrip.map(resDes=>{return resDes.id.split('-')[1];}))"
                             />
                             <v-dialog
