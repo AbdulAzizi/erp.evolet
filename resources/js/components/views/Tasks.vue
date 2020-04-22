@@ -18,9 +18,13 @@
               <v-badge overlap>
                 <template v-slot:badge>
                   <span v-if="filtersLen && !hover">{{ filtersLen }}</span>
-                    <v-icon dark x-small v-else-if="filtersLen && hover" @click="clearFilters()" v-on="closeFilter">
-                      mdi-close
-                    </v-icon>
+                  <v-icon
+                    dark
+                    x-small
+                    v-else-if="filtersLen && hover"
+                    @click="clearFilters()"
+                    v-on="closeFilter"
+                  >mdi-close</v-icon>
                 </template>
                 <v-btn
                   depressed
@@ -44,8 +48,8 @@
           <v-list-item-content>
             <v-list-item-title class="title">Фильтры</v-list-item-title>
           </v-list-item-content>
-          <v-btn icon small color="primary" @click="filtersMenu = false">
-            <v-icon>mdi-close-circle</v-icon>
+          <v-btn icon small @click="filtersMenu = false">
+            <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-list-item>
         <v-divider></v-divider>
@@ -570,7 +574,14 @@ export default {
       });
     },
     clearFilters() {
-      this.$refs.filterForms.reset();
+      this.author = null;
+      this.groupTask = null;
+      this.responsible = null;
+      this.status = null;
+      this.taskCategory = null;
+      this.employee = null;
+      this.priority = null;
+      this.selectedTags = [];
     }
   },
   computed: {
