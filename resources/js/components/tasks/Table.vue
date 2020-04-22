@@ -102,7 +102,7 @@ export default {
     return {
       localTasks: this.tasks,
       headers: [
-        { text: "" },
+        { text: "", sortable: false },
         { text: "", value: "priority" },
         { text: "Задача", value: "title" },
         { text: "Описание", value: "description" },

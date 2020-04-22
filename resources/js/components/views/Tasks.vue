@@ -12,269 +12,286 @@
         :disabled="groupTask ? true : false"
       ></v-text-field>
       <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
+        <template v-slot:activator="{ on: tooltip, on: closeFilter }">
           <div>
-            <v-badge overlap>
-              <template v-slot:badge v-if="filtersLen">
-                <span>{{ filtersLen }}</span>
-              </template>
-              <v-btn
-                depressed
-                solo
-                color="white"
-                height="38"
-                class="ml-3"
-                @click="filtersMenu = !filtersMenu, getStatuses()"
-                v-on="on"
-              >
-                <v-icon color="grey">mdi-tune</v-icon>
-              </v-btn>
-            </v-badge>
+            <v-hover v-slot:default="{ hover }">
+              <v-badge overlap>
+                <template v-slot:badge>
+                  <span v-if="filtersLen && !hover">{{ filtersLen }}</span>
+                    <v-icon dark x-small v-else-if="filtersLen && hover" @click="clearFilters()" v-on="closeFilter">
+                      mdi-close
+                    </v-icon>
+                </template>
+                <v-btn
+                  depressed
+                  solo
+                  color="white"
+                  height="38"
+                  class="ml-3"
+                  @click="filtersMenu = true, getStatuses()"
+                  v-on="tooltip"
+                >
+                  <v-icon color="grey">mdi-tune</v-icon>
+                </v-btn>
+              </v-badge>
+            </v-hover>
           </div>
         </template>
         <span>Фильтры</span>
       </v-tooltip>
-      <v-navigation-drawer v-model="filtersMenu" right fixed temporary width="300">
+      <v-navigation-drawer v-model="filtersMenu" right fixed stateless temporary width="300">
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="title">Фильтры</v-list-item-title>
           </v-list-item-content>
+          <v-btn icon small color="primary" @click="filtersMenu = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
         </v-list-item>
         <v-divider></v-divider>
         <v-card flat tile>
           <v-card-text>
-            <v-select
-              v-if="!selectEmployee"
-              v-model="taskCategory"
-              :items="filterItems"
-              label="Все задачи"
-              class="mb-4"
-              item-text="name"
-              item-value="url"
-              height="38"
-              outlined
-              flat
-              dense
-              hide-details
-              single-line
-              return-object
-              clearable
-            ></v-select>
-            <v-select
-              v-if="selectEmployee"
-              v-model="employee"
-              :items="employeeItems"
-              label="Выберите сотрудника"
-              class="mb-4"
-              item-text="name"
-              item-value="id"
-              height="38"
-              outlined
-              flat
-              dense
-              hide-details
-              single-line
-              return-object
-              chips
-              deletable-chips
-              no-data-text="Нет сотрудников"
-            >
-              <template v-slot:selection="data">
-                <v-chip
-                  @click="data.select"
-                  @click:close="employee = null"
-                  v-bind="data.attrs"
-                  :input-value="data.selected"
-                  color="primary"
-                  close
-                >
-                  <v-avatar left>
-                    <v-img :src="thumb(data.item.img)"></v-img>
-                  </v-avatar>
-                  {{ data.item.fullname }}
-                </v-chip>
-              </template>
-              <template v-slot:item="data">
-                <v-list-item-avatar>
-                  <img :src="photo(data.item.img)" />
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
-                </v-list-item-content>
-              </template>
-            </v-select>
-            <v-select
-              v-model="status"
-              :items="taskStatuses"
-              label="Статус задачи"
-              class="mb-4"
-              item-text="name"
-              item-value="id"
-              height="38"
-              outlined
-              flat
-              dense
-              hide-details
-              single-line
-              return-object
-              clearable
-            ></v-select>
-            <v-autocomplete
-              v-model="selectedTags"
-              :items="localTags"
-              class="mb-4"
-              item-text="name"
-              item-value="id"
-              dense
-              outlined
-              no-data-text="У вас нет тегов"
-              hide-details
+            <v-form ref="filterForms">
+              <v-select
+                v-if="!selectEmployee"
+                v-model="taskCategory"
+                :items="filterItems"
+                label="Все задачи"
+                class="mb-4"
+                item-text="name"
+                item-value="url"
+                height="38"
+                outlined
+                flat
+                dense
+                hide-details
+                single-line
+                return-object
+                clearable
+              ></v-select>
+              <v-select
+                v-if="selectEmployee"
+                v-model="employee"
+                :items="employeeItems"
+                label="Выберите сотрудника"
+                class="mb-4"
+                item-text="name"
+                item-value="id"
+                height="38"
+                outlined
+                flat
+                dense
+                hide-details
+                single-line
+                return-object
+                chips
+                deletable-chips
+                no-data-text="Нет сотрудников"
+              >
+                <template v-slot:selection="data">
+                  <v-chip
+                    @click="data.select"
+                    @click:close="employee = null"
+                    v-bind="data.attrs"
+                    :input-value="data.selected"
+                    color="primary"
+                    close
+                  >
+                    <v-avatar left>
+                      <v-img :src="thumb(data.item.img)"></v-img>
+                    </v-avatar>
+                    {{ data.item.fullname }}
+                  </v-chip>
+                </template>
+                <template v-slot:item="data">
+                  <v-list-item-avatar>
+                    <img :src="photo(data.item.img)" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
+                  </v-list-item-content>
+                </template>
+              </v-select>
+              <v-select
+                v-model="status"
+                :items="taskStatuses"
+                label="Статус задачи"
+                class="mb-4"
+                item-text="name"
+                item-value="id"
+                height="38"
+                outlined
+                flat
+                dense
+                hide-details
+                single-line
+                return-object
+                clearable
+              ></v-select>
+              <v-autocomplete
+                v-model="selectedTags"
+                :items="localTags"
+                class="mb-4"
+                item-text="name"
+                item-value="id"
+                dense
+                outlined
+                no-data-text="У вас нет тегов"
+                hide-details
+                color="primary"
+                label="Тег"
+                multiple
+                chips
+                hide-selected
+                return-object
+                flat
+              >
+                <template v-slot:selection="data">
+                  <v-chip
+                    v-bind="data.attrs"
+                    :input-value="data.selected"
+                    close
+                    small
+                    color="primary"
+                    @click:close="removeItem(data.item)"
+                  >{{data.item.name}}</v-chip>
+                </template>
+              </v-autocomplete>
+              <v-select
+                v-model="priority"
+                :items="priorityItems"
+                label="Приоритет"
+                class="mb-4"
+                item-text="name"
+                item-value="url"
+                height="38"
+                outlined
+                flat
+                dense
+                hide-details
+                single-line
+                return-object
+                clearable
+                @click:clear="priority=null"
+              >
+                <template v-slot:selection="data">
+                  <v-icon class="mr-4" :color="data.item.color">mdi-flag-variant</v-icon>
+                  {{ data.item.name }}
+                </template>
+                <template v-slot:item="data">
+                  <v-icon class="mr-4" :color="data.item.color">mdi-flag-variant</v-icon>
+                  {{ data.item.name }}
+                </template>
+              </v-select>
+              <v-select
+                v-model="author"
+                :items="localUsers"
+                label="От"
+                class="mb-4"
+                item-text="fullname"
+                item-value="id"
+                height="38"
+                outlined
+                flat
+                dense
+                hide-details
+                single-line
+                return-object
+              >
+                <template v-slot:selection="data">
+                  <v-chip
+                    @click="data.select"
+                    @click:close="author = null"
+                    v-bind="data.attrs"
+                    :input-value="data.selected"
+                    close
+                    color="primary"
+                  >
+                    <v-avatar left>
+                      <v-img :src="thumb(data.item.img)"></v-img>
+                    </v-avatar>
+                    {{ data.item.fullname }}
+                  </v-chip>
+                </template>
+                <template v-slot:item="data">
+                  <v-list-item-avatar>
+                    <img :src="photo(data.item.img)" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
+                  </v-list-item-content>
+                </template>
+              </v-select>
+              <v-select
+                v-model="responsible"
+                :items="localUsers"
+                label="Исполнитель"
+                class="mb-4"
+                item-text="fullname"
+                item-value="id"
+                height="38"
+                outlined
+                flat
+                dense
+                hide-details
+                single-line
+                return-object
+              >
+                <template v-slot:selection="data">
+                  <v-chip
+                    @click="data.select"
+                    @click:close="responsible = null"
+                    v-bind="data.attrs"
+                    :input-value="data.selected"
+                    close
+                    color="primary"
+                  >
+                    <v-avatar left>
+                      <v-img :src="thumb(data.item.img)"></v-img>
+                    </v-avatar>
+                    {{ data.item.fullname }}
+                  </v-chip>
+                </template>
+                <template v-slot:item="data">
+                  <v-list-item-avatar>
+                    <img :src="photo(data.item.img)" />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
+                  </v-list-item-content>
+                </template>
+              </v-select>
+              <v-select
+                v-model="groupTask"
+                :items="groupTaskItems"
+                label="Группа задач по"
+                class="mb-4"
+                item-text="name"
+                item-value="value"
+                height="38"
+                outlined
+                flat
+                dense
+                hide-details
+                single-line
+                return-object
+                clearable
+              ></v-select>
+              <v-switch
+                v-if="auth.id == auth.division.head_id"
+                label="Задачи сотрудника"
+                hide-details
+                v-model="selectEmployee"
+              />
+            </v-form>
+            <v-btn
+              block
+              dark
+              depressed
               color="primary"
-              label="Тег"
-              multiple
-              chips
-              hide-selected
-              return-object
-              flat
-            >
-              <template v-slot:selection="data">
-                <v-chip
-                  v-bind="data.attrs"
-                  :input-value="data.selected"
-                  close
-                  small
-                  color="primary"
-                  @click:close="removeItem(data.item)"
-                >{{data.item.name}}</v-chip>
-              </template>
-            </v-autocomplete>
-            <v-select
-              v-model="priority"
-              :items="priorityItems"
-              label="Приоритет"
-              class="mb-4"
-              item-text="name"
-              item-value="url"
-              height="38"
-              outlined
-              flat
-              dense
-              hide-details
-              single-line
-              return-object
-              clearable
-              @click:clear="priority=null"
-            >
-              <template v-slot:selection="data">
-                <v-icon class="mr-4" :color="data.item.color">mdi-flag-variant</v-icon>
-                {{ data.item.name }}
-              </template>
-              <template v-slot:item="data">
-                <v-icon class="mr-4" :color="data.item.color">mdi-flag-variant</v-icon>
-                {{ data.item.name }}
-              </template>
-            </v-select>
-            <v-select
-              v-model="author"
-              :items="localUsers"
-              label="От"
-              class="mb-4"
-              item-text="fullname"
-              item-value="id"
-              height="38"
-              outlined
-              flat
-              dense
-              hide-details
-              single-line
-              return-object
-            >
-              <template v-slot:selection="data">
-                <v-chip
-                  @click="data.select"
-                  @click:close="author = null"
-                  v-bind="data.attrs"
-                  :input-value="data.selected"
-                  close
-                  color="primary"
-                >
-                  <v-avatar left>
-                    <v-img :src="thumb(data.item.img)"></v-img>
-                  </v-avatar>
-                  {{ data.item.fullname }}
-                </v-chip>
-              </template>
-              <template v-slot:item="data">
-                <v-list-item-avatar>
-                  <img :src="photo(data.item.img)" />
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
-                </v-list-item-content>
-              </template>
-            </v-select>
-            <v-select
-              v-model="responsible"
-              :items="localUsers"
-              label="Исполнитель"
-              class="mb-4"
-              item-text="fullname"
-              item-value="id"
-              height="38"
-              outlined
-              flat
-              dense
-              hide-details
-              single-line
-              return-object
-            >
-              <template v-slot:selection="data">
-                <v-chip
-                  @click="data.select"
-                  @click:close="responsible = null"
-                  v-bind="data.attrs"
-                  :input-value="data.selected"
-                  close
-                  color="primary"
-                >
-                  <v-avatar left>
-                    <v-img :src="thumb(data.item.img)"></v-img>
-                  </v-avatar>
-                  {{ data.item.fullname }}
-                </v-chip>
-              </template>
-              <template v-slot:item="data">
-                <v-list-item-avatar>
-                  <img :src="photo(data.item.img)" />
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
-                </v-list-item-content>
-              </template>
-            </v-select>
-            <v-select
-              v-model="groupTask"
-              :items="groupTaskItems"
-              label="Группа задач по"
-              class="mb-4"
-              item-text="name"
-              item-value="value"
-              height="38"
-              outlined
-              flat
-              dense
-              hide-details
-              single-line
-              return-object
-              clearable
-            ></v-select>
-            <v-switch
-              v-if="auth.id == auth.division.head_id"
-              label="Задачи сотрудника"
-              hide-details
-              v-model="selectEmployee"
-            />
-            <v-btn block dark depressed color="primary" class="my-5" @click="filterTask()">Фильтр</v-btn>
+              class="my-5"
+              @click="clearFilters()"
+            >Сборосить фильтры</v-btn>
           </v-card-text>
         </v-card>
       </v-navigation-drawer>
@@ -434,7 +451,6 @@ export default {
               }
             })
             .then(res => {
-              this.filtersMenu = false;
               this.filteredTasks = res.data;
               this.page = this.loading = false;
               this.countFilters();
@@ -450,7 +466,6 @@ export default {
           this.filteredTasks = [];
           this.page = 1;
           this.paginate();
-          this.filtersMenu = false;
           this.countFilters();
           localStorage.setItem("filters", JSON.stringify(this.filters));
           this.displayGroupTasks = false;
@@ -521,7 +536,6 @@ export default {
           }
         })
         .then(res => {
-          this.filtersMenu = false;
           this.filteredTasks = res.data;
           this.page = this.loading = false;
           this.displayGroupTasks = true;
@@ -554,12 +568,10 @@ export default {
           this.selectedTags.splice(index, 1);
         }
       });
+    },
+    clearFilters() {
+      this.$refs.filterForms.reset();
     }
-    // getUsers(){
-    //   axios.get(this.appPath('api/users')).then(res => {
-    //     this.users = res.data;
-    //   }).catch(e => this.users = null);
-    // }
   },
   computed: {
     activeBtn() {
@@ -601,6 +613,7 @@ export default {
         this.setFilter("tags", tagsId);
         localStorage.setItem("tags", JSON.stringify(tags));
       }
+      this.filterTask();
     },
     searchTask(title) {
       title === "" || this.filters["title"]
@@ -616,6 +629,7 @@ export default {
         this.setFilter(newVal.query, newVal.user);
         localStorage.setItem("taskCategory", JSON.stringify(newVal));
       }
+      this.filterTask();
     },
     employee(newVal) {
       if (newVal) {
@@ -631,6 +645,7 @@ export default {
         this.setFilter("all", true);
         localStorage.setItem("employee", JSON.stringify(null));
       }
+      this.filterTask();
     },
     priority(item) {
       if (!item) {
@@ -640,6 +655,7 @@ export default {
         this.setFilter("priority", item.id);
         localStorage.setItem("priority", JSON.stringify(item));
       }
+      this.filterTask();
     },
     status(item) {
       if (!item) {
@@ -649,6 +665,7 @@ export default {
         this.setFilter("status_id", item.id);
         localStorage.setItem("status", JSON.stringify(item));
       }
+      this.filterTask();
     },
     selectEmployee(val) {
       if (val && this.taskCategory) {
@@ -676,6 +693,7 @@ export default {
           JSON.stringify({ id: item.id, fullname: item.fullname })
         );
       }
+      this.filterTask();
     },
     responsible(item) {
       if (!item) {
@@ -688,6 +706,7 @@ export default {
           JSON.stringify({ id: item.id, fullname: item.fullname })
         );
       }
+      this.filterTask();
     },
     groupTask(item) {
       if (!item) {
@@ -696,11 +715,13 @@ export default {
         localStorage.setItem("groupTask", JSON.stringify(item));
         Event.fire("groupType", item.value);
       }
+      this.filterTask();
     }
   },
   created() {
     this.paginate();
     this.tasksTags();
+    this.countFilters();
     Event.listen("loadTasks", data => this.paginate());
     Event.listen("filterByPriority", data => {
       this.priorityItems.forEach(item => {

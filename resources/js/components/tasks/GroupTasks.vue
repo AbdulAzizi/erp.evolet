@@ -49,7 +49,7 @@
                       <span>Просмотрено {{ moment(item.read_at).local().format('lll') }}</span>
                     </v-tooltip>
                   </td>
-                  <td>{{ item.description.substring(0, 30) + '...' }}</td>
+                  <td>{{ item.description.length >= 30 ? item.description.substring(0, 30) + '...' : item.description }}</td>
                   <td>
                     <span>{{durObj(item.planned_time)}}</span>
                   </td>
