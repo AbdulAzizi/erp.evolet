@@ -114,16 +114,17 @@ class TaskController extends Controller
         $tags = json_decode($request->existingTags);
         $poll = json_decode($request->poll);
 
-        
-        foreach ($newTags as $newTag) {
-            // Create new tags and merge them to existing tags array
-            $tag = Tag::create(['name' => $newTag]);
-
-            $division = Division::find(auth()->user()->division->id);
-
-            $division->tags()->attach($tag);
-
-            $tags[] = $tag->id;
+        if(count($newTags)){
+            foreach ($newTags as $newTag) {
+                // Create new tags and merge them to existing tags array
+                $tag = Tag::create(['name' => $newTag]);
+    
+                $division = Division::find(auth()->user()->division->id);
+    
+                $division->tags()->attach($tag);
+    
+                $tags[] = $tag->id;
+            }
         }
         // if there is a poll
         if ($poll) {
