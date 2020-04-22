@@ -92,16 +92,16 @@ export default {
                 // Make last start time as a moment object
                 from = this.moment(time_set.start_time);
                 // if end time exists get it if not get current time
-                to = time_set.end_time
-                    ? this.moment(time_set.end_time)
-                    : this.moment();
+                to = this.moment(time_set.end_time);
+                // to = time_set.end_time
+                //     ? this.moment(time_set.end_time)
+                //     : this.moment();
                 // Add diff time to sum
                 sumOfDiffTime = sumOfDiffTime + to.diff(from);
             });
 
             // Set Duration variable as difference time
             this.duration = sumOfDiffTime;
-            
         },
         runTimer() {
             setInterval(() => {
@@ -177,13 +177,13 @@ export default {
         task(val) {
             this.localTask = val;
         },
-        duration(val){
+        duration(val) {
             //
         }
     },
     computed: {
         tasIskNew() {
-            return this.localTask.time_sets.length == 0;
+            return this.localTask.status.name == "Новый";
         },
         taskIsPaused() {
             return this.localTask.status.name == "Приостановлен";
@@ -191,16 +191,15 @@ export default {
         taskIsPlaying() {
             if (this.localTask) {
                 if (this.localTask.time_sets.length) {
-                    return (
-                        this.localTask.time_sets[
-                            this.localTask.time_sets.length - 1
-                        ].end_time == null
-                    );
+                    return this.localTask.status.name == "В процессе";
                 }
             } else {
                 return false;
             }
-        }
+        },
+        tasIsClosed() {
+            return this.localTask.status.name == "Закрытый";
+        },
     }
 };
 </script>

@@ -26,7 +26,7 @@ class ResponsibilityDescriptionController extends Controller
         $description = ResponsibilityDescription::find($request->id);
 
         $description->update([
-            'text' => $request->title,
+            'text' => $request->text,
             'description' => $request->description,
         ]);
 

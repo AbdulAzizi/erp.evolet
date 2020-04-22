@@ -27,7 +27,7 @@
             </v-tooltip>
         </template>
         <v-card>
-            <v-card-text>
+            <v-card-text class="pa-6">
                 <form-field :field="usersField" v-model="watchers"/>
             </v-card-text>
         </v-card>
@@ -49,7 +49,8 @@ export default {
                 label: "Наблюдатели",
                 users: this.users,
                 icon: 'mdi-eye-plus',
-                multiple: true
+                multiple: true,
+                hideDetails: true
             }
         };
     },

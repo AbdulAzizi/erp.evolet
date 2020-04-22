@@ -41,30 +41,76 @@
                         </v-col>
                         <v-col cols="12" class="pb-0">
                             <input
+                                v-if="selectedRespOrDescrip.length"
                                 type="hidden"
-                                :name="'descriptions' in selectedRespOrDescrip ? 'responsibility' : 'responsibility_description'"
-                                :value="selectedRespOrDescrip.id"
+                                :name="'descriptions' in selectedRespOrDescrip[0] ? 'responsibility' : 'responsibility_description'"
+                                :value="JSON.stringify(selectedRespOrDescrip.map(resDes=>{return resDes.id.split('-')[1];}))"
                             />
-                            <v-autocomplete
-                                ref="selectedRespOrDescrip"
-                                v-model="selectedRespOrDescrip"
-                                prepend-icon="mdi-rename-box"
-                                rounded
-                                filled
-                                label="Должностные задачи"
-                                :disabled="userResponsibilityDescriptions.length == 0"
-                                :items="userResponsibilityDescriptions"
-                                item-text="text"
-                                item-value="id"
-                                :rules="[v=> Object.keys(v).length != 0 || 'Обязательное поле']"
-                                return-object
+                            <v-dialog
+                                ref="responsibilityDialog"
+                                :return-value.sync="selectedRespOrDescrip"
+                                max-width="700"
+                                v-model="responsibilityDialog"
+                                scrollable
                             >
-                                <template v-slot:item="data">
-                                    <v-list-item-content
-                                        :class="'descriptions' in data.item ? 'font-weight-bold' : 'pl-5'"
-                                    >{{data.item.text}}</v-list-item-content>
+                                <template v-slot:activator="{ on }">
+                                    <v-autocomplete
+                                        :disabled="userResponsibilityDescriptions.length == 0"
+                                        prepend-icon="mdi-rename-box"
+                                        rounded
+                                        filled
+                                        label="Должностные задачи"
+                                        v-model="selectedRespOrDescrip"
+                                        :items="userResponsibilityDescriptions"
+                                        item-text="text"
+                                        item-value="id"
+                                        return-object
+                                        multiple
+                                        v-on="on"
+                                        readonly
+                                        ref="selectedRespOrDescrip"
+                                        :rules="[v=> selectedRespOrDescrip.length != 0 || 'Обязательное поле']"
+                                    >
+                                        <template v-slot:selection="data">
+                                            <v-chip small color="primary">{{ data.item.text }}</v-chip>
+                                        </template>
+                                    </v-autocomplete>
                                 </template>
-                            </v-autocomplete>
+                                <v-card style="overflow:auto;" flat>
+                                    <v-toolbar dense flat dark class="primary">
+                                        <v-toolbar-title
+                                            class="font-weight-regular"
+                                        >Выберите должностную задачу</v-toolbar-title>
+                                    </v-toolbar>
+                                    <v-divider />
+                                    <v-card-text class="py-0">
+                                        <v-treeview
+                                            v-model="selectedRespOrDescrip"
+                                            selection-type="leaf"
+                                            dense
+                                            :return-object="true"
+                                            item-children="descriptions"
+                                            :items="responsibilities"
+                                            selected-color="primary"
+                                            item-text="text"
+                                            item-key="id"
+                                            selectable
+                                            class="mr-0"
+                                            :rules="[v=> Object.keys(v).length != 0 || 'Обязательное поле']"
+                                        />
+                                    </v-card-text>
+                                    <v-divider />
+                                    <v-card-actions>
+                                        <v-spacer />
+                                        <v-btn text @click="responsibilityDialog = false">Отмена</v-btn>
+                                        <v-btn
+                                            text
+                                            @click="$refs.responsibilityDialog.save(selectedRespOrDescrip)"
+                                            color="primary"
+                                        >Сохранить</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
                         </v-col>
                         <v-col cols="12" class="py-0">
                             <form-field
@@ -173,14 +219,15 @@
                                     </v-tooltip>
                                 </template>
                                 <v-card>
-                                    <v-card-text>
+                                    <v-card-text class="pa-6">
                                         <form-field
                                             :field="{
-                            type: 'select',
-                            items: priorities,
-                            label: 'Приоритет',
-                            props: {'item-text': 'label'}
-                        }"
+                                                type: 'select',
+                                                items: priorities,
+                                                label: 'Приоритет',
+                                                props: {'item-text': 'label'},
+                                                hideDetails: true
+                                            }"
                                             v-model="selectedPriority"
                                         >
                                             <template v-slot:item="{ item }">
@@ -203,7 +250,7 @@
                                 </v-card>
                             </v-dialog>
 
-                            <v-dialog v-model="startTime" width="500">
+                            <v-dialog v-model="startTime" width="500" v-if="false">
                                 <template v-slot:activator="{ on:dialog }">
                                     <v-tooltip top>
                                         <template v-slot:activator="{ on:tooltip }">
@@ -232,11 +279,11 @@
                                     <v-card-text>
                                         <form-field
                                             :field="{
-                        type: 'date-time',
-                        name: 'start_date',
-                        label: 'Когда планируете начать ?',
-                        icon: 'mdi-clock',
-                        }"
+                                                type: 'date-time',
+                                                name: 'start_date',
+                                                label: 'Когда планируете начать ?',
+                                                icon: 'mdi-clock',
+                                                }"
                                             v-model="startTimeValue"
                                         />
                                     </v-card-text>
@@ -319,7 +366,8 @@
                                             items: tags,
                                             icon: 'mdi-tag',
                                             multiple: true,
-                                            returnObject: true
+                                            returnObject: true,
+                                            hideDetails: true
                                         }"
                                         v-model="selectedTags"
                                         v-if="auth.position_level.name == 'Руководитель'"
@@ -582,8 +630,12 @@ export default {
 
             selectedAssignee: [],
 
-            selectedRespOrDescrip: {},
-            userResponsibilityDescriptions: []
+            selectedRespOrDescrip: [],
+            userResponsibilityDescriptions: [],
+
+            responsibilities: [],
+
+            responsibilityDialog: false
         };
     },
     created() {
@@ -603,6 +655,31 @@ export default {
         });
     },
     watch: {
+        selectedRespOrDescrip(newVal, oldVal) {
+            if (oldVal.length === newVal.length) return;
+            let resps = 0;
+            newVal.forEach(val => {
+                let splitedVal = val.id.split("-");
+                if (splitedVal[0] == "resp") {
+                    resps++;
+                } else {
+                    let responsibility_id =
+                        newVal[newVal.length - 1].responsibility_id;
+                    this.selectedRespOrDescrip = this.selectedRespOrDescrip.filter(
+                        sel => {
+                            if ("responsibility_id" in sel) {
+                                if (sel.responsibility_id == responsibility_id)
+                                    return sel;
+                            }
+                        }
+                    );
+                    return true;
+                }
+            });
+            if (resps >= 1) {
+                this.selectedRespOrDescrip = [newVal[newVal.length - 1]];
+            }
+        },
         intervalNumber(value) {
             let reminder = value < 20 ? value : (value - 10) % 10;
             if (reminder == 1) {
@@ -647,6 +724,14 @@ export default {
                     userIDs: userIDs
                 })
                 .then(response => {
+                    this.responsibilities = response.data;
+                    this.responsibilities.forEach(resp => {
+                        resp.id = "resp-" + resp.id;
+                        resp.descriptions.forEach(desc => {
+                            desc.id = "desc-" + desc.id;
+                        });
+                    });
+
                     this.userResponsibilityDescriptions = [];
                     response.data.forEach(resp => {
                         this.userResponsibilityDescriptions.push(resp);

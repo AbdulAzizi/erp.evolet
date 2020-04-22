@@ -493,7 +493,7 @@ export default {
             this.localPosition.responsibilities.forEach(responsibility => {
                 responsibility.descriptions.forEach(description => {
                     if (description.id == data.id) {
-                        description.title = data.title;
+                        description.text = data.text;
                         description.description = data.description;
                     }
                 });

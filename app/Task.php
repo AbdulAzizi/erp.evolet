@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use Filterable;
-    
+
     protected $fillable = [
         'title',
         'description',
@@ -21,7 +21,7 @@ class Task extends Model
         'created_at',
         'readed',
         'responsibility_description_id',
-        'end_time'
+        'end_time',
     ];
 
     // protected $with = ['responsible.user','from'];
@@ -73,7 +73,7 @@ class Task extends Model
 
     public function products()
     {
-        return $this->belongsToMany('App\Product'); 
+        return $this->belongsToMany('App\Product');
     }
 
     public function polls()
@@ -89,5 +89,14 @@ class Task extends Model
     public function responsibilityDescription()
     {
         return $this->belongsTo('App\ResponsibilityDescription');
+    }
+
+    public function setTimesetEndtime()
+    {
+        if (count($this->timeSets)) {
+            if ($this->timeSets->last()->end_time == null) {
+                $this->timeSets->last()->end_time = date(now());
+            }
+        }
     }
 }

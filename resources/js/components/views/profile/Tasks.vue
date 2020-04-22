@@ -49,7 +49,7 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td>{{item.task.responsibility_description.title}}</td>
+                        <td>{{item.task.responsibility_description.text}}</td>
                         <td>{{item.task.description}}</td>
                         <td>{{moment(item.start_time).local().format('LLL') }}</td>
                         <td>
@@ -85,7 +85,7 @@
                 </template>
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td>{{item.responsibility_description.title}}</td>
+                        <td>{{item.responsibility_description.text}}</td>
                         <td>{{item.description}}</td>
                         <td>{{item.deadline}}</td>
                         <td>{{item.ended_time}}</td>
@@ -121,14 +121,14 @@ export default {
             localTimesets: this.timesets,
             localTasks: this.tasks,
             timesetHeaders: [
-                { text: "ДЗ", value: "task.responsibility_description.title" },
+                { text: "ДЗ", value: "task.responsibility_description.text" },
                 { text: "Описание задачи", value: "task.description" },
                 { text: "Начало", value: "start_time" },
                 { text: "Конец", value: "end_time" },
                 { text: "Всего", value: "diff" }
             ],
             taskHeaders: [
-                { text: "ДЗ", value: "responsibility_description.title" },
+                { text: "ДЗ", value: "responsibility_description.text" },
                 {
                     text: "Описание задачи",
                     value: "description"
