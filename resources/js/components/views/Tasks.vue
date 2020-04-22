@@ -437,7 +437,6 @@ export default {
     this.author = this.setLocalFilter("author", this.author);
     this.responsible = this.setLocalFilter("responsible", this.responsible);
     this.groupTask = this.setLocalFilter("groupTask", this.groupTask);
-    this.filterTask();
   },
   methods: {
     filterTask() {
