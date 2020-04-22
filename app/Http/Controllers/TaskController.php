@@ -8,7 +8,6 @@ use App\Events\TaskForwardedEvent;
 use App\Filters\TaskFilters;
 use App\Option;
 use App\Question;
-use App\Responsibility;
 use App\ResponsibilityDescription;
 use App\Status;
 use App\Tag;
@@ -67,7 +66,7 @@ class TaskController extends Controller
             'estimatedTaskTime' => 'required',
         ]);
 
-        $descriptions = json_decode( $request->responsibility_description );
+        $descriptions = json_decode($request->responsibility_description);
 
         // Decode things that must be decoded
         $assignees = json_decode($request->assignees);
@@ -76,7 +75,6 @@ class TaskController extends Controller
         $newStatus = \App\Status::where('name', 'Новый')->first();
         // Empty array to keep query
         $tasks = [];
-
 
         // Loop through responsibility descriptions
         foreach ($descriptions as $description) {
@@ -110,7 +108,6 @@ class TaskController extends Controller
         $tags = json_decode($request->existingTags);
         $poll = json_decode($request->poll);
 
-        
         foreach ($newTags as $newTag) {
             // Create new tags and merge them to existing tags array
             $tag = Tag::create(['name' => $newTag]);
@@ -185,7 +182,10 @@ class TaskController extends Controller
                 $task->save();
             }
 
+            $task->setTimesetEndtime();
+
             return view('tasks.show', compact('task'));
+
         } else {
             abort(404);
         }
@@ -386,6 +386,8 @@ class TaskController extends Controller
         $task->status()->associate($InProcess);
         // save
         $task->save();
+        //
+        $task->setTimesetEndtime();
         // return
         return $task;
     }
@@ -513,18 +515,18 @@ class TaskController extends Controller
 
         $tags = [];
 
-        $tasks = Task::where(function ($q) use ($authUser){
+        $tasks = Task::where(function ($q) use ($authUser) {
             $q->where('from_id', $authUser->id)
-              ->orWhere('responsible_id', $authUser->id)
-              ->orWhereHas('watchers', function ($watcher) use ($authUser) {
-                  $watcher->where('user_id', $authUser->id);
-              });
+                ->orWhere('responsible_id', $authUser->id)
+                ->orWhereHas('watchers', function ($watcher) use ($authUser) {
+                    $watcher->where('user_id', $authUser->id);
+                });
         })->with('tags')->get();
 
-        foreach($tasks as $task){
-           foreach(collect($task->tags)->unique() as $tag){
-               $tags[] = $tag;
-           }
+        foreach ($tasks as $task) {
+            foreach (collect($task->tags)->unique() as $tag) {
+                $tags[] = $tag;
+            }
         }
 
         $uniqueTags = collect($tags)->unique('id');

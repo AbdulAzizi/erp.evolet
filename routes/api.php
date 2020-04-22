@@ -105,9 +105,6 @@ Route::get('/users/{id}/responsibilitydescriptions', 'UserController@responsibil
 
 Route::post('/divisions/{id}/edit', 'DivisionController@edit')->name('divisions.edit');
 
-Route::get('/tasks/{id}/start', 'TaskController@start')->name('api.tasks.start');
-Route::get('/tasks/{id}/pause', 'TaskController@pause')->name('api.tasks.pause');
-Route::get('/tasks/{id}/stop', 'TaskController@stop')->name('api.tasks.stop');
 Route::delete('/tasks/{id}', 'TaskController@delete')->name('api.tasks.delete');
 
 Route::get('/statuses', 'StatusController@all')->name('api.statuses.all');

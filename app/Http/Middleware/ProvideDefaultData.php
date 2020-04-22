@@ -26,8 +26,13 @@ class ProvideDefaultData
         $currentTask = Task::whereHas('status', function (Builder $query) {
             $query->where('name', 'В процессе');
         })
-        ->where('responsible_id', $authUser->id)
-        ->with('timeSets','status')->first();
+            ->where('responsible_id', $authUser->id)
+            ->with('timeSets', 'status')->first();
+
+        // ...
+        if ($currentTask) {
+            $currentTask->setTimesetEndtime();
+        }
 
         View::share('authUser', $authUser);
         View::share('currentTask', $currentTask);
