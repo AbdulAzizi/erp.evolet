@@ -22,7 +22,7 @@
                     dark
                     x-small
                     v-else-if="filtersLen && hover"
-                    @click="clearFilters()"
+                    
                     v-on="closeFilter"
                   >mdi-close</v-icon>
                 </template>
@@ -43,7 +43,7 @@
         </template>
         <span>Фильтры</span>
       </v-tooltip>
-      <v-navigation-drawer v-model="filtersMenu" right fixed stateless temporary width="300">
+      <v-navigation-drawer v-model="filtersMenu" right fixed temporary width="300">
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="title">Фильтры</v-list-item-title>
@@ -294,7 +294,7 @@
               depressed
               color="primary"
               class="my-5"
-              @click="clearFilters()"
+              
             >Сборосить фильтры</v-btn>
           </v-card-text>
         </v-card>
@@ -573,14 +573,14 @@ export default {
       });
     },
     clearFilters() {
-      this.author = null;
-      this.groupTask = null;
-      this.responsible = null;
+      // this.author = null;
+      // this.groupTask = null;
+      // this.responsible = null;
       this.status = null;
       this.taskCategory = null;
-      this.employee = null;
-      this.priority = null;
-      this.selectedTags = [];
+      // this.employee = null;
+      // this.priority = null;
+      // this.selectedTags = [];
     }
   },
   computed: {
@@ -731,7 +731,6 @@ export default {
   created() {
     this.paginate();
     this.tasksTags();
-    this.countFilters();
     Event.listen("loadTasks", data => this.paginate());
     Event.listen("filterByPriority", data => {
       this.priorityItems.forEach(item => {
