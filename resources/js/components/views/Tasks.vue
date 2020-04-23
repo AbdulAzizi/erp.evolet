@@ -12,19 +12,18 @@
         :disabled="groupTask ? true : false"
       ></v-text-field>
       <v-tooltip bottom>
-        <template v-slot:activator="{ on: tooltip, on: closeFilter }">
+        <template v-slot:activator="{ on: tooltip }">
           <div>
-            <v-hover v-slot:default="{ hover }">
+            <!-- <v-hover v-slot:default="{ hover }"> -->
               <v-badge overlap>
                 <template v-slot:badge>
-                  <span v-if="filtersLen && !hover">{{ filtersLen }}</span>
-                  <v-icon
+                  <span v-if="filtersLen">{{ filtersLen }}</span>
+                  <!-- <v-icon
                     dark
                     x-small
                     v-else-if="filtersLen && hover"
-                    
                     v-on="closeFilter"
-                  >mdi-close</v-icon>
+                  >mdi-close</v-icon> -->
                 </template>
                 <v-btn
                   depressed
@@ -38,7 +37,7 @@
                   <v-icon color="grey">mdi-tune</v-icon>
                 </v-btn>
               </v-badge>
-            </v-hover>
+            <!-- </v-hover> -->
           </div>
         </template>
         <span>Фильтры</span>
@@ -288,14 +287,14 @@
                 v-model="selectEmployee"
               />
             </v-form>
-            <v-btn
+            <!-- <v-btn
               block
               dark
               depressed
               color="primary"
               class="my-5"
               
-            >Сборосить фильтры</v-btn>
+            >Сборосить фильтры</v-btn> -->
           </v-card-text>
         </v-card>
       </v-navigation-drawer>
@@ -437,6 +436,7 @@ export default {
     this.author = this.setLocalFilter("author", this.author);
     this.responsible = this.setLocalFilter("responsible", this.responsible);
     this.groupTask = this.setLocalFilter("groupTask", this.groupTask);
+    this.filterTask();
   },
   methods: {
     filterTask() {
@@ -729,7 +729,6 @@ export default {
     }
   },
   created() {
-    this.paginate();
     this.tasksTags();
     Event.listen("loadTasks", data => this.paginate());
     Event.listen("filterByPriority", data => {
