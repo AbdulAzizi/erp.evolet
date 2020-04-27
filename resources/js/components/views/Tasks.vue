@@ -116,7 +116,7 @@
                 </template>
               </v-select>
               <v-select
-                v-model="status"
+                v-model="selectedStatuses"
                 :items="taskStatuses"
                 label="Статус задачи"
                 class="mb-4"
@@ -130,7 +130,18 @@
                 single-line
                 return-object
                 clearable
-              ></v-select>
+                multiple
+              >
+              <template v-slot:selection="data">
+                  <v-chip
+                    @click="data.select"
+                    v-bind="data.attrs"
+                    :input-value="data.selected"
+                    color="primary"
+                  >
+                    {{ data.item.name }}
+                  </v-chip>
+                </template></v-select>
               <v-autocomplete
                 v-model="selectedTags"
                 :items="localTags"
@@ -353,6 +364,7 @@ export default {
       responsibleItems: [],
       localTags: [],
       taskStatuses: [],
+      selectedStatuses: [],
       localUsers: this.users,
       author: null,
       groupTask: null,
@@ -361,7 +373,6 @@ export default {
         all: true
       },
       currentView: null,
-      status: null,
       taskCategory: null,
       employee: null,
       priority: null,
@@ -426,7 +437,7 @@ export default {
     this.filters = this.setLocalFilter("filters", this.filters);
     this.priority = this.setLocalFilter("priority", this.priority);
     this.taskCategory = this.setLocalFilter("taskCategory", this.taskCategory);
-    this.status = this.setLocalFilter("status", this.status);
+    this.selectedStatuses = this.setLocalFilter("status", this.selectedStatuses);
     this.selectedTags = this.setLocalFilter("tags", this.selectedTags);
     this.selectEmployee = this.setLocalFilter(
       "selectEmployee",
@@ -607,7 +618,7 @@ export default {
     selectedTags(tags) {
       let tagsId = JSON.stringify(tags.map(tag => tag.id));
       if (!tags.length) {
-        localStorage.tags = JSON.stringify([]);
+        localStorage.removeItem('tags');
         this.deleteFilter("tags");
       } else {
         this.setFilter("tags", tagsId);
@@ -622,8 +633,8 @@ export default {
     },
     taskCategory(newVal, oldVal) {
       if (oldVal) {
+        localStorage.removeItem('taskCategory');
         this.deleteFilter(oldVal.query);
-        localStorage.taskCategory = null;
       }
       if (newVal) {
         this.setFilter(newVal.query, newVal.user);
@@ -649,7 +660,7 @@ export default {
     },
     priority(item) {
       if (!item) {
-        localStorage.priority = null;
+        localStorage.removeItem('priority')
         this.deleteFilter("priority");
       } else {
         this.setFilter("priority", item.id);
@@ -657,13 +668,14 @@ export default {
       }
       this.filterTask();
     },
-    status(item) {
-      if (!item) {
-        localStorage.status = null;
+    selectedStatuses(statuses) {
+      let statusesId = JSON.stringify(statuses.map(status => status.id));
+      if (!statuses.length) {
+        localStorage.removeItem('status');
         this.deleteFilter("status_id");
       } else {
-        this.setFilter("status_id", item.id);
-        localStorage.setItem("status", JSON.stringify(item));
+        this.setFilter("status_id", statusesId);
+        localStorage.setItem("status", JSON.stringify(statuses));
       }
       this.filterTask();
     },

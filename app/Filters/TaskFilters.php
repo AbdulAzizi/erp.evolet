@@ -62,8 +62,9 @@ class TaskFilters extends QueryFilters
 
     public function status_id($term)
     {   
+        $localStatus = json_decode($term);
 
-        return $this->builder->having('status_id', $term);
+        return $this->builder->whereIn('status_id', $localStatus);
 
     }
 
