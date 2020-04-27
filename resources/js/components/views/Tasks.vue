@@ -31,7 +31,7 @@
                   color="white"
                   height="38"
                   class="ml-3"
-                  @click="filtersMenu = true, getStatuses()"
+                  @click="filtersMenu = true"
                   v-on="tooltip"
                 >
                   <v-icon color="grey">mdi-tune</v-icon>
@@ -571,16 +571,6 @@ export default {
           this.selectedTags.splice(index, 1);
         }
       });
-    },
-    clearFilters() {
-      // this.author = null;
-      // this.groupTask = null;
-      // this.responsible = null;
-      this.status = null;
-      this.taskCategory = null;
-      // this.employee = null;
-      // this.priority = null;
-      // this.selectedTags = [];
     }
   },
   computed: {
@@ -730,6 +720,7 @@ export default {
   },
   created() {
     this.tasksTags();
+    this.getStatuses();
     Event.listen("loadTasks", data => this.paginate());
     Event.listen("filterByPriority", data => {
       this.priorityItems.forEach(item => {
