@@ -53,14 +53,14 @@
                   <td>
                     <span>{{durObj(item.planned_time)}}</span>
                   </td>
-                  <td>{{ moment(item.deadline).format('L') }}</td>
+                  <td>{{ moment(item.deadline).format('DD-MM-Y hh:mm') }}</td>
                   <td>
                     <avatar size="30" :user="item.from" :link="false" />
                   </td>
                   <td>
                     <avatar size="30" :user="item.responsible" :link="false" />
                   </td>
-                  <td>{{ moment(item.created_at).format('L') }}</td>
+                  <td>{{ moment(item.created_at).format('DD-MM-Y hh:mm') }}</td>
                   <td>{{ item.status.name }}</td>
                   <td>
                     <v-chip

@@ -41,26 +41,34 @@
             <td @click.stop="filter(item.priority, 'filterByPriority')">
               <priority :id="item.priority" icon></priority>
             </td>
-            <td>{{item.responsibility_description.text}}
+            <td>
+              {{item.responsibility_description.text}}
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                <v-icon small v-if="item.read_at" color="green" v-on="on">mdi-check-all</v-icon>
+                  <v-icon small v-if="item.read_at" color="green" v-on="on">mdi-check-all</v-icon>
                 </template>
                 <span>Просмотрено {{ moment(item.read_at).local().format('lll') }}</span>
               </v-tooltip>
             </td>
-            <td>{{ item.description.length >= 30 ? item.description.substring(0, 30) + '...' : item.description }}</td>
+            <td>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                <span v-on="on">{{ item.description.length >= 30 ? item.description.substring(0, 30) + '...' : item.description }}</span>
+                </template>
+                <div style="max-width: 250px" class="pa-0">{{ item.description }}</div>
+              </v-tooltip>
+            </td>
             <td>
               <span>{{durObj(item.planned_time)}}</span>
             </td>
-            <td>{{ moment(item.deadline).format('L') }}</td>
+            <td>{{ moment(item.deadline).format('DD-MM-Y hh:mm') }}</td>
             <td @click.stop="filter(item.from, 'filterByAuthor')">
               <avatar size="30" :user="item.from" :link="false" />
             </td>
             <td @click.stop="filter(item.responsible, 'filterByResponsible')">
-              <avatar size="30" :user="item.responsible" :link="false"/>
+              <avatar size="30" :user="item.responsible" :link="false" />
             </td>
-            <td>{{ moment(item.created_at).format('L') }}</td>
+            <td>{{ moment(item.created_at).format('DD-MM-Y hh:mm') }}</td>
             <td @click.stop="filter(item.status.id, 'filterByStatus')">{{ item.status.name }}</td>
             <td>
               <v-chip
@@ -128,7 +136,7 @@ export default {
     displayTask(item) {
       window.location.href = "tasks/" + item.id;
     },
-    filter(item, eventName){
+    filter(item, eventName) {
       Event.fire(eventName, item);
     },
     mark(task) {
@@ -159,9 +167,9 @@ export default {
     taskAuthor(task) {
       return this.auth.id === task.from_id;
     },
-    deleteTask(task){
-        this.taskId = task.id;
-        this.deleteTaskDialog = true;
+    deleteTask(task) {
+      this.taskId = task.id;
+      this.deleteTaskDialog = true;
     }
   },
   created() {
