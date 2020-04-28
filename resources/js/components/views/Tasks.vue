@@ -122,7 +122,6 @@
                 class="mb-4"
                 item-text="name"
                 item-value="id"
-                height="38"
                 outlined
                 flat
                 dense
@@ -138,6 +137,7 @@
                     v-bind="data.attrs"
                     :input-value="data.selected"
                     color="primary"
+                    small
                   >
                     {{ data.item.name }}
                   </v-chip>
@@ -744,12 +744,13 @@ export default {
       this.filterTask();
     });
     Event.listen("filterByStatus", statusId => {
+      this.selectedStatuses = [];
       this.taskStatuses.forEach(item => {
         if (item.id == statusId) {
-          this.status = item;
+          this.selectedStatuses.push(item);
         }
       });
-      this.filters.status_id = statusId;
+      this.filters.status_id = JSON.stringify(this.selectedStatuses.map(status => status.id));
       this.filterTask();
     });
     Event.listen("filterByTag", tag => {
