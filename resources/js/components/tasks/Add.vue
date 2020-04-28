@@ -134,9 +134,9 @@
                                     name: 'deadline',
                                     label: 'Дедлайн',
                                     icon: 'mdi-calendar-clock',
-                                    rules: ['required'],
+                                    rules: [rules.date],
                                 }"
-                            />
+                            v-model="deadline" />
                         </v-col>
                         <v-col cols="12" class="py-0">
                             <input type="hidden" name="estimatedTaskTime" :value="estimateTime" />
@@ -555,7 +555,8 @@ export default {
                 taskTimeRule: () => !!this.estimateTime || "Обязательное поле",
                 day: val => val < 366 || "Должно быть меньше 366",
                 hour: val => val < 24 || "Должно быть меньше 24",
-                minute: val => val < 60 || "Должно быть меньше 60"
+                minute: val => val < 60 || "Должно быть меньше 60",
+                date: val => !isNaN(new Date(val)) || 'Выберите дату'
             },
             formHasErrors: false,
             csrf_token: window.Laravel.csrf_token,
