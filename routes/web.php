@@ -100,6 +100,8 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/factories/{id}', 'FactoryController@show')->name('factories.show');
     Route::post('/factories', 'FactoryController@store')->name('factories.store');
     Route::post('/users/change/avatar/{id}', 'UserController@changeAvatar')->name('user.changeAvatar');
+    
+    Route::get('/timesets', 'TimesetController@index')->name('timesets.index');
 });
 
 Route::prefix('api')->group(function () {

@@ -165,6 +165,14 @@ export default {
                     positions: [],
                     headOf: [],
                     divisions: ["ОУПС"]
+                },
+                {
+                    icon: "mdi-chart-timeline",
+                    text: "История задач",
+                    url: "/timesets",
+                    positions: [],
+                    headOf: ["ОРПО"],
+                    divisions: []
                 }
             ]
         };
