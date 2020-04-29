@@ -5,6 +5,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use App\Product;
+use App\Task;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class MessageCreated extends Notification
@@ -40,23 +41,46 @@ class MessageCreated extends Notification
      */
     public function toArray($notifiable)
     {
-        $product = Product::find($this->message->messageable->id);
+        if ($this->message->messageable_type == 'App\Product') {
 
-        return [
-            'avatar' => $this->message->sender->img,
-            'title' =>  '<a href="'. route("users.show", $this->message->sender->id) . '">' . $this->message->sender->fullname . '</a>' . 
-            ' добавил комментарий ' . '<a href="#">' . $this->message->body . '</a> ' . ' в ' . '<a href="' . route('products.show', $product->id) . '">' . ' продукте ' . '</a>',
-        ];
+            $product = Product::find($this->message->messageable->id);
+
+            return [
+                'avatar' => $this->message->sender->img,
+                'title' =>  '<a href="' . route("profile.positions", $this->message->sender->id) . '">' . $this->message->sender->fullname . '</a>' .
+                    ' добавил комментарий ' . '<a href="#">' . mb_strimwidth($this->message->body, 0, 40, '...') . '</a> ' . ' в ' . '<a href="' . route('products.show', $product->id) . '">' . ' продукте ' . '</a>',
+            ];
+        }
+        if ($this->message->messageable_type == 'App\Task') {
+            $task = Task::find($this->message->messageable->id);
+
+            return [
+                'avatar' => $this->message->sender->img,
+                'title' =>  '<a href="' . route("profile.positions", $this->message->sender->id) . '">' . $this->message->sender->fullname . '</a>' .
+                    ' добавил комментарий ' . '<a href="#">' . mb_strimwidth($this->message->body, 0, 40, '...') . '</a> ' . ' в ' . '<a href="' . route('tasks.show', $task->id) . '">' . ' задаче ' . '</a>',
+            ];
+        }
     }
 
     public function toBroadcast($notifiable)
     {
-        $product = Product::find($this->message->messageable->id);
-        return new BroadcastMessage([
-            'avatar' =>  $this->message->sender->img,
-            'title' =>  '<a href="'. route("users.show", $this->message->sender->id) . '">' . $this->message->sender->fullname . '</a>' . 
-            'добавил комментарий' . '<a href="#">' . $this->message->body . '</a> ' . ' в ' .  '<a href="' . route('products.show', $product->id) . '">' . ' продукте ' . '</a>',
-            'notification' => $notifiable->notifications()->find($this->id)
-        ]);
+        if ($this->message->messageable_type == 'App\Product') {
+            $product = Product::find($this->message->messageable->id);
+            return new BroadcastMessage([
+                'avatar' =>  $this->message->sender->img,
+                'title' =>  '<a href="' . route("profile.positions", $this->message->sender->id) . '">' . $this->message->sender->fullname . '</a>' .
+                    'добавил комментарий' . '<a href="#">' . mb_strimwidth($this->message->body, 0, 40, '...') . '</a> ' . ' в ' .  '<a href="' . route('products.show', $product->id) . '">' . ' продукте ' . '</a>',
+                'notification' => $notifiable->notifications()->find($this->id)
+            ]);
+        }
+        if ($this->message->messageable_type == 'App\Task') {
+            $task = Task::find($this->message->messageable->id);
+            return new BroadcastMessage([
+                'avatar' =>  $this->message->sender->img,
+                'title' =>  '<a href="' . route("profile.positions", $this->message->sender->id) . '">' . $this->message->sender->fullname . '</a>' .
+                    'добавил комментарий' . '<a href="#">' . mb_strimwidth($this->message->body, 0, 40, '...') . '</a> ' . ' в ' .  '<a href="' . route('tasks.show', $task->id) . '">' . ' задаче ' . '</a>',
+                'notification' => $notifiable->notifications()->find($this->id)
+            ]);
+        }
     }
 }
