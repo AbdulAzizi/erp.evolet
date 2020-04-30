@@ -15,9 +15,8 @@
         <template v-slot:activator="{ on: tooltip }">
           <div>
             <!-- <v-hover v-slot:default="{ hover }"> -->
-              <v-badge overlap>
+              <v-badge overlap :value="filtersLen" :content="filtersLen">
                 <template v-slot:badge>
-                  <span v-if="filtersLen">{{ filtersLen }}</span>
                   <!-- <v-icon
                     dark
                     x-small
@@ -728,9 +727,13 @@ export default {
         Event.fire("groupType", item.value);
       }
       this.filterTask();
+    },
+    filtersLen(val){
+      console.log(val);
     }
   },
   created() {
+    console.log(this.filtersLen);
     this.tasksTags();
     this.getStatuses();
     Event.listen("loadTasks", data => this.paginate());
