@@ -70,8 +70,16 @@ export default {
             ],
             options: {
                 editable: false,
+                stack: false,
                 template: function(item, element, data) {
-                    return `<span></span>`;
+                    console.log(item);
+                    console.log(element);
+                    console.log(data);
+                    
+                    return `<span>${item.content}</span>`;
+                },
+                orientation:{
+                    axis:'both'
                 }
             },
             colors: [
@@ -95,7 +103,6 @@ export default {
         };
     },
     created() {
-        console.log(this.rand(1, 10));
         this.prepareData();
     },
     methods: {
@@ -114,10 +121,10 @@ export default {
                     group: timeset.task.responsible_id,
                     start: timeset.start_time,
                     end: timeset.end_time,
-                    content: timeset.start_time + " " + timeset.end_time,
+                    content: timeset.task.description,
                     className: this.localUsers.filter(user => {
                         return user.id == timeset.task.responsible_id;
-                    })[0].color
+                    })[0].color+' '+'white--text caption'
                 };
             });
         },
@@ -231,4 +238,7 @@ export default {
 // };
 </script>
 <style>
+.vis-item-content{
+    padding: 0px 10px !important;
+}
 </style>
