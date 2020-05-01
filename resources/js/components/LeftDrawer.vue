@@ -178,8 +178,8 @@ export default {
                     icon: "mdi-account-search",
                     text: "Задачи сотрудников",
                     url: "/users-tasks",
-                    positions: ["Программист", "РВЗ"],
-                    headOf: ["HR"],
+                    positions: ["РВЗ"],
+                    headOf: ["ОУПС"],
                     divisions: []
                 }
             ]
