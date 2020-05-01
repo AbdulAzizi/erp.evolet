@@ -23,7 +23,7 @@
                 xl="3"
                 class="pa-1 d-flex align-content-stretch"
             >
-                <user-card-horizontal :user="user" :link="userLink"/>
+                <user-card-horizontal :user="user" :link="true"/>
             </v-col>
         </v-row>
     </v-container>
