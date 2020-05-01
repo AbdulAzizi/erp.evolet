@@ -242,4 +242,9 @@ class UserController extends Controller
         }
         return $descriptions;
     }
+
+    public function tasks()
+    {
+        return view('users.tasks');
+    }
 }

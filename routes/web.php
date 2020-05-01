@@ -102,6 +102,8 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::post('/users/change/avatar/{id}', 'UserController@changeAvatar')->name('user.changeAvatar');
     
     Route::get('/timesets', 'TimesetController@index')->name('timesets.index');
+
+    Route::get('/users-tasks', 'UserController@tasks')->name('users.tasks');
 });
 
 Route::prefix('api')->group(function () {
@@ -136,5 +138,6 @@ Route::prefix('api')->group(function () {
     Route::get('/tasks/{id}/start', 'TaskController@start')->name('api.tasks.start');
     Route::get('/tasks/{id}/pause', 'TaskController@pause')->name('api.tasks.pause');
     Route::get('/tasks/{id}/stop', 'TaskController@stop')->name('api.tasks.stop');
+    Route::get('/users/tasks', 'TaskController@usersTasks')->name('api.users.tasks');
 
 });

@@ -6,6 +6,7 @@ use App\Division;
 use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
 use App\Filters\TaskFilters;
+use App\Filters\UserTaskFilters;
 use App\Option;
 use App\Question;
 use App\ResponsibilityDescription;
@@ -108,15 +109,15 @@ class TaskController extends Controller
         $tags = json_decode($request->existingTags);
         $poll = json_decode($request->poll);
 
-        if(count($newTags)){
+        if (count($newTags)) {
             foreach ($newTags as $newTag) {
                 // Create new tags and merge them to existing tags array
                 $tag = Tag::create(['name' => $newTag]);
-    
+
                 $division = Division::find(auth()->user()->division->id);
-    
+
                 $division->tags()->attach($tag);
-    
+
                 $tags[] = $tag->id;
             }
         }
@@ -187,7 +188,6 @@ class TaskController extends Controller
             $task->setTimesetEndtime();
 
             return view('tasks.show', compact('task'));
-
         } else {
             abort(404);
         }
@@ -534,5 +534,50 @@ class TaskController extends Controller
         $uniqueTags = collect($tags)->unique('id');
 
         return $uniqueTags->values()->all();
+    }
+
+    public function usersTasks(UserTaskFilters $filters)
+    {
+        $tasks = Task::filter($filters)->with(
+            'from',
+            'responsible',
+            'watchers',
+            'status',
+            'tags',
+            'responsibilityDescription'
+        )->orderBy('created_at', 'desc')->get();
+
+        return $tasks;
+    }
+
+    public function userTasksGroup(UserTaskFilters $filters, $divisionName)
+    {
+        $users = [];
+
+        $userIds = [];
+
+        $division = Division::where('name', $divisionName)->first();
+
+        if ($division) {
+
+            $divisionWithDepth = $division->withDepth()->descendantsAndSelf($division->id);
+
+            foreach ($divisionWithDepth as $division) {
+
+                foreach ($division->users as $user) {
+
+                    $users[] = $user;
+                }
+            }
+        }
+
+        foreach ($users as $user) {
+            
+            $userIds[] = $user->id;
+        }
+
+        $tasks = Task::filter($filters)->wherIn('responsible_id', $userIds)->orderBy('created_at', 'desc')->get();
+
+        return $tasks;
     }
 }
