@@ -171,7 +171,7 @@ export default {
                     text: "История задач",
                     url: "/timesets",
                     positions: [],
-                    headOf: ["ОРПО"],
+                    headOf: ["ОРПО","ОУПС"],
                     divisions: []
                 }
             ]
