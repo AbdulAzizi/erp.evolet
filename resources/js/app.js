@@ -372,6 +372,7 @@ Vue.component("bp-forms", require('./components/BP/BPForms.vue').default);
 Vue.component("bp-form", require('./components/BP/BPForm.vue').default);
 Vue.component("division-tags", require("./components/division/Tags.vue").default);
 Vue.component("views-timesets-index", require("./components/views/timesets/Index.vue").default);
+Vue.component("views-users-tasks", require("./components/views/users/Tasks.vue").default);
 
 /****************************TASKS********************************/
 Vue.component("task-title", require("./components/tasks/TaskTitle.vue").default);

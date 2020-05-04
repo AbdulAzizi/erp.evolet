@@ -173,6 +173,14 @@ export default {
                     positions: [],
                     headOf: ["ОРПО","ОУПС"],
                     divisions: []
+                },
+                {
+                    icon: "mdi-account-search",
+                    text: "Задачи сотрудников",
+                    url: "/users-tasks",
+                    positions: ["РВЗ"],
+                    headOf: ["ОУПС"],
+                    divisions: []
                 }
             ]
         };
