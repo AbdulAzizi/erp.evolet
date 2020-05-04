@@ -10,10 +10,7 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on:tooltip }">
           <v-btn icon v-on="{ ...tooltip, ...menu }">
-            <v-badge left overlap v-model="localItems.length">
-              <template v-slot:badge v-if="unreadItems() > 0">
-                <span>{{ unreadItems()}}</span>
-              </template>
+            <v-badge left overlap :value="unreadItems()" :content="unreadItems()">
               <v-icon color="grey darken-1">{{ icon }}</v-icon>
             </v-badge>
           </v-btn>
