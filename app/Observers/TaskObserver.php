@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\History;
 use App\Notifications\AssignedAsAuthor;
 use App\Notifications\AssignedToTask;
 use App\Task;
@@ -34,6 +35,17 @@ class TaskObserver
             }
 
             session()->flash('alerts', $alerts);
+            
+            History::create([
+                'user_id' => $task->from->id,
+                'description' => 
+                        '<a href="' . route("users.dashboard", $task->from->id) . '">' . $task->from->fullname . '</a> поставил(a) задачу
+                         <a href="' . route("users.dashboard", $task->responsible->id) . '">' . $task->responsible->fullname . '</a>',
+                'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+                'historyable_id' => $task->id,
+                'historyable_type' => 'App\Task',
+                'created_at' => date(now())
+            ]);
         }
 
     }
