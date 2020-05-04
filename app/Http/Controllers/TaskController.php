@@ -138,9 +138,6 @@ class TaskController extends Controller
             if (count($tags)) {
                 $task->tags()->attach($tags);
             }
-
-            //Log creation to tasks History
-            event(new TaskCreatedEvent($task));
         }
         // Redirect to Tasks Index page
         return redirect()->route('tasks.index');
@@ -164,6 +161,7 @@ class TaskController extends Controller
             'timeSets',
             'responsibilityDescription'
         )->find($id);
+        
         // check if task exists
         if ($task) {
             if ($task->from_type == "App\Process") {
