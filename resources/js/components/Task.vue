@@ -155,7 +155,7 @@
                             <v-icon>mdi-calendar-clock</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content>
-                            <v-list-item-title>{{ moment(task.deadline).format('D MMMM Y') }}</v-list-item-title>
+                            <v-list-item-title>{{ moment(item.deadline).local().format('DD-MM-Y hh:mm') }}</v-list-item-title>
                             <v-list-item-subtitle>Дедлайн</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
@@ -165,7 +165,7 @@
                             <v-icon>mdi-calendar-plus</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content>
-                            <v-list-item-title>{{ moment(task.created_at).format('D MMMM Y') }}</v-list-item-title>
+                            <v-list-item-title>{{ moment(item.created_at).local().format('DD-MM-Y hh:mm') }}</v-list-item-title>
                             <v-list-item-subtitle>Дата добавления</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
