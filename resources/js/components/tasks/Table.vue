@@ -116,10 +116,10 @@ export default {
         { text: "Описание", value: "description" },
         { text: "Время на задачу", value: "planned_time" },
         { text: "Дедлайн", value: "deadline" },
-        { text: "От", value: "from", sort: false },
-        { text: "Испол", value: "responsible", sort: false },
+        { text: "От", value: "from" },
+        { text: "Испол", value: "responsible" },
         { text: "Поставлена", value: "created_at" },
-        { text: "Статус", value: "status" },
+        { text: "Статус", value: "status.name" },
         { text: "Теги", value: "tags", width: 100 }
       ],
       selectedTask: null,
