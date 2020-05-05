@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Division;
-use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
 use App\Filters\TaskFilters;
 use App\Filters\UserTaskFilters;
@@ -164,7 +163,7 @@ class TaskController extends Controller
             'timeSets',
             'responsibilityDescription'
         )->find($id);
-        
+
         // check if task exists
         if ($task) {
             if ($task->from_type == "App\Process") {
@@ -236,7 +235,7 @@ class TaskController extends Controller
 
         $newResponsibleID = $request->responsible_id;
         $oldResponsible = $task->responsible;
-        
+
         $task->responsible_id = $newResponsibleID;
         $task->save();
         // load new responsible
@@ -412,16 +411,21 @@ class TaskController extends Controller
         // Add Event to History
         History::create([
             'user_id' => $task->responsible->id,
-            'description' => 
-                '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> закрыл задачу',
+            'description' =>
+            '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> закрыл задачу',
             'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
             'historyable_id' => $task->id,
             'historyable_type' => 'App\Task',
-            'created_at' => date(now())
+            'created_at' => date(now()),
         ]);
-        // Notify Author
-        if($task->from_type == "App\User"){
-            $task->from->notify(new TaskIsClosed($task));
+        
+        // Check if it is from a person
+        if ($task->from_type == "App\User") {
+            // Check id author and responsible is not a same persone
+            if ($task->from->id != $task->responsible->id) {
+                // Notify Author
+                $task->from->notify(new TaskIsClosed($task));
+            }
         }
 
         return $task;
@@ -569,7 +573,7 @@ class TaskController extends Controller
         }
 
         foreach ($users as $user) {
-            
+
             $userIds[] = $user->id;
         }
 
