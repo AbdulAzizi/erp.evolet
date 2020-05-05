@@ -107,7 +107,7 @@
               <template v-slot:selection="data">
                 <v-chip
                   @click="data.select"
-                  @click:close="removeItem(data.item.id)"
+                  @click:close="removeUser(data.item.id)"
                   v-bind="data.attrs"
                   :input-value="data.selected"
                   color="primary"
@@ -180,7 +180,7 @@
                   close
                   small
                   color="primary"
-                  @click:close="removeItem(data.item)"
+                  @click:close="removeTag(data.item.id)"
                 >{{data.item.name}}</v-chip>
               </template>
             </v-autocomplete>
@@ -253,7 +253,7 @@ export default {
       tags: [],
       selectedTags: [],
       priority: null,
-      divisions: this.loadDivisions(),
+      divisions: this.loadDivisions(), // it comes from app.js
       headers: [
         { text: "", value: "priority" },
         { text: "Задача", value: "title" },
@@ -290,6 +290,7 @@ export default {
       window.location.href = "tasks/" + item.id;
     },
     getFilteredTasks() {
+      // check filters length, if not empty, don't send response
       if (Object.keys(this.filters).length > 0) {
         axios
           .get(this.appPath("api/users/tasks"), {
@@ -311,8 +312,11 @@ export default {
         this.allUsers = res.data;
       });
     },
-    removeItem(itemId) {
-      this.users = this.users.filter(userId => userId !== itemId);
+    removeUser(userId) {
+      this.users = this.users.filter(itemId => itemId !== userId);
+    },
+    removeTag(tagId) {
+      this.selectedTags = this.selectedTags.filter(itemId => itemId !== tagId);
     },
     getStatuses() {
       if (this.taskStatuses.length == 0) {
@@ -326,6 +330,7 @@ export default {
         });
       }
     },
+    // Get tags of filtered tasks
     getTags(tasks) {
       tasks.forEach(task => {
         task.tags.forEach(tag => {
@@ -335,40 +340,29 @@ export default {
           });
         });
       });
+    },
+    // Set filters from forms and filter
+    setFiltersAndFilterTasks(value, item) {
+      if(Array.isArray(item)){
+        !item.length ? delete this.filters[value] : this.filters[value] = JSON.stringify(item);
+      } else {
+        !item ? delete this.filters[value] : this.filters[value] = item.id;
+      }
+      this.getFilteredTasks();
     }
   },
   watch: {
     users(items) {
-      if (!items.length) {
-        delete this.filters.user_id;
-      } else {
-        this.filters.user_id = JSON.stringify(items);
-      }
-      this.getFilteredTasks();
+      this.setFiltersAndFilterTasks('user_id', items);
     },
     priority(item) {
-      if (!item) {
-        delete this.filters.priority;
-      } else {
-        this.filters.priority = item.id;
-      }
-      this.getFilteredTasks();
+       this.setFiltersAndFilterTasks('priority', item);
     },
     statuses(items) {
-      if (!items.length) {
-        delete this.filters.status_id;
-      } else {
-        this.filters.status_id = JSON.stringify(items);
-      }
-      this.getFilteredTasks();
+      this.setFiltersAndFilterTasks('status_id', items);
     },
     selectedTags(items) {
-      if (!items.length) {
-        delete this.filters.tag_id;
-      } else {
-        this.filters.tag_id = JSON.stringify(items);
-      }
-      this.getFilteredTasks();
+      this.setFiltersAndFilterTasks('tag_id', items);
     }
   },
   created() {

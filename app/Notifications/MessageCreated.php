@@ -57,7 +57,7 @@ class MessageCreated extends Notification
             return [
                 'avatar' => $this->message->sender->img,
                 'title' =>  '<a href="' . route("profile.positions", $this->message->sender->id) . '">' . $this->message->sender->fullname . '</a>' .
-                    ' добавил комментарий ' . '<a href="#">' . mb_strimwidth($this->message->body, 0, 40, '...') . '</a> ' . ' в ' . '<a href="' . route('tasks.show', $task->id) . '">' . ' задаче ' . '</a>',
+                    ' добавил комментарий: ' . mb_strimwidth($this->message->body, 0, 40, '...') . ' в ' . '<a href="' . route('tasks.show', $task->id) . '">' . ' ' . mb_strimwidth($task->responsibilityDescription->text, 0, 40, '...') . '</a>',
             ];
         }
     }
@@ -78,7 +78,7 @@ class MessageCreated extends Notification
             return new BroadcastMessage([
                 'avatar' =>  $this->message->sender->img,
                 'title' =>  '<a href="' . route("profile.positions", $this->message->sender->id) . '">' . $this->message->sender->fullname . '</a>' .
-                    'добавил комментарий' . '<a href="#">' . mb_strimwidth($this->message->body, 0, 40, '...') . '</a> ' . ' в ' .  '<a href="' . route('tasks.show', $task->id) . '">' . ' задаче ' . '</a>',
+                    'добавил комментарий: ' . mb_strimwidth($this->message->body, 0, 40, '...') . ' в ' .  '<a href="' . route('tasks.show', $task->id) . '">' . ' ' . mb_strimwidth($task->responsibilityDescription->text, 0, 40, '...') . '</a>',
                 'notification' => $notifiable->notifications()->find($this->id)
             ]);
         }
