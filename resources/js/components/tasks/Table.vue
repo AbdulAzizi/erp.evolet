@@ -61,14 +61,14 @@
             <td>
               <span>{{durObj(item.planned_time)}}</span>
             </td>
-            <td>{{ moment(item.deadline).format('DD-MM-Y hh:mm') }}</td>
+            <td>{{ moment(item.deadline).local().format('DD-MM-Y hh:mm') }}</td>
             <td @click.stop="filter(item.from, 'filterByAuthor')">
               <avatar size="30" :user="item.from" :link="false" />
             </td>
             <td @click.stop="filter(item.responsible, 'filterByResponsible')">
               <avatar size="30" :user="item.responsible" :link="false" />
             </td>
-            <td>{{ moment(item.created_at).format('DD-MM-Y hh:mm') }}</td>
+            <td>{{ moment(item.created_at).local().format('DD-MM-Y hh:mm') }}</td>
             <td @click.stop="filter(item.status.id, 'filterByStatus')">{{ item.status.name }}</td>
             <td>
               <v-chip
