@@ -9,6 +9,7 @@ use App\Filters\UserTaskFilters;
 use App\History;
 use App\Notifications\ForwardedTask;
 use App\Notifications\TaskIsClosed;
+use App\Notifications\TaskIsStarted;
 use App\Option;
 use App\Question;
 use App\ResponsibilityDescription;
@@ -372,6 +373,27 @@ class TaskController extends Controller
         $task->save();
         //
         $task->setTimesetEndtime();
+
+        // Add Event to History
+        History::create([
+            'user_id' => $task->responsible->id,
+            'description' =>
+                '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> начал исполнять задачу',
+            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+        
+        // Check if it is from a person
+        if ($task->from_type == "App\User") {
+            // Check id author and responsible is not a same persone
+            if ($task->from->id != $task->responsible->id) {
+                // Notify Author
+                $task->from->notify(new TaskIsStarted($task));
+            }
+        }
+
         // return
         return $task;
     }
