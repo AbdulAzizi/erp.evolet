@@ -61,14 +61,14 @@
             <td>
               <span>{{durObj(item.planned_time)}}</span>
             </td>
-            <td>{{ moment(item.deadline).format('DD-MM-Y hh:mm') }}</td>
+            <td>{{ moment(item.deadline).local().format('DD-MM-Y hh:mm') }}</td>
             <td @click.stop="filter(item.from, 'filterByAuthor')">
               <avatar size="30" :user="item.from" :link="false" />
             </td>
             <td @click.stop="filter(item.responsible, 'filterByResponsible')">
               <avatar size="30" :user="item.responsible" :link="false" />
             </td>
-            <td>{{ moment(item.created_at).format('DD-MM-Y hh:mm') }}</td>
+            <td>{{ moment(item.created_at).local().format('DD-MM-Y hh:mm') }}</td>
             <td @click.stop="filter(item.status.id, 'filterByStatus')">{{ item.status.name }}</td>
             <td>
               <v-chip
@@ -116,10 +116,10 @@ export default {
         { text: "Описание", value: "description" },
         { text: "Время на задачу", value: "planned_time" },
         { text: "Дедлайн", value: "deadline" },
-        { text: "От", value: "from", sort: false },
-        { text: "Испол", value: "responsible", sort: false },
+        { text: "От", value: "from" },
+        { text: "Испол", value: "responsible" },
         { text: "Поставлена", value: "created_at" },
-        { text: "Статус", value: "status" },
+        { text: "Статус", value: "status.name" },
         { text: "Теги", value: "tags", width: 100 }
       ],
       selectedTask: null,

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Division;
-use App\Events\TaskCreatedEvent;
 use App\Events\TaskForwardedEvent;
 use App\Filters\TaskFilters;
 use App\Filters\UserTaskFilters;
+use App\History;
+use App\Notifications\ForwardedTask;
+use App\Notifications\TaskIsClosed;
+use App\Notifications\TaskIsStarted;
 use App\Option;
 use App\Question;
 use App\ResponsibilityDescription;
@@ -191,25 +194,6 @@ class TaskController extends Controller
         }
     }
 
-    public function update($id, Request $request)
-    {
-        $task = Task::find($id);
-
-        $taskFields = collect($task->getAttributes());
-
-        $updatedColumns = collect($request->all())->intersectByKeys($taskFields);
-
-        foreach ($updatedColumns as $columnName => $updatedValue) {
-            switch ($columnName) {
-                case 'responsible_id':
-                    $this->forwardTask($task, $updatedValue);
-                    break;
-            }
-        }
-
-        return redirect()->route('tasks.index');
-    }
-
     /**
      * Create a poll
      *
@@ -246,30 +230,31 @@ class TaskController extends Controller
         return $question;
     }
 
+    public function forward($id, Request $request)
+    {
+        $task = Task::find($id);
+
+        $newResponsibleID = $request->responsible_id;
+        $oldResponsible = $task->responsible;
+
+        $task->responsible_id = $newResponsibleID;
+        $task->save();
+        // load new responsible
+        $task->load('responsible');
+        // Alert
+        session()->flash('alerts', ["Задача делегированна успешно!"]);
+        // Create history task
+        event(new TaskForwardedEvent($oldResponsible, $task, $request->reason));
+        // Notify new responsible
+        $task->responsible->notify(new ForwardedTask($oldResponsible, $task));
+
+        return redirect()->route('tasks.index');
+    }
+
     /**
      * Helpers
      *
      */
-
-    private function forwardTask(Task $task, $newResponsibleID)
-    {
-        $oldTask = $task->replicate();
-
-        $author = auth()->user();
-        $authorDivision = $author->load('division')->division;
-
-        $isAuthorHead = $author->id === $authorDivision->head_id;
-
-        if (!$isAuthorHead) {
-            return;
-        }
-
-        $task->responsible_id = $newResponsibleID;
-
-        $task->save();
-
-        event(new TaskForwardedEvent($oldTask, $task));
-    }
 
     public function changeStatus(Request $request)
     {
@@ -388,6 +373,27 @@ class TaskController extends Controller
         $task->save();
         //
         $task->setTimesetEndtime();
+
+        // Add Event to History
+        History::create([
+            'user_id' => $task->responsible->id,
+            'description' =>
+                '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> начал исполнять задачу',
+            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+        
+        // Check if it is from a person
+        if ($task->from_type == "App\User") {
+            // Check id author and responsible is not a same persone
+            if ($task->from->id != $task->responsible->id) {
+                // Notify Author
+                $task->from->notify(new TaskIsStarted($task));
+            }
+        }
+
         // return
         return $task;
     }
@@ -423,6 +429,25 @@ class TaskController extends Controller
         if ($lastTimeSet->end_time == null) {
             $lastTimeSet->end_time = date(now());
             $lastTimeSet->save();
+        }
+        // Add Event to History
+        History::create([
+            'user_id' => $task->responsible->id,
+            'description' =>
+            '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> закрыл задачу',
+            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+        
+        // Check if it is from a person
+        if ($task->from_type == "App\User") {
+            // Check id author and responsible is not a same persone
+            if ($task->from->id != $task->responsible->id) {
+                // Notify Author
+                $task->from->notify(new TaskIsClosed($task));
+            }
         }
 
         return $task;

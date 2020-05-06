@@ -68,6 +68,8 @@
                     readonly
                     ref="selectedRespOrDescrip"
                     :rules="[v=> selectedRespOrDescrip.length != 0 || 'Обязательное поле']"
+                    hint="При выборе категории будет поставлена задача для каждой подкатегории"
+                    persistent-hint
                   >
                     <template v-slot:selection="data">
                       <v-chip small color="primary">{{ data.item.text }}</v-chip>

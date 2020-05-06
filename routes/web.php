@@ -23,7 +23,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/tasks', 'TaskController@index')->name('tasks.index');
     Route::post('/tasks', 'TaskController@store')->name('tasks.store');
     Route::get('/tasks/{id}', 'TaskController@show')->name('tasks.show')->middleware('task.ownership');
-    Route::put('/tasks/{id}', 'TaskController@update')->name('tasks.update');
+    Route::post('/tasks/{id}/forward', 'TaskController@forward')->name('tasks.forward');
 
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
 
