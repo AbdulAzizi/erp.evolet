@@ -7,8 +7,6 @@ use App\File;
 use App\Position;
 use App\PositionLevel;
 use App\Responsibility;
-use App\ResponsibilityDescription;
-use App\Task;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -203,13 +201,15 @@ class UserController extends Controller
 
         // $others = ResponsibilityDescription::where('title', 'Прочее')->first();
         // $intersactions->push($others);
-        
+
         // return $intersactions->all();
         $userIDs = $request->userIDs;
         $responsibilitiesToReturn = collect([]);
         if (count($userIDs) == 1) {
-            $responsibilitiesToReturn = User::with(['responsibilities.descriptions'])->find($userIDs)->first()->responsibilities;
-        } 
+            $responsibilitiesToReturn = User::with(['responsibilities' => function ($query) {
+                $query->has('descriptions')->with('descriptions');
+            }])->find($userIDs)->first()->responsibilities;
+        }
         $others = Responsibility::with('descriptions')->where('text', 'Прочее')->first();
         $responsibilitiesToReturn->push($others);
         return $responsibilitiesToReturn;
@@ -233,10 +233,9 @@ class UserController extends Controller
 
         $others = Responsibility::with('descriptions')->where('text', 'Прочее')->first();
         $descriptions[] = $others->descriptions->first();
-        
-        
-        foreach($user->responsibilities as $responsibility){
-            foreach($responsibility->descriptions as $description){
+
+        foreach ($user->responsibilities as $responsibility) {
+            foreach ($responsibility->descriptions as $description) {
                 $descriptions[] = $description;
             }
         }
