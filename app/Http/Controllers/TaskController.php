@@ -385,14 +385,14 @@ class TaskController extends Controller
             'created_at' => date(now()),
         ]);
         
-        // Check if it is from a person
-        if ($task->from_type == "App\User") {
-            // Check id author and responsible is not a same persone
-            if ($task->from->id != $task->responsible->id) {
-                // Notify Author
-                $task->from->notify(new TaskIsStarted($task));
-            }
-        }
+        // // Check if it is from a person
+        // if ($task->from_type == "App\User") {
+        //     // Check id author and responsible is not a same persone
+        //     if ($task->from->id != $task->responsible->id) {
+        //         // Notify Author
+        //         $task->from->notify(new TaskIsStarted($task));
+        //     }
+        // }
 
         // return
         return $task;
