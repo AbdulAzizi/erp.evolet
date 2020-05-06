@@ -2,12 +2,13 @@
   <div>
     <v-row>
       <v-col cols="11">
-        <v-card flat>
+        <v-card flat v-if="!divisionId">
           <v-card-text class="pa-2">Начните искать задачи сотрудников</v-card-text>
         </v-card>
+        <v-alert v-else dense dark height="38" class="ma-0" color="primary">{{ divisionName }}</v-alert>
       </v-col>
       <v-col cols="1">
-        <v-btn depressed block color="primary" height="38" @click="filtersMenu = true">
+        <v-btn depressed block :color="divisionId ? 'white' : 'primary'" height="38" @click="filtersMenu = true">
           <v-icon>mdi-filter</v-icon>
         </v-btn>
       </v-col>
@@ -103,6 +104,7 @@
               deletable-chips
               no-data-text="Нет сотрудников"
               multiple
+              :disabled="Boolean(divisionId)"
             >
               <template v-slot:selection="data">
                 <v-chip
@@ -129,6 +131,30 @@
                 </v-list-item-content>
               </template>
             </v-select>
+            <v-autocomplete
+              v-model="divisionId"
+              :items="divisionItems"
+              label="Выберите отдел"
+              class="mb-4"
+              item-text="name"
+              item-value="id"
+              outlined
+              flat
+              dense
+              hide-details
+              single-line
+              clearable
+              :disabled="users.length > 0"
+            >
+              <template v-slot:selection="data">
+                <div
+                  class="my-1 pa-2"
+                  @click="data.select"
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                >{{ data.item.name }}</div>
+              </template>
+            </v-autocomplete>
             <v-select
               v-model="statuses"
               :items="taskStatuses"
@@ -209,34 +235,13 @@
                 {{ data.item.name }}
               </template>
             </v-select>
-            <!-- <v-select
-              :items="divisions"
-              label="Выберите отдел"
-              class="mb-4"
-              item-text="name"
-              item-value="id"
-              outlined
-              flat
-              dense
-              hide-details
-              single-line
-              clearable
-              multiple
-            >
-              <template v-slot:selection="data">
-                <div
-                  class="my-1 pa-2"
-                  @click="data.select"
-                  v-bind="data.attrs"
-                  :input-value="data.selected"
-                  style="background: #6897f5; color: white; border-left-radius: 30%"
-                >{{ data.item.name }}</div>
-              </template>
-            </v-select> -->
           </v-form>
         </v-card-text>
       </v-card>
     </v-navigation-drawer>
+     <v-overlay v-if="loading" light opacity="0">
+      <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 <script>
@@ -253,7 +258,9 @@ export default {
       tags: [],
       selectedTags: [],
       priority: null,
-      divisions: this.loadDivisions(), // it comes from app.js
+      divisionId: null,
+      loading: false,
+      divisionItems: this.loadDivisions(), // it comes from app.js
       headers: [
         { text: "", value: "priority" },
         { text: "Задача", value: "title" },
@@ -290,8 +297,9 @@ export default {
       window.location.href = "tasks/" + item.id;
     },
     getFilteredTasks() {
-      // check filters length, if not empty, don't send response
+      // check filters length, if empty, don't send response
       if (Object.keys(this.filters).length > 0) {
+        this.loading = true;
         axios
           .get(this.appPath("api/users/tasks"), {
             params: {
@@ -301,11 +309,26 @@ export default {
           .then(res => {
             this.filteredTasks = res.data;
             this.getTags(res.data);
+            this.loading = false;
           });
       } else {
         this.filteredTasks = null;
         this.tags = [];
       }
+    },
+    getDivisionTasks() {
+      this.loading = true;
+      axios
+        .get(this.appPath(`api/divisions/${this.divisionId}/tasks`), {
+          params: {
+            ...this.filters
+          }
+        })
+        .then(res => {
+          this.filteredTasks = res.data;
+          this.getTags(res.data);
+          this.loading = false;
+        });
     },
     getUsers() {
       axios.get(this.appPath("api/users")).then(res => {
@@ -343,26 +366,43 @@ export default {
     },
     // Set filters from forms and filter
     setFiltersAndFilterTasks(value, item) {
-      if(Array.isArray(item)){
-        !item.length ? delete this.filters[value] : this.filters[value] = JSON.stringify(item);
+      if (Array.isArray(item)) {
+        !item.length
+          ? delete this.filters[value]
+          : (this.filters[value] = JSON.stringify(item));
       } else {
-        !item ? delete this.filters[value] : this.filters[value] = item.id;
+        !item ? delete this.filters[value] : (this.filters[value] = item.id);
       }
-      this.getFilteredTasks();
+      this.divisionId ? this.getDivisionTasks() : this.getFilteredTasks();
+    }
+  },
+  computed: {
+    divisionName() {
+      let name = null;
+      this.divisionId
+        ? this.divisionItems.filter(division => {
+            division.id == this.divisionId ? (name = division.name) : "";
+          })
+        : "";
+
+      return name;
     }
   },
   watch: {
     users(items) {
-      this.setFiltersAndFilterTasks('user_id', items);
+      this.setFiltersAndFilterTasks("user_id", items);
     },
     priority(item) {
-       this.setFiltersAndFilterTasks('priority', item);
+      this.setFiltersAndFilterTasks("priority", item);
     },
     statuses(items) {
-      this.setFiltersAndFilterTasks('status_id', items);
+      this.setFiltersAndFilterTasks("status_id", items);
     },
     selectedTags(items) {
-      this.setFiltersAndFilterTasks('tag_id', items);
+      this.setFiltersAndFilterTasks("tag_id", items);
+    },
+    divisionId(id) {
+      id ? this.getDivisionTasks() : (this.filteredTasks = this.tags = null);
     }
   },
   created() {

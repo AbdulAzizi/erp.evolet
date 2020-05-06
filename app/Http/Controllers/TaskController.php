@@ -161,7 +161,7 @@ class TaskController extends Controller
             'timeSets',
             'responsibilityDescription'
         )->find($id);
-        
+
         // check if task exists
         if ($task) {
             if ($task->from_type == "App\Process") {
@@ -548,17 +548,17 @@ class TaskController extends Controller
         return $tasks;
     }
 
-    public function userTasksGroup(UserTaskFilters $filters, $divisionName)
+    public function divisionTasks(UserTaskFilters $filters, $id)
     {
         $users = [];
 
         $userIds = [];
 
-        $division = Division::where('name', $divisionName)->first();
+        $division = Division::find($id);
 
         if ($division) {
 
-            $divisionWithDepth = $division->withDepth()->descendantsAndSelf($division->id);
+            $divisionWithDepth = $division->withDepth()->descendantsAndSelf($id);
 
             foreach ($divisionWithDepth as $division) {
 
@@ -570,11 +570,18 @@ class TaskController extends Controller
         }
 
         foreach ($users as $user) {
-            
+
             $userIds[] = $user->id;
         }
 
-        $tasks = Task::filter($filters)->wherIn('responsible_id', $userIds)->orderBy('created_at', 'desc')->get();
+        $tasks = Task::filter($filters)->whereIn('responsible_id', $userIds)->with(
+            'from',
+            'responsible',
+            'watchers',
+            'status',
+            'tags',
+            'responsibilityDescription'
+        )->orderBy('created_at', 'desc')->get();
 
         return $tasks;
     }

@@ -139,5 +139,6 @@ Route::prefix('api')->group(function () {
     Route::get('/tasks/{id}/pause', 'TaskController@pause')->name('api.tasks.pause');
     Route::get('/tasks/{id}/stop', 'TaskController@stop')->name('api.tasks.stop');
     Route::get('/users/tasks', 'TaskController@usersTasks')->name('api.users.tasks');
+    Route::get('/divisions/{id}/tasks', 'TaskController@divisionTasks')->name('api.divisions.tasks');
 
 });
