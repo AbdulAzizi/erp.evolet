@@ -525,13 +525,22 @@ class TaskController extends Controller
         $task->delete();
     }
 
-    public function updateResponsibilityDescription($id, Request $request)
+    public function responsibilitydescription($id, Request $request)
     {
         $task = Task::find($id);
         $task->responsibilityDescription()->associate($request->responsibility_description_id);
         $task->save();
 
         return ResponsibilityDescription::find($request->responsibility_description_id);
+    }
+
+    public function description($id, Request $request)
+    {
+        $task = Task::find($id);
+        $task->description = $request->description;
+        $task->save();
+
+        return $task->description;
     }
 
     public function tags()

@@ -64,6 +64,7 @@ export default {
                     // );
                     this.editing = false;
                     this.title = resp.data.text;
+                    Event.fire('notify', ['Категория задачи успешно изменена']);
                 });
         },
         fetchResponsibilityDescription() {

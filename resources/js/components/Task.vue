@@ -65,10 +65,9 @@
                                     class="font-weight-medium pb-1 grey--text"
                                 >Просмотрено: {{ moment(item.read_at).local().format('lll') }}</div>
                             </div>
-                            <div v-if="task.description" class="pb-3">
-                                <div class="font-weight-medium pb-1">Описание</div>
-                                <div v-html="task.description"></div>
-                            </div>
+
+                            <task-description :task="task" :edit="edit" />
+
                             <div v-if="task.question_tasks.length" class="pb-3">
                                 <div class="font-weight-medium pb-1">Опрос</div>
                                 <poll-form
