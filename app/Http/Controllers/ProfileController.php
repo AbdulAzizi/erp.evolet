@@ -26,7 +26,8 @@ class ProfileController extends Controller
 
         $editable = false;
 
-        if (\Auth::user()->positionLevel->name == "Руководитель" && \Auth::user()->division->id == $user->division->id) {
+        if (
+            (\Auth::user()->positionLevel->name == "Руководитель" && \Auth::user()->division->id == $user->division->id) || \Auth::user()->fullname == 'Абдулазиз Нуров') {
             $editable = true;
         }
 
