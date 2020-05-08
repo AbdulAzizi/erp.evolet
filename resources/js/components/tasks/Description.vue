@@ -6,7 +6,7 @@
         </v-btn>
         <v-textarea
             ref="description"
-            v-if="editing"
+            v-show="editing"
             label="Описание"
             counter="300"
             rows="5"
@@ -15,9 +15,8 @@
             rounded
             outlined
             @blur="save"
-            autofocus
         />
-        <div v-else v-html="description"></div>
+        <div v-show="!editing" v-html="description"></div>
     </div>
 </template>
 <script>
@@ -41,7 +40,10 @@ export default {
     },
     methods: {
         save() {
-            if (this.temporaryDescription != "") {
+            if (
+                this.temporaryDescription != "" &&
+                this.temporaryDescription != this.description
+            ) {
                 // save axios
                 axios
                     .put(this.appPath(`api/tasks/${this.id}/description`), {
@@ -49,7 +51,9 @@ export default {
                     })
                     .then(resp => {
                         this.description = resp.data;
-                        Event.fire('notify', ['Описание задачи успешно изменено']);
+                        Event.fire("notify", [
+                            "Описание задачи успешно изменено"
+                        ]);
                     });
             }
             this.editing = false;
@@ -58,6 +62,9 @@ export default {
     watch: {
         editing() {
             this.temporaryDescription = this.description;
+            this.$nextTick(() => {
+                this.$refs.description.focus();
+            });
         },
         edit(val) {
             if (!val) {

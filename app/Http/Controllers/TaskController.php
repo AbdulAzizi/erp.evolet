@@ -528,15 +528,43 @@ class TaskController extends Controller
     public function responsibilitydescription($id, Request $request)
     {
         $task = Task::find($id);
+
+        $responsibilityDescription = ResponsibilityDescription::find($request->responsibility_description_id);
+
+        // Add Event to History
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' =>
+                '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) категорию задачи с 
+                <span class="primary--text">' . $task->responsibilityDescription->text . '</span> на <span class="primary--text">' . $responsibilityDescription->text . '</span>',
+            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
         $task->responsibilityDescription()->associate($request->responsibility_description_id);
         $task->save();
 
-        return ResponsibilityDescription::find($request->responsibility_description_id);
+        return $responsibilityDescription;
     }
 
     public function description($id, Request $request)
     {
         $task = Task::find($id);
+
+        // Add Event to History
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' =>
+                '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) описание задачи с 
+                <span class="primary--text">' . $task->description . '</span> на <span class="primary--text">' . $request->description . '</span>',
+            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
         $task->description = $request->description;
         $task->save();
 

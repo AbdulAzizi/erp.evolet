@@ -292,12 +292,12 @@ export default {
         Event.listen(`tasks/${this.task.id}/status/changed`, status => {
             this.task.status = status;
         });
-        // Event.listen(
-        //     `tasks/${this.task.id}/responsibilitydescription/changed`, description =>{
-        //         this.task.responsibility_description_id = description.id;
-        //         this.task.responsibilityDescription = description;
-        //     }
-        // );
+        Event.listen(
+            `tasks/${this.task.id}/responsibilitydescription/changed`, description =>{
+                this.task.responsibility_description_id = description.id;
+                this.task.responsibility_description = description;
+            }
+        );
     },
     watch: {
         item(v) {

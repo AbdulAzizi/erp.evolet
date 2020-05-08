@@ -6,11 +6,11 @@
         </v-btn>
 
         <v-autocomplete
-            v-if="editing"
+            ref="responsibilityDescrition"
+            v-show="editing"
             v-model="selectedResponsibilityDescritionID"
             rounded
             dense
-            :disabled="userResponsibilityDescriptions.length == 0"
             :items="userResponsibilityDescriptions"
             item-text="text"
             item-value="id"
@@ -18,6 +18,7 @@
             hide-details
             outlined
             @blur="save"
+            :disabled="userResponsibilityDescriptions.length == 0"
         >
             <template v-slot:item="data">
                 <v-list-item-content>{{data.item.text}}</v-list-item-content>
@@ -47,25 +48,33 @@ export default {
     },
     methods: {
         save() {
-            axios
-                .put(
-                    this.appPath(
-                        `api/tasks/${this.task.id}/responsibilitydescription`
-                    ),
-                    {
-                        responsibility_description_id: this
-                            .selectedResponsibilityDescritionID
-                    }
-                )
-                .then(resp => {
-                    // Event.fire(
-                    //     `tasks/${this.task.id}/responsibilitydescription/changed`,
-                    //     resp.data
-                    // );
-                    this.editing = false;
-                    this.title = resp.data.text;
-                    Event.fire('notify', ['Категория задачи успешно изменена']);
-                });
+            // Check if responsibility_description is changed
+            if (
+                this.task.responsibility_description.id !=
+                this.selectedResponsibilityDescritionID
+            ) {
+                axios
+                    .put(
+                        this.appPath(
+                            `api/tasks/${this.task.id}/responsibilitydescription`
+                        ),
+                        {
+                            responsibility_description_id: this
+                                .selectedResponsibilityDescritionID
+                        }
+                    )
+                    .then(resp => {
+                        Event.fire(
+                            `tasks/${this.task.id}/responsibilitydescription/changed`,
+                            resp.data
+                        );
+                        this.title = resp.data.text;
+                        Event.fire("notify", [
+                            "Категория задачи успешно изменена"
+                        ]);
+                    });
+            }
+            this.editing = false;
         },
         fetchResponsibilityDescription() {
             axios
@@ -76,6 +85,9 @@ export default {
                 )
                 .then(response => {
                     this.userResponsibilityDescriptions = response.data;
+                    this.$nextTick(() => {
+                        this.$refs.responsibilityDescrition.focus();
+                    });
                 });
         }
     },
@@ -85,10 +97,15 @@ export default {
                 this.fetchResponsibilityDescription();
             }
         },
-        edit(val){
-            if(!val){
+        edit(val) {
+            if (!val) {
                 this.editing = false;
             }
+        },
+        task(task) {
+            this.selectedResponsibilityDescritionID =
+                task.responsibility_description.id;
+            this.title = task.responsibility_description.text;
         }
     }
 };
