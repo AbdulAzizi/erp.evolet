@@ -96,4 +96,11 @@ class ProfileController extends Controller
 
         return $timesets;
     }
+
+    public function setTasks($id)
+    {
+        $tasks = Task::where('responsible_id', $id)->get()->groupBy('from_id');
+
+        return view('users.setTasks', compact('tasks'));
+    }
 }

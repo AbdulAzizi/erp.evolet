@@ -331,6 +331,7 @@ Vue.component("users-show", require("./components/views/users/Show.vue").default
 Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vue").default);
 Vue.component("views-profile-tasks", require("./components/views/profile/Tasks.vue").default);
 Vue.component("tasks-group-view", require('./components/tasks/GroupTasks.vue').default);
+Vue.component("views-users-set-tasks", require('./components/views/users/SetTasks.vue').default);
 
 
 Vue.component("positions", require("./components/Positions.vue").default);
