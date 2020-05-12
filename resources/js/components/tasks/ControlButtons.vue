@@ -6,6 +6,7 @@
                 style="padding:2px 0px; width:100%;"
                 class="grey lighten-2 mb-2 text-center"
             >
+                {{moment(duration).days() }} :
                 {{moment(duration).hours() }} :
                 {{moment(duration).minutes() }} :
                 {{moment(duration).seconds() }}
