@@ -375,7 +375,8 @@ Vue.component("views-timesets-index", require("./components/views/timesets/Index
 Vue.component("views-users-tasks", require("./components/views/users/Tasks.vue").default);
 
 /****************************TASKS********************************/
-Vue.component("task-title", require("./components/tasks/TaskTitle.vue").default);
+Vue.component("task-description", require("./components/tasks/Description.vue").default);
+Vue.component("task-title", require("./components/tasks/Title.vue").default);
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
 Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
 Vue.component("tasks-calendar", require("./components/tasks/Calendar.vue").default);
