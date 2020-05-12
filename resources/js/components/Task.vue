@@ -65,10 +65,9 @@
                                     class="font-weight-medium pb-1 grey--text"
                                 >Просмотрено: {{ moment(item.read_at).local().format('lll') }}</div>
                             </div>
-                            <div v-if="task.description" class="pb-3">
-                                <div class="font-weight-medium pb-1">Описание</div>
-                                <div v-html="task.description"></div>
-                            </div>
+
+                            <task-description :task="task" :edit="edit" />
+
                             <div v-if="task.question_tasks.length" class="pb-3">
                                 <div class="font-weight-medium pb-1">Опрос</div>
                                 <poll-form
@@ -293,12 +292,12 @@ export default {
         Event.listen(`tasks/${this.task.id}/status/changed`, status => {
             this.task.status = status;
         });
-        // Event.listen(
-        //     `tasks/${this.task.id}/responsibilitydescription/changed`, description =>{
-        //         this.task.responsibility_description_id = description.id;
-        //         this.task.responsibilityDescription = description;
-        //     }
-        // );
+        Event.listen(
+            `tasks/${this.task.id}/responsibilitydescription/changed`, description =>{
+                this.task.responsibility_description_id = description.id;
+                this.task.responsibility_description = description;
+            }
+        );
     },
     watch: {
         item(v) {

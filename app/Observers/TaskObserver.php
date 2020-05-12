@@ -19,12 +19,15 @@ class TaskObserver
     }
     public function created(Task $task)
     {
-        // Notify Assignees
-        $task->responsible->notify(new AssignedToTask($task->from, $task));
+        // Dont notify when author and assignee are the same person
+        if( $task->responsible->id !=  $task->from->id && $task->from_type == "App\User"){
+            // Notify Assignees
+            $task->responsible->notify(new AssignedToTask($task->from, $task));
+            // Notify Author
+            // $task->from->notify(new AssignedAsAuthor($task));
+        }
 
         if ($task->from_type == "App\User") {
-            // Notify Author
-            $task->from->notify(new AssignedAsAuthor($task));
 
             // Make flash notification
             $alerts = session()->get('alerts');
