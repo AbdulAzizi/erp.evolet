@@ -545,9 +545,9 @@ export default {
       selectedPriority: null,
       prioritiesDialog: false,
       priorities: [
-        { id: 0, label: "Низкий", color: "light-blue lighten-4" },
-        { id: 1, label: "Средний", color: "amber lighten-1" },
-        { id: 2, label: "Высокий", color: "red" }
+        { id: 0, label: "Низкий", color: "green lighten-3" },
+        { id: 1, label: "Средний", color: "blue lighten-3" },
+        { id: 2, label: "Высокий", color: "red lighten-3" }
       ],
 
       reapeatTaskDialog: false,
