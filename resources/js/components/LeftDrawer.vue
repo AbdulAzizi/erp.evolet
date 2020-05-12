@@ -171,15 +171,15 @@ export default {
                     text: "История задач",
                     url: "/timesets",
                     positions: [],
-                    headOf: ["ОРПО","ОУПС"],
+                    headOf: ["*"],
                     divisions: []
                 },
                 {
                     icon: "mdi-account-search",
                     text: "Задачи сотрудников",
                     url: "/users-tasks",
-                    positions: [],
-                    headOf: ["*"],
+                    positions: ["РВЗ"],
+                    headOf: ["ОУПС"],
                     divisions: []
                 }
             ]
