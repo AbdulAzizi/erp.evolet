@@ -251,6 +251,11 @@ export default {
                     title: "Резюме",
                     path: `/users/${this.user.id}/cv`,
                     icon: "mdi-account-card-details"
+                },
+                {
+                    title: "ПЗ",
+                    path: `/users/${this.user.id}/setTasks`,
+                    icon: "mdi-calendar"
                 }
             ],
             url: window.location.pathname
