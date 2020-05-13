@@ -15,11 +15,15 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on:tooltip }">
           <img v-on="{ ...tooltip }" :src="thumb(user.img) " alt="avatar" />
+          
         </template>
         <span v-if="user.surname">{{ user.name }} {{ user.surname }}</span>
         <span v-else>Процесс: {{ user.name }}</span>
       </v-tooltip>
     </v-avatar>
+      <span v-if="fullname">
+        {{user.fullname}}
+      </span>
 </div>
 
 </template>
@@ -36,6 +40,9 @@ export default {
       default:40
     },
     link: {
+      required: false
+    },
+    fullname: {
       required: false
     }
   }

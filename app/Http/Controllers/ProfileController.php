@@ -100,8 +100,10 @@ class ProfileController extends Controller
 
     public function setTasks($id)
     {
-        $tasks = Task::where('responsible_id', $id)->get()->groupBy('from_id');
+        $fromTasks = Task::where('responsible_id', $id)->with('responsibilityDescription', 'from', 'responsible', 'tags', 'status')->get()->groupBy('from_id');
 
-        return view('users.setTasks', compact('tasks'));
+        $toTasks = Task::where('from_id', $id)->with('responsibilityDescription', 'from', 'responsible', 'tags', 'status')->get()->groupBy('responsible_id');
+
+        return view('users.setTasks', compact('fromTasks', 'toTasks'));
     }
 }
