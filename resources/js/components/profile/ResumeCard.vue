@@ -28,23 +28,24 @@
         </v-list-item>
         <template v-for="(item, index) in resume">
           <v-hover v-slot:default="{ hover }" :key="'hover-' + index">
-            <v-list-item :key="'item-' + index">
+            <v-list-item :key="'item-' + index" three-line>
               <v-list-item-avatar>
                 <v-icon>{{main_icon}}</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>
+                <div>
                   {{item[firstMainLine]}}
                   <span
                     class="grey--text text--darken-1"
                   >{{item[firstSecondaryLine] ? ' &#183; ' + item[firstSecondaryLine] : ''}}</span>
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  <span v-for="(secondLineItem, index) in secondLineItems" :key="index">
+                </div>
+               
+                  <div>
+                  <span v-for="(secondLineItem, index) in secondLineItems" :key="index" class="text--secondary" style="font-size: 14px">
                     {{item[secondLineItem]}}
                     <span v-if="secondLineItems.length > index + 1">&#183;</span>
                   </span>
-                </v-list-item-subtitle>
+                  </div>
               </v-list-item-content>
               <v-list-item-action v-if="hover && check">
                 <v-btn
