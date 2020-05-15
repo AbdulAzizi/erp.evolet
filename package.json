@@ -29,6 +29,7 @@
         "moment-timezone": "^0.5.28",
         "pusher-js": "^5.1.1",
         "v-infinite-scroll": "^1.0.4",
+        "v-mask": "^2.1.0",
         "vue2vis": "0.0.18",
         "vuedraggable": "^2.23.2",
         "vuetify": "^2.2.23"

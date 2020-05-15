@@ -9,33 +9,115 @@
             <v-toolbar-title>
               <h4>Основное</h4>
             </v-toolbar-title>
+            <v-spacer />
+            <v-btn icon v-if="user.id == permit" @click="edit = true">
+              <v-icon>mdi-pencil-circle</v-icon>
+            </v-btn>
           </v-toolbar>
           <v-list dense>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-calendar-range</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>{{ moment(user.resume[0].birthday).format("L") }}</v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-phone</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].phone}}</v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-email</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].email}}</v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-human-male-female</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>{{user.resume[0].male_female}}</v-list-item-content>
-            </v-list-item>
+            <v-form ref="editForm">
+              <v-list-item v-if="!edit">
+                <v-list-item-icon>
+                  <v-icon>mdi-calendar-range</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>{{ moment(birthday).format("L") }}</v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="edit">
+                <v-list-item-content>
+                  <v-dialog
+                    ref="dialog"
+                    v-model="modal"
+                    :return-value.sync="birthday"
+                    persistent
+                    width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="birthday"
+                        label="День рождение"
+                        outlined
+                        v-on="on"
+                        dense
+                        :rules="required"
+                        hide-details
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="birthday" scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="modal = false">Отмена</v-btn>
+                      <v-btn text color="primary" @click="$refs.dialog.save(birthday)">Сохранить</v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="!edit">
+                <v-list-item-icon>
+                  <v-icon>mdi-phone</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>{{phone}}</v-list-item-content>
+              </v-list-item>
+              <v-list-item v-show="edit">
+                <v-list-item-content>
+                  <v-text-field
+                  v-model="phone"
+                  v-mask="'###-##-##-##'"
+                  label="Номер телефона"
+                  outlined
+                  dense
+                  :rules="required"
+                  hide-details>
+                  </v-text-field>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="!edit">
+                <v-list-item-icon>
+                  <v-icon>mdi-email</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>{{email}}</v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="edit">
+                <v-list-item-content>
+                  <v-text-field
+                  v-model="email"
+                  label="Эл. почта"
+                  outlined
+                  dense
+                  :rules="required"
+                  hide-details
+                  >
+                  </v-text-field>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="!edit">
+                <v-list-item-icon>
+                  <v-icon>mdi-human-male-female</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>{{gender}}</v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="edit">
+                <v-list-item-content>
+                  <v-select
+                  v-model="gender"
+                  label="Выберите пол"
+                  :items="['Мужской', 'Женский']"
+                  outlined
+                  dense
+                  :rules="required"
+                  hide-details>
+                  </v-select>
+                </v-list-item-content>
+              </v-list-item>
+            </v-form>
           </v-list>
+          <v-card-actions v-if="edit">
+            <v-spacer />
+            <v-btn text color="primary" @click="cancelEdit()">
+              Отмена
+            </v-btn>
+            <v-btn color="primary" @click="editMainInfo()">
+              Изменить
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
@@ -176,17 +258,26 @@
 </template>
 
 <script>
+import { VueMaskDirective } from 'v-mask';
+Vue.directive('mask', VueMaskDirective);
 export default {
   props: ["user", "permit"],
 
   data() {
     return {
+      edit: false,
+      modal: false,
+      required: [v => !!v || "Форма должна быть заполнена"],
       localUser: this.user,
+      birthday: this.user.resume[0].birthday,
+      phone: this.user.resume[0].phone,
+      email: this.user.resume[0].email,
+      gender: this.user.resume[0].male_female,
       showEdit: false,
       listenEventName: null,
       education: {
         colsPerRow: [4, 4, 4, 12, 12],
-        event: 'educations',
+        event: "educations",
         fields: [
           {
             label: "Степень",
@@ -223,7 +314,7 @@ export default {
       },
       job: {
         colsPerRow: [4, 4, 4, 12, 12],
-        event: 'jobs',
+        event: "jobs",
         fields: [
           {
             label: "Название",
@@ -259,7 +350,7 @@ export default {
       },
       family: {
         colsPerRow: [4, 4, 4],
-        event: 'families',
+        event: "families",
         fields: [
           {
             label: "Степень родства",
@@ -284,7 +375,7 @@ export default {
       },
       language: {
         colsPerRow: [6, 6],
-        event: 'languages',
+        event: "languages",
         fields: [
           {
             label: "Язык",
@@ -303,7 +394,7 @@ export default {
       },
       achievment: {
         colsPerRow: [12],
-        event: 'achievments',
+        event: "achievments",
         fields: [
           {
             label: "Тип",
@@ -321,7 +412,7 @@ export default {
       },
       skills: {
         colsPerRow: [12],
-        event:'skills',
+        event: "skills",
         fields: [
           {
             label: "Описание",
@@ -340,7 +431,31 @@ export default {
       let b = this.moment(start);
       return a.diff(b, "years");
     },
-     defineEvent() {
+    cancelEdit(){
+      this.edit = false;
+      this.birthday = this.user.resume[0].birthday;
+      this.phone = this.user.resume[0].phone;
+      this.email = this.user.resume[0].email;
+      this.gender = this.user.resume[0].male_female;
+    },
+    editMainInfo(){
+      const formValid = this.$refs.editForm.validate();
+      if(formValid){
+        axios.post(this.appPath(`api/resume/${this.user.resume[0].id}/edit`), {
+          phone: this.phone.split('-').join(),
+          email: this.email,
+          gender: this.gender,
+          birthday: this.birthday
+        }).then(res => {
+          this.edit = false;
+          this.birthday = res.data.birthday;
+          this.phone = res.data.phone;
+          this.email = res.data.email;
+          this.gender = res.data.male_female;
+        }).catch(err => console.error(err));
+      }
+    },
+    defineEvent() {
       Event.listen("passDataEvent", data => {
         this.listenEventName = data;
       });
@@ -356,7 +471,7 @@ export default {
     this.defineEvent();
   },
   watch: {
-    listenEventName(element){
+    listenEventName(element) {
       this.listenEvents(element);
     }
   }
