@@ -33,7 +33,7 @@
             </v-col>
         </v-row>
         <!-- Display Divisions poistions -->
-        <v-expansion-panels>
+        <v-expansion-panels mandatory>
             <v-expansion-panel v-for="(division, index) in divisions" :key="'panels-'+index">
                 <v-expansion-panel-header>{{ division.name }}</v-expansion-panel-header>
                 <v-expansion-panel-content class="grey lighten-2">

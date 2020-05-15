@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels accordion class="d-inline-flex justify-end division-expansion-panel">
+  <v-expansion-panels accordion mandatory class="d-inline-flex justify-end division-expansion-panel">
     <v-dialog eager width="600" v-model="addEmployeeDialog">
       <add-employee :division="localDivision" :addHeadEmployee="addHeadEmployee"/>
     </v-dialog>
