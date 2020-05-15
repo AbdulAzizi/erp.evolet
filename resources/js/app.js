@@ -14,8 +14,6 @@ import "vuetify/dist/vuetify.min.css";
 // import "material-design-icons-iconfont/dist/material-design-icons.css";
 import "@mdi/font/css/materialdesignicons.css";
 import moment from "moment-timezone";
-import { Timeline } from 'vue2vis';
-import "vue2vis/dist/vue2vis.css";
 
 const vuetifyOptions = {
     theme: {
@@ -264,7 +262,6 @@ Vue.mixin({
 });
 
 /****************************COMPONENTS********************************/
-Vue.component('timeline', Timeline);
 Vue.component("alert", require("./components/Alert.vue").default);
 Vue.component("alerts", require("./components/Alerts.vue").default);
 Vue.component("navbar", require("./components/Navbar.vue").default);
