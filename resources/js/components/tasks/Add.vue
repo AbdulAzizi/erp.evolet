@@ -140,7 +140,7 @@
                                 }"
                                 v-model="deadline"
                             />
-                            <input type="hidden" name="deadline" :value="moment(new Date(deadline) ).utc().format('Y-MM-DD hh:mm')" />
+                            <input type="hidden" name="deadline" :value="deadlineWithTz" />
                         </v-col>
                         <v-col cols="12" class="py-0">
                             <input type="hidden" name="estimatedTaskTime" :value="estimateTime" />
@@ -773,6 +773,12 @@ export default {
         }
     },
     computed: {
+        deadlineWithTz() {
+            let offset = new Date().getTimezoneOffset();
+            return this.moment(this.deadline, "YYYY-MM-DD hh:mm").utcOffset(offset).format(
+                "YYYY-MM-DD hh:mm"
+            );
+        },
         estimatedTaskTime() {
             return {
                 days: this.estimateDays,
