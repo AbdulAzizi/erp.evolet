@@ -426,6 +426,10 @@ export default {
         {
           name: "Описание задачи",
           value: "description"
+        },
+        {
+          name: "Автор задачи",
+          value: "from_id"
         }
       ],
       loading: false
@@ -727,13 +731,9 @@ export default {
         Event.fire("groupType", item.value);
       }
       this.filterTask();
-    },
-    filtersLen(val){
-      console.log(val);
     }
   },
   created() {
-    console.log(this.filtersLen);
     this.tasksTags();
     this.getStatuses();
     Event.listen("loadTasks", data => this.paginate());

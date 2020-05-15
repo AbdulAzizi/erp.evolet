@@ -2,7 +2,11 @@
   <div class="group_tasks">
     <v-expansion-panels v-for="(task, index) in localTasks" :key="index">
       <v-expansion-panel class="mb-3">
-        <v-expansion-panel-header>{{ groupType == "description" ? task[0].description : task[0].responsibility_description.text}}</v-expansion-panel-header>
+        <v-expansion-panel-header v-if="groupType == 'description'">{{ task[0].description}}</v-expansion-panel-header>
+        <v-expansion-panel-header v-if="groupType == 'from_id'">
+           <avatar size="30" :user="task[0].from" :link="true" :fullname="true" />
+        </v-expansion-panel-header>
+        <v-expansion-panel-header v-if="groupType == 'responsibility_description_id'">{{ task[0].responsibility_description.text}}</v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-infinite-scroll style="max-height: 80vh; overflow-y: scroll;">
             <v-data-table

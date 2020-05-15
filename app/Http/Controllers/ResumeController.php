@@ -31,6 +31,22 @@ class ResumeController extends Controller
         return view('profile.curriculum', compact('user'));
     }
 
+    public function edit(Request $request, $id)
+    {
+        $resume = Resume::find($id);
+
+        $resume->update([
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'birthday' => $request->birthday,
+            'male_female' => $request->gender
+        ]);
+
+        $resume->save();
+
+        return $resume;
+    }
+
     public function create(Request $request)
     {
         $gender = json_decode($request->gender);
