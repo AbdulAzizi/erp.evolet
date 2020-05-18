@@ -44,7 +44,7 @@ class TaskObserver
                 'description' => 
                         '<a href="' . route("users.dashboard", $task->from->id) . '">' . $task->from->fullname . '</a> поставил(a) задачу
                          <a href="' . route("users.dashboard", $task->responsible->id) . '">' . $task->responsible->fullname . '</a>',
-                'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+                'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
                 'historyable_id' => $task->id,
                 'historyable_type' => 'App\Task',
                 'created_at' => date(now())
