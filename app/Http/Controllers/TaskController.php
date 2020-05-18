@@ -9,7 +9,6 @@ use App\Filters\UserTaskFilters;
 use App\History;
 use App\Notifications\ForwardedTask;
 use App\Notifications\TaskIsClosed;
-use App\Notifications\TaskIsStarted;
 use App\Option;
 use App\Question;
 use App\ResponsibilityDescription;
@@ -378,13 +377,13 @@ class TaskController extends Controller
         History::create([
             'user_id' => $task->responsible->id,
             'description' =>
-                '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> начал исполнять задачу',
+            '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> начал исполнять задачу',
             'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
             'historyable_id' => $task->id,
             'historyable_type' => 'App\Task',
             'created_at' => date(now()),
         ]);
-        
+
         // // Check if it is from a person
         // if ($task->from_type == "App\User") {
         //     // Check id author and responsible is not a same persone
@@ -440,7 +439,7 @@ class TaskController extends Controller
             'historyable_type' => 'App\Task',
             'created_at' => date(now()),
         ]);
-        
+
         // Check if it is from a person
         if ($task->from_type == "App\User") {
             // Check id author and responsible is not a same persone
@@ -535,7 +534,7 @@ class TaskController extends Controller
         History::create([
             'user_id' => auth()->user()->id,
             'description' =>
-                '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) категорию задачи с 
+            '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) категорию задачи с
                 <span class="primary--text">' . $task->responsibilityDescription->text . '</span> на <span class="primary--text">' . $responsibilityDescription->text . '</span>',
             'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
             'historyable_id' => $task->id,
@@ -557,7 +556,7 @@ class TaskController extends Controller
         History::create([
             'user_id' => auth()->user()->id,
             'description' =>
-                '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) описание задачи с 
+            '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) описание задачи с
                 <span class="primary--text">' . $task->description . '</span> на <span class="primary--text">' . $request->description . '</span>',
             'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
             'historyable_id' => $task->id,
@@ -646,5 +645,28 @@ class TaskController extends Controller
         )->orderBy('created_at', 'desc')->get();
 
         return $tasks;
+    }
+
+    public function deadline($id, Request $request)
+    {
+        $task = Task::find($id);
+
+        // Add Event to History
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' =>
+            '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) дедлайн задачи с
+                <span class="primary--text">' . $task->deadline . '</span> на <span class="primary--text">' . $request->deadline . '</span>. Причина:
+                <span class="primary--text">' . $request->reason . '</span>',
+            'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
+        $task->deadline = $request->deadline;
+        $task->save();
+
+        return $task->deadline;
     }
 }

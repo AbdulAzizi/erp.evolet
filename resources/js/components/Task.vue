@@ -149,15 +149,7 @@
                     <avatars-set :items="usersForAvatar" item-hint="role" class="pl-3"></avatars-set>
                     <v-subheader>Параметры</v-subheader>
 
-                    <v-list-item>
-                        <v-list-item-avatar>
-                            <v-icon>mdi-calendar-clock</v-icon>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                            <v-list-item-title>{{ moment(item.deadline).local().format('DD-MM-Y hh:mm') }}</v-list-item-title>
-                            <v-list-item-subtitle>Дедлайн</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
+                    <tasks-deadline :task="item" :edit="edit" />
 
                     <v-list-item>
                         <v-list-item-avatar>

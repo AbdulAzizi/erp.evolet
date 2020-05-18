@@ -127,6 +127,7 @@ Route::prefix('api')->group(function () {
     Route::get('/tasks/paginate', 'TaskController@paginate')->name('api.tasks.paginate');
     Route::put('/tasks/{id}/responsibilitydescription', 'TaskController@responsibilitydescription')->name('api.tasks.responsibilitydescription');
     Route::put('/tasks/{id}/description', 'TaskController@description')->name('api.tasks.description');
+    Route::put('/tasks/{id}/deadline', 'TaskController@deadline')->name('api.tasks.deadline');
 
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
     Route::get('/tasks/groupBy/{field}', 'TaskController@group')->name('api.tasks.group');

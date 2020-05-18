@@ -4,6 +4,9 @@
     </v-card>
 </template>
 <script>
+import {Timeline} from "vue2vis";
+import "vue2vis/dist/vue2vis.css";
+
 export default {
     props: {
         timesets: {
@@ -12,6 +15,9 @@ export default {
         users: {
             required: true
         }
+    },
+    components: {
+        Timeline
     },
     data() {
         return {
@@ -32,8 +38,8 @@ export default {
                 },
                 zoomMax: 31557600000,
                 zoomMin: 3600000,
-                tooltip:{
-                    followMouse:true
+                tooltip: {
+                    followMouse: true
                 }
             },
             colors: [
@@ -66,7 +72,12 @@ export default {
                     id: user.id,
                     content: user.fullname,
                     color: this.colors[this.rand(0, this.colors.length - 1)],
-                    content: '<div tabindex="0" role="listitem" aria-selected="false" class="px-2 v-list-item v-list-item--dense theme--light" style="min-height:30px;"><div class="v-avatar my-0 v-list-item__avatar" style="height: 27px; min-width: 27px; width: 27px;"><div class="v-responsive v-image"><div class="v-responsive__sizer" style="padding-bottom: 100%;"></div><div class="v-image__image v-image__image--cover" style="background-image: url(&quot;'+ this.photo(user.img) +'&quot;); background-position: center center;"></div><div class="v-responsive__content" style="width: 128px;"></div></div></div><div class="v-list-item__content py-0"><div class="v-list-item__title">'+ user.fullname + '</div></div></div>'
+                    content:
+                        '<div tabindex="0" role="listitem" aria-selected="false" class="px-2 v-list-item v-list-item--dense theme--light" style="min-height:30px;"><div class="v-avatar my-0 v-list-item__avatar" style="height: 27px; min-width: 27px; width: 27px;"><div class="v-responsive v-image"><div class="v-responsive__sizer" style="padding-bottom: 100%;"></div><div class="v-image__image v-image__image--cover" style="background-image: url(&quot;' +
+                        this.photo(user.img) +
+                        '&quot;); background-position: center center;"></div><div class="v-responsive__content" style="width: 128px;"></div></div></div><div class="v-list-item__content py-0"><div class="v-list-item__title">' +
+                        user.fullname +
+                        "</div></div></div>"
                 };
             });
 
@@ -97,7 +108,7 @@ export default {
 .vis-item-content {
     padding: 0px 10px !important;
 }
-.vis-inner{
+.vis-inner {
     padding: 0px !important;
 }
 </style>

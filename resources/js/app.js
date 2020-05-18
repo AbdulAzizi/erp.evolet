@@ -14,8 +14,6 @@ import "vuetify/dist/vuetify.min.css";
 // import "material-design-icons-iconfont/dist/material-design-icons.css";
 import "@mdi/font/css/materialdesignicons.css";
 import moment from "moment-timezone";
-import { Timeline } from 'vue2vis';
-import "vue2vis/dist/vue2vis.css";
 
 const vuetifyOptions = {
     theme: {
@@ -264,7 +262,6 @@ Vue.mixin({
 });
 
 /****************************COMPONENTS********************************/
-Vue.component('timeline', Timeline);
 Vue.component("alert", require("./components/Alert.vue").default);
 Vue.component("alerts", require("./components/Alerts.vue").default);
 Vue.component("navbar", require("./components/Navbar.vue").default);
@@ -376,6 +373,7 @@ Vue.component("views-timesets-index", require("./components/views/timesets/Index
 Vue.component("views-users-tasks", require("./components/views/users/Tasks.vue").default);
 
 /****************************TASKS********************************/
+Vue.component("tasks-deadline", require("./components/tasks/Deadline.vue").default);
 Vue.component("task-description", require("./components/tasks/Description.vue").default);
 Vue.component("task-title", require("./components/tasks/Title.vue").default);
 Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
