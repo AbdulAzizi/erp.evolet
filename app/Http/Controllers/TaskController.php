@@ -17,6 +17,7 @@ use App\Tag;
 use App\Task;
 use App\Timeset;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -651,12 +652,26 @@ class TaskController extends Controller
     {
         $task = Task::find($id);
 
+        $prevDeadline = Carbon::createFromFormat(
+            'Y-m-d H:i:s',
+            $task->deadline
+        )
+            ->utcOffset($request->offset)
+            ->format('Y-m-d H:i:s');
+
+        $newDeadline = Carbon::createFromFormat(
+            'Y-m-d H:i',
+            $request->deadline
+        )
+            ->utcOffset($request->offset)
+            ->format('Y-m-d H:i:s');
+
         // Add Event to History
         History::create([
             'user_id' => auth()->user()->id,
             'description' =>
             '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) дедлайн задачи с
-                <span class="primary--text">' . $task->deadline . '</span> на <span class="primary--text">' . $request->deadline . '</span>. Причина:
+                <span class="primary--text">' . $prevDeadline . '</span> на <span class="primary--text">' . $newDeadline . '</span>. Причина:
                 <span class="primary--text">' . $request->reason . '</span>',
             'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
             'historyable_id' => $task->id,

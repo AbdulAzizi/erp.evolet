@@ -69,6 +69,7 @@ export default {
             id: this.task.id,
             dialog: false,
             deadline: this.task.deadline,
+            offset: null,
             formDeadline: null,
             reason: null,
             rules: {
@@ -87,7 +88,8 @@ export default {
             axios
                 .put(this.appPath(`api/tasks/${this.id}/deadline`), {
                     deadline: this.deadlineWithTz,
-                    reason: this.reason
+                    reason: this.reason,
+                    offset: this.offset * -1
                 })
                 .then(resp => {
                     this.deadline = resp.data;
@@ -99,9 +101,9 @@ export default {
     },
     computed: {
         deadlineWithTz() {
-            let offset = new Date().getTimezoneOffset();
+            this.offset = new Date().getTimezoneOffset();
             return this.moment(this.formDeadline, "YYYY-MM-DD HH:mm")
-                .utcOffset(offset)
+                .utcOffset(this.offset)
                 .format("YYYY-MM-DD HH:mm");
         }
     }
