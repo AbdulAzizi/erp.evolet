@@ -775,8 +775,8 @@ export default {
     computed: {
         deadlineWithTz() {
             let offset = new Date().getTimezoneOffset();
-            return this.moment(this.deadline, "YYYY-MM-DD hh:mm").utcOffset(offset).format(
-                "YYYY-MM-DD hh:mm"
+            return this.moment(this.deadline, "YYYY-MM-DD HH:mm").utcOffset(offset).format(
+                "YYYY-MM-DD HH:mm"
             );
         },
         estimatedTaskTime() {

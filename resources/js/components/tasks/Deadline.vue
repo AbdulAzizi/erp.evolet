@@ -48,7 +48,7 @@
             <v-icon>mdi-calendar-clock</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-            <v-list-item-title>{{ moment(deadline).local().format('DD-MM-Y hh:mm') }}</v-list-item-title>
+            <v-list-item-title>{{ moment(deadline).local().format('DD-MM-Y HH:mm') }}</v-list-item-title>
             <v-list-item-subtitle>Дедлайн</v-list-item-subtitle>
         </v-list-item-content>
     </v-list-item>
@@ -100,9 +100,9 @@ export default {
     computed: {
         deadlineWithTz() {
             let offset = new Date().getTimezoneOffset();
-            return this.moment(this.formDeadline, "YYYY-MM-DD hh:mm")
+            return this.moment(this.formDeadline, "YYYY-MM-DD HH:mm")
                 .utcOffset(offset)
-                .format("YYYY-MM-DD hh:mm");
+                .format("YYYY-MM-DD HH:mm");
         }
     }
 };
