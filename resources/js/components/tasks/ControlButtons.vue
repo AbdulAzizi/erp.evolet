@@ -49,6 +49,15 @@
                 <v-icon left>mdi-stop</v-icon>Завершить
             </v-btn>
         </v-col>
+        <v-col
+            v-if="tasIsClosed"
+            :class="horizontalButtons ? 'pa-2':'pa-0'"
+            :cols="horizontalButtons ? 4:12"
+        >
+            <v-btn class="mb-2" small depressed block color="blue" dark @click="play">
+                <v-icon left>mdi-replay</v-icon>Возобновить
+            </v-btn>
+        </v-col>
     </v-row>
 </template>
 <script>

@@ -363,27 +363,45 @@ class TaskController extends Controller
             'task_id' => $id,
             'start_time' => date(now()),
         ]);
+        // Get new Status instance
+        $newStatus = Status::where('name', 'Новый')->first();
         // Get in process status
         $InProcess = Status::where('name', 'В процессе')->first();
+        // Get in closed status
+        $stop = Status::where('name', 'Закрытый')->first();
         // Get task with this id
         $task = Task::with('status', 'timeSets')->find($id);
+        // if task was closed
+        if ($task->status_id == $stop->id) {
+            // Add Event to History that task was reopened
+            History::create([
+                'user_id' => $task->responsible->id,
+                'description' =>
+                '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> возобновил задачу',
+                'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+                'historyable_id' => $task->id,
+                'historyable_type' => 'App\Task',
+                'created_at' => date(now()),
+            ]);
+        }
+        if ($task->status_id == $newStatus->id) {
+            // Add Event to History that task is started
+            History::create([
+                'user_id' => $task->responsible->id,
+                'description' =>
+                '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> начал исполнять задачу',
+                'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+                'historyable_id' => $task->id,
+                'historyable_type' => 'App\Task',
+                'created_at' => date(now()),
+            ]);
+        }
         // Change status
         $task->status()->associate($InProcess);
         // save
         $task->save();
         //
         $task->setTimesetEndtime();
-
-        // Add Event to History
-        History::create([
-            'user_id' => $task->responsible->id,
-            'description' =>
-            '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> начал исполнять задачу',
-            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
-            'historyable_id' => $task->id,
-            'historyable_type' => 'App\Task',
-            'created_at' => date(now()),
-        ]);
 
         // // Check if it is from a person
         // if ($task->from_type == "App\User") {
