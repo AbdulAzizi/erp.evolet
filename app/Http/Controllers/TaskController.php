@@ -242,7 +242,7 @@ class TaskController extends Controller
         // load new responsible
         $task->load('responsible');
         // Alert
-        session()->flash('alerts', ["Задача делегированна успешно!"]);
+        session()->flash('alerts', ["Задача делегирована успешно!"]);
         // Create history task
         event(new TaskForwardedEvent($oldResponsible, $task, $request->reason));
         // Notify new responsible

@@ -95,7 +95,7 @@ export default {
                     this.deadline = resp.data;
                     this.dialog = false;
 
-                    Event.fire("notify", ["Дедлайн задачи успешно изменено"]);
+                    Event.fire("notify", ["Дедлайн задачи успешно изменён"]);
                 });
         }
     },
