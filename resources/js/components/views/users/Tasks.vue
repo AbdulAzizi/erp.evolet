@@ -32,7 +32,7 @@
                 <priority :id="item.priority" icon></priority>
               </td>
               <td>
-                {{item.responsibility_description.text}}
+                {{item.responsibility_description.text ? item.responsibility_description.text : 'Удалено' }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-icon small v-if="item.read_at" color="green" v-on="on">mdi-check-all</v-icon>
