@@ -17,6 +17,7 @@ use App\Tag;
 use App\Task;
 use App\Timeset;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -241,7 +242,7 @@ class TaskController extends Controller
         // load new responsible
         $task->load('responsible');
         // Alert
-        session()->flash('alerts', ["Задача делегированна успешно!"]);
+        session()->flash('alerts', ["Задача делегирована успешно!"]);
         // Create history task
         event(new TaskForwardedEvent($oldResponsible, $task, $request->reason));
         // Notify new responsible
@@ -362,27 +363,45 @@ class TaskController extends Controller
             'task_id' => $id,
             'start_time' => date(now()),
         ]);
+        // Get new Status instance
+        $newStatus = Status::where('name', 'Новый')->first();
         // Get in process status
         $InProcess = Status::where('name', 'В процессе')->first();
+        // Get in closed status
+        $stop = Status::where('name', 'Закрытый')->first();
         // Get task with this id
         $task = Task::with('status', 'timeSets')->find($id);
+        // if task was closed
+        if ($task->status_id == $stop->id) {
+            // Add Event to History that task was reopened
+            History::create([
+                'user_id' => $task->responsible->id,
+                'description' =>
+                '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> возобновил задачу',
+                'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+                'historyable_id' => $task->id,
+                'historyable_type' => 'App\Task',
+                'created_at' => date(now()),
+            ]);
+        }
+        if ($task->status_id == $newStatus->id) {
+            // Add Event to History that task is started
+            History::create([
+                'user_id' => $task->responsible->id,
+                'description' =>
+                '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> начал исполнять задачу',
+                'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+                'historyable_id' => $task->id,
+                'historyable_type' => 'App\Task',
+                'created_at' => date(now()),
+            ]);
+        }
         // Change status
         $task->status()->associate($InProcess);
         // save
         $task->save();
         //
         $task->setTimesetEndtime();
-
-        // Add Event to History
-        History::create([
-            'user_id' => $task->responsible->id,
-            'description' =>
-            '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> начал исполнять задачу',
-            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
-            'historyable_id' => $task->id,
-            'historyable_type' => 'App\Task',
-            'created_at' => date(now()),
-        ]);
 
         // // Check if it is from a person
         // if ($task->from_type == "App\User") {
@@ -651,12 +670,26 @@ class TaskController extends Controller
     {
         $task = Task::find($id);
 
+        $prevDeadline = Carbon::createFromFormat(
+            'Y-m-d H:i:s',
+            $task->deadline
+        )
+            ->utcOffset($request->offset)
+            ->format('Y-m-d H:i:s');
+
+        $newDeadline = Carbon::createFromFormat(
+            'Y-m-d H:i',
+            $request->deadline
+        )
+            ->utcOffset($request->offset)
+            ->format('Y-m-d H:i:s');
+
         // Add Event to History
         History::create([
             'user_id' => auth()->user()->id,
             'description' =>
             '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) дедлайн задачи с
-                <span class="primary--text">' . $task->deadline . '</span> на <span class="primary--text">' . $request->deadline . '</span>. Причина:
+                <span class="primary--text">' . $prevDeadline . '</span> на <span class="primary--text">' . $newDeadline . '</span>. Причина:
                 <span class="primary--text">' . $request->reason . '</span>',
             'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
             'historyable_id' => $task->id,

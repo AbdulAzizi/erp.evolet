@@ -1,11 +1,6 @@
 <template>
     <v-list-item>
-        <v-dialog
-            ref="deadlineDialog"
-            v-model="dialog"
-            max-width="400"
-            v-if="edit"
-        >
+        <v-dialog ref="deadlineDialog" v-model="dialog" max-width="400" v-if="edit">
             <template v-slot:activator="{ on }">
                 <v-btn v-on="on" height="40" width="40" icon @click class="mr-4 my-2">
                     <v-icon>mdi-pencil</v-icon>
@@ -53,7 +48,7 @@
             <v-icon>mdi-calendar-clock</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-            <v-list-item-title>{{ moment(deadline).local().format('DD-MM-Y hh:mm') }}</v-list-item-title>
+            <v-list-item-title>{{ moment(deadline).local().format('DD-MM-Y HH:mm') }}</v-list-item-title>
             <v-list-item-subtitle>Дедлайн</v-list-item-subtitle>
         </v-list-item-content>
     </v-list-item>
@@ -74,6 +69,7 @@ export default {
             id: this.task.id,
             dialog: false,
             deadline: this.task.deadline,
+            offset: null,
             formDeadline: null,
             reason: null,
             rules: {
@@ -86,20 +82,29 @@ export default {
     methods: {
         submit() {
             let valid = this.$refs.form.validate();
-            
+
             if (!valid) return;
 
             axios
                 .put(this.appPath(`api/tasks/${this.id}/deadline`), {
-                    deadline: this.formDeadline,
-                    reason: this.reason
+                    deadline: this.deadlineWithTz,
+                    reason: this.reason,
+                    offset: this.offset * -1
                 })
                 .then(resp => {
                     this.deadline = resp.data;
                     this.dialog = false;
-                    
-                    Event.fire("notify", ["Дедлайн задачи успешно изменено"]);
+
+                    Event.fire("notify", ["Дедлайн задачи успешно изменён"]);
                 });
+        }
+    },
+    computed: {
+        deadlineWithTz() {
+            this.offset = new Date().getTimezoneOffset();
+            return this.moment(this.formDeadline, "YYYY-MM-DD HH:mm")
+                .utcOffset(this.offset)
+                .format("YYYY-MM-DD HH:mm");
         }
     }
 };

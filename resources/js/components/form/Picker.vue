@@ -60,7 +60,8 @@ const timePicker = {
     component: "v-time-picker",
     props: {
         "full-width": true,
-        color: "primary"
+        color: "primary",
+        format: "24hr"
     }
 };
 
