@@ -85,7 +85,7 @@
                 </template>
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td>{{item.responsibility_description ? item.responsibility_description.text : 'Удалено' }}</td>
+                        {{item.responsibility_description.text ? item.responsibility_description.text : 'Удалено' }}
                         <td>{{item.description}}</td>
                         <td>{{item.deadline}}</td>
                         <td>{{item.ended_time}}</td>
