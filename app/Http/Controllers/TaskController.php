@@ -378,7 +378,7 @@ class TaskController extends Controller
                 'user_id' => $task->responsible->id,
                 'description' =>
                 '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> возобновил задачу',
-                'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+                'link' => "<a href=" . route("tasks.show", $task->id) . "> " . mb_strimwidth($task->description, 0, 40, "...") . " </a>",
                 'historyable_id' => $task->id,
                 'historyable_type' => 'App\Task',
                 'created_at' => date(now()),
@@ -390,7 +390,7 @@ class TaskController extends Controller
                 'user_id' => $task->responsible->id,
                 'description' =>
                 '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> начал исполнять задачу',
-                'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+                'link' => "<a href=" . route("tasks.show", $task->id) . "> " . mb_strimwidth($task->description, 0, 40, "...") . " </a>",
                 'historyable_id' => $task->id,
                 'historyable_type' => 'App\Task',
                 'created_at' => date(now()),
@@ -453,7 +453,7 @@ class TaskController extends Controller
             'user_id' => $task->responsible->id,
             'description' =>
             '<a href="' . route('users.dashboard', $task->responsible->id) . '">' . $task->responsible->fullname . '</a> закрыл задачу',
-            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+            'link' => "<a href=" . route("tasks.show", $task->id) . "> " . mb_strimwidth($task->description, 0, 40, "...") . " </a>",
             'historyable_id' => $task->id,
             'historyable_type' => 'App\Task',
             'created_at' => date(now()),
@@ -555,7 +555,7 @@ class TaskController extends Controller
             'description' =>
             '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) категорию задачи с
                 <span class="primary--text">' . $task->responsibilityDescription->text . '</span> на <span class="primary--text">' . $responsibilityDescription->text . '</span>',
-            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+            'link' => "<a href=" . route("tasks.show", $task->id) . "> " . mb_strimwidth($task->description, 0, 40, "...") . " </a>",
             'historyable_id' => $task->id,
             'historyable_type' => 'App\Task',
             'created_at' => date(now()),
@@ -577,7 +577,7 @@ class TaskController extends Controller
             'description' =>
             '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) описание задачи с
                 <span class="primary--text">' . $task->description . '</span> на <span class="primary--text">' . $request->description . '</span>',
-            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+            'link' => "<a href=" . route("tasks.show", $task->id) . "> " . mb_strimwidth($task->description, 0, 40, "...") . " </a>",
             'historyable_id' => $task->id,
             'historyable_type' => 'App\Task',
             'created_at' => date(now()),
