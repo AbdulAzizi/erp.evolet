@@ -171,17 +171,7 @@
                         </v-list-item-content>
                     </v-list-item>
 
-                    <v-list-item>
-                        <v-list-item-avatar>
-                            <v-icon>mdi-timelapse</v-icon>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                            <v-list-item-title>
-                                <span>{{durObj(task.planned_time)}}</span>
-                            </v-list-item-title>
-                            <v-list-item-subtitle>Время на задачу</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
+                    <tasks-planned-time :task="task" :edit="edit" />
 
                     <priority :id="task.priority" classes=" lighten-3"></priority>
 

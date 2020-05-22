@@ -24,7 +24,7 @@ class TaskForwardedEvent
                     '<a href="' . route("users.dashboard", $oldResponsible->id) . '">' . $oldResponsible->full_name . '</a> 
                     делегировал(a) задачу <a href="' . route("users.dashboard", $task->responsible->id) . '">' . $task->responsible->full_name . '</a>.
                     Причина: "<span class="primary--text">' . $reason . '</span>"',
-            'link' => "<a href=" . route("tasks.show", $task->id) . "> $task->description </a>",
+            'link' => "<a href=" . route("tasks.show", $task->id) . ">". mb_strimwidth($task->description, 0, 40, "...") ." </a>",
             'historyable_id' => $task->id,
             'historyable_type' => 'App\Task',
             'created_at' => date(now())
