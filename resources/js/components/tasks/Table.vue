@@ -42,7 +42,7 @@
               <priority :id="item.priority" icon></priority>
             </td>
             <td>
-              {{item.responsibility_description ? item.responsibility_description.text.substring(0, 30) + '...' : 'Удалено' }}
+              {{item.responsibility_description ? (item.responsibility_description.text.length >= 30 ? item.responsibility_description.text.substring(0, 30) : item.responsibility_description.text) : 'Удалено' }}
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <v-icon small v-if="item.read_at" color="green" v-on="on">mdi-check-all</v-icon>
@@ -72,7 +72,7 @@
             <td @click.stop="filter(item.status.id, 'filterByStatus')">{{ item.status.name }}</td>
             <td>
               <v-chip
-                class="primary mr-1"
+                class="primary my-1"
                 small
                 v-for="(tag,index) in item.tags"
                 :key="'tag-'+index"
