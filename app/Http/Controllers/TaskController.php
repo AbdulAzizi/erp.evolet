@@ -702,4 +702,50 @@ class TaskController extends Controller
 
         return $task->deadline;
     }
+
+    public function planned_time($id, Request $request)
+    {
+        $task = Task::find($id);
+        
+        // Add Event to History
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' =>
+            '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) время на задачу с
+                <span class="primary--text">' . $this->time($task->planned_time) . '</span> на <span class="primary--text">' . $this->time($request->estimateTime) . '</span>. Причина:
+                <span class="primary--text">' . $request->reason . '</span>',
+            'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
+        $task->planned_time = $request->estimateTime;
+        $task->save();
+
+        return $task->planned_time;
+    }
+
+    private function millToHours($milliseconds)
+    {
+        $result = $milliseconds / 3600000 - ($this->millToDays($milliseconds) * 24);
+        return bcdiv($result, 1, 0);
+    }
+
+    private function millToMinutes($milliseconds)
+    {
+        $result = $milliseconds / 60000 - ($this->millToDays($milliseconds) * 24 * 60) - ($this->millToHours($milliseconds) * 60);
+        return bcdiv($result, 1, 0);
+    }
+
+    private function millToDays($milliseconds)
+    {
+        $result = $milliseconds / 86400000;
+        return bcdiv($result, 1, 0);
+    }
+
+    private function time($milliseconds)
+    {
+        return $this->millToDays($milliseconds) . 'д ' . $this->millToHours($milliseconds) . 'ч ' . $this->millToMinutes($milliseconds) . 'м';
+    }
 }

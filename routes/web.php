@@ -128,6 +128,7 @@ Route::prefix('api')->group(function () {
     Route::put('/tasks/{id}/responsibilitydescription', 'TaskController@responsibilitydescription')->name('api.tasks.responsibilitydescription');
     Route::put('/tasks/{id}/description', 'TaskController@description')->name('api.tasks.description');
     Route::put('/tasks/{id}/deadline', 'TaskController@deadline')->name('api.tasks.deadline');
+    Route::put('/tasks/{id}/planned_time', 'TaskController@planned_time')->name('api.tasks.planned_time');
 
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
     Route::get('/tasks/groupBy/{field}', 'TaskController@group')->name('api.tasks.group');
