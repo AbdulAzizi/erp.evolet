@@ -59,6 +59,7 @@
             <div class="ml-4 caption">
               <span v-html="item.data.title"></span>
               <span v-html="item.data.link" @click="markAsRead(item, false)"></span>
+              <span v-if="item.data.deadline">{{moment(item.data.deadline).local().format('lll')}}</span>
             </div>
             <h6 class="ml-4 caption grey--text">{{ moment(item.created_at).fromNow() }}</h6>
           </v-flex>
@@ -128,6 +129,7 @@ export default {
     };
   },
   created() {
+    console.log(this.localItems);
     Echo.private("App.User." + this.auth.id).notification(notification => {
       this.localItems.unshift(notification.notification);
 

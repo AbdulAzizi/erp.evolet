@@ -24,7 +24,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('minute:delete')->monthlyOn(1, '00:00');
+        $schedule->command('delete:oldNotifications')->monthlyOn(1, '00:00');
+
+        $schedule->command('deadline:notification')->dailyAt('11:00');
     }
 
     /**
