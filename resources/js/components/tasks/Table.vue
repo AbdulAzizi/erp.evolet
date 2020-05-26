@@ -153,7 +153,7 @@
                             {{ item.status.name }}
                         </td>
                         <td>
-                            <v-chip-group>
+                            <v-chip-group class="py-0">
                                 <v-chip
                                     class="primary"
                                     small
