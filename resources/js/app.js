@@ -373,6 +373,7 @@ Vue.component("views-timesets-index", () => import("./components/views/timesets/
 Vue.component("views-users-tasks", () => import("./components/views/users/Tasks.vue"));
 
 /****************************TASKS********************************/
+Vue.component("tasks-tags", () => import('./components/tasks/Tags.vue'));
 Vue.component("tasks-planned-time", () => import("./components/tasks/PlannedTime.vue"));
 Vue.component("tasks-deadline", () => import("./components/tasks/Deadline.vue"));
 Vue.component("task-description", () => import("./components/tasks/Description.vue"));
