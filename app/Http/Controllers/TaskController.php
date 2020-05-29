@@ -739,33 +739,34 @@ class TaskController extends Controller
 
     public function attachTag(Request $request, $id)
     {
+        // Get task
         $task = Task::find($id);
-
-        $allTags = $request->tags;
-
-        $taskTagIds = [];
-
-        $tags = [];
-
-        foreach($allTags as $tag){
-
-            if($tag['id'] == -1){
-
-                $tag = Tag::create(['name' => $tag['name']]);
-
-                $division = Division::find(auth()->user()->division->id);
-
-                $division->tags()->attach($tag);
-
-                $tags[] = $tag['id'];
-                
+        // Initialize variables
+        $newTags = [];
+        $existingTagIDs = [];
+        // Seperate new tags from existing once
+        foreach ($request->tags as $tag) {
+            if ($tag['id'] == -1) {
+                $newTags[] = $tag;
             } else {
-                $tags[] = $tag['id'];
+                $existingTagIDs[] = $tag['id'];
             }
         }
-
-        $task->tags()->attach($tags);
-
+        // Insert all new Tags
+        Tag::insert($newTags);
+        // Get new tag by names
+        $newTagsByName = array_map(function ($tag) {
+            return $tag['name'];
+        }, $newTags);
+        //  Get new tag IDs
+        $newTagIDs = Tag::whereIn('name', $newTagsByName)->get()->pluck('id')->toArray();
+        // Attach new tags to division
+        auth()->user()->division->tags()->attach($newTagIDs);
+        // Merge existing and new tags
+        $tagsToAttach = array_merge($newTagIDs, $existingTagIDs);
+        // Attach all tags to task
+        $task->tags()->attach($tagsToAttach);
+        // Return tags
         return $task->tags;
     }
 
