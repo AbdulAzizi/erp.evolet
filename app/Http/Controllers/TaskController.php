@@ -752,8 +752,12 @@ class TaskController extends Controller
                 $existingTagIDs[] = $tag['id'];
             }
         }
+        // Prepare tags for insertion
+        $tagsToInsert = array_map(function ($tag) {
+            return ['name' => $tag['name']];
+        }, $newTags);
         // Insert all new Tags
-        Tag::insert($newTags);
+        Tag::insert($tagsToInsert);
         // Get new tag by names
         $newTagsByName = array_map(function ($tag) {
             return $tag['name'];
