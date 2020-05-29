@@ -17,21 +17,30 @@
                                     class="body-2"
                                     @click="forwardTask"
                                     v-if="isTaskResponsible"
-                                >Делегировать</v-list-item>
+                                >
+                                    Делегировать
+                                </v-list-item>
                                 <v-list-item
                                     class="body-2"
                                     @click="markAsUnread(task)"
-                                >Отметить как непрочитанное</v-list-item>
+                                    >Отметить как непрочитанное</v-list-item
+                                >
                                 <v-list-item
                                     class="body-2"
                                     v-if="isTaskAuthor"
                                     @click="deleteTaskDialog = true"
-                                >Удалить задачу</v-list-item>
+                                    >Удалить задачу</v-list-item
+                                >
                                 <v-list-item
                                     v-if="isTaskResponsible"
                                     class="body-2"
                                     @click="edit = !edit"
-                                >{{edit?'Закончить изменения':'Изменить'}}</v-list-item>
+                                    >{{
+                                        edit
+                                            ? "Закончить изменения"
+                                            : "Изменить"
+                                    }}</v-list-item
+                                >
                             </v-list>
                         </v-card>
                     </v-menu>
@@ -61,9 +70,14 @@
                     <v-tab-item value="task">
                         <v-card-text>
                             <div v-if="task.read_at" class="pb-3">
-                                <div
-                                    class="font-weight-medium pb-1 grey--text"
-                                >Просмотрено: {{ moment(item.read_at).local().format('lll') }}</div>
+                                <div class="font-weight-medium pb-1 grey--text">
+                                    Просмотрено:
+                                    {{
+                                        moment(item.read_at)
+                                            .local()
+                                            .format("lll")
+                                    }}
+                                </div>
                             </div>
 
                             <task-description :task="task" :edit="edit" />
@@ -77,37 +91,89 @@
                             </div>
                             <template v-if="task.from.front_tethers">
                                 <div
-                                    v-if="task.from.front_tethers.length > 1 && task.question_tasks.length === 0"
+                                    v-if="
+                                        task.from.front_tethers.length > 1 &&
+                                            task.question_tasks.length === 0
+                                    "
                                 >
-                                    <div class="font-weight-medium pb-1">Действия</div>
+                                    <div class="font-weight-medium pb-1">
+                                        Действия
+                                    </div>
                                     <!-- <v-list nav v-if="taskHasActions"> -->
                                     <v-list nav>
                                         <v-list-item-group color="primary">
                                             <v-list-item
-                                                v-for="( tether, index ) in task.from.front_tethers"
-                                                :key="'list-item-'+index"
-                                                :href="tether.forms.length == 0 ? appPath(`/products/${task.products[0].id}/changeTo/${tether.to_process_id}`) : null"
+                                                v-for="(tether, index) in task
+                                                    .from.front_tethers"
+                                                :key="'list-item-' + index"
+                                                :href="
+                                                    tether.forms.length == 0
+                                                        ? appPath(
+                                                              `/products/${
+                                                                  task
+                                                                      .products[0]
+                                                                      .id
+                                                              }/changeTo/${
+                                                                  tether.to_process_id
+                                                              }`
+                                                          )
+                                                        : null
+                                                "
                                             >
                                                 <v-list-item-content
-                                                    v-if="tether.forms.length != 0"
+                                                    v-if="
+                                                        tether.forms.length != 0
+                                                    "
                                                 >
                                                     <v-list-item-title
-                                                        @click="displayForm(index)"
-                                                    >{{ tether.action_text }}</v-list-item-title>
+                                                        @click="
+                                                            displayForm(index)
+                                                        "
+                                                        >{{
+                                                            tether.action_text
+                                                        }}</v-list-item-title
+                                                    >
                                                     <!-- {{preparedFields({...tether.form})}} -->
                                                     <dynamic-form
                                                         width="800"
                                                         dialog
-                                                        :fieldsPerRows="tether.forms[0].fields.length > 1 ? [2] : [1]"
-                                                        :fields="preparedFields(tether.forms[0])"
-                                                        :title="tether.forms[0].label"
-                                                        :actionUrl=" appPath(`products/${task.products[0].id}/changeTo/${tether.to_process_id}`)"
-                                                        :activatorEventName="`display_form_${index}`"
+                                                        :fieldsPerRows="
+                                                            tether.forms[0]
+                                                                .fields.length >
+                                                            1
+                                                                ? [2]
+                                                                : [1]
+                                                        "
+                                                        :fields="
+                                                            preparedFields(
+                                                                tether.forms[0]
+                                                            )
+                                                        "
+                                                        :title="
+                                                            tether.forms[0]
+                                                                .label
+                                                        "
+                                                        :actionUrl="
+                                                            appPath(
+                                                                `products/${
+                                                                    task
+                                                                        .products[0]
+                                                                        .id
+                                                                }/changeTo/${
+                                                                    tether.to_process_id
+                                                                }`
+                                                            )
+                                                        "
+                                                        :activatorEventName="
+                                                            `display_form_${index}`
+                                                        "
                                                         method="post"
                                                     ></dynamic-form>
                                                 </v-list-item-content>
                                                 <v-list-item-content v-else>
-                                                    <v-list-item-title>{{ tether.action_text }}</v-list-item-title>
+                                                    <v-list-item-title>{{
+                                                        tether.action_text
+                                                    }}</v-list-item-title>
                                                 </v-list-item-content>
                                             </v-list-item>
                                         </v-list-item-group>
@@ -122,7 +188,13 @@
                                     :fieldsPerRows="[2]"
                                     :fields="preparedFields(task.forms[0])"
                                     :title="task.forms[0].label"
-                                    :actionUrl="appPath(`products/${task.products[0].id}/changeToNext`)"
+                                    :actionUrl="
+                                        appPath(
+                                            `products/${
+                                                task.products[0].id
+                                            }/changeToNext`
+                                        )
+                                    "
                                     method="post"
                                 ></dynamic-form>
                             </div>
@@ -146,7 +218,12 @@
             <v-col cols="3" class="white">
                 <v-list subheader dense tile class="pl-5">
                     <v-subheader>Участники</v-subheader>
-                    <avatars-set :items="usersForAvatar" item-hint="role" class="pl-3"></avatars-set>
+                    <!-- <avatars-set
+                        :items="usersForAvatar"
+                        item-hint="role"
+                        class="pl-3"
+                    ></avatars-set> -->
+                    <tasks-participants :task="task" :edit="edit" />
                     <v-subheader>Параметры</v-subheader>
 
                     <tasks-deadline :task="item" :edit="edit" />
@@ -156,8 +233,14 @@
                             <v-icon>mdi-calendar-plus</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content>
-                            <v-list-item-title>{{ moment(item.created_at).local().format('DD-MM-Y hh:mm') }}</v-list-item-title>
-                            <v-list-item-subtitle>Дата добавления</v-list-item-subtitle>
+                            <v-list-item-title>{{
+                                moment(item.created_at)
+                                    .local()
+                                    .format("DD-MM-Y hh:mm")
+                            }}</v-list-item-title>
+                            <v-list-item-subtitle
+                                >Дата добавления</v-list-item-subtitle
+                            >
                         </v-list-item-content>
                     </v-list-item>
 
@@ -166,16 +249,25 @@
                             <v-icon>mdi-format-list-checks</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content>
-                            <v-list-item-title>{{ task.status.name }}</v-list-item-title>
+                            <v-list-item-title>{{
+                                task.status.name
+                            }}</v-list-item-title>
                             <v-list-item-subtitle>Статус</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
 
                     <tasks-planned-time :task="task" :edit="edit" />
 
-                    <priority :id="task.priority" classes=" lighten-3"></priority>
+                    <priority
+                        :id="task.priority"
+                        classes=" lighten-3"
+                    ></priority>
 
-                    <task-control-buttons v-if="isTaskResponsible" class="mr-5" :task="task" />
+                    <task-control-buttons
+                        v-if="isTaskResponsible"
+                        class="mr-5"
+                        :task="task"
+                    />
 
                     <v-subheader v-if="task.tags.length">Теги</v-subheader>
                     <div class="px-3">
@@ -184,10 +276,14 @@
                             color="grey lighten-4"
                             text-color="grey darken-1"
                             v-for="(tag, index) in task.tags"
-                            :key="'tag-'+index"
+                            :key="'tag-' + index"
                             small
                         >
-                            <v-avatar style="margin-left:-8px" class="mr-0" left>
+                            <v-avatar
+                                style="margin-left:-8px"
+                                class="mr-0"
+                                left
+                            >
                                 <v-icon class="body-1">mdi-tag</v-icon>
                             </v-avatar>
                             {{ tag.name }}
@@ -275,7 +371,8 @@ export default {
             this.task.status = status;
         });
         Event.listen(
-            `tasks/${this.task.id}/responsibilitydescription/changed`, description =>{
+            `tasks/${this.task.id}/responsibilitydescription/changed`,
+            description => {
                 this.task.responsibility_description_id = description.id;
                 this.task.responsibility_description = description;
             }
@@ -342,19 +439,6 @@ export default {
         },
         taskHasBPActions() {
             return this.task.from.front_tethers;
-        },
-        usersForAvatar() {
-            let users = this.task.watchers.map(watcher => {
-                watcher["role"] = "Наблюдатель";
-                return watcher;
-            });
-
-            this.task.responsible["role"] = "Исполнитель";
-            this.task.from["role"] = "Постановщик";
-
-            users.push(this.task.responsible, this.task.from);
-
-            return users;
         },
         isTaskAuthor() {
             return this.auth.id === this.task.from_id;

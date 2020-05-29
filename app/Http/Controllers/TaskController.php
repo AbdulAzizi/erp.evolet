@@ -706,7 +706,7 @@ class TaskController extends Controller
     public function planned_time($id, Request $request)
     {
         $task = Task::find($id);
-        
+
         // Add Event to History
         History::create([
             'user_id' => auth()->user()->id,
@@ -747,5 +747,74 @@ class TaskController extends Controller
     private function time($milliseconds)
     {
         return $this->millToDays($milliseconds) . 'д ' . $this->millToHours($milliseconds) . 'ч ' . $this->millToMinutes($milliseconds) . 'м';
+    }
+
+    public function author($id, Request $request)
+    {
+        $task = Task::find($id);
+        $author = User::find($request->author_id);
+
+        // Add Event to History
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' =>
+            '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) постановщика задачи с
+                <a href="' . route('users.dashboard', $task->from->id) . '">' . $task->from->fullname . '</a> на
+                <a href="' . route('users.dashboard', $author->id) . '">' . $author->fullname . '</a>',
+            'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
+        $task->from_id = $request->author_id;
+        $task->from_type = 'App\User';
+        $task->save();
+        $task->load('from');
+
+        return $task->from;
+
+    }
+
+    public function watchers($id, Request $request)
+    {
+        $task = Task::find($id);
+        $watchers = User::find($request->watchers);
+        $historyText = '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил наблюдателей.';
+
+        $addedWatchers = $watchers->whereNotIn('id', $task->watchers->pluck('id'));
+        if (count($addedWatchers)) {
+            $historyText = $historyText . ' Добавил: ';
+            foreach ($addedWatchers as $index => $watcher) {
+                $historyText = $historyText . '<a href="' . route('users.dashboard', $watcher->id) . '">' . $watcher->fullname . '</a>';
+                if ($index != (count($addedWatchers) - 1)) {
+                    $historyText = $historyText . ', ';
+                }
+            }
+        }
+        $removedWatchers = $task->watchers->whereNotIn('id', $watchers->pluck('id'));
+        if (count($removedWatchers)) {
+            $historyText = $historyText . ' Удалил: ';
+            foreach ($removedWatchers as $index => $watcher) {
+                $historyText = $historyText . '<a href="' . route('users.dashboard', $watcher->id) . '">' . $watcher->fullname . '</a>';
+
+                if ($index != (count($removedWatchers) - 1)) {
+                    $historyText = $historyText . ', ';
+                }
+            }
+        }
+
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' => $historyText,
+            'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
+        $task->watchers()->sync($watchers);
+        $task->load('watchers');
+        return $task->watchers;
     }
 }

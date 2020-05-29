@@ -27,7 +27,7 @@
                     <v-avatar left>
                         <img :src="photo(data.item.img)" />
                     </v-avatar>
-                    {{ data.item.name }} {{data.item.surname}}
+                    {{ data.item.name }} {{ data.item.surname }}
                 </v-chip>
             </template>
 
@@ -38,25 +38,38 @@
                     </v-list-item-avatar>
 
                     <v-list-item-content>
-                        <v-list-item-title>{{data.item.name}} {{data.item.surname}}</v-list-item-title>
+                        <v-list-item-title
+                            >{{ data.item.name }}
+                            {{ data.item.surname }}</v-list-item-title
+                        >
                         <v-list-item-subtitle>
                             <span
-                                v-for="(position,key) in data.item.positions"
-                                :key="'position-'+key"
+                                v-for="(position, key) in data.item.positions"
+                                :key="'position-' + key"
                             >
-                                {{position.label}}
-                                <span v-if="key != data.item.positions.length-1">|</span>
+                                {{ position.label }}
+                                <span
+                                    v-if="key != data.item.positions.length - 1"
+                                    >|</span
+                                >
                             </span>
                             <!-- - {{data.item.division.abbreviation}} -->
                         </v-list-item-subtitle>
                     </v-list-item-content>
                 </template>
-                <v-list-item-content v-else @click.stop="handleDivisionSelection(data.item)">
-                    <v-list-item-title>{{data.item.name}}</v-list-item-title>
+                <v-list-item-content
+                    v-else
+                    @click.stop="handleDivisionSelection(data.item)"
+                >
+                    <v-list-item-title>{{ data.item.name }}</v-list-item-title>
                 </v-list-item-content>
             </template>
         </v-autocomplete>
-        <input type="hidden" :name="name" :value="JSON.stringify(selectedUsers)" />
+        <input
+            type="hidden"
+            :name="name"
+            :value="JSON.stringify(selectedUsers)"
+        />
     </div>
 </template>
 
@@ -87,10 +100,6 @@ export default {
             searchText: null
         };
     },
-    mounted(){
-        console.log(this.$attrs);
-        
-    },
     methods: {
         handleDivisionSelection(el) {
             // this.selectedUsers.pop();
@@ -105,9 +114,20 @@ export default {
             });
         },
         remove(user) {
-            this.selectedUsers = this.selectedUsers.filter(
-                userId => userId !== user.id
-            );
+            if (this.$attrs.multiple) {
+                this.selectedUsers = this.selectedUsers.filter(userOrUserID => {
+                    if (
+                        this.$attrs.returnObject ||
+                        this.$attrs["return-object"]
+                    ) {
+                        return userOrUserID.id !== user.id;
+                    } else {
+                        return userOrUserID !== user.id;
+                    }
+                });
+            } else {
+                this.selectedUsers = null;
+            }
         }
     },
     watch: {
