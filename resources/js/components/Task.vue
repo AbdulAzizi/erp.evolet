@@ -269,26 +269,7 @@
                         :task="task"
                     />
 
-                    <v-subheader v-if="task.tags.length">Теги</v-subheader>
-                    <div class="px-3">
-                        <v-chip
-                            class="mb-2 mr-2"
-                            color="grey lighten-4"
-                            text-color="grey darken-1"
-                            v-for="(tag, index) in task.tags"
-                            :key="'tag-' + index"
-                            small
-                        >
-                            <v-avatar
-                                style="margin-left:-8px"
-                                class="mr-0"
-                                left
-                            >
-                                <v-icon class="body-1">mdi-tag</v-icon>
-                            </v-avatar>
-                            {{ tag.name }}
-                        </v-chip>
-                    </div>
+                    <tasks-tags :task="task" :edit="edit" />
                 </v-list>
             </v-col>
         </v-row>
@@ -377,6 +358,16 @@ export default {
                 this.task.responsibility_description = description;
             }
         );
+        Event.listen("tagDeleted", tagId => {
+            this.task.tags.forEach((tag, index) => {
+                if (tag.id == tagId) {
+                    this.task.tags.splice(index, 1);
+                }
+            });
+        });
+        Event.listen("taskTagsUpdated", tags => {
+            this.task.tags = tags;
+        });
     },
     watch: {
         item(v) {

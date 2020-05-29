@@ -481,6 +481,7 @@ Vue.component("views-users-tasks", () =>
 );
 
 /****************************TASKS********************************/
+Vue.component("tasks-tags", () => import("./components/tasks/Tags.vue"));
 Vue.component("tasks-participants", () =>
     import("./components/tasks/Participants.vue")
 );

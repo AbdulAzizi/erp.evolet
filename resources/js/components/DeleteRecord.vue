@@ -36,13 +36,25 @@ export default {
     },
     redirect: {
       required: false
+    },
+    event: {
+      required: false
     }
   },
   methods: {
     deleteRecord() {
       axios
         .delete(this.route)
-        .then(res => this.redirect ? window.location.replace(this.redirect) : window.location.reload())
+        .then(res => {
+          if (this.event) {
+            Event.fire(this.event, res.data);
+            this.dialog = false;
+          } else {
+            this.redirect
+              ? window.location.replace(this.redirect)
+              : window.location.reload();
+          }
+        })
         .catch(err => err.message);
     }
   },

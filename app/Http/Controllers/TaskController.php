@@ -726,6 +726,49 @@ class TaskController extends Controller
         return $task->planned_time;
     }
 
+    public function detachTag($taskId, $tagId)
+    {
+        $task = Task::find($taskId);
+
+        $task->tags()->detach($tagId);
+
+        $task->save();
+
+        return $tagId;
+    }
+
+    public function attachTag(Request $request, $id)
+    {
+        $task = Task::find($id);
+
+        $allTags = $request->tags;
+
+        $taskTagIds = [];
+
+        $tags = [];
+
+        foreach($allTags as $tag){
+
+            if($tag['id'] == -1){
+
+                $tag = Tag::create(['name' => $tag['name']]);
+
+                $division = Division::find(auth()->user()->division->id);
+
+                $division->tags()->attach($tag);
+
+                $tags[] = $tag['id'];
+                
+            } else {
+                $tags[] = $tag['id'];
+            }
+        }
+
+        $task->tags()->attach($tags);
+
+        return $task->tags;
+    }
+
     private function millToHours($milliseconds)
     {
         $result = $milliseconds / 3600000 - ($this->millToDays($milliseconds) * 24);

@@ -131,6 +131,8 @@ Route::prefix('api')->group(function () {
     Route::put('/tasks/{id}/planned_time', 'TaskController@planned_time')->name('api.tasks.planned_time');
     Route::put('/tasks/{id}/author', 'TaskController@author')->name('api.tasks.author');
     Route::put('/tasks/{id}/watchers', 'TaskController@watchers')->name('api.tasks.watchers');
+    Route::delete('/tasks/{taskId}/tags/{tagId}', 'TaskController@detachTag')->name('api.tasks.detachTag');
+    Route::put('/tasks/{id}/tags', 'TaskController@attachTag')->name('api.tasks.attachTag');
 
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
     Route::get('/tasks/groupBy/{field}', 'TaskController@group')->name('api.tasks.group');
