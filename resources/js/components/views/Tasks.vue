@@ -8,8 +8,8 @@
         dense
         solo
         hide-details
-        label="Название задачи"
-        :disabled="groupTask ? true : false"
+        label="Задачи"
+        :disabled="true"
       ></v-text-field>
       <v-tooltip bottom>
         <template v-slot:activator="{ on: tooltip }">
