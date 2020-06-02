@@ -21,7 +21,7 @@
                     color="primary"
                     textColor="white"
                     pill
-                    close
+                    :close="removeable"
                     @click:close="remove(data.item)"
                 >
                     <v-avatar left>
@@ -92,6 +92,10 @@ export default {
             required: false,
             default: "userSelected",
             type: String
+        },
+        removeable:{
+            required:false,
+            default:true
         }
     },
     data() {

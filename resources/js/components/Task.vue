@@ -16,7 +16,7 @@
                                 <v-list-item
                                     class="body-2"
                                     @click="forwardTask"
-                                    v-if="isTaskResponsible"
+                                    v-if="isTaskAuthor || isHisHead"
                                 >
                                     Делегировать
                                 </v-list-item>
@@ -32,7 +32,7 @@
                                     >Удалить задачу</v-list-item
                                 >
                                 <v-list-item
-                                    v-if="isTaskResponsible"
+                                    v-if="isTaskResponsible || isTaskAuthor"
                                     class="body-2"
                                     @click="edit = !edit"
                                     >{{
@@ -80,7 +80,7 @@
                                 </div>
                             </div>
 
-                            <task-description :task="task" :edit="edit" />
+                            <task-description :task="task" :edit="edit && isTaskAuthor" />
 
                             <div v-if="task.question_tasks.length" class="pb-3">
                                 <div class="font-weight-medium pb-1">Опрос</div>
@@ -226,7 +226,7 @@
                     <tasks-participants :task="task" :edit="edit" />
                     <v-subheader>Параметры</v-subheader>
 
-                    <tasks-deadline :task="item" :edit="edit" />
+                    <tasks-deadline :task="item" :edit="edit && isTaskAuthor" />
 
                     <v-list-item>
                         <v-list-item-avatar>
@@ -256,7 +256,7 @@
                         </v-list-item-content>
                     </v-list-item>
 
-                    <tasks-planned-time :task="task" :edit="edit" />
+                    <tasks-planned-time :task="task" :edit="edit && isTaskAuthor" />
 
                     <priority
                         :id="task.priority"
