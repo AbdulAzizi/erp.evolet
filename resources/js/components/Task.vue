@@ -51,7 +51,7 @@
                             <v-tab href="#history">История</v-tab>
 
                             <dynamic-form
-                                v-if="isTaskResponsible"
+                                v-if="isTaskAuthor || isHisHead"
                                 dialog
                                 :fields="forwardFields"
                                 title="Выберите сотрудника"
