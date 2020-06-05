@@ -23,6 +23,12 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    private $priorities = [
+        ["id" => 0, "label" => "Низкий"],
+        ["id" => 1, "label" => "Средний"],
+        ["id" => 2, "label" => "Высокий"],
+    ];
+
     public function index(Request $request, TaskFilters $filters)
     {
         $authUser = \Auth::user();
@@ -864,5 +870,28 @@ class TaskController extends Controller
         $task->watchers()->sync($watchers);
         $task->load('watchers');
         return $task->watchers;
+    }
+
+    public function updatePriority($id, Request $request)
+    {
+        $task = Task::find($id);
+
+        // Add Event to History
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' =>
+            '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) приоритет задачи с
+            <span class="primary--text">' . $this->priorities[$task->priority]['label'] .  '</span> на 
+            <span class="primary--text">'.$this->priorities[$request->priority]['label'].'</span>',
+            'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
+        $task->priority = $request->priority;
+        $task->save();
+
+        return $task->priority;
     }
 }

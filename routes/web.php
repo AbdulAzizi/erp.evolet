@@ -133,6 +133,7 @@ Route::prefix('api')->group(function () {
     Route::put('/tasks/{id}/watchers', 'TaskController@watchers')->name('api.tasks.watchers');
     Route::delete('/tasks/{taskId}/tags/{tagId}', 'TaskController@detachTag')->name('api.tasks.detachTag');
     Route::put('/tasks/{id}/tags', 'TaskController@attachTag')->name('api.tasks.attachTag');
+    Route::put('/tasks/{id}/priority', 'TaskController@updatePriority')->name('api.tasks.updatePriority');
 
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
     Route::get('/tasks/groupBy/{field}', 'TaskController@group')->name('api.tasks.group');
