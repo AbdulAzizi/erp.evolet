@@ -61,55 +61,44 @@ export default {
   data() {
     return {
       body: "",
-      localMessageable: this.messageable
+      localMessageable: { ...this.messageable }
     };
   },
   created() {
-    if(this.type == "App\\User"){
-
+    if (this.type == "App\\User") {
       Echo.channel(
         `User.${this.auth.id}.${this.messageable.id}.messages`
       ).listen("NewMessage", event => {
         this.localMessageable.messages.push(event.message);
-        this.scrollToBotom();
       });
 
       Echo.channel(
         `User.${this.messageable.id}.${this.auth.id}.messages`
       ).listen("NewMessage", event => {
         this.localMessageable.messages.push(event.message);
-        this.scrollToBotom();
       });
-      console.log(`User.${this.messageable.id}.${this.auth.id}.messages`);
-      
-
     } else {
-
-      let result = this.type.split('\\');
+      let result = this.type.split("\\");
       let model = result[1];
-      console.log(`${model}.${this.messageable.id}.messages`);
-      
+
       Echo.channel(`${model}.${this.messageable.id}.messages`).listen(
         "NewMessage",
         event => {
           this.localMessageable.messages.push(event.message);
-          this.scrollToBotom();
-      });
+        }
+      );
     }
   },
   methods: {
     storeMessage(messageable) {
-      let self = this;
       axios
         .post(this.appPath("api/messages"), {
-          body: self.body,
+          body: this.body,
           messageable_id: messageable.id,
-          messageable_type: self.type
+          messageable_type: this.type
         })
-        .then(function(response) {
-          console.log(response);
-
-          self.body = "";
+        .then(response => {
+          this.body = "";
         })
         .catch(function(error) {
           console.log(error);
@@ -120,29 +109,37 @@ export default {
         this.$refs.messagesWrapper.scrollTop = this.$refs.messagesWrapper.scrollHeight;
       });
     },
-    showDateOfMessage(date){
-        let currentYear = this.moment().local().format('Y');
-        let currentDay = this.moment().local().format('DD');
-        let messageDate = this.moment(date).local();
+    showDateOfMessage(date) {
+      let currentYear = this.moment()
+        .local()
+        .format("Y");
+      let currentDay = this.moment()
+        .local()
+        .format("DD");
+      let messageDate = this.moment(date).local();
 
-        if(messageDate.format('Y') !== currentYear){
-            return messageDate.format('hh:mm DD.M.YY');
-        }
-        if(messageDate.format('DD') !== currentDay){
-            return messageDate.format('DD MMM hh:mm');
-        }
-        else{
-            return messageDate.format('hh:mm');
-        }
+      if (messageDate.format("Y") !== currentYear) {
+        return messageDate.format("hh:mm DD.M.YY");
+      }
+      if (messageDate.format("DD") !== currentDay) {
+        return messageDate.format("DD MMM hh:mm");
+      } else {
+        return messageDate.format("hh:mm");
+      }
     }
   },
   watch: {
     messageable(val) {
-      console.log("commantable");
-      console.log(this.messageable);
-
-      this.localMessageable = this.messageable;
+      this.localMessageable = { ...this.messageable };
       this.scrollToBotom();
+    },
+    messages(val) {
+      this.scrollToBotom();
+    }
+  },
+  computed: {
+    messages() {
+      return this.localMessageable.messages;
     }
   }
 };
