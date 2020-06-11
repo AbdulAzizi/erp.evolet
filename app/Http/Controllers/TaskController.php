@@ -545,6 +545,7 @@ class TaskController extends Controller
         $task->watchers()->detach();
         $task->forms()->delete();
         $task->questionTasks()->delete();
+        $task->messages()->delete();
 
         $task->delete();
     }
