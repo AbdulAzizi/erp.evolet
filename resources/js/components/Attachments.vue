@@ -59,7 +59,7 @@
             ></v-icon>
             <v-list-item-content>
               <v-list-item-title>{{ file.name }}</v-list-item-title>
-              <v-list-item-subtitle :class="(file.size / 1000) >= 1024 ? 'red--text' : 'grey--text'"
+              <v-list-item-subtitle :class="(file.size / 1000) >= 20000 ? 'red--text' : 'grey--text'"
               >{{ (file.size / 1000).toFixed(2) }} kb</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
@@ -218,7 +218,7 @@ export default {
       formData.append("taskId", this.taskId);
 
       this.selectedFiles.forEach(file => {
-        if (file.size / 1000 >= 1024) {
+        if (file.size / 1000 >= 20000) {
           this.localError = "Размер файла не должен превышать 20 мб";
           this.selectedFiles.length = 0;
         }
