@@ -16,7 +16,7 @@ class AttachmentController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'attachments.*' => 'max:1024'
+            'attachments.*' => 'max:20000'
         ]);
 
         $task = Task::find($request->taskId);

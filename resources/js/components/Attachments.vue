@@ -2,8 +2,14 @@
   <div>
     <v-row>
       <v-col cols="10">
-          <span class="mb-0 font-weight-medium grey--text text--darken-2" v-if="localFiles.length">Прикрепленные файлы</span>
-          <span class="mb-0 font-weight-medium grey--text text--darken-2" v-if="!localFiles.length && !deleteBtn">Нет прикрепленных файлов</span>
+        <span
+          class="mb-0 font-weight-medium grey--text text--darken-2"
+          v-if="localFiles.length"
+        >Прикрепленные файлы</span>
+        <span
+          class="mb-0 font-weight-medium grey--text text--darken-2"
+          v-if="!localFiles.length && !deleteBtn"
+        >Нет прикрепленных файлов</span>
       </v-col>
       <v-col cols="2" class="pb-0">
         <form
@@ -59,7 +65,8 @@
             ></v-icon>
             <v-list-item-content>
               <v-list-item-title>{{ file.name }}</v-list-item-title>
-              <v-list-item-subtitle :class="(file.size / 1000) >= 20000 ? 'red--text' : 'grey--text'"
+              <v-list-item-subtitle
+                :class="(file.size / 1000) >= 20000 ? 'red--text' : 'grey--text'"
               >{{ (file.size / 1000).toFixed(2) }} kb</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
@@ -91,7 +98,7 @@
         </v-card>
       </v-col>
       <template v-for="(item, index) in selectedFiles">
-        <v-col cols="4" class="loader" :key="index" v-if="loading && (error ? error : localError)">
+        <v-col cols="4" class="loader" :key="index" v-if="loading && !localError">
           <v-sheet class="pt-0" color="grey lighten-4">
             <v-skeleton-loader
               height="61"
@@ -195,11 +202,15 @@ export default {
       if (this.edit) {
         axios
           .delete(`/api/attachments/${id}`)
-          .then(res => Event.fire("countFiles", this.localFiles.length));
+          .then(res => {
+            Event.fire("countFiles", this.localFiles.length);
+            Event.fire("notify", ["Файл успешно удален"]);
+          })
+          .catch(err => Event.fire("notify", ["Ошибка! Файл не удален"]));
       }
-      if((size / 1000) >= 20000){
+      if (size / 1000 >= 20000) {
         this.localError = null;
-        Event.fire("fileError", false)
+        Event.fire("fileError", false);
       }
       this.localFiles.splice(index, 1);
     },
@@ -236,6 +247,10 @@ export default {
             Event.fire("countFiles", this.localFiles.length);
             this.selectedFiles.length = 0;
             this.loading = false;
+            Event.fire("notify", ["Файл успешно добавлен"]);
+          })
+          .catch(err => {
+            Event.fire("notify", ["Ошибка! Файл не добавлен"]);
           });
       }
     }
@@ -243,11 +258,11 @@ export default {
   watch: {
     files(val) {
       val.some(item => {
-        if((item.size / 1000) >= 20000) {
+        if (item.size / 1000 >= 20000) {
           this.localError = "Размер файла не должен превышать 20 мб";
-          Event.fire("fileError", true)
+          Event.fire("fileError", true);
         }
-      })
+      });
     }
   }
 };
