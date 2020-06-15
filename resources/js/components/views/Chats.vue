@@ -129,7 +129,7 @@
                             <v-icon>{{ user.icon }}</v-icon>
                 </v-list-item-icon>-->
                 <v-list-item-avatar>
-                  <v-img :src="appPath('img/'+user.img)"></v-img>
+                  <v-img :src="photo(user.img)"></v-img>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
