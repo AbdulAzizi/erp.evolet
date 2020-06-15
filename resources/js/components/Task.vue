@@ -16,7 +16,7 @@
                 <v-list-item
                   class="body-2"
                   @click="forwardTask"
-                  v-if="isTaskResponsible"
+                  v-if="isTaskAuthor || isHisHead"
                 >Делегировать</v-list-item>
                 <v-list-item class="body-2" @click="markAsUnread(task)">Отметить как непрочитанное</v-list-item>
                 <v-list-item
@@ -25,10 +25,16 @@
                   @click="deleteTaskDialog = true"
                 >Удалить задачу</v-list-item>
                 <v-list-item
-                  v-if="isTaskResponsible"
+                  v-if="isTaskResponsible || isTaskAuthor"
                   class="body-2"
                   @click="edit = !edit"
-                >{{edit?'Закончить изменения':'Изменить'}}</v-list-item>
+                >
+                  {{
+                  edit
+                  ? "Закончить изменения"
+                  : "Изменить"
+                  }}
+                </v-list-item>
               </v-list>
             </v-card>
           </v-menu>
@@ -44,9 +50,8 @@
                 >Вложения</v-badge>
                 <span v-if="!countFiles">Вложения</span>
               </v-tab>
-
               <dynamic-form
-                v-if="isTaskResponsible"
+                v-if="isTaskAuthor || isHisHead"
                 dialog
                 :fields="forwardFields"
                 title="Выберите сотрудника"
@@ -61,12 +66,17 @@
           <v-tab-item value="task">
             <v-card-text>
               <div v-if="task.read_at" class="pb-3">
-                <div
-                  class="font-weight-medium pb-1 grey--text"
-                >Просмотрено: {{ moment(item.read_at).local().format('lll') }}</div>
+                <div class="font-weight-medium pb-1 grey--text">
+                  Просмотрено:
+                  {{
+                  moment(item.read_at)
+                  .local()
+                  .format("lll")
+                  }}
+                </div>
               </div>
 
-              <task-description :task="task" :edit="edit" />
+              <task-description :task="task" :edit="edit && isTaskAuthor" />
 
               <div v-if="task.question_tasks.length" class="pb-3">
                 <div class="font-weight-medium pb-1">Опрос</div>
@@ -138,34 +148,49 @@
       <v-col cols="3" class="white">
         <v-list subheader dense tile class="pl-5">
           <v-subheader>Участники</v-subheader>
-          <avatars-set :items="usersForAvatar" item-hint="role" class="pl-3"></avatars-set>
+          <!-- <avatars-set
+                        :items="usersForAvatar"
+                        item-hint="role"
+                        class="pl-3"
+          ></avatars-set>-->
+          <tasks-participants :task="task" :edit="edit" />
           <v-subheader>Параметры</v-subheader>
 
-          <tasks-deadline :task="item" :edit="edit" />
+          <tasks-deadline :task="item" :edit="edit && isTaskAuthor" />
 
-          <v-list-item>
-            <v-list-item-avatar>
-              <v-icon>mdi-calendar-plus</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ moment(item.created_at).local().format('DD-MM-Y hh:mm') }}</v-list-item-title>
-              <v-list-item-subtitle>Дата добавления</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
+          <tasks-planned-time :task="task" :edit="edit && isTaskAuthor" />
+
+          <tasks-priority :task="task" :edit="edit" />
 
           <v-list-item>
             <v-list-item-avatar>
               <v-icon>mdi-format-list-checks</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ task.status.name }}</v-list-item-title>
+              <v-list-item-title>
+                {{
+                task.status.name
+                }}
+              </v-list-item-title>
               <v-list-item-subtitle>Статус</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
-          <tasks-planned-time :task="task" :edit="edit" />
-
-          <priority :id="task.priority" classes=" lighten-3"></priority>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-icon>mdi-calendar-plus</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{
+                moment(item.created_at)
+                .local()
+                .format("DD-MM-Y hh:mm")
+                }}
+              </v-list-item-title>
+              <v-list-item-subtitle>Дата добавления</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
 
           <task-control-buttons v-if="isTaskResponsible" class="mr-5" :task="task" />
 
@@ -248,7 +273,6 @@ export default {
     };
   },
   created() {
-    console.log(this.auth.id == this.task.from_id)
     this.synch();
     Event.listen(`tasks/${this.task.id}/status/changed`, status => {
       this.task.status = status;
@@ -273,6 +297,11 @@ export default {
     Event.listen("countFiles", data => {
       this.countFiles = data;
     });
+
+    Event.listen("taskPriorityChanged", priority => {
+      this.task.priority = priority;
+    });
+    
   },
   watch: {
     item(v) {

@@ -1,6 +1,6 @@
 <template>
     <div
-        style="position: absolute;
+        style="position: fixed;
 				top: 60px;
 				right: 13px;
 				align-self: center;

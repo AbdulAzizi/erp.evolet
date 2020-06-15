@@ -29,6 +29,12 @@ use Zipper;
 
 class TaskController extends Controller
 {
+    private $priorities = [
+        ["id" => 0, "label" => "Низкий"],
+        ["id" => 1, "label" => "Средний"],
+        ["id" => 2, "label" => "Высокий"],
+    ];
+
     public function index(Request $request, TaskFilters $filters)
     {
         $authUser = \Auth::user();
@@ -578,6 +584,7 @@ class TaskController extends Controller
         $task->watchers()->detach();
         $task->forms()->delete();
         $task->questionTasks()->delete();
+        $task->messages()->delete();
 
         $task->delete();
     }
@@ -778,32 +785,38 @@ class TaskController extends Controller
 
     public function attachTag(Request $request, $id)
     {
+        // Get task
         $task = Task::find($id);
-
-        $allTags = $request->tags;
-
-        $taskTagIds = [];
-
-        $tags = [];
-
-        foreach ($allTags as $tag) {
-
+        // Initialize variables
+        $newTags = [];
+        $existingTagIDs = [];
+        // Seperate new tags from existing once
+        foreach ($request->tags as $tag) {
             if ($tag['id'] == -1) {
-
-                $tag = Tag::create(['name' => $tag['name']]);
-
-                $division = Division::find(auth()->user()->division->id);
-
-                $division->tags()->attach($tag);
-
-                $tags[] = $tag['id'];
+                $newTags[] = $tag;
             } else {
-                $tags[] = $tag['id'];
+                $existingTagIDs[] = $tag['id'];
             }
         }
-
-        $task->tags()->attach($tags);
-
+        // Prepare tags for insertion
+        $tagsToInsert = array_map(function ($tag) {
+            return ['name' => $tag['name']];
+        }, $newTags);
+        // Insert all new Tags
+        Tag::insert($tagsToInsert);
+        // Get new tag by names
+        $newTagsByName = array_map(function ($tag) {
+            return $tag['name'];
+        }, $newTags);
+        //  Get new tag IDs
+        $newTagIDs = Tag::whereIn('name', $newTagsByName)->get()->pluck('id')->toArray();
+        // Attach new tags to division
+        auth()->user()->division->tags()->attach($newTagIDs);
+        // Merge existing and new tags
+        $tagsToAttach = array_merge($newTagIDs, $existingTagIDs);
+        // Attach all tags to task
+        $task->tags()->attach($tagsToAttach);
+        // Return tags
         return $task->tags;
     }
     
@@ -856,5 +869,97 @@ class TaskController extends Controller
     private function time($milliseconds)
     {
         return $this->millToDays($milliseconds) . 'д ' . $this->millToHours($milliseconds) . 'ч ' . $this->millToMinutes($milliseconds) . 'м';
+    }
+
+    public function author($id, Request $request)
+    {
+        $task = Task::find($id);
+        $author = User::find($request->author_id);
+
+        // Add Event to History
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' =>
+            '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) постановщика задачи с
+                <a href="' . route('users.dashboard', $task->from->id) . '">' . $task->from->fullname . '</a> на
+                <a href="' . route('users.dashboard', $author->id) . '">' . $author->fullname . '</a>',
+            'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
+        $task->from_id = $request->author_id;
+        $task->from_type = 'App\User';
+        $task->save();
+        $task->load('from');
+
+        return $task->from;
+
+    }
+
+    public function watchers($id, Request $request)
+    {
+        $task = Task::find($id);
+        $watchers = User::find($request->watchers);
+        $historyText = '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил наблюдателей.';
+
+        $addedWatchers = $watchers->whereNotIn('id', $task->watchers->pluck('id'));
+        if (count($addedWatchers)) {
+            $historyText = $historyText . ' Добавил: ';
+            foreach ($addedWatchers as $index => $watcher) {
+                $historyText = $historyText . '<a href="' . route('users.dashboard', $watcher->id) . '">' . $watcher->fullname . '</a>';
+                if ($index != (count($addedWatchers) - 1)) {
+                    $historyText = $historyText . ', ';
+                }
+            }
+        }
+        $removedWatchers = $task->watchers->whereNotIn('id', $watchers->pluck('id'));
+        if (count($removedWatchers)) {
+            $historyText = $historyText . ' Удалил: ';
+            foreach ($removedWatchers as $index => $watcher) {
+                $historyText = $historyText . '<a href="' . route('users.dashboard', $watcher->id) . '">' . $watcher->fullname . '</a>';
+
+                if ($index != (count($removedWatchers) - 1)) {
+                    $historyText = $historyText . ', ';
+                }
+            }
+        }
+
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' => $historyText,
+            'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
+        $task->watchers()->sync($watchers);
+        $task->load('watchers');
+        return $task->watchers;
+    }
+
+    public function updatePriority($id, Request $request)
+    {
+        $task = Task::find($id);
+
+        // Add Event to History
+        History::create([
+            'user_id' => auth()->user()->id,
+            'description' =>
+            '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) приоритет задачи с
+            <span class="primary--text">' . $this->priorities[$task->priority]['label'] .  '</span> на 
+            <span class="primary--text">'.$this->priorities[$request->priority]['label'].'</span>',
+            'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
+            'historyable_id' => $task->id,
+            'historyable_type' => 'App\Task',
+            'created_at' => date(now()),
+        ]);
+
+        $task->priority = $request->priority;
+        $task->save();
+
+        return $task->priority;
     }
 }
