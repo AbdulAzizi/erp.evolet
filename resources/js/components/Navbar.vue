@@ -47,7 +47,7 @@
         <span>Задачи</span>
       </v-tooltip>
 
-      <v-tooltip bottom v-if="false">
+      <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on" :href="appPath('chats')">
             <v-icon color="grey darken-1">mdi-forum</v-icon>

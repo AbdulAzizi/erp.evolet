@@ -141,6 +141,24 @@ export default {
     messages() {
       return this.localMessageable.messages;
     }
+  },
+  beforeDestroy() {
+    if (this.type == "App\\User") {
+
+      Echo.channel(`User.${this.auth.id}.${this.messageable.id}.messages`)
+        .stopListening("NewMessage");
+
+      Echo.channel(`User.${this.messageable.id}.${this.auth.id}.messages`)
+        .stopListening("NewMessage");
+        
+    } else {
+      let result = this.type.split("\\");
+      let model = result[1];
+
+      Echo.channel(`${model}.${this.messageable.id}.messages`)
+        .stopListening("NewMessage");
+    }
+    
   }
 };
 </script>

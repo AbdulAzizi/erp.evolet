@@ -29,35 +29,47 @@
       <v-tabs-items v-model="tab">
         <v-tab-item>
           <v-list dense shaped style="max-height: calc(100vh - 96px); overflow-y: scroll;">
-            <v-list-item-group color="primary">
-              <v-list-item v-for="(chat, index) in chats" :key="'chat-'+index" :value="chat.id">
-                <template v-if="chat.title">
+            <v-list-item-group color="primary" v-model="selectedChatObject">
+              <template v-for="(chat, index) in chats">
+                <v-list-item v-if="chat.title" :key="'chat-'+index" :value="chat">
                   <v-list-item-avatar>
                     <v-img :src="photo(chat.img)"></v-img>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{chat.title}}</v-list-item-title>
                   </v-list-item-content>
-                </template>
-                <template v-if="typeof chat.from === 'object'">
+                </v-list-item>
+
+                <v-list-item
+                  v-if="typeof chat.from === 'object'"
+                  :key="'chat-'+index"
+                  :value="chat.from"
+                >
                   <v-list-item-avatar>
                     <v-img :src="photo(chat.from.img)"></v-img>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{ chat.from.name }} {{ chat.from.surname }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ chat.from.positionLevel.name }} {{ chat.from.division.abbreviation }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ chat.from.position_level.name }} {{ chat.from.division.abbreviation }}</v-list-item-subtitle>
                   </v-list-item-content>
-                </template>
-                <template v-if="typeof chat.to === 'object'">
-                  <v-list-item-avatar>
-                    <v-img :src="photo(chat.to.img)"></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ chat.to.name }} {{ chat.to.surname }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ chat.to.positionLevel.name }} {{ chat.to.division.abbreviation }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
+                </v-list-item>
+
+                <v-list-item
+                  v-if="typeof chat.to === 'object'"
+                  :key="'chat-'+index"
+                  :value="chat.to"
+                >
+                  <template>
+                    <v-list-item-avatar>
+                      <v-img :src="photo(chat.to.img)"></v-img>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ chat.to.name }} {{ chat.to.surname }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ chat.to.position_level.name }} {{ chat.to.division.abbreviation }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </template>
+                </v-list-item>
+              </template>
             </v-list-item-group>
           </v-list>
         </v-tab-item>
@@ -82,11 +94,11 @@
                 <v-list-item-title>Новая Группа</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item-group v-model="selectedChatIndex" color="primary">
+            <v-list-item-group v-model="selectedGroup" color="primary">
               <v-list-item
                 v-for="(chat, index) in filteredGroups"
                 :key="'chat-'+index"
-                :value="chat.id"
+                :value="chat"
               >
                 <v-list-item-avatar>
                   <v-img :src="photo(chat.img)"></v-img>
@@ -112,7 +124,7 @@
           <v-divider></v-divider>
           <v-list dense shaped style="max-height: calc(100vh - 177px); overflow-y: scroll;">
             <v-list-item-group v-model="selectedUser" color="primary">
-              <v-list-item v-for="user in filteredUsers" :key="user.title" :value="user.id">
+              <v-list-item v-for="user in filteredUsers" :key="user.title" :value="user">
                 <!-- <v-list-item-icon>
                             <v-icon>{{ user.icon }}</v-icon>
                 </v-list-item-icon>-->
@@ -135,11 +147,11 @@
       <v-toolbar-title v-text="selectedChat.title ? selectedChat.title : selectedChat.name"></v-toolbar-title>
       <div class="flex-grow-1"></div>
 
-      <template v-if="$vuetify.breakpoint.smAndUp">
+      <!-- <template v-if="$vuetify.breakpoint.smAndUp">
         <v-btn icon>
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-      </template>
+      </template>-->
     </v-toolbar>
 
     <v-divider></v-divider>
@@ -167,9 +179,9 @@
             <v-list-item-subtitle>Администратор</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
+        <v-divider></v-divider>
       </template>
 
-      <v-divider></v-divider>
       <v-list dense>
         <v-list-item
           v-for="( participant, index ) in selectedChat.participants"
@@ -184,7 +196,7 @@
               {{participant.name}}
               {{participant.surname}}
             </v-list-item-title>
-            <v-list-item-subtitle>{{participant.positionLevel.name}} {{participant.division.abbreviation}}</v-list-item-subtitle>
+            <!-- <v-list-item-subtitle>{{participant.position_level.name}} {{participant.division.abbreviation}}</v-list-item-subtitle> -->
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -205,13 +217,13 @@ export default {
       contactSearch: null,
       filteredGroups: this.groups,
 
-      items: [
-        { title: "Dashboard", icon: "mdi-view-dashboard" },
-        { title: "Photos", icon: "mdi-image" },
-        { title: "About", icon: "mdi-help-box" }
-      ],
-      selectedChatIndex: null,
+      selectedChatObject: null,
+      selectedGroup: null,
+      selectedUser: null,
+
       selectedChat: null,
+      selectedType: null,
+
       newGroupFields: [
         {
           type: "string",
@@ -229,9 +241,7 @@ export default {
           users: this.users,
           multiple: true
         }
-      ],
-      selectedUser: null,
-      damnyou: []
+      ]
     };
   },
   methods: {
@@ -243,7 +253,8 @@ export default {
     }
   },
   created() {
-    this.selectedChatIndex = this.groups[0].id;
+    // console.log(this.chats);
+    // if (this.groups.length) this.selectedGroup = this.groups[0].id;
   },
   watch: {
     contactSearch(val) {
@@ -259,17 +270,17 @@ export default {
         return new RegExp(this.groupSearch, "gi").test(chat.title);
       });
     },
-    selectedChatIndex(id) {
+    selectedGroup(group) {
       // Undo selected chat
       this.selectedChat = null;
       this.selectedType = null;
       // Check if anything was selected
-      if (id != null) {
+      if (group != null) {
         let index = null;
         let chat = null;
         // get chat from groups
         this.groups.map((el, key) => {
-          if (el.id == id) {
+          if (el.id == group.id) {
             index = key;
             chat = el;
           }
@@ -279,7 +290,7 @@ export default {
         if (chat.participants == undefined) {
           // Send request to get details of selected chat
           axios
-            .get(this.appPath(`api/chats/${id}/details`))
+            .get(this.appPath(`api/chats/${group.id}/details`))
             // On Respond
             .then(response => {
               // Append details to local variable groups
@@ -296,15 +307,28 @@ export default {
         }
       }
     },
-    selectedUser(id) {
+    selectedUser(user) {
       this.selectedChat = null;
+      this.selectedType = null;
+      if (user == null) return;
+
       axios
-        .get(this.appPath(`api/directs/${id}`))
+        .get(this.appPath(`api/directs/${user.id}`))
         // On response
         .then(response => {
           this.selectedChat = response.data;
           this.selectedType = "App\\Direct";
         });
+    },
+    selectedChatObject(object) {
+      this.selectedChat = null;
+      this.selectedType = null;
+      if (!object) return;
+      if ("admin_id" in object) {
+        this.selectedGroup = { ...object };
+      } else {
+        this.selectedUser = { ...object };
+      }
     },
     selectedChat(val) {
       // console.log("selectedChat");
