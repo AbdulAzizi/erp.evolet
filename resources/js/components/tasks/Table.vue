@@ -69,11 +69,11 @@
                             {{
                                 item.responsibility_description
                                     ? item.responsibility_description.text
-                                          .length >= 30
+                                          .length >= 20
                                         ? item.responsibility_description.text.substring(
                                               0,
-                                              30
-                                          )
+                                              20
+                                          ) + '...'
                                         : item.responsibility_description.text
                                     : "Удалено"
                             }}
@@ -95,6 +95,12 @@
                                             .format("lll")
                                     }}</span
                                 >
+                            </v-tooltip>
+                            <v-tooltip v-if="item.attachments_count" bottom>
+                                <template v-slot:activator="{ on }">
+                                   <v-icon color="grey darken-3" small v-on="on">mdi-paperclip</v-icon>
+                                </template>
+                                <span>Файлов {{ item.attachments_count }}</span>
                             </v-tooltip>
                         </td>
                         <td>

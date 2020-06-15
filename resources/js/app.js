@@ -82,6 +82,9 @@ Vue.mixin({
                 return window.Laravel.asset_path + "img/green-solo-logo.png";
             
         },
+        filePath(name){
+            return window.Laravel.asset_path + "storage/" + name;
+        },
         thumb(name){
             if(name){
                 return window.Laravel.asset_path + "img/thumbs/" + name;
@@ -254,6 +257,21 @@ Vue.mixin({
         },
         currentTask(){
             return window.Laravel.currentTask;
+        },
+        availableFileFormats() {
+            return [
+                'image/*',
+                '.pdf',
+                '.xlsx',
+                '.xls',
+                '.doc',
+                '.docx',
+                '.ppt',
+                '.pptx',
+                '.psd',
+                '.ai',
+                '.cdr'
+              ]
         }
     },
     created() {
@@ -298,6 +316,7 @@ Vue.component("process-task-add-form", () => import("./components/processTask/Ad
 Vue.component("edit-add-actions", () => import("./components/division/EditAddActions.vue"));
 Vue.component("add-employee", () => import("./components/division/AddEmployee.vue"));
 Vue.component("edit-record", () => import("./components/EditRecord.vue"));
+Vue.component("attachments", () => import("./components/Attachments.vue"));
 
 /****************************RESPONSIBILITIES********************************/
 Vue.component("attach-responsibilities-btn", () => import("./components/responsibility/AttachResponsibilityBtn.vue"));

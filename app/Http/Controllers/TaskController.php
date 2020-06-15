@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Attachment;
 use App\Division;
 use App\Events\TaskForwardedEvent;
 use App\Filters\TaskFilters;
@@ -20,6 +21,11 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Image;
+use Zipper;
 
 class TaskController extends Controller
 {
@@ -62,12 +68,10 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         // validate obligatory fields
-        $validatedData = $request->validate([
-            'responsibility_description' => 'required_without:responsibility',
-            'responsibility' => 'required_without:responsibility_description',
-            'assignees' => 'required',
-            'deadline' => 'required',
-            'estimatedTaskTime' => 'required',
+        // dd($request->all());
+
+        $validator = Validator::make($request->all(), [
+            'attachments.*' => 'max:20000'
         ]);
 
         $descriptions = json_decode($request->responsibility_description);
@@ -75,75 +79,109 @@ class TaskController extends Controller
         // Decode things that must be decoded
         $assignees = json_decode($request->assignees);
 
+        $priority = json_decode($request->priority);
+
         // Get new Status instance
         $newStatus = \App\Status::where('name', 'Новый')->first();
         // Empty array to keep query
         $tasks = [];
 
-        // Loop through responsibility descriptions
-        foreach ($descriptions as $description) {
-            // Loop through assignees
-            foreach ($assignees as $key => $assigneeID) {
-                // Push each query array to one that must be executed for Tasks
-                $tasks[] = Task::create([
-                    'title' => $request->title,
-                    'description' => $request->description,
-                    'status_id' => $newStatus->id,
-                    'priority' => $request->priority === null ? 1 : $request->priority,
-                    'planned_time' => $request->estimatedTaskTime / count($descriptions),
-                    'start_date' => $request->start_date,
-                    'deadline' => $request->deadline,
-                    'responsible_id' => $assigneeID,
-                    'from_id' => auth()->id(),
-                    'from_type' => User::class,
-                    'responsibility_description_id' => $description,
-                ]);
+        $files = $request->file('attachments');
+
+        if($validator->fails()){
+            return ['attachmentError' => $validator->errors()->first()];
+        }
+        else {
+
+            // Loop through responsibility descriptions
+            foreach ($descriptions as $description) {
+                // Loop through assignees
+                foreach ($assignees as $key => $assigneeID) {
+                    // Push each query array to one that must be executed for Tasks
+                    $tasks[] = Task::create([
+                        'title' => $request->title,
+                        'description' => $request->description,
+                        'status_id' => $newStatus->id,
+                        'priority' => $priority === null ? 1 : $priority,
+                        'planned_time' => $request->estimatedTaskTime / count($descriptions),
+                        'start_date' => $request->start_date,
+                        'deadline' => $request->deadline,
+                        'responsible_id' => $assigneeID,
+                        'from_id' => auth()->id(),
+                        'from_type' => User::class,
+                        'responsibility_description_id' => $description,
+                    ]);
+                }
+            }
+    
+            // Decode watchers
+            $watchers = json_decode($request->watchers);
+            if (count($watchers)) {
+                // Get all Watcher Users
+                $watchers = User::alone()->find($watchers);
+            }
+    
+            $newTags = json_decode($request->newTags);
+            $tags = json_decode($request->existingTags);
+            $poll = json_decode($request->poll);
+    
+            if (count($newTags)) {
+                foreach ($newTags as $newTag) {
+                    // Create new tags and merge them to existing tags array
+                    $tag = Tag::create(['name' => $newTag]);
+    
+                    $division = Division::find(auth()->user()->division->id);
+    
+                    $division->tags()->attach($tag);
+    
+                    $tags[] = $tag->id;
+                }
+            }
+            // if there is a poll
+            if ($poll) {
+                $this->createPoll($poll, $tasks);
+            }
+            // Loop through Tasks
+            foreach ($tasks as $task) {
+    
+                // TODO On the clide side restrickt User to add himself as a watcher
+                // TODO select auth user as task responsible by deafauld on the client side
+    
+                if ($request->watchers) {
+                    // Attach Watchers to Task
+                    $task->watchers()->attach($watchers);
+                }
+                if (count($tags)) {
+                    $task->tags()->attach($tags);
+                }
+    
+                if($files){
+    
+                    foreach ($files as $file) {
+                        if(strpos($file->getMimeType(), 'image') !== false){
+                            $image = Image::make($file);
+                            $image->save(public_path('img/' . $file->getClientOriginalName()));
+                        }
+                        else {
+                            Storage::disk('public')->put($file->getClientOriginalName(), file_get_contents($file));
+                        }
+        
+        
+                        $attachment = Attachment::create([
+                            'name' => $file->getClientOriginalName(),
+                            'size' => $file->getSize(),
+                            'attachable_type' => 'App\Task',
+                            'attachable_id' => $task->id,
+                            'mimeType' => $file->getMimeType()
+                        ]);
+        
+                        $attachment->save();
+                }
+                }
             }
         }
-
-        // Decode watchers
-        $watchers = json_decode($request->watchers);
-        if (count($watchers)) {
-            // Get all Watcher Users
-            $watchers = User::alone()->find($watchers);
-        }
-
-        $newTags = json_decode($request->newTags);
-        $tags = json_decode($request->existingTags);
-        $poll = json_decode($request->poll);
-
-        if (count($newTags)) {
-            foreach ($newTags as $newTag) {
-                // Create new tags and merge them to existing tags array
-                $tag = Tag::create(['name' => $newTag]);
-
-                $division = Division::find(auth()->user()->division->id);
-
-                $division->tags()->attach($tag);
-
-                $tags[] = $tag->id;
-            }
-        }
-        // if there is a poll
-        if ($poll) {
-            $this->createPoll($poll, $tasks);
-        }
-        // Loop through Tasks
-        foreach ($tasks as $task) {
-
-            // TODO On the clide side restrickt User to add himself as a watcher
-            // TODO select auth user as task responsible by deafauld on the client side
-
-            if ($request->watchers) {
-                // Attach Watchers to Task
-                $task->watchers()->attach($watchers);
-            }
-            if (count($tags)) {
-                $task->tags()->attach($tags);
-            }
-        }
-        // Redirect to Tasks Index page
-        return redirect()->route('tasks.index');
+        
+        
     }
 
     public function show($id)
@@ -162,7 +200,8 @@ class TaskController extends Controller
             // 'messages',
             'forms.fields',
             'timeSets',
-            'responsibilityDescription'
+            'responsibilityDescription',
+            'attachments'
         )->find($id);
 
         // check if task exists
@@ -706,7 +745,7 @@ class TaskController extends Controller
     public function planned_time($id, Request $request)
     {
         $task = Task::find($id);
-        
+
         // Add Event to History
         History::create([
             'user_id' => auth()->user()->id,
@@ -747,9 +786,9 @@ class TaskController extends Controller
 
         $tags = [];
 
-        foreach($allTags as $tag){
+        foreach ($allTags as $tag) {
 
-            if($tag['id'] == -1){
+            if ($tag['id'] == -1) {
 
                 $tag = Tag::create(['name' => $tag['name']]);
 
@@ -758,7 +797,6 @@ class TaskController extends Controller
                 $division->tags()->attach($tag);
 
                 $tags[] = $tag['id'];
-                
             } else {
                 $tags[] = $tag['id'];
             }
@@ -767,6 +805,34 @@ class TaskController extends Controller
         $task->tags()->attach($tags);
 
         return $task->tags;
+    }
+    
+    public function downloadAttachments($id){
+        
+        $attachments = Task::find($id)->attachments;
+
+        $files = [];
+
+        $zipFileName = public_path('storage/task-' . $id . '-files.zip');
+
+        if(file_exists($zipFileName)){
+            File::delete($zipFileName);
+        }
+
+        $zipper = Zipper::make($zipFileName);
+
+        // Get attachments url's
+        foreach($attachments as $attachment) {
+
+            $files[] = strpos($attachment->mimeType, 'image') !== false ? public_path('img/' . $attachment->name) : public_path('storage/' . $attachment->name);
+
+        }
+
+        // Zip and store files
+        $zipper->add($files)->close();
+
+        
+        return response()->download($zipFileName);
     }
 
     private function millToHours($milliseconds)

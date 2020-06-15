@@ -26,6 +26,8 @@ class Task extends Model
 
     // protected $with = ['responsible.user','from'];
 
+    protected $appends = ['attachments_count'];
+
     public function from()
     {
         return $this->morphTo();
@@ -98,5 +100,15 @@ class Task extends Model
                 $this->timeSets->last()->end_time = date(now());
             }
         }
+    }
+
+    public function attachments()
+    {
+        return $this->morphMany('App\Attachment', 'attachable');
+    }
+
+    public function getAttachmentsCountAttribute() 
+    {
+        return $this->attachments()->count();
     }
 }

@@ -60,6 +60,7 @@ export default {
         watchers(value){
             const selectedUsers = this.users.filter(user => value.includes(user.id));
             this.watchersData = selectedUsers;
+            Event.fire('watchersAdded', this.watchers);
         }
     }
 

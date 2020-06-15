@@ -21,7 +21,6 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/company/structure', 'HomeController@company')->name('company');
 
     Route::get('/tasks', 'TaskController@index')->name('tasks.index');
-    Route::post('/tasks', 'TaskController@store')->name('tasks.store');
     Route::get('/tasks/{id}', 'TaskController@show')->name('tasks.show')->middleware('task.ownership');
     Route::post('/tasks/{id}/forward', 'TaskController@forward')->name('tasks.forward');
 
@@ -105,6 +104,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::get('/timesets', 'TimesetController@index')->name('timesets.index');
 
     Route::get('/users-tasks', 'UserController@tasks')->name('users.tasks');
+    Route::get('/tasks/{id}/downloadAttachments', 'TaskController@downloadAttachments')->name('api.downloadAttachemnts');
 });
 
 Route::prefix('api')->group(function () {
@@ -131,6 +131,7 @@ Route::prefix('api')->group(function () {
     Route::put('/tasks/{id}/planned_time', 'TaskController@planned_time')->name('api.tasks.planned_time');
     Route::delete('/tasks/{taskId}/tags/{tagId}', 'TaskController@detachTag')->name('api.tasks.detachTag');
     Route::put('/tasks/{id}/tags', 'TaskController@attachTag')->name('api.tasks.attachTag');
+    Route::post('/tasks', 'TaskController@store')->name('tasks.store');
 
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
     Route::get('/tasks/groupBy/{field}', 'TaskController@group')->name('api.tasks.group');
@@ -146,5 +147,9 @@ Route::prefix('api')->group(function () {
     Route::get('/tasks/{id}/stop', 'TaskController@stop')->name('api.tasks.stop');
     Route::get('/users/tasks', 'TaskController@usersTasks')->name('api.users.tasks');
     Route::get('/divisions/{id}/tasks', 'TaskController@divisionTasks')->name('api.divisions.tasks');
+
+    Route::post('/attachments', 'AttachmentController@create')->name('api.attachmetns.create');
+    Route::delete('/attachments/{id}', 'AttachmentController@destroy')->name('api.attachments.destroy');
+
 
 });
