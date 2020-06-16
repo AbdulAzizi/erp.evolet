@@ -22,15 +22,28 @@ class PollOptionChosenEvent implements ShouldBroadcast
     {
         $this->questionTask = $questionTask;
         $option = Option::find($selectedOptionID);
+
         $product = $questionTask->task->products->first();
+
+        $historyable = null;
+        
+        if($product){
+            $historyable['id'] = $product->id;
+            $historyable['type'] = 'App\Product';
+        }
+        else{
+            $historyable['id'] = $questionTask->task->id;
+            $historyable['type'] = 'App\Task';
+        }
+
 
         History::create([
             'user_id' => $user->id,
             'description' => 
                 'Пользователь <a href="' . route('users.dashboard',$user->id) . '">' . $user->fullname . '</a> 
                 выбрал опцию <span class="primary--text">'.$option->body.'</span> в опросе <span class="primary--text">'.$questionTask->question->body.'</span>',
-            'historyable_id' => $product->id,
-            'historyable_type' => 'App\Product',
+            'historyable_id' => $historyable['id'],
+            'historyable_type' => $historyable['type'],
             'created_at' => date(now())
         ]);
     }
