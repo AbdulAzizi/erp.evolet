@@ -60,8 +60,8 @@ class AssignedAsWatcher extends Notification
         if (isset($this->from->email))
             return [
                 'avatar' => $this->from->img,
-                'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                    ' Назначил(а) вас наблюдателем ' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
+                    ' Назначил(а) вас наблюдателем ' . '<a href="' . route("users.dashboard", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
                 $this->task->title . '</a>',
                 'task' => $this->task->id
@@ -71,7 +71,7 @@ class AssignedAsWatcher extends Notification
             return [
                 'avatar' => null,
                 'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
-                    ' назначил(а) вас наблюдателем ' . '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                    ' назначил(а) вас наблюдателем ' . '<a href="' . route("users.dashboard", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
                             $this->task->title . '</a>',
                 'task' => $this->task->id
@@ -83,8 +83,8 @@ class AssignedAsWatcher extends Notification
         if (isset($this->from->email))
             return new BroadcastMessage([
                 'avatar' => $this->from->img,
-                'title' =>  '<a href="' . route("users.show", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                    ' Назначил(а) вас наблюдателем '. '<a href="' . route("users.show", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
+                    ' Назначил(а) вас наблюдателем '. '<a href="' . route("users.dashboard", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
                         $this->task->title . '</a>',
                 'task' => $this->task->id
@@ -95,7 +95,7 @@ class AssignedAsWatcher extends Notification
                 'avatar' => null,
                 'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
                     ' назначил(а) вас наблюдателем ' .
-                    $this->task->title . '</a>' . '<a href="' . route("users.show", $this->responsible->id) . '">' . ' исполнитель: ' . $this->responsible->name . '</a>',
+                    $this->task->title . '</a>' . '<a href="' . route("users.dashboard", $this->responsible->id) . '">' . ' исполнитель: ' . $this->responsible->name . '</a>',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
                     $this->task->title . '</a>',
                 'task' => $this->task->id

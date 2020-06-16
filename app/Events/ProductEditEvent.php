@@ -29,7 +29,7 @@ class ProductEditEvent
         History::create([
             'user_id' => $user->id,
             'description' => 
-                'Пользователь <a href="' . route('users.show', $user->id) . '">' . $user->fullname . '</a> изменил поле ' . " \"$val\" " .
+                'Пользователь <a href="' . route('users.dashboard', $user->id) . '">' . $user->fullname . '</a> изменил поле ' . " \"$val\" " .
                 "</a> проекта " . 
                 ' <a href="' . route('products.index',['project_id' => $project->id]) . '">' . $project->country->name . ' · ' . $project->pc->name . '</a>',
             'historyable_id' => $product->id,

@@ -27,7 +27,7 @@ class PollOptionChosenEvent implements ShouldBroadcast
         History::create([
             'user_id' => $user->id,
             'description' => 
-                'Пользователь <a href="' . route('users.show',$user->id) . '">' . $user->fullname . '</a> 
+                'Пользователь <a href="' . route('users.dashboard',$user->id) . '">' . $user->fullname . '</a> 
                 выбрал опцию <span class="primary--text">'.$option->body.'</span> в опросе <span class="primary--text">'.$questionTask->question->body.'</span>',
             'historyable_id' => $product->id,
             'historyable_type' => 'App\Product',

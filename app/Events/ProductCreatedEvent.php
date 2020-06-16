@@ -18,7 +18,7 @@ class ProductCreatedEvent
         History::create([
             'user_id' => $user->id,
             'description' => 
-                'Пользователь <a href="' . route('users.show', $user->id) . '">' . $user->fullname . '</a> 
+                'Пользователь <a href="' . route('users.dashboard', $user->id) . '">' . $user->fullname . '</a> 
                 в проекте 
                 <a href="' . route('products.index',['project_id'=>$project->id]) . '">' . $project->country->name . ' · ' . $project->pc->name . '</a>'
                 . ' добавил',
