@@ -8,6 +8,7 @@ use App\Events\TaskForwardedEvent;
 use App\Filters\TaskFilters;
 use App\Filters\UserTaskFilters;
 use App\History;
+use App\Notifications\AssignedAsWatcher;
 use App\Notifications\ForwardedTask;
 use App\Notifications\TaskIsClosed;
 use App\Option;
@@ -22,6 +23,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Image;
@@ -153,9 +155,11 @@ class TaskController extends Controller
                 // TODO On the clide side restrickt User to add himself as a watcher
                 // TODO select auth user as task responsible by deafauld on the client side
     
-                if ($request->watchers) {
+                if (count($watchers)) {
                     // Attach Watchers to Task
                     $task->watchers()->attach($watchers);
+                    // Notify Watchers
+                    Notification::send($watchers, new AssignedAsWatcher($task->from, $task->responsible, $task));
                 }
                 if (count($tags)) {
                     $task->tags()->attach($tags);
