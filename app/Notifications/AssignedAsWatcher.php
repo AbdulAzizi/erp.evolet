@@ -60,10 +60,10 @@ class AssignedAsWatcher extends Notification
         if (isset($this->from->email))
             return [
                 'avatar' => $this->from->img,
-                'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                    ' Назначил(а) вас наблюдателем ' . '<a href="' . route("users.dashboard", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->fullname . '</a>' .
+                    ' назначил(а) вас наблюдателем в задаче' ,
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                $this->task->title . '</a>',
+                mb_strimwidth( $this->task->description, 0, 40, "...") . '</a>',
                 'task' => $this->task->id
             ];
         // if procces
@@ -71,9 +71,11 @@ class AssignedAsWatcher extends Notification
             return [
                 'avatar' => null,
                 'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
-                    ' назначил(а) вас наблюдателем ' . '<a href="' . route("users.dashboard", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                    ' назначил вас наблюдателем в задаче ' . '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                    mb_strimwidth( $this->task->description, 0, 40, "...") . '</a>' . 
+                    ' Исполнитель: <a href="' . route("users.dashboard", $this->responsible->id) . '">' . $this->responsible->fullname . '</a>',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                            $this->task->title . '</a>',
+                    mb_strimwidth( $this->task->description, 0, 40, "...") . '</a>',
                 'task' => $this->task->id
             ];
     }
@@ -83,10 +85,10 @@ class AssignedAsWatcher extends Notification
         if (isset($this->from->email))
             return new BroadcastMessage([
                 'avatar' => $this->from->img,
-                'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->name . ' ' . $this->from->surname . '</a>' .
-                    ' Назначил(а) вас наблюдателем '. '<a href="' . route("users.dashboard", $this->responsible->id) . '">' .  ' исполнитель: ' . $this->responsible->name . '</a>',
+                'title' =>  '<a href="' . route("users.dashboard", $this->from->id) . '">' . $this->from->fullname . '</a>' .
+                    ' назначил(а) вас наблюдателем в задаче',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                        $this->task->title . '</a>',
+                        mb_strimwidth( $this->task->description, 0, 40, "...") . '</a>',
                 'task' => $this->task->id
             ]);
         // if procces
@@ -94,10 +96,11 @@ class AssignedAsWatcher extends Notification
             return new BroadcastMessage([
                 'avatar' => null,
                 'title' =>  'Процесс <a href="' . route("processes.show", $this->from->id) . '">' . $this->from->name . '</a>' .
-                    ' назначил(а) вас наблюдателем ' .
-                    $this->task->title . '</a>' . '<a href="' . route("users.dashboard", $this->responsible->id) . '">' . ' исполнитель: ' . $this->responsible->name . '</a>',
+                    ' назначил вас наблюдателем в задаче ' . '<a href="' . route("tasks.show", $this->task->id) . '">' .
+                    mb_strimwidth( $this->task->description, 0, 40, "...") . '</a>' . 
+                    ' Исполнитель: <a href="' . route("users.dashboard", $this->responsible->id) . '">' . $this->responsible->fullname . '</a>',
                 'link' => '<a href="' . route("tasks.show", $this->task->id) . '">' .
-                    $this->task->title . '</a>',
+                    mb_strimwidth( $this->task->description, 0, 40, "...") . '</a>',
                 'task' => $this->task->id
             ]);
     }
