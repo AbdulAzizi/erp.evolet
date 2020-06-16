@@ -54,7 +54,7 @@ class ProfileController extends Controller
             $query->where('responsible_id', $id);
         }])->get();
 
-        return view('users.dashboard', compact('statuses'));
+        return view('users.show', compact('statuses'));
     }
 
     public function getTasks(Request $request)
