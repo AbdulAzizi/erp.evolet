@@ -16,7 +16,7 @@
           :action="`${taskId}/downloadAttachments`"
           v-if="!deleteBtn && !edit && localFiles.length"
         >
-          <v-tooltip right>
+          <v-tooltip left>
             <template v-slot:activator="{ on }">
               <v-btn icon absolute right type="submit" v-on="on">
                 <v-icon>mdi-download</v-icon>
@@ -26,18 +26,27 @@
           </v-tooltip>
         </form>
         <v-btn icon absolute right v-if="edit" class="px-0">
-          <label class="inputLabel" @click="$refs.inputFiles.value = '', localError = null">
-            <input
-              type="file"
-              multiple
-              name="attachments"
-              style="display: none"
-              ref="inputFiles"
-              :accept="availableFileFormats"
-              @change="addFile()"
-            />
-            <v-icon>mdi-file-upload-outline</v-icon>
-          </label>
+          <v-tooltip left>
+            <template v-slot:activator="{ on }">
+              <label
+                class="inputLabel"
+                @click="$refs.inputFiles.value = '', localError = null"
+                v-on="on"
+              >
+                <input
+                  type="file"
+                  multiple
+                  name="attachments"
+                  style="display: none"
+                  ref="inputFiles"
+                  :accept="availableFileFormats"
+                  @change="addFile()"
+                />
+                <v-icon>mdi-file-upload-outline</v-icon>
+              </label>
+            </template>
+            <span>Загрузить файл</span>
+          </v-tooltip>
         </v-btn>
       </v-col>
       <v-col cols="12" v-if="localError || error" class="pb-0">
@@ -70,15 +79,20 @@
               >{{ (file.size / 1000).toFixed(2) }} kb</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn
-                outlined
-                icon
-                small
-                @click="deleteFile(file.id, index, file.size)"
-                v-if="deleteBtn || edit"
-              >
-                <v-icon small>mdi-close</v-icon>
-              </v-btn>
+              <v-tooltip v-if="deleteBtn || edit" bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    outlined
+                    icon
+                    small
+                    @click="deleteFile(file.id, index, file.size)"
+                    v-on="on"
+                  >
+                    <v-icon small>mdi-close</v-icon>
+                  </v-btn>
+                </template>
+                <span>Удалить файл</span>
+              </v-tooltip>
               <a
                 :href="isImage(file.name) ? photo(file.name) : filePath(file.name)"
                 download
