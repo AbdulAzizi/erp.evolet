@@ -17,7 +17,7 @@ class AssignedToTaskProductEvent
             'user_id' => $responsible->id,
             'description' => 
                     "Процесс <a href='#'> $process->name </a> поставил пользователю
-                    <a href=" . route("users.show", $responsible->id) . "> $responsible->fullname </a> задачу ",
+                    <a href=" . route("users.dashboard", $responsible->id) . "> $responsible->fullname </a> задачу ",
             'link' => "<a href=" . route("tasks.show", $task->id) . ">". mb_strimwidth($task->description, 0, 40, "...") ." </a>",
             'historyable_id' => $product->id,
             'historyable_type' => 'App\Product',
