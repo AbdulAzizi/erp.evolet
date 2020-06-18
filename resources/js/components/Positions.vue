@@ -33,10 +33,10 @@
             </v-col>
         </v-row>
         <!-- Display Divisions poistions -->
-        <v-expansion-panels mandatory>
+        <v-expansion-panels flat>
             <v-expansion-panel v-for="(division, index) in divisions" :key="'panels-'+index">
                 <v-expansion-panel-header>{{ division.name }}</v-expansion-panel-header>
-                <v-expansion-panel-content class="grey lighten-2">
+                <v-expansion-panel-content style="background-color:#e6e6e6;">
                     <v-row class="pa-0 ma-0 pb-3">
                         <v-col cols="12" class="pb-0">
                             <add-position

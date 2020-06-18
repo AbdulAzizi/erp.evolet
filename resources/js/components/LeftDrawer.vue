@@ -77,19 +77,21 @@ export default {
                 //     headOf: ["Evolet", "НАП", "ОМАР"],
                 //     divisions:[]
                 // },
-                {
-                    icon: "mdi-attachment",
-                    text: "ЭП",
-                    url: "/projects?sortBy=country",
-                    positions: [
-                        "Программист",
-                        "Куратор Портфеля ПК стран",
-                        "НО",
-                        "ПК"
-                    ],
-                    headOf: ["Evolet", "НАП", "ОМАР"],
-                    divisions: []
-                },
+
+                // {
+                //     icon: "mdi-attachment",
+                //     text: "ЭП",
+                //     url: "/projects?sortBy=country",
+                //     positions: [
+                //         "Программист",
+                //         "Куратор Портфеля ПК стран",
+                //         "НО",
+                //         "ПК"
+                //     ],
+                //     headOf: ["Evolet", "НАП", "ОМАР"],
+                //     divisions: []
+                // },
+
                 // {
                 //     icon: "mdi-attachment",
                 //     text: "ЭН",
@@ -126,30 +128,33 @@ export default {
                     headOf: ["*", "ОМАР"],
                     divisions: []
                 },
-                {
-                    icon: "mdi-sort-variant",
-                    text: "Фильтры",
-                    url: "/admin/products",
-                    positions: ["Программист", "РВЗ"],
-                    headOf: ["НАП", "ОМАР"],
-                    divisions: []
-                },
-                {
-                    icon: "mdi-file-document-box-multiple",
-                    text: "Файлы",
-                    url: "/admin/files",
-                    positions: ["Программист", "РВЗ"],
-                    headOf: ["НАП", "ОМАР"],
-                    divisions: []
-                },
-                {
-                    icon: "mdi-factory",
-                    text: "Заводы",
-                    url: "/factories",
-                    positions: ["Программист", "МРБ"],
-                    headOf: ["ОМАР"],
-                    divisions: []
-                },
+                // {
+                //     icon: "mdi-sort-variant",
+                //     text: "Фильтры",
+                //     url: "/admin/products",
+                //     positions: ["Программист", "РВЗ"],
+                //     headOf: ["НАП", "ОМАР"],
+                //     divisions: []
+                // },
+
+                // {
+                //     icon: "mdi-file-document-box-multiple",
+                //     text: "Файлы",
+                //     url: "/admin/files",
+                //     positions: ["Программист", "РВЗ"],
+                //     headOf: ["НАП", "ОМАР"],
+                //     divisions: []
+                // },
+
+                // {
+                //     icon: "mdi-factory",
+                //     text: "Заводы",
+                //     url: "/factories",
+                //     positions: ["Программист", "МРБ"],
+                //     headOf: ["ОМАР"],
+                //     divisions: []
+                // },
+
                 {
                     icon: "mdi-script-text",
                     text: "ДО Компании",
@@ -158,6 +163,7 @@ export default {
                     headOf: [],
                     divisions: ["ОУПС"]
                 },
+                
                 {
                     icon: "mdi-account-group",
                     text: "Сотрудники",

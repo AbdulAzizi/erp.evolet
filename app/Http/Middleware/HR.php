@@ -15,7 +15,15 @@ class HR
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->division->abbreviation == "ОУПС") {
+        $RVZ = false;
+
+        foreach (auth()->user()->positions as $position) {
+            if ($position->name == "РВЗ") {
+                $RVZ = true;
+            }
+        }
+
+        if (auth()->user()->division->abbreviation == "ОУПС" || $RVZ) {
             return $next($request);
         } else {
             return redirect()->route('tasks.index');
