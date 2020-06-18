@@ -21,7 +21,7 @@ class DeadlineNotification extends Command
      *
      * @var string
      */
-    protected $description = 'This command is for notify users 3 days before deadline';
+    protected $description = 'This command is for notifying users of 2, 1 days left deadline of task';
 
     /**
      * Create a new command instance.
@@ -40,17 +40,19 @@ class DeadlineNotification extends Command
      */
     public function handle()
     {
-        $tasks = Task::whereDate('deadline', '=', Carbon::now()->addDays(2))
-                    ->orWhereDate('deadline', '=', Carbon::now()->addDays(3))
-                    ->orWhereDate('deadline', '=', Carbon::now()->addDays(1))
-                    ->orWhereDate('deadline', '=', Carbon::now())
-                    ->get();
+        $tasks = Task::where('status_id', '!=', 4)->whereDate('deadline', '=', Carbon::now()->addDays(2))
+                        ->orWhereDate('deadline', '=', Carbon::now()->addDays(3))
+                        ->orWhereDate('deadline', '=', Carbon::now()->addDays(1))
+                        ->orWhereDate('deadline', '=', Carbon::now())
+                        ->get();
 
         foreach ($tasks as $task) {
+
             $task->responsible->notify(new TaskDeadlineIsNear($task));
+
         }
-
-
+        
         echo ('notification sent');
+
     }
 }
