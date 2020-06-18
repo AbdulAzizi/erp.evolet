@@ -14,29 +14,21 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on: tooltip }">
           <div>
-            <!-- <v-hover v-slot:default="{ hover }"> -->
-              <v-badge overlap :value="filtersLen" :content="filtersLen">
-                <template v-slot:badge>
-                  <!-- <v-icon
-                    dark
-                    x-small
-                    v-else-if="filtersLen && hover"
-                    v-on="closeFilter"
-                  >mdi-close</v-icon> -->
-                </template>
-                <v-btn
-                  depressed
-                  solo
-                  color="white"
-                  height="38"
-                  class="ml-3"
-                  @click="filtersMenu = true"
-                  v-on="tooltip"
-                >
-                  <v-icon color="grey">mdi-tune</v-icon>
-                </v-btn>
-              </v-badge>
-            <!-- </v-hover> -->
+            <v-badge overlap :value="filtersLen" :content="filtersLen">
+              <template v-slot:badge>
+              </template>
+              <v-btn
+                depressed
+                solo
+                color="white"
+                height="38"
+                class="ml-3"
+                @click="filtersMenu = true"
+                v-on="tooltip"
+              >
+                <v-icon color="grey">mdi-tune</v-icon>
+              </v-btn>
+            </v-badge>
           </div>
         </template>
         <span>Фильтры</span>
@@ -71,15 +63,14 @@
                 return-object
                 clearable
               ></v-select>
-              <v-select
+              <v-autocomplete
                 v-if="selectEmployee"
-                v-model="employee"
+                v-model="employees"
                 :items="employeeItems"
                 label="Выберите сотрудника"
                 class="mb-4"
                 item-text="name"
                 item-value="id"
-                height="38"
                 outlined
                 flat
                 dense
@@ -87,13 +78,14 @@
                 single-line
                 return-object
                 chips
-                deletable-chips
+                multiple
                 no-data-text="Нет сотрудников"
               >
                 <template v-slot:selection="data">
                   <v-chip
+                    class="my-1"
                     @click="data.select"
-                    @click:close="employee = null"
+                    @click:close="removeItem(data.item, employees)"
                     v-bind="data.attrs"
                     :input-value="data.selected"
                     color="primary"
@@ -113,7 +105,7 @@
                     <v-list-item-title>{{ data.item.fullname }}</v-list-item-title>
                   </v-list-item-content>
                 </template>
-              </v-select>
+              </v-autocomplete>
               <v-select
                 v-model="selectedStatuses"
                 :items="taskStatuses"
@@ -129,18 +121,7 @@
                 return-object
                 clearable
                 multiple
-              >
-              <template v-slot:selection="data">
-                  <v-chip
-                    @click="data.select"
-                    v-bind="data.attrs"
-                    :input-value="data.selected"
-                    color="primary"
-                    small
-                  >
-                    {{ data.item.name }}
-                  </v-chip>
-                </template></v-select>
+              ></v-select>
               <v-autocomplete
                 v-model="selectedTags"
                 :items="localTags"
@@ -166,7 +147,7 @@
                     close
                     small
                     color="primary"
-                    @click:close="removeItem(data.item)"
+                    @click:close="removeItem(data.item, selectedTags)"
                   >{{data.item.name}}</v-chip>
                 </template>
               </v-autocomplete>
@@ -236,6 +217,7 @@
                 </template>
               </v-select>
               <v-select
+                v-if="!selectEmployee"
                 v-model="responsible"
                 :items="localUsers"
                 label="Исполнитель"
@@ -304,7 +286,7 @@
               color="primary"
               class="my-5"
               
-            >Сборосить фильтры</v-btn> -->
+            >Сборосить фильтры</v-btn>-->
           </v-card-text>
         </v-card>
       </v-navigation-drawer>
@@ -364,6 +346,7 @@ export default {
       localTags: [],
       taskStatuses: [],
       selectedStatuses: [],
+      employees: [],
       localUsers: this.users,
       author: null,
       groupTask: null,
@@ -373,7 +356,6 @@ export default {
       },
       currentView: null,
       taskCategory: null,
-      employee: null,
       priority: null,
       selectEmployee: false,
       filtersMenu: false,
@@ -440,13 +422,16 @@ export default {
     this.filters = this.setLocalFilter("filters", this.filters);
     this.priority = this.setLocalFilter("priority", this.priority);
     this.taskCategory = this.setLocalFilter("taskCategory", this.taskCategory);
-    this.selectedStatuses = this.setLocalFilter("status", this.selectedStatuses);
+    this.selectedStatuses = this.setLocalFilter(
+      "status",
+      this.selectedStatuses
+    );
     this.selectedTags = this.setLocalFilter("tags", this.selectedTags);
     this.selectEmployee = this.setLocalFilter(
       "selectEmployee",
       this.selectEmployee
     );
-    this.employee = this.setLocalFilter("employee", this.employee);
+    this.employees = this.setLocalFilter("employee", this.employees);
     this.author = this.setLocalFilter("author", this.author);
     this.responsible = this.setLocalFilter("responsible", this.responsible);
     this.groupTask = this.setLocalFilter("groupTask", this.groupTask);
@@ -579,10 +564,10 @@ export default {
         });
       }
     },
-    removeItem(item) {
-      this.selectedTags.forEach((tag, index) => {
+    removeItem(item, model) {
+      model.forEach((tag, index) => {
         if (item.id == tag.id) {
-          this.selectedTags.splice(index, 1);
+          model.splice(index, 1);
         }
       });
     }
@@ -621,7 +606,7 @@ export default {
     selectedTags(tags) {
       let tagsId = JSON.stringify(tags.map(tag => tag.id));
       if (!tags.length) {
-        localStorage.removeItem('tags');
+        localStorage.removeItem("tags");
         this.deleteFilter("tags");
       } else {
         this.setFilter("tags", tagsId);
@@ -636,7 +621,7 @@ export default {
     },
     taskCategory(newVal, oldVal) {
       if (oldVal) {
-        localStorage.removeItem('taskCategory');
+        localStorage.removeItem("taskCategory");
         this.deleteFilter(oldVal.query);
       }
       if (newVal) {
@@ -645,25 +630,26 @@ export default {
       }
       this.filterTask();
     },
-    employee(newVal) {
-      if (newVal) {
+    employees(items) {
+      let employeeIds = JSON.stringify(items.map(item => item.id));
+      if (!items.length) {
+        this.deleteFilter("employee_id");
+        this.setFilter("all", true);
+        localStorage.removeItem("employee");
+      } else {
         if (this.filters["employee_id"]) {
           this.deleteFilter("employee_id");
         }
         this.page = false;
         this.deleteFilter("all");
-        this.setFilter("employee_id", newVal.id);
-        localStorage.setItem("employee", JSON.stringify(newVal));
-      } else {
-        this.deleteFilter("employee_id");
-        this.setFilter("all", true);
-        localStorage.setItem("employee", JSON.stringify(null));
+        this.setFilter("employee_id", employeeIds);
+        localStorage.setItem("employee", JSON.stringify(items));
       }
       this.filterTask();
     },
     priority(item) {
       if (!item) {
-        localStorage.removeItem('priority')
+        localStorage.removeItem("priority");
         this.deleteFilter("priority");
       } else {
         this.setFilter("priority", item.id);
@@ -674,7 +660,7 @@ export default {
     selectedStatuses(statuses) {
       let statusesId = JSON.stringify(statuses.map(status => status.id));
       if (!statuses.length) {
-        localStorage.removeItem('status');
+        localStorage.removeItem("status");
         this.deleteFilter("status_id");
       } else {
         this.setFilter("status_id", statusesId);
@@ -734,6 +720,7 @@ export default {
     }
   },
   created() {
+    localStorage.clear(); // Remove after localstorage cleared
     this.tasksTags();
     this.getStatuses();
     Event.listen("loadTasks", data => this.paginate());
@@ -753,7 +740,9 @@ export default {
           this.selectedStatuses.push(item);
         }
       });
-      this.filters.status_id = JSON.stringify(this.selectedStatuses.map(status => status.id));
+      this.filters.status_id = JSON.stringify(
+        this.selectedStatuses.map(status => status.id)
+      );
       this.filterTask();
     });
     Event.listen("filterByTag", tag => {

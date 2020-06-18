@@ -30,7 +30,8 @@ class TaskFilters extends QueryFilters
 
     public function employee_id($term)
     {
-        return $this->builder->where('responsible_id', $term);
+        $localTerm = json_decode($term);
+        return $this->builder->whereIn('responsible_id', $localTerm);
     }
 
     public function watcher_id($term)
