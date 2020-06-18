@@ -361,18 +361,23 @@
               </v-dialog>
 
               <v-btn icon>
-                <label class="inputLabel" @click="$refs.inputFiles.value = ''">
-                  <input
-                    type="file"
-                    multiple
-                    name="attachments"
-                    style="display: none"
-                    ref="inputFiles"
-                    :accept="availableFileFormats"
-                    @change="addFile()"
-                  />
-                  <v-icon>mdi-paperclip</v-icon>
-                </label>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <label class="inputLabel" @click="$refs.inputFiles.value = ''" v-on="on">
+                      <input
+                        type="file"
+                        multiple
+                        name="attachments"
+                        style="display: none"
+                        ref="inputFiles"
+                        :accept="availableFileFormats"
+                        @change="addFile()"
+                      />
+                      <v-icon>mdi-paperclip</v-icon>
+                    </label>
+                  </template>
+                  <span>Прикрепить файл</span>
+                </v-tooltip>
               </v-btn>
 
               <v-dialog v-model="reapeatTaskDialog" width="600" v-if="false">
@@ -643,7 +648,7 @@ export default {
 
     Event.listen("fileError", data => {
       this.error = data;
-    })
+    });
   },
   watch: {
     selectedRespOrDescrip(newVal, oldVal) {
@@ -811,8 +816,7 @@ export default {
     tags() {
       return this.loadDivisionTags();
     }
-  },
-
+  }
 };
 </script>
 
