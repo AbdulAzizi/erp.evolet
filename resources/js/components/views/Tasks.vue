@@ -720,7 +720,7 @@ export default {
     }
   },
   created() {
-    localStorage.clear(); // Remove after localstorage cleared
+    // localStorage.clear(); // Remove after localstorage cleared
     this.tasksTags();
     this.getStatuses();
     Event.listen("loadTasks", data => this.paginate());
