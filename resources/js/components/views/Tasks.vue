@@ -102,7 +102,7 @@
                     <v-avatar left>
                       <v-img :src="thumb(data.item.img)"></v-img>
                     </v-avatar>
-                    {{ data.item.fullname }}
+                    {{ data.item.fullname.length >= 20 ? data.item.fullname.substring(0, 15) + '...' : data.item.fullname }}
                   </v-chip>
                 </template>
                 <template v-slot:item="data">
@@ -223,7 +223,7 @@
                     <v-avatar left>
                       <v-img :src="thumb(data.item.img)"></v-img>
                     </v-avatar>
-                    {{ data.item.fullname }}
+                    {{ data.item.fullname.length >= 20 ? data.item.fullname.substring(0, 15) + '...' : data.item.fullname }}
                   </v-chip>
                 </template>
                 <template v-slot:item="data">
@@ -262,7 +262,7 @@
                     <v-avatar left>
                       <v-img :src="thumb(data.item.img)"></v-img>
                     </v-avatar>
-                    {{ data.item.fullname }}
+                    {{ data.item.fullname.length >= 20 ? data.item.fullname.substring(0, 15) + '...' : data.item.fullname }}
                   </v-chip>
                 </template>
                 <template v-slot:item="data">
