@@ -18,6 +18,15 @@ class UserTableSeeder extends Seeder
         // TODO fix many to many positions seed code
         $this->seedUsers([
             [
+                'name' => 'Аслиддин',
+                'surname' => 'Музафарзода',
+                'email' => 'asliddin@admin.com',
+                'password' => 'admin',
+                'division' => 'ОРПО',
+                'positionLevel' => 'Главный специалист',
+                'positions' => ["Программист"],
+            ],
+            [
                 'name' => 'Parviz',
                 'surname' => 'Jabborov',
                 'email' => 'parviz@admin.com',
