@@ -673,13 +673,16 @@ export default {
         this.deleteFilter(this.taskCategory.query);
       }
       if (!val) {
-        this.employee = null;
+        this.employees = [];
         this.setFilter("all", true);
         this.deleteFilter("employee_id");
         localStorage.setItem("selectEmployee", null);
       } else {
         this.taskCategory = null;
         localStorage.setItem("selectEmployee", JSON.stringify(true));
+        this.deleteFilter("task_responsible_id");
+        localStorage.removeItem("responsible");
+        this.responsible = null;
         this.divisionUsers();
       }
     },
@@ -720,7 +723,7 @@ export default {
     }
   },
   created() {
-    localStorage.clear(); // Remove after localstorage cleared
+    // localStorage.clear(); // Remove after localstorage cleared
     this.tasksTags();
     this.getStatuses();
     Event.listen("loadTasks", data => this.paginate());

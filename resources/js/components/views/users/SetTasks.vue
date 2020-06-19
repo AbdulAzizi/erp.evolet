@@ -89,6 +89,7 @@ export default {
   methods: {
     redirect(user, type) {
       localStorage.clear();
+      localStorage.setItem("filters", JSON.stringify({all: true}));
       localStorage.setItem(
         type,
         JSON.stringify({ id: user.id, fullname: user.fullname })

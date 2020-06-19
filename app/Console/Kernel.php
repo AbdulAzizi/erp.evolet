@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('delete:oldNotifications')->monthlyOn(1, '00:00');
 
-        $schedule->command('deadline:notification')->dailyAt('11:00');
+        $schedule->command('deadline:notification')->dailyAt('00:00');
     }
 
     /**
