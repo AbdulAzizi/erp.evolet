@@ -509,7 +509,7 @@
               </v-dialog>
             </v-col>
             <v-col cols="3" class="py-0" align-self="end">
-              <v-btn color="primary float-right" @click="submit()">Добавить</v-btn>
+              <v-btn color="primary float-right" @click="submit()" :loading="loading">Добавить</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -624,7 +624,8 @@ export default {
       image: null,
       previewImageDialog: false,
       description: null,
-      error: false
+      error: false,
+      loading: false
     };
   },
   created() {
@@ -739,6 +740,7 @@ export default {
       return days * 86400000 + hours * 3600000 + minutes * 60000;
     },
     submit() {
+      this.loading = true;
       const FORM = this.$refs.form;
       let formData = new FormData();
       let responsibilityDescriptions = this.selectedRespOrDescrip.map(
@@ -773,6 +775,7 @@ export default {
             }
           })
           .then(res => {
+            this.loading = false
             window.location.reload();
           });
       }
