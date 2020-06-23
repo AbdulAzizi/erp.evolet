@@ -190,8 +190,8 @@ export default {
       axios
         .get(this.appPath(`api/timesets`), {
           params: {
-            from: this.filters.from,
-            to: this.filters.to
+            from: this.filters.from.toString(),
+            to: this.filters.to.toString()
           }
         })
         .then(resp => {
