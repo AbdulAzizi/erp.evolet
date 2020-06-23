@@ -54,7 +54,12 @@
     <v-row>
       <v-col>
         <v-card>
-          <timeline :items="preparedTimesets" :groups="preparedUsers" :options="options" :key="timelineKey"></timeline>
+          <timeline
+            :items="preparedTimesets"
+            :groups="preparedUsers"
+            :options="options"
+            :key="timelineKey"
+          ></timeline>
         </v-card>
       </v-col>
     </v-row>
@@ -115,14 +120,21 @@ export default {
       },
       fromMenu: null,
       toMenu: null,
-      timesets:[],
-      users:[],
-      timelineKey:0 // Needed to rerender component
+      timesets: [],
+      users: [],
+      timelineKey: 0 // Needed to rerender component
     };
   },
-  created() {
-    this.filters.from = this.moment().startOf('month').format('YYYY-MM-DD');
-    this.filters.to = this.moment().endOf('month').format('YYYY-MM-DD');
+  async created() {
+
+    this.filters.from = await this.moment()
+      .startOf("month")
+      .format("YYYY-MM-DD");
+
+    this.filters.to = await this.moment()
+      .endOf("month")
+      .format("YYYY-MM-DD");
+
   },
   methods: {
     prepareData() {
@@ -140,7 +152,7 @@ export default {
         };
       });
 
-      this.preparedTimesets = this.timesets.map(timeset => { 
+      this.preparedTimesets = this.timesets.map(timeset => {
         return {
           id: timeset.id,
           title: timeset.task.description,
@@ -172,7 +184,7 @@ export default {
         .then(resp => {
           this.users = resp.data.users;
           this.timesets = resp.data.timesets;
-          
+
           this.prepareData();
         });
     }

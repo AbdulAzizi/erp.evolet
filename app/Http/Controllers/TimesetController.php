@@ -19,7 +19,7 @@ class TimesetController extends Controller
     public function getTimesets(Request $request)
     {
         // Get exeptions
-        $exeptions = Division::whereIn('abbreviation', ['ОРПО', 'ОУПС'])->get()->pluck('id');
+        $exeptions = Division::whereIn('abbreviation', ['ОРПО', 'ОУПС','Evolet'])->get()->pluck('id');
         // Get auth user
         $auth = auth()->user();
         // Initialize timeset query
