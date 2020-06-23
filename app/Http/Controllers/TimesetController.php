@@ -23,7 +23,7 @@ class TimesetController extends Controller
         // Get auth user
         $auth = auth()->user();
         // Initialize timeset query
-        $timesetQuery = Timeset::where('end_time', '>=', $request->from)
+        $timesetQuery = Timeset::where('start_time', '>=', $request->from)
             ->where('end_time', '<=', $request->to)
             ->with('task.responsible');
 
@@ -37,7 +37,7 @@ class TimesetController extends Controller
                 $task->whereIn('responsible_id', $userIDs);
             });
         } else {
-            $users = User::all();
+            $users = User::alone()->get();
         }
 
         $timesets = $timesetQuery->get();
