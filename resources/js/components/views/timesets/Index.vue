@@ -54,7 +54,7 @@
     <v-row>
       <v-col>
         <v-card>
-          <timeline :items="localItems" :groups="localUsers" :options="options"></timeline>
+          <timeline :items="preparedTimesets" :groups="preparedUsers" :options="options" :key="timelineKey"></timeline>
         </v-card>
       </v-col>
     </v-row>
@@ -65,41 +65,13 @@ import { Timeline } from "vue2vis";
 import "vue2vis/dist/vue2vis.css";
 
 export default {
-  props: {
-    timesets: {
-      required: true
-    },
-    users: {
-      required: true
-    },
-    from: {
-      required: false
-    },
-    to: {
-      required: false
-    }
-  },
   components: {
     Timeline
   },
   data() {
     return {
-      months: [
-        "Январь",
-        "Февраль",
-        "Март",
-        "Апрель",
-        "Май",
-        "Июнь",
-        "Июль",
-        "Август",
-        "Сентябрь",
-        "Октябрь",
-        "Ноябрь",
-        "Декабрь"
-      ],
-      localUsers: [],
-      localItems: [],
+      preparedUsers: [],
+      preparedTimesets: [],
       options: {
         configure: false,
         editable: false,
@@ -142,17 +114,19 @@ export default {
         to: null
       },
       fromMenu: null,
-      toMenu: null
+      toMenu: null,
+      timesets:[],
+      users:[],
+      timelineKey:0 // Needed to rerender component
     };
   },
   created() {
-    this.prepareData();
-    this.filters.from = this.from;
-    this.filters.to = this.to;
+    this.filters.from = this.moment().startOf('month').format('YYYY-MM-DD');
+    this.filters.to = this.moment().endOf('month').format('YYYY-MM-DD');
   },
   methods: {
     prepareData() {
-      this.localUsers = this.users.map(user => {
+      this.preparedUsers = this.users.map(user => {
         return {
           id: user.id,
           content: user.fullname,
@@ -166,7 +140,7 @@ export default {
         };
       });
 
-      this.localItems = this.timesets.map(timeset => {
+      this.preparedTimesets = this.timesets.map(timeset => { 
         return {
           id: timeset.id,
           title: timeset.task.description,
@@ -175,13 +149,14 @@ export default {
           start: this.moment(timeset.start_time),
           end: this.moment(timeset.end_time),
           className:
-            this.localUsers.filter(user => {
+            this.preparedUsers.filter(user => {
               return user.id == timeset.task.responsible_id;
             })[0].color +
             " " +
             "white--text caption"
         };
       });
+      this.timelineKey += 1; // Needed to rerender component
     },
     rand(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -190,33 +165,35 @@ export default {
       axios
         .get(this.appPath(`api/timesets`), {
           params: {
-            from: this.filters.from.toString(),
-            to: this.filters.to.toString()
+            from: this.filters.from,
+            to: this.filters.to
           }
         })
         .then(resp => {
-          this.localUsers = resp.data.users;
-          this.localItems = resp.data.timesets;
+          this.users = resp.data.users;
+          this.timesets = resp.data.timesets;
+          
+          this.prepareData();
         });
     }
   },
   watch: {
-    filterFrom(val) {
+    from(val) {
       if (this.filters.to) {
         this.fetchTimesets();
       }
     },
-    filterTo(val) {
+    to(val) {
       if (this.filters.from) {
         this.fetchTimesets();
       }
     }
   },
   computed: {
-    filterFrom() {
+    from() {
       return this.filters.from;
     },
-    filterTo() {
+    to() {
       return this.filters.to;
     }
   }

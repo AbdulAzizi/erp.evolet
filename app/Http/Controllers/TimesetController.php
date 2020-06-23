@@ -13,25 +13,7 @@ class TimesetController extends Controller
 {
     public function index()
     {
-        // Get from day
-        $from = new Carbon();
-        $from = $from->firstOfMonth();
-        $from = $from->startOfDay();
-        // Get to day
-        $to = new Carbon();
-        $to = $to->endOfMonth();
-        $to = $to->endOfDay();
-
-        $request = new Request([
-            'from' => $from,
-            'to' => $to,
-        ]);
-
-        $data = $this->getTimesets($request);
-        $data['from'] = $from;
-        $data['to'] = $to;
-
-        return view('timesets.index', $data);
+        return view('timesets.index');
     }
 
     public function getTimesets(Request $request)
