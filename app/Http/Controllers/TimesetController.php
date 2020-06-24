@@ -25,7 +25,7 @@ class TimesetController extends Controller
         // Initialize timeset query
         $timesetQuery = Timeset::where('start_time', '>=', $request->from)
             ->where('end_time', '<=', $request->to)
-            ->with('task.responsible');
+            ->with('task');
 
         // if user is not an exeption
         if (!$exeptions->contains($auth->division_id)) {
