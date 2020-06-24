@@ -9,6 +9,7 @@ use App\PositionLevel;
 use App\Responsibility;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -143,6 +144,16 @@ class UserController extends Controller
         $user = User::find($request->id);
 
         $notifications = $user->notifications->markAsRead();
+
+        return $notifications;
+    }
+
+    public function loadNotifications(Request $request) 
+    {
+
+        $user = User::find(auth()->user()->id);
+        
+        $notifications = $user->notifications->forPage($request->page, 10)->values();
 
         return $notifications;
     }
