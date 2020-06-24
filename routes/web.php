@@ -155,5 +155,6 @@ Route::prefix('api')->group(function () {
     Route::delete('/attachments/{id}', 'AttachmentController@destroy')->name('api.attachments.destroy');
 
     Route::post('/notifications', 'UserController@loadNotifications')->name('api.notificatinos.load');
+    Route::get('/timesets', 'TimesetController@getTimesets')->name('timesets.getTimesets');
 
 });

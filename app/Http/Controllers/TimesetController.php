@@ -7,26 +7,25 @@ use App\Timeset;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class TimesetController extends Controller
 {
     public function index()
     {
+        return view('timesets.index');
+    }
+
+    public function getTimesets(Request $request)
+    {
         // Get exeptions
-        $exeptions = Division::whereIn('abbreviation', ['ОРПО', 'ОУПС'])->get()->pluck('id');
+        $exeptions = Division::whereIn('abbreviation', ['ОРПО', 'ОУПС','Evolet'])->get()->pluck('id');
         // Get auth user
         $auth = auth()->user();
-        // Get from day
-        $from = new Carbon('2019-01-01');
-        $from = $from->startOfDay();
-        // Get to day
-        $to = new Carbon('2021-01-01');
-        $to = $to->endOfDay();
-
         // Initialize timeset query
-        $timesetQuery = Timeset::where('end_time', '>=', $from)
-            ->where('end_time', '<=', $to)
-            ->with('task.responsible');
+        $timesetQuery = Timeset::where('start_time', '>=', $request->from)
+            ->where('end_time', '<=', $request->to)
+            ->with('task');
 
         // if user is not an exeption
         if (!$exeptions->contains($auth->division_id)) {
@@ -38,11 +37,11 @@ class TimesetController extends Controller
                 $task->whereIn('responsible_id', $userIDs);
             });
         } else {
-            $users = User::all();
+            $users = User::alone()->get();
         }
 
         $timesets = $timesetQuery->get();
-        
-        return view('timesets.index', compact('timesets', 'users'));
+
+        return compact('users', 'timesets');
     }
 }
