@@ -51,8 +51,13 @@
         </v-menu>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>
+    <v-row align="center" justify="center">
+      <v-card v-if="loading" class="mt-10">
+        <v-card-text class="pa-10">
+          <v-progress-circular :size="100" color="primary" indeterminate></v-progress-circular>
+        </v-card-text>
+      </v-card>
+      <v-col v-else>
         <v-card>
           <timeline
             :items="preparedTimesets"
@@ -122,11 +127,11 @@ export default {
       toMenu: null,
       timesets: [],
       users: [],
-      timelineKey: 0 // Needed to rerender component
+      timelineKey: 0, // Needed to rerender component,
+      loading: false
     };
   },
   async created() {
-
     this.filters.from = await this.moment()
       .startOf("month")
       .format("YYYY-MM-DD");
@@ -134,7 +139,6 @@ export default {
     this.filters.to = await this.moment()
       .endOf("month")
       .format("YYYY-MM-DD");
-
   },
   methods: {
     prepareData() {
@@ -168,6 +172,7 @@ export default {
             "white--text caption"
         };
       });
+      this.loading = false;
       this.timelineKey += 1; // Needed to rerender component
     },
     rand(min, max) {
@@ -192,11 +197,13 @@ export default {
   watch: {
     from(val) {
       if (this.filters.to) {
+        this.loading = true;
         this.fetchTimesets();
       }
     },
     to(val) {
       if (this.filters.from) {
+        this.loading = true;
         this.fetchTimesets();
       }
     }
