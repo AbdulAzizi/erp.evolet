@@ -216,7 +216,7 @@ export default {
               .local()
               .format();
           });
-          this.unreadItems = 0;
+          this.unreadNotifications = 0;
         })
         .catch(err => err.messages);
     },
