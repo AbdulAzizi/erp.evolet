@@ -15,8 +15,7 @@
         <template v-slot:activator="{ on: tooltip }">
           <div>
             <v-badge overlap :value="filtersLen" :content="filtersLen">
-              <template v-slot:badge>
-              </template>
+              <template v-slot:badge></template>
               <v-btn
                 depressed
                 solo
@@ -417,9 +416,9 @@ export default {
       loading: false
     };
   },
-  mounted() {
-    this.currentView = this.localCurrentView;
+  beforeMount() {
     this.filters = this.setLocalFilter("filters", this.filters);
+    this.currentView = this.localCurrentView;
     this.priority = this.setLocalFilter("priority", this.priority);
     this.taskCategory = this.setLocalFilter("taskCategory", this.taskCategory);
     this.selectedStatuses = this.setLocalFilter(
@@ -435,44 +434,25 @@ export default {
     this.author = this.setLocalFilter("author", this.author);
     this.responsible = this.setLocalFilter("responsible", this.responsible);
     this.groupTask = this.setLocalFilter("groupTask", this.groupTask);
-    this.filterTask();
+
+    this.filter();
   },
   methods: {
     filterTask() {
-      const filtersLen = Object.keys(this.filters).length;
-      if (filtersLen > 1 || this.selectEmployee) {
-        if (this.groupTask) {
-          this.countFilters();
-          this.loadGroupTasks();
-        } else {
-          this.loading = !this.loading;
-          axios
-            .get(this.appPath("api/tasks/filter"), {
-              params: {
-                ...this.filters
-              }
-            })
-            .then(res => {
-              this.filteredTasks = res.data;
-              this.page = this.loading = false;
-              this.countFilters();
-              localStorage.setItem("filters", JSON.stringify(this.filters));
-              this.displayGroupTasks = false;
-            });
-        }
-      } else {
-        if (this.groupTask) {
-          this.countFilters();
-          this.loadGroupTasks();
-        } else {
-          this.filteredTasks = [];
-          this.page = 1;
-          this.paginate();
+      this.loading = true;
+      axios
+        .get(this.appPath("api/tasks/filter"), {
+          params: {
+            ...this.filters
+          }
+        })
+        .then(res => {
+          this.filteredTasks = res.data;
+          this.page = this.loading = false;
           this.countFilters();
           localStorage.setItem("filters", JSON.stringify(this.filters));
           this.displayGroupTasks = false;
-        }
-      }
+        });
       Event.fire("kanbanFilter", this.filters);
     },
     paginate() {
@@ -531,6 +511,7 @@ export default {
     },
     loadGroupTasks() {
       this.loading = true;
+      this.countFilters();
       axios
         .get(this.appPath(`api/tasks/groupBy/${this.groupTask.value}`), {
           params: {
@@ -570,6 +551,21 @@ export default {
           model.splice(index, 1);
         }
       });
+    },
+    filter() {
+      const filtersLen = Object.keys(this.filters).length;
+      this.countFilters();
+      if (this.groupTask) {
+        this.loadGroupTasks();
+      } else if (filtersLen > 1 || this.selectEmployee) {
+        this.filterTask();
+      } else {
+        this.filteredTasks = [];
+        this.page = 1;
+        localStorage.setItem("filters", JSON.stringify(this.filters));
+        this.displayGroupTasks = false;
+        this.paginate();
+      }
     }
   },
   computed: {
@@ -612,7 +608,7 @@ export default {
         this.setFilter("tags", tagsId);
         localStorage.setItem("tags", JSON.stringify(tags));
       }
-      this.filterTask();
+      this.filter();
     },
     searchTask(title) {
       title === "" || this.filters["title"]
@@ -628,7 +624,7 @@ export default {
         this.setFilter(newVal.query, newVal.user);
         localStorage.setItem("taskCategory", JSON.stringify(newVal));
       }
-      this.filterTask();
+      this.filter();
     },
     employees(items) {
       let employeeIds = JSON.stringify(items.map(item => item.id));
@@ -645,7 +641,7 @@ export default {
         this.setFilter("employee_id", employeeIds);
         localStorage.setItem("employee", JSON.stringify(items));
       }
-      this.filterTask();
+      this.filter();
     },
     priority(item) {
       if (!item) {
@@ -655,7 +651,7 @@ export default {
         this.setFilter("priority", item.id);
         localStorage.setItem("priority", JSON.stringify(item));
       }
-      this.filterTask();
+      this.filter();
     },
     selectedStatuses(statuses) {
       let statusesId = JSON.stringify(statuses.map(status => status.id));
@@ -666,7 +662,7 @@ export default {
         this.setFilter("status_id", statusesId);
         localStorage.setItem("status", JSON.stringify(statuses));
       }
-      this.filterTask();
+      this.filter();
     },
     selectEmployee(val) {
       if (val && this.taskCategory) {
@@ -697,7 +693,7 @@ export default {
           JSON.stringify({ id: item.id, fullname: item.fullname })
         );
       }
-      this.filterTask();
+      this.filter();
     },
     responsible(item) {
       if (!item) {
@@ -710,16 +706,17 @@ export default {
           JSON.stringify({ id: item.id, fullname: item.fullname })
         );
       }
-      this.filterTask();
+      this.filter();
     },
     groupTask(item) {
       if (!item) {
         localStorage.groupTask = null;
+        this.filter();
       } else {
         localStorage.setItem("groupTask", JSON.stringify(item));
         Event.fire("groupType", item.value);
+        this.loadGroupTasks();
       }
-      this.filterTask();
     }
   },
   created() {
@@ -734,7 +731,7 @@ export default {
         }
       });
       this.filters.priority = data;
-      this.filterTask();
+      this.filter();
     });
     Event.listen("filterByStatus", statusId => {
       this.selectedStatuses = [];
@@ -746,7 +743,7 @@ export default {
       this.filters.status_id = JSON.stringify(
         this.selectedStatuses.map(status => status.id)
       );
-      this.filterTask();
+      this.filter();
     });
     Event.listen("filterByTag", tag => {
       this.selectedTags = [];
@@ -765,7 +762,7 @@ export default {
         this.responsible = user;
         this.filters.task_responsible_id = user.id;
       }
-      this.filterTask();
+      this.filter();
     });
     Event.listen("filterByAuthor", user => {
       if (user.id == this.auth.id) {
@@ -778,7 +775,7 @@ export default {
         this.author = user;
         this.filters.author_id = user.id;
       }
-      this.filterTask();
+      this.filter();
     });
   }
 };

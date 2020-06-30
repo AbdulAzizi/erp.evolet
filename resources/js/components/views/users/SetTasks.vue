@@ -87,9 +87,9 @@ export default {
     }
   },
   methods: {
-    redirect(user, type) {
+    redirect(user, type) { 
       localStorage.clear();
-      localStorage.setItem("filters", JSON.stringify({all: true}));
+      type == 'author' ? localStorage.setItem("filters", JSON.stringify({all: true, author_id: user.id})) : localStorage.setItem("filters", JSON.stringify({all: true, responsible_id: user.id})) 
       localStorage.setItem(
         type,
         JSON.stringify({ id: user.id, fullname: user.fullname })

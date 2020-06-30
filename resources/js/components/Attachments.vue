@@ -85,7 +85,7 @@
                     outlined
                     icon
                     small
-                    @click="deleteFile(file.id, index, file.size)"
+                    @click="beforeDelete(file, index)"
                     v-on="on"
                   >
                     <v-icon small>mdi-close</v-icon>
@@ -130,6 +130,18 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <v-dialog v-model="deleteConfirmation" width="500">
+      <v-card>
+        <v-card-title>
+          Дейествительно хотите удалить запись?
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="red lighten-2" @click="deleteConfirmation = false">Нет</v-btn>
+          <v-btn text color="primary" @click="deleteFile(fileBeforeDelete.file, fileBeforeDelete.index )">Да</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -163,7 +175,9 @@ export default {
       image: null,
       selectedFiles: [],
       loading: false,
-      localError: null
+      localError: null,
+      fileBeforeDelete: null,
+      deleteConfirmation: false
     };
   },
   methods: {
@@ -212,21 +226,29 @@ export default {
       let imageFormats = [".png", ".img", ".image", ".svg", ".jpeg", ".jpg"];
       return imageFormats.some(val => name.toLowerCase().includes(val));
     },
-    deleteFile(id, index, size) {
+    deleteFile(file, index) {
       if (this.edit) {
         axios
-          .delete(`/api/attachments/${id}`)
+          .delete(`/api/attachments/${file.id}`)
           .then(res => {
             Event.fire("countFiles", this.localFiles.length);
             Event.fire("notify", ["Файл успешно удален"]);
           })
           .catch(err => Event.fire("notify", ["Ошибка! Файл не удален"]));
       }
-      if (size / 1000 >= 20000) {
+      if (file.size / 1000 >= 20000) {
         this.localError = null;
         Event.fire("fileError", false);
       }
       this.localFiles.splice(index, 1);
+      this.deleteConfirmation = false;
+    },
+    beforeDelete(file, index) {
+      this.fileBeforeDelete = {
+        file: file,
+        index: index
+      };
+      this.deleteConfirmation = true;
     },
     addFile() {
       this.loading = true;
