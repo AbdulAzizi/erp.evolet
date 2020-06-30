@@ -50,6 +50,19 @@
           <v-date-picker v-model="filters.to" @input="toMenu = false"></v-date-picker>
         </v-menu>
       </v-col>
+
+      <v-col class="py-0" v-if="divisions.length">
+        <v-select
+          v-model="selectedDivision"
+          label="Отделы"
+          :items="divisions"
+          item-text="name"
+          item-value="id"
+          hide-details
+          solo
+          dense
+        ></v-select>
+      </v-col>
     </v-row>
     <v-row align="center" justify="center">
       <v-card v-if="loading" class="mt-10">
@@ -75,6 +88,11 @@ import { Timeline } from "vue2vis";
 import "vue2vis/dist/vue2vis.css";
 
 export default {
+  props: {
+    divisions: {
+      required: true
+    }
+  },
   components: {
     Timeline
   },
@@ -128,7 +146,8 @@ export default {
       timesets: [],
       users: [],
       timelineKey: 0, // Needed to rerender component,
-      loading: false
+      loading: false,
+      selectedDivision: null
     };
   },
   async created() {
@@ -179,11 +198,14 @@ export default {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
     fetchTimesets() {
+      this.loading = true;
+
       axios
         .get(this.appPath(`api/timesets`), {
           params: {
             from: this.filters.from,
-            to: this.filters.to
+            to: this.filters.to,
+            division_id: this.selectedDivision
           }
         })
         .then(resp => {
@@ -197,15 +219,16 @@ export default {
   watch: {
     from(val) {
       if (this.filters.to) {
-        this.loading = true;
         this.fetchTimesets();
       }
     },
     to(val) {
       if (this.filters.from) {
-        this.loading = true;
         this.fetchTimesets();
       }
+    },
+    selectedDivision(val) {
+      this.fetchTimesets();
     }
   },
   computed: {
