@@ -1,7 +1,32 @@
 <template>
   <v-container fluid class="pa-0">
     <v-row justify="start">
-      <v-col class="py-0">
+      <v-col class="py-0" v-if="filters.user_id">
+        <v-menu
+          v-model="dateMenu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="filters.date"
+              label="Дата"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+              solo
+              hide-details
+              dense
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="filters.date" @input="dateMenu = false"></v-date-picker>
+        </v-menu>
+      </v-col>
+
+      <v-col class="py-0" v-if="filters.division_id">
         <v-menu
           v-model="fromMenu"
           :close-on-content-click="false"
@@ -12,7 +37,7 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="filters.from"
+              v-model="filters.start_time"
               label="From"
               readonly
               v-bind="attrs"
@@ -22,11 +47,11 @@
               dense
             ></v-text-field>
           </template>
-          <v-date-picker v-model="filters.from" @input="fromMenu = false"></v-date-picker>
+          <v-date-picker v-model="filters.start_time" @input="fromMenu = false"></v-date-picker>
         </v-menu>
       </v-col>
 
-      <v-col class="py-0">
+      <v-col class="py-0" v-if="filters.division_id">
         <v-menu
           v-model="toMenu"
           :close-on-content-click="false"
@@ -37,7 +62,7 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="filters.to"
+              v-model="filters.end_time"
               label="To"
               readonly
               v-bind="attrs"
@@ -47,13 +72,13 @@
               dense
             ></v-text-field>
           </template>
-          <v-date-picker v-model="filters.to" @input="toMenu = false"></v-date-picker>
+          <v-date-picker v-model="filters.end_time" @input="toMenu = false"></v-date-picker>
         </v-menu>
       </v-col>
 
       <v-col class="py-0" v-if="divisions.length">
         <v-select
-          v-model="selectedDivision"
+          v-model="filters.division_id"
           label="Отделы"
           :items="divisions"
           item-text="name"
@@ -63,6 +88,22 @@
           dense
         ></v-select>
       </v-col>
+      <v-col class="py-0">
+        <form-field
+          :field="{
+            users: users,
+            type: 'users',
+            label: 'Сотрудники',
+            rules: ['required'],
+            multiple: false,
+            dense: true,
+            solo: true,
+            rounded: false,
+            'hide-details': true
+          }"
+          v-model="filters.user_id"
+        />
+      </v-col>
     </v-row>
     <v-row align="center" justify="center">
       <v-card v-if="loading" class="mt-10">
@@ -70,16 +111,34 @@
           <v-progress-circular :size="100" color="primary" indeterminate></v-progress-circular>
         </v-card-text>
       </v-card>
-      <v-col v-else>
-        <v-card>
-          <timeline
-            :items="preparedTimesets"
-            :groups="preparedUsers"
-            :options="options"
-            :key="timelineKey"
-          ></timeline>
-        </v-card>
-      </v-col>
+      <template v-else>
+        <v-col v-if="filters.division_id">
+          <v-card>
+            <timeline
+              :items="preparedTimesets"
+              :groups="preparedUsers"
+              :options="options"
+              :key="timelineKey"
+            ></timeline>
+          </v-card>
+        </v-col>
+        <v-col v-else>
+          <v-sheet height="600">
+            <v-calendar
+              ref="calendar"
+              :now="moment().format('YYYY-MM-DD')"
+              :value="filters.date"
+              :events="events"
+              color="primary"
+              type="week"
+              :first-interval="16"
+              :interval-minutes="30"
+              :interval-count="20"
+              :interval-height="48"
+            ></v-calendar>
+          </v-sheet>
+        </v-col>
+      </template>
     </v-row>
   </v-container>
 </template>
@@ -90,6 +149,9 @@ import "vue2vis/dist/vue2vis.css";
 export default {
   props: {
     divisions: {
+      required: true
+    },
+    users: {
       required: true
     }
   },
@@ -138,30 +200,37 @@ export default {
         "blue-grey"
       ],
       filters: {
-        from: null,
-        to: null
+        date: null,
+        start_time: null,
+        end_time: null,
+        division_id: null,
+        user_id: null
       },
+      dateMenu: null,
       fromMenu: null,
       toMenu: null,
       timesets: [],
-      users: [],
+      timelineUsers: [],
       timelineKey: 0, // Needed to rerender component,
-      loading: false,
-      selectedDivision: null
+      loading: false
     };
   },
   async created() {
-    this.filters.from = await this.moment()
+    this.filters.start_time = await this.moment()
       .startOf("month")
       .format("YYYY-MM-DD");
 
-    this.filters.to = await this.moment()
+    this.filters.end_time = await this.moment()
       .endOf("month")
       .format("YYYY-MM-DD");
+
+    if (this.isExeption) {
+      this.filters.division_id = this.auth.division.id;
+    }
   },
   methods: {
     prepareData() {
-      this.preparedUsers = this.users.map(user => {
+      this.preparedUsers = this.timelineUsers.map(user => {
         return {
           id: user.id,
           content: user.fullname,
@@ -199,44 +268,86 @@ export default {
     },
     fetchTimesets() {
       this.loading = true;
-
       axios
         .get(this.appPath(`api/timesets`), {
-          params: {
-            from: this.filters.from,
-            to: this.filters.to,
-            division_id: this.selectedDivision
-          }
+          params: this.filters
         })
         .then(resp => {
-          this.users = resp.data.users;
+          this.timelineUsers = resp.data.users;
           this.timesets = resp.data.timesets;
 
           this.prepareData();
         });
+    },
+    isExeption() {
+      let exeptions = ["ОРПО", "ОУПС", "Evolet"];
+
+      exeptions.forEach(ex => {
+        if (ex == this.auth.division.abbreviation) return true;
+      });
+
+      return false;
     }
   },
   watch: {
-    from(val) {
-      if (this.filters.to) {
+    start_time(val) {
+      if (this.filters.end_time) {
         this.fetchTimesets();
       }
     },
-    to(val) {
-      if (this.filters.from) {
+    end_time(val) {
+      if (this.filters.start_time) {
         this.fetchTimesets();
       }
     },
-    selectedDivision(val) {
+    division_id(val) {
+      if (val != null) {
+        this.filters.user_id = null;
+        this.filters.date = null;
+        this.fetchTimesets();
+      }
+    },
+    user_id(val) {
+      if (val != null) {
+        this.filters.division_id = null;
+        this.filters.date = this.moment().format("YYYY-MM-DD");
+        this.fetchTimesets();
+      }
+    },
+    date(val) {
+      this.filters.start_time = null;
+      this.filters.end_time = null;
       this.fetchTimesets();
     }
   },
   computed: {
-    from() {
-      return this.filters.from;
+    events() {
+      return this.timesets.map(timeset => {
+        return {
+          start: this.moment(timeset.start_time)
+            .local()
+            .format("YYYY-MM-DD HH:mm:ss"),
+          end: this.moment(timeset.end_time)
+            .local()
+            .format("YYYY-MM-DD HH:mm:ss"),
+          name: timeset.task.description
+        };
+      });
     },
-    to() {
-      return this.filters.to;
+    start_time() {
+      return this.filters.start_time;
+    },
+    end_time() {
+      return this.filters.end_time;
+    },
+    division_id() {
+      return this.filters.division_id;
+    },
+    user_id() {
+      return this.filters.user_id;
+    },
+    date() {
+      return this.filters.date;
     }
   }
 };
