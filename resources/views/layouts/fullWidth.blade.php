@@ -8,8 +8,8 @@
 
 	<navbar :user="{{$authUser}}"></navbar>
 
-	<v-content>
+	<v-main>
         @yield('content')
-	</v-content>
+	</v-main>
 
 @endsection

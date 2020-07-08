@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('layout')
-	<v-content>
+	<v-main>
 		@yield('content')
-	</v-content>
+	</v-main>
 @endsection
