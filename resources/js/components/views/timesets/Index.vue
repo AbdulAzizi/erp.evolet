@@ -123,17 +123,17 @@
           </v-card>
         </v-col>
         <v-col v-else>
-          <v-sheet height="600">
+          <v-sheet height="calc( 100vh - 125px )">
             <v-calendar
               ref="calendar"
               :now="moment().format('YYYY-MM-DD')"
-              :value="filters.date"
+              v-model="filters.date"
               :events="events"
               color="primary"
               type="week"
-              :first-interval="16"
+              :first-interval="13"
               :interval-minutes="30"
-              :interval-count="20"
+              :interval-count="36"
               :interval-height="48"
             ></v-calendar>
           </v-sheet>
@@ -236,11 +236,22 @@ export default {
           content: user.fullname,
           color: this.colors[this.rand(0, this.colors.length - 1)],
           content:
-            '<div tabindex="0" role="listitem" aria-selected="false" class="px-2 v-list-item v-list-item--dense theme--light" style="min-height:30px;"><div class="v-avatar my-0 v-list-item__avatar" style="height: 27px; min-width: 27px; width: 27px;"><div class="v-responsive v-image"><div class="v-responsive__sizer" style="padding-bottom: 100%;"></div><div class="v-image__image v-image__image--cover" style="background-image: url(&quot;' +
+            '<div tabindex="0" role="listitem" aria-selected="false" class="px-2 v-list-item v-list-item--dense theme--light" style="min-height:30px;">' +
+            '<div class="v-avatar my-0 v-list-item__avatar" style="height: 27px; min-width: 27px; width: 27px;">' +
+            '<div class="v-responsive v-image">' +
+            '<div class="v-responsive__sizer" style="padding-bottom: 100%;"></div>' +
+            '<div class="v-image__image v-image__image--cover" style="background-image: url(&quot;' +
             this.photo(user.img) +
-            '&quot;); background-position: center center;"></div><div class="v-responsive__content" style="width: 128px;"></div></div></div><div class="v-list-item__content py-0"><div class="v-list-item__title">' +
+            '&quot;); background-position: center center;"></div>' +
+            '<div class="v-responsive__content" style="width: 128px;"></div>' +
+            "</div>" +
+            "</div>" +
+            '<div class="v-list-item__content py-0">' +
+            '<div class="v-list-item__title">' +
             user.fullname +
-            "</div></div></div>"
+            "</div>" +
+            "</div>" +
+            "</div>"
         };
       });
 
