@@ -966,4 +966,43 @@ class TaskController extends Controller
 
         return $task->priority;
     }
+
+    public function userResponsibleTasks()
+    {
+        $tasks = Task::where([
+            'responsible_id' => auth()->user()->id,
+            'start_date' => null
+        ])->get();
+
+        return $tasks;
+    }
+
+    public function createCalendarEvent(Request $request) 
+    {
+        $task = Task::find($request->id);
+
+        $task->start_date = $request->startDate;
+
+        $task->save();
+
+        return $task;
+    }
+
+    public function deleteCalendarEvent(Request $request)
+    {
+        $task = Task::find($request->taskId);
+
+        $task->start_date = null;
+
+        $task->save();
+    }
+
+    public function tasksForCalendarEvents() {
+
+        $tasks = Task::where([
+            'responsible_id' => auth()->user()->id
+        ])->whereNotNull('start_date')->get();
+
+        return $tasks;
+    }
 }
