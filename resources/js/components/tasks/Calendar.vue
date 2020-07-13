@@ -250,14 +250,15 @@ export default {
       });
     },
     createEvent() {
-      let dateToMilliseconds = this.moment(
+      let startDate = this.moment(
         `${this.calendarDate} ${this.startTime}`
       ).local().valueOf();
+
 
       axios
         .post("/api/createCalendarEvent", {
           id: this.eventTask.id,
-          startDate: dateToMilliseconds
+          startDate: startDate
         })
         .then(res => {
           this.pushEvent(res.data);
@@ -296,7 +297,7 @@ export default {
     },
     // Push data to events array
     pushEvent(event) {
-      let startDate = this.moment(Number(event.start_date)).format("YYYY-MM-DD hh:mm");
+      let startDate = this.moment(Number(event.start_date)).format("YYYY-MM-DD HH:mm");
       let endDate = this.calculateEndDate(event.start_date, event.planned_time);
 
       this.events.push({
