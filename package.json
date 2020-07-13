@@ -34,6 +34,6 @@
         "v-mask": "^2.2.1",
         "vue2vis": "0.0.18",
         "vuedraggable": "^2.23.2",
-        "vuetify": "^2.2.23"
+        "vuetify": "^2.3.3"
     }
 }

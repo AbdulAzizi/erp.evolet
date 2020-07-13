@@ -8,11 +8,11 @@
 
 	<navbar :user="{{$authUser}}"></navbar>
 
-	<v-content>
+	<v-main>
         <v-container fluid class="pb-0">
             @yield('content')
         </v-container>
-	</v-content>
+	</v-main>
 
 
 

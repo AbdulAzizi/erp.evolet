@@ -5,7 +5,7 @@
         floating
         clipped
         app
-        mobile-break-point="960"
+        mobile-breakpoint="960"
         width="240"
         class="elevation-3"
         expand-on-hover

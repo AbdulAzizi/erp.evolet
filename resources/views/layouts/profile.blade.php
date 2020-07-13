@@ -5,7 +5,7 @@
 
 	<navbar :user="{{$authUser}}"></navbar>
 
-	<v-content>
+	<v-main>
         <v-container fluid class="pb-0">
             <profile-banner 
             :user="{{ $user }}" 
@@ -13,5 +13,5 @@
             ></profile-banner>
             @yield('content')
         </v-container>
-	</v-content>
+	</v-main>
 @endsection
