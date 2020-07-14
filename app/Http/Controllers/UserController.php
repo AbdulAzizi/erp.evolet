@@ -45,10 +45,12 @@ class UserController extends Controller
 
     public function edit(Request $request)
     {
-        $user = User::find($request->id);
-
+        $user = User::find(auth()->user()->id);
+        
         if ($request->email) {
+
             $user->email = $request->email;
+
         } else {
 
             $user->name = $request->name;

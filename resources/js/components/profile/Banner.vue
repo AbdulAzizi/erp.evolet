@@ -285,7 +285,7 @@ export default {
         },
         editUser() {
             axios
-                .post(`/api/users/edit/${this.user.id}`, {
+                .post('/api/users/edit', {
                     name: this.fullName.split(" ")[0],
                     surname: this.fullName.split(" ")[1],
                     email: this.emailToSend
