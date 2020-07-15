@@ -153,6 +153,7 @@ export default {
       this.localItems.unshift(notification.notification);
 
       Event.fire("notify", ["У вас новое уведомление!"]);
+      this.unreadNotifications ++;
 
       this.sound.muted = false;
       let promise = this.muted == 1 ? this.sound.pause() : this.sound.play();
