@@ -971,9 +971,8 @@ class TaskController extends Controller
     {
         $tasks = Task::where([
             'responsible_id' => auth()->user()->id,
-            'start_date' => null,
-            'status_id' => [1,2,3]
-        ])->get();
+            'start_date' => null
+        ])->where('status_id', '!=', 4)->get();
 
         return $tasks;
     }
