@@ -90,7 +90,7 @@ Route::get('/divisions', 'DivisionController@loadDivisions')->name('division.loa
 
 Route::post('/divisions/create', 'DivisionController@store')->name('division.store');
 Route::delete('/divisions/{id}', 'DivisionController@delete')->name('division.delete');
-Route::post('/users/edit/{id}', 'UserController@edit')->name('user.edit');
+
 Route::post('/tags/create', 'TagController@create')->name('tag.create');
 Route::delete('/tags/{id}', 'TagController@delete')->name('tag.delete');
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 80vh">
     <v-row align="center" class="px-3 mb-3">
       <v-text-field
         v-model="searchTask"
@@ -296,19 +296,19 @@
               <v-icon :color="isTable ? 'white' : 'grey lighten-0'">mdi-table-of-contents</v-icon>
             </v-btn>
           </template>
-          <span>таблица</span>
+          <span>Таблица</span>
         </v-tooltip>
 
-        <!-- <v-tooltip bottom>
+        <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
-                            <v-btn small text :value="activeBtn.CALENDAR" dark v-on="on">
+                            <v-btn small text :value="activeBtn.CALENDAR" dark v-on="on" height="38">
                                 <v-icon
                                     :color="isCalendar ? 'white' : 'grey lighten-0'"
                                 >mdi-calendar-month</v-icon>
                             </v-btn>
                         </template>
                         <span>календарь</span>
-        </v-tooltip>-->
+        </v-tooltip>
 
         <!-- <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -322,7 +322,7 @@
     </v-row>
 
     <tasks-table :tasks="filteredTasks" v-if="isTable && !displayGroupTasks"></tasks-table>
-    <!-- <tasks-calendar :tasks="tasks" v-show="isCalendar"></tasks-calendar> -->
+    <tasks-calendar v-show="isCalendar"></tasks-calendar>
     <!-- <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser" /> -->
     <tasks-group-view :tasks="filteredTasks" v-if="displayGroupTasks" />
     <tasks-add :divisions="divisions" :users="users" :errors="errors" />

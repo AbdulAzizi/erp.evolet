@@ -157,4 +157,13 @@ Route::prefix('api')->group(function () {
     Route::post('/notifications', 'UserController@loadNotifications')->name('api.notificatinos.load');
     Route::get('/timesets', 'TimesetController@getTimesets')->name('timesets.getTimesets');
 
+    Route::get('/userResponsibleTasks', 'TaskController@userResponsibleTasks')->name('user.responsible.tasks');
+
+    Route::post('/createCalendarEvent', 'TaskController@createCalendarEvent')->name('create.calendar.event');
+    Route::get('/tasksForCalendarEvents', 'TaskController@tasksForCalendarEvents')->name('tasks.calendar.events');
+    Route::post('/deleteCalendarEvent', 'TaskController@deleteCalendarEvent')->name('delete.calendar.event');
+
+    Route::post('/users/edit', 'UserController@edit')->name('user.edit');
+
+
 });
