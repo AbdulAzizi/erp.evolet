@@ -42,17 +42,20 @@ class EventDeadline extends Notification
      */
     public function toArray($notifiable)
     {
+        $timeWithText = $this->time === 1 ? 'Остался' . $this->time . 'час' : 'Осталось' . $this->time . 'минут';
         return [
             'avatar' => $this->task->responsible->img,
-            'title' => 'Осталось '. $this->time .' до начала выполнения задачи <a href="' . route("tasks.show", $this->task->id) . '">' . mb_strimwidth($this->task->description, 0, 40, "...") . '</a>'
+            'title' => 'Остался '. $timeWithText .' до начала выполнения задачи <a href="' . route("tasks.show", $this->task->id) . '">' . mb_strimwidth($this->task->description, 0, 40, "...") . '</a>'
         ];
     }
 
     public function toBroadcast($notifiable)
     {
+        $timeWithText = $this->time === 1 ? 'Остался' . $this->time . 'час' : 'Осталось' . $this->time . 'минут';
+
         return new BroadcastMessage([
             'avatar' => $this->task->responsible->img,
-            'title' => 'Осталось '. $this->time .' до начала выполнения задачи <a href="' . route("tasks.show", $this->task->id) . '">' . mb_strimwidth($this->task->description, 0, 40, "...") . '</a>',
+            'title' => 'Осталось '. $timeWithText .' до начала выполнения задачи <a href="' . route("tasks.show", $this->task->id) . '">' . mb_strimwidth($this->task->description, 0, 40, "...") . '</a>',
             'notification' => $notifiable->notifications()->find($this->id),
         ]);
     }
