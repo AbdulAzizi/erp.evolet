@@ -307,7 +307,7 @@
                                 >mdi-calendar-month</v-icon>
                             </v-btn>
                         </template>
-                        <span>календарь</span>
+                        <span>Календарь</span>
         </v-tooltip>
 
         <!-- <v-tooltip bottom>
