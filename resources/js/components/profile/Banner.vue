@@ -71,6 +71,7 @@
                                     v-model="fullName"
                                     v-if="editFullName"
                                     filled
+                                    label="Имя фамилия"
                                     solo
                                     flat
                                     dense
