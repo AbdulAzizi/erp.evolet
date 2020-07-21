@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entry;
 use App\Status;
 use App\Task;
 use App\Timeset;
@@ -109,7 +110,7 @@ class ProfileController extends Controller
 
     public function entries($id)
     {
-        $entries = User::find($id)->entries;
+        $entries = Entry::where('user_id', $id)->with('users')->get();
         return view('users.entries', compact('entries'));
     }
 }
