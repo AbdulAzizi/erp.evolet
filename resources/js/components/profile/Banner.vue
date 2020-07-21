@@ -236,7 +236,7 @@ export default {
                 {
                     title: "Задачи",
                     path: `/users/${this.user.id}`,
-                    icon: "mdi-phone"
+                    icon: "mdi-calendar-check"
                 },
                 {
                     title: "ДИ",
@@ -257,6 +257,11 @@ export default {
                     title: "ПЗ",
                     path: `/users/${this.user.id}/setTasks`,
                     icon: "mdi-calendar"
+                },
+                {
+                    title: "Турникет",
+                    path: `/users/${this.user.id}/entries`,
+                    icon: "mdi-door-open"
                 }
             ],
             url: window.location.pathname

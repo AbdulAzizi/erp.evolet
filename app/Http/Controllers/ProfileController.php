@@ -106,4 +106,10 @@ class ProfileController extends Controller
 
         return view('users.setTasks', compact('fromTasks', 'toTasks'));
     }
+
+    public function entries($id)
+    {
+        $entries = User::find($id)->entries;
+        return view('users.entries', compact('entries'));
+    }
 }

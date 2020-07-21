@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
         Route::get('/users/{id}/positions', 'ProfileController@positions')->name('profile.positions');
         Route::get('/users/{id}', 'ProfileController@dashboard')->name('users.dashboard');
         Route::get('/users/{id}/setTasks', 'ProfileController@setTasks')->name('users.setTasks');
+        Route::get('/users/{id}/entries', 'ProfileController@entries')->name('users.entries');
     });
 
     Route::get('/profile', 'UserController@show')->name('profile');
