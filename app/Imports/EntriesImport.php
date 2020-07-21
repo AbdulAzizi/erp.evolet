@@ -38,8 +38,8 @@ class EntriesImport implements ToModel
                 return new Entry([
                     'user_id' => $user->id,
                     'date' => $row[3],
-                    'sign_in' => $row[5],
-                    'sign_out' => $row[6],
+                    'sign_in' => $row[5] == 'Not Sign in' ? null : $row[5],
+                    'sign_out' => $row[6] == 'Not Sign out' ? null : $row[6],
                 ]);
             }
         }
