@@ -159,5 +159,10 @@ class User extends Authenticatable
         $unreadNotifications = count($user->unreadNotifications);
 
         return $unreadNotifications;
-    } 
+    }
+    
+    public function entries()
+    {
+        return $this->hasMany('App\Entry');
+    }
 }
