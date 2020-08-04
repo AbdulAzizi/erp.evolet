@@ -334,7 +334,7 @@ export default {
       this.localDays.forEach((day) => {
         day.timesets = [];
         this.timesets.forEach((timeset) => {
-          if (this.moment(timeset).format("YYYY-MM-DD") == day.text) {
+          if (this.moment(timeset.start_time).format("YYYY-MM-DD") == day.text) {
             day.timesets.push(timeset);
           }
         });
