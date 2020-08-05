@@ -269,22 +269,6 @@ export default {
     if (this.isExeption) {
       this.filters.division_id = this.auth.division.id;
     }
-
-    // initialize custom timeline
-    for (let i = 0; i < 24; i++) {
-      this.timeline.push((i < 10 ? "0" + i : i) + ":00");
-    }
-
-    let startMonth = this.moment().startOf("month");
-    let endMonth = this.moment().endOf("month");
-
-    while (startMonth <= endMonth) {
-      this.localDays.push({
-        text: startMonth.format("YYYY-MM-DD"),
-        timesets: [],
-      });
-      startMonth = startMonth.add(1, "days");
-    }
   },
   methods: {
     prepareData() {
@@ -330,15 +314,42 @@ export default {
         };
       });
 
-      // push timeset for each day
-      this.localDays.forEach((day) => {
-        day.timesets = [];
-        this.timesets.forEach((timeset) => {
-          if (this.moment(timeset.start_time).format("YYYY-MM-DD") == day.text) {
-            day.timesets.push(timeset);
-          }
+      // initialize custom timeline
+      if (this.filters.month) {
+        this.timeline = [];
+        this.localDays = [];
+
+        for (let i = 0; i < 24; i++) {
+          this.timeline.push((i < 10 ? "0" + i : i) + ":00");
+        }
+        let res = this.filters.month.split("-");
+        let year = res[0];
+        let month = parseInt(res[1]) - 1;
+
+        let date = this.moment().set({ year: year, month: month });
+
+        let startMonth = this.moment(date).startOf("month");
+        let endMonth = this.moment(date).endOf("month");
+
+        while (startMonth <= endMonth) {
+          this.localDays.push({
+            text: startMonth.format("YYYY-MM-DD"),
+            timesets: [],
+          });
+          startMonth = startMonth.add(1, "days");
+        }
+        // push timeset for each day
+        this.localDays.forEach((day) => {
+          day.timesets = [];
+          this.timesets.forEach((timeset) => {
+            if (
+              this.moment(timeset.start_time).format("YYYY-MM-DD") == day.text
+            ) {
+              day.timesets.push(timeset);
+            }
+          });
         });
-      });
+      }
 
       this.loading = false;
       this.timelineKey += 1; // Needed to rerender component
