@@ -12,7 +12,7 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="filters.date"
+              v-model="filters.month"
               label="Дата"
               readonly
               v-bind="attrs"
@@ -22,7 +22,7 @@
               dense
             ></v-text-field>
           </template>
-          <v-date-picker v-model="filters.date" @input="dateMenu = false"></v-date-picker>
+          <v-date-picker v-model="filters.month" @input="dateMenu = false" type="month"></v-date-picker>
         </v-menu>
       </v-col>
 
@@ -127,7 +127,7 @@
             <v-calendar
               ref="calendar"
               :now="moment().format('YYYY-MM-DD')"
-              v-model="filters.date"
+              v-model="filters.month"
               :events="events"
               color="primary"
               type="week"
@@ -238,7 +238,7 @@ export default {
         "blue-grey",
       ],
       filters: {
-        date: null,
+        month: null,
         start_time: null,
         end_time: null,
         division_id: null,
@@ -390,18 +390,18 @@ export default {
     division_id(val) {
       if (val != null) {
         this.filters.user_id = null;
-        this.filters.date = null;
+        this.filters.month = null;
         this.fetchTimesets();
       }
     },
     user_id(val) {
       if (val != null) {
         this.filters.division_id = null;
-        this.filters.date = this.moment().format("YYYY-MM-DD");
+        this.filters.month = this.moment().format("YYYY-MM");
         this.fetchTimesets();
       }
     },
-    date(val) {
+    month(val) {
       this.filters.start_time = null;
       this.filters.end_time = null;
       this.fetchTimesets();
@@ -433,8 +433,8 @@ export default {
     user_id() {
       return this.filters.user_id;
     },
-    date() {
-      return this.filters.date;
+    month() {
+      return this.filters.month;
     },
   },
 };
