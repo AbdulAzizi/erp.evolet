@@ -159,7 +159,7 @@
                     x-small
                     label
                     :style="'min-width:3px; width:' + ((moment(timeset.end_time).diff(moment(timeset.start_time)) / 1000) * 0.015555) + 'px; z-index:2; position: absolute; left:' + calculateLeftSpace(timeset) + 'px;'"
-                    class="red white--text px-0"
+                    :class="day.color + ' white--text px-1'"
                     v-on="on"
                   >{{timeset.task.description}}</v-chip>
                 </template>
@@ -271,6 +271,42 @@ export default {
     }
   },
   methods: {
+    prepareCustomTimeline() {
+      this.timeline = [];
+      this.localDays = [];
+
+      for (let i = 0; i < 24; i++) {
+        this.timeline.push((i < 10 ? "0" + i : i) + ":00");
+      }
+      let res = this.filters.month.split("-");
+      let year = res[0];
+      let month = parseInt(res[1]) - 1;
+
+      let date = this.moment().set({ year: year, month: month });
+
+      let startMonth = this.moment(date).startOf("month");
+      let endMonth = this.moment(date).endOf("month");
+
+      while (startMonth <= endMonth) {
+        this.localDays.push({
+          text: startMonth.format("YYYY-MM-DD"),
+          timesets: [],
+          color: this.colors[this.rand(0, this.colors.length - 1)]
+        });
+        startMonth = startMonth.add(1, "days");
+      }
+      // push timeset for each day
+      this.localDays.forEach((day) => {
+        day.timesets = [];
+        this.timesets.forEach((timeset) => {
+          if (
+            this.moment(timeset.start_time).format("YYYY-MM-DD") == day.text
+          ) {
+            day.timesets.push(timeset);
+          }
+        });
+      });
+    },
     prepareData() {
       this.preparedUsers = this.timelineUsers.map((user) => {
         return {
@@ -316,39 +352,7 @@ export default {
 
       // initialize custom timeline
       if (this.filters.month) {
-        this.timeline = [];
-        this.localDays = [];
-
-        for (let i = 0; i < 24; i++) {
-          this.timeline.push((i < 10 ? "0" + i : i) + ":00");
-        }
-        let res = this.filters.month.split("-");
-        let year = res[0];
-        let month = parseInt(res[1]) - 1;
-
-        let date = this.moment().set({ year: year, month: month });
-
-        let startMonth = this.moment(date).startOf("month");
-        let endMonth = this.moment(date).endOf("month");
-
-        while (startMonth <= endMonth) {
-          this.localDays.push({
-            text: startMonth.format("YYYY-MM-DD"),
-            timesets: [],
-          });
-          startMonth = startMonth.add(1, "days");
-        }
-        // push timeset for each day
-        this.localDays.forEach((day) => {
-          day.timesets = [];
-          this.timesets.forEach((timeset) => {
-            if (
-              this.moment(timeset.start_time).format("YYYY-MM-DD") == day.text
-            ) {
-              day.timesets.push(timeset);
-            }
-          });
-        });
+        this.prepareCustomTimeline();
       }
 
       this.loading = false;
