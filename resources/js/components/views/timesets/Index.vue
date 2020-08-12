@@ -168,7 +168,7 @@
               <template v-for="(entry,index) in day.entries">
 
 
-                <v-tooltip top :key="'entry-sign_in-'+index">
+                <v-tooltip top :key="'entry-sign_in-'+index" v-if="entry.sign_in">
                   <template v-slot:activator="{ on, attrs }">
                     <v-chip
                       x-small
