@@ -165,17 +165,36 @@
                 </template>
                 <span>{{timeset.task.description}}</span>
               </v-tooltip>
-              <v-tooltip top v-for="(entry,index) in day.entries" :key="'entry-'+index">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-chip
-                    x-small
-                    :style="'border-radius:0;width:2px; height:20px; z-index:2; position: absolute; left:' + calculateLeftSpace(entry.date) + 'px;'"
-                    class="primary white--text px-0"
-                    v-on="on"
-                  ></v-chip>
-                </template>
-                <span>{{entry.date}}</span>
-              </v-tooltip>
+              <template v-for="(entry,index) in day.entries">
+
+
+                <v-tooltip top :key="'entry-sign_in-'+index">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-chip
+                      x-small
+                      :style="'border-radius:0;width:2px; height:20px; z-index:2; position: absolute; left:' + calcEntryLeft(entry.sign_in) + 'px;'"
+                      class="primary white--text px-0"
+                      v-on="on"
+                    ></v-chip>
+                  </template>
+                  <span>{{entry.sign_in}}</span>
+                </v-tooltip>
+
+
+                <v-tooltip top :key="'entry-'+index" v-if="entry.sign_out">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-chip
+                      x-small
+                      :style="'border-radius:0;width:2px; height:20px; z-index:2; position: absolute; left:' + calcEntryLeft(entry.sign_out) + 'px;'"
+                      class="primary white--text px-0"
+                      v-on="on"
+                    ></v-chip>
+                  </template>
+                  <span>{{entry.sign_out}}</span>
+                </v-tooltip>
+
+
+              </template>
             </v-row>
             <v-divider :key="'divider-'+index" class="grey lighten-3" />
           </template>
@@ -402,13 +421,20 @@ export default {
 
       return false;
     },
-    calculateLeftSpace(start_time) {
+    calculateLeftSpace(date) {
       return (
         106 +
-        this.moment(start_time).local().hours() * 56 +
-        this.moment(start_time).local().minutes() * (56 / 60)
+        this.moment(date).local().hours() * 56 +
+        this.moment(date).local().minutes() * (56 / 60)
       );
     },
+    calcEntryLeft(time){
+      return (
+        106 +
+        this.moment(time, "HH:mm").hours() * 56 +
+        this.moment(time, "HH:mm").minutes() * (56 / 60)
+      );
+    }
   },
   watch: {
     start_time(val) {
