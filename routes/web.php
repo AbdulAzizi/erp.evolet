@@ -167,6 +167,4 @@ Route::prefix('api')->group(function () {
     Route::post('/deleteCalendarEvent', 'TaskController@deleteCalendarEvent')->name('delete.calendar.event');
 
     Route::post('/users/edit', 'UserController@edit')->name('user.edit');
-
-
 });

@@ -158,12 +158,23 @@
                   <v-chip
                     x-small
                     label
-                    :style="'min-width:3px; width:' + ((moment(timeset.end_time).diff(moment(timeset.start_time)) / 1000) * 0.015555) + 'px; z-index:2; position: absolute; left:' + calculateLeftSpace(timeset) + 'px;'"
+                    :style="'min-width:3px; width:' + ((moment(timeset.end_time).diff(moment(timeset.start_time)) / 1000) * 0.015555) + 'px; z-index:2; position: absolute; left:' + calculateLeftSpace(timeset.start_time) + 'px;'"
                     :class="day.color + ' white--text px-1'"
                     v-on="on"
                   >{{timeset.task.description}}</v-chip>
                 </template>
                 <span>{{timeset.task.description}}</span>
+              </v-tooltip>
+              <v-tooltip top v-for="(entry,index) in day.entries" :key="'entry-'+index">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-chip
+                    x-small
+                    :style="'border-radius:0;width:2px; height:20px; z-index:2; position: absolute; left:' + calculateLeftSpace(entry.date) + 'px;'"
+                    class="primary white--text px-0"
+                    v-on="on"
+                  ></v-chip>
+                </template>
+                <span>{{entry.date}}</span>
               </v-tooltip>
             </v-row>
             <v-divider :key="'divider-'+index" class="grey lighten-3" />
@@ -255,6 +266,7 @@ export default {
       timeline: [],
       zoom: 24,
       localDays: [],
+      entries: [],
     };
   },
   async created() {
@@ -291,18 +303,24 @@ export default {
         this.localDays.push({
           text: startMonth.format("YYYY-MM-DD"),
           timesets: [],
-          color: this.colors[this.rand(0, this.colors.length - 1)]
+          color: this.colors[this.rand(0, this.colors.length - 1)],
         });
         startMonth = startMonth.add(1, "days");
       }
       // push timeset for each day
       this.localDays.forEach((day) => {
         day.timesets = [];
+        day.entries = [];
         this.timesets.forEach((timeset) => {
           if (
             this.moment(timeset.start_time).format("YYYY-MM-DD") == day.text
           ) {
             day.timesets.push(timeset);
+          }
+        });
+        this.entries.forEach((ent) => {
+          if (this.moment(ent.date).format("YYYY-MM-DD") == day.text) {
+            day.entries.push(ent);
           }
         });
       });
@@ -370,6 +388,7 @@ export default {
         .then((resp) => {
           this.timelineUsers = resp.data.users;
           this.timesets = resp.data.timesets;
+          this.entries = resp.data.entries;
 
           this.prepareData();
         });
@@ -383,11 +402,11 @@ export default {
 
       return false;
     },
-    calculateLeftSpace(timeset) {
+    calculateLeftSpace(start_time) {
       return (
         106 +
-        this.moment(timeset.start_time).local().hours() * 56 +
-        this.moment(timeset.start_time).local().minutes() * (56 / 60)
+        this.moment(start_time).local().hours() * 56 +
+        this.moment(start_time).local().minutes() * (56 / 60)
       );
     },
   },
