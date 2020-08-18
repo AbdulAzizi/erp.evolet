@@ -4,9 +4,10 @@ namespace App\Imports;
 
 use App\Entry;
 use App\User;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Row;
 
-class EntriesImport implements ToModel
+class EntriesImport implements OnEachRow
 {
     private $users;
 
@@ -14,14 +15,13 @@ class EntriesImport implements ToModel
     {
         $this->users = User::alone()->get();
     }
+    
 
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function model(array $row)
+    public function onRow(Row $row)
     {
+        $rowIndex = $row->getIndex();
+        $row = $row->toArray();
+
         $result = (explode(' ', $row[2]));
 
         if (count($result) == 2) {
@@ -35,7 +35,7 @@ class EntriesImport implements ToModel
 
             if ($user) {
 
-                return new Entry([
+                Entry::firstOrCreate([
                     'user_id' => $user->id,
                     'date' => $row[3],
                     'sign_in' => $row[5] == 'Not Sign in' ? null : $row[5],
@@ -43,7 +43,5 @@ class EntriesImport implements ToModel
                 ]);
             }
         }
-
-        return;
     }
 }
