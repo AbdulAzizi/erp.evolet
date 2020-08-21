@@ -22,4 +22,13 @@ class EntryController extends Controller
         return redirect()->route('entries.index');
     }
 
+    public function update(Request $request, $id)
+    {
+        $entry = Entry::find($id);
+        $entry->comment = $request->comment;
+        $entry->save();
+
+        return $entry;
+    }
+
 }
