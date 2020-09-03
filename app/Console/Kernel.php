@@ -29,6 +29,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('deadline:notification')->dailyAt('00:00');
 
         $schedule->command('calendarevent:notification')->everyFifteenMinutes()->between('00:00', '23:00');
+
+        $schedule->command('repeat:task')->dailyAt('00:00');
     }
 
     /**

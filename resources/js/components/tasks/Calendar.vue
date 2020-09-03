@@ -63,8 +63,10 @@
           dark
           class="float-right"
           @mousedown.stop="displayEventDeleteDialog(event)"
+          :disabled="event.repeat"
         >
-          <v-icon>mdi-delete</v-icon>
+          <v-icon v-if="!event.repeat">mdi-delete</v-icon>
+          <v-icon style="color: white !important" v-else>mdi-repeat</v-icon>
         </v-btn>
         <v-menu v-else offset-x absolute transition="slide-x-transition">
           <template v-slot:activator="{ on }">
@@ -125,6 +127,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="isRepeatDialog">
+      <v-card>
+        <v-card-title>Изменятся и все последующие повторяющиеся задачи</v-card-title>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -138,7 +145,9 @@ export default {
     calendarDate: null,
     createEventDialog: false,
     deleteEventDialog: false,
+    isRepeatDialog: false,
     eventForDelete: null,
+    repeatTasks: [],
     startTime: "08:30",
     focus: "",
     type: "month",
@@ -156,11 +165,13 @@ export default {
       "#4CAF50",
       "#FF9800",
       "#757575"
-    ]
+    ],
+    repeatColor: null
   }),
   mounted() {
     this.$refs.calendar.checkChange();
     this.loadTasksForCalendarEvents();
+    this.repeatColor = this.colors[this.rnd(0, this.colors.length - 1)];
   },
   methods: {
     getEventColor(event) {
@@ -199,7 +210,7 @@ export default {
     },
     // Change Event time locally on mouse move
     mouseMove(tms) {
-      if (this.changeEvent) {
+      if (this.changeEvent && !this.changeEvent.repeat) {
         let startDate = `${tms.date} ${this.roundTime(tms)}`;
         let endDate = this.calculateEndDate(
           this.moment(this.changeEvent.start).valueOf(),
@@ -250,10 +261,9 @@ export default {
       });
     },
     createEvent() {
-      let startDate = this.moment(
-        `${this.calendarDate} ${this.startTime}`
-      ).local().valueOf();
-
+      let startDate = this.moment(`${this.calendarDate} ${this.startTime}`)
+        .local()
+        .valueOf();
 
       axios
         .post("/api/createCalendarEvent", {
@@ -265,15 +275,18 @@ export default {
           this.createEventDialog = false;
           this.loadUserTasks();
           Event.fire("notify", [
-              `${res.data.description} успешно добавлен в календарь`
+            `${res.data.description} успешно добавлен в календарь`
           ]);
+          if (res.data.repeat.length > 0) window.location.reload();
         });
     },
     updateEvent(event) {
-      axios.post("/api/createCalendarEvent", {
-        id: event.id,
-        startDate: this.moment(event.start).valueOf()
-      });
+      if (!event.repeat) {
+        axios.post("/api/createCalendarEvent", {
+          id: event.id,
+          startDate: this.moment(event.start).valueOf()
+        });
+      }
     },
     deleteEvent(event) {
       axios
@@ -281,43 +294,138 @@ export default {
           taskId: event.id
         })
         .then(res => {
-          this.spliceFromArray(this.events, event)
-          this.deleteEventDialog = false;
-          this.loadUserTasks();
+          // this.spliceFromArray(this.events, event);
+          // this.deleteEventDialog = false;
+          // this.loadUserTasks();
+          window.location.reload();
           Event.fire("notify", [`${event.name} успешно удален из календаря`]);
         });
     },
-
     loadTasksForCalendarEvents() {
+      let currentDate = this.moment();
       axios.get("/api/tasksForCalendarEvents").then(res => {
-        res.data.forEach(task => {
+        res.data.forEach((task, index) => {
           this.pushEvent(task);
+          if (task.repeat && !task.repeated) {
+            this.createRepeatTasks(task, task.repeat.range_period);
+          }
         });
       });
     },
     // Push data to events array
     pushEvent(event) {
-      let startDate = this.moment(Number(event.start_date)).format("YYYY-MM-DD HH:mm");
+      let startDate = this.moment(Number(event.start_date)).format(
+        "YYYY-MM-DD HH:mm"
+      );
       let endDate = this.calculateEndDate(event.start_date, event.planned_time);
-
       this.events.push({
         name: event.description,
         start: startDate,
         end: endDate,
         id: event.id,
         planned_time: event.planned_time,
-        color: this.colors[this.rnd(0, this.colors.length - 1)]
+        color: this.colors[this.rnd(0, this.colors.length - 1)],
+        repeat: false
       });
     },
     spliceFromArray(arr, event) {
       arr.forEach((item, index) => {
-        if(item.id === event.id) 
-          arr.splice(index, 1);
-      })
+        if (item.id == event.id) arr.splice(index, 1);
+      });
+    },
+    pushRepeatEvents(arr, period) {
+      let color = this.colors[this.rnd(0, this.colors.length - 1)];
+      let addDays = period;
+
+      arr.forEach(el => {
+        let daysOfWeek = JSON.parse(el.repeat.weekdays);
+        let checkDayOfWeek = daysOfWeek.includes(
+          this.moment(Number(el.start_date) + addDays * el.repeat.range).day()
+        );
+        let start = this.moment(
+          (Number(el.start_date) + addDays) * el.repeat.range
+        ).format("YYYY-MM-DD HH:mm");
+        let end = this.calculateEndDate(
+          Number(el.start_date) + addDays * el.repeat.range,
+          Number(el.planned_time)
+        );
+        let daysInMonth = this.moment(start).daysInMonth() * 86400000;
+
+        if (checkDayOfWeek) {
+          this.events.push({
+            name: el.description,
+            start: start,
+            end: end,
+            id: el.id,
+            planned_time: el.planned_time,
+            color: this.events.find(event => event.id == el.id).color,
+            repeat: true
+          });
+        }
+
+        addDays += el.repeat.range_period == 'month' ? daysInMonth : period;
+      });
+    },
+    createRepeatTasks(task, period) {
+      let dayArr = [];
+      let weekArr = [];
+      let monthArr = [];
+      let yearArr = [];
+      let arr = [];
+      let startDate = this.moment(Number(task.start_date)) || this.moment();
+      let daysInMonth = this.moment(Number(task.start_date)).daysInMonth() * 86400000;
+      if (task.repeat.end_date) {
+        while (
+          startDate
+            .startOf("day")
+            .diff(this.moment(task.repeat.end_date).startOf("day"), "days") < 0
+        ) {
+          startDate = this.moment(startDate).add(task.repeat.range, period);
+          switch (period) {
+            case "day":
+              dayArr.push(task);
+              break;
+            case "week":
+              weekArr.push(task);
+              break;
+            case "month":
+              monthArr.push(task);
+              break;
+            case "year":
+              yearArr.push(task);
+              break;
+            default:
+              arr.push(task);
+              break;
+          }
+        }
+      } else {
+        for (let i = 0; i < 365; i++) {
+          arr.push(task);
+        }
+      }
+
+      switch (period) {
+        case "day":
+          this.pushRepeatEvents(dayArr, 86400000);
+          break;
+        case "week":
+          this.pushRepeatEvents(weekArr, 604800000);
+          break;
+        case "month":
+          this.pushRepeatEvents(monthArr, daysInMonth);
+          break;
+        case "year":
+          this.pushRepeatEvents(yearArr, 31536000000);
+          break;
+        default:
+          this.pushRepeatEvents(arr, 86400000);
+          break;
+      }
     }
   },
   computed: {
-    // Create time range for creating events
+    // Create time range to create events
     timeRange() {
       let times = [];
       let date = this.moment(new Date("2020-07-01 00:00"));

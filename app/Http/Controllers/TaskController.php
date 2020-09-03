@@ -13,6 +13,7 @@ use App\Notifications\ForwardedTask;
 use App\Notifications\TaskIsClosed;
 use App\Option;
 use App\Question;
+use App\Repitition;
 use App\ResponsibilityDescription;
 use App\Status;
 use App\Tag;
@@ -76,7 +77,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         // validate obligatory fields
-        // dd($request->all());
+        // return $request->all();
 
         $validator = Validator::make($request->all(), [
             'attachments.*' => 'max:20000'
@@ -96,10 +97,26 @@ class TaskController extends Controller
 
         $files = $request->file('attachments');
 
-        if($validator->fails()){
+        $repeatTask = json_decode($request->repeatTask);
+
+        $startDateTime = json_decode($request->startDateTime);
+
+        $repitition = '';
+
+
+        if ($validator->fails()) {
             return ['attachmentError' => $validator->errors()->first()];
-        }
-        else {
+        } else {
+
+            if ($repeatTask) {
+                $repitition = Repitition::create([
+                    'range_period' => $repeatTask->period,
+                    'range' => $repeatTask->range,
+                    'end_date' => $repeatTask->end_date,
+                    'action' => $repeatTask->action,
+                    'weekDays' => json_encode($repeatTask->weekDays)
+                ]);
+            }
 
             // Loop through responsibility descriptions
             foreach ($descriptions as $description) {
@@ -118,30 +135,32 @@ class TaskController extends Controller
                         'from_id' => auth()->id(),
                         'from_type' => User::class,
                         'responsibility_description_id' => $description,
+                        'start_date' => $repeatTask ? $repeatTask->startTime : ($startDateTime ? $startDateTime : null),
+                        'repeat_id' => $repitition ? $repitition->id : null
                     ]);
                 }
             }
-    
+
             // Decode watchers
             $watchers = json_decode($request->watchers);
             if (count($watchers)) {
                 // Get all Watcher Users
                 $watchers = User::alone()->find($watchers);
             }
-    
+
             $newTags = json_decode($request->newTags);
             $tags = json_decode($request->existingTags);
             $poll = json_decode($request->poll);
-    
+
             if (count($newTags)) {
                 foreach ($newTags as $newTag) {
                     // Create new tags and merge them to existing tags array
                     $tag = Tag::create(['name' => $newTag]);
-    
+
                     $division = Division::find(auth()->user()->division->id);
-    
+
                     $division->tags()->attach($tag);
-    
+
                     $tags[] = $tag->id;
                 }
             }
@@ -151,10 +170,10 @@ class TaskController extends Controller
             }
             // Loop through Tasks
             foreach ($tasks as $task) {
-    
+
                 // TODO On the clide side restrickt User to add himself as a watcher
                 // TODO select auth user as task responsible by deafauld on the client side
-    
+
                 if (count($watchers)) {
                     // Attach Watchers to Task
                     $task->watchers()->attach($watchers);
@@ -164,19 +183,18 @@ class TaskController extends Controller
                 if (count($tags)) {
                     $task->tags()->attach($tags);
                 }
-    
-                if($files){
-    
+
+                if ($files) {
+
                     foreach ($files as $file) {
-                        if(strpos($file->getMimeType(), 'image') !== false){
+                        if (strpos($file->getMimeType(), 'image') !== false) {
                             $image = Image::make($file);
                             $image->save(public_path('img/' . $file->getClientOriginalName()));
-                        }
-                        else {
+                        } else {
                             Storage::disk('public')->put($file->getClientOriginalName(), file_get_contents($file));
                         }
-        
-        
+
+
                         $attachment = Attachment::create([
                             'name' => $file->getClientOriginalName(),
                             'size' => $file->getSize(),
@@ -184,14 +202,12 @@ class TaskController extends Controller
                             'attachable_id' => $task->id,
                             'mimeType' => $file->getMimeType()
                         ]);
-        
+
                         $attachment->save();
-                }
+                    }
                 }
             }
         }
-        
-        
     }
 
     public function show($id)
@@ -211,7 +227,8 @@ class TaskController extends Controller
             'forms.fields',
             'timeSets',
             'responsibilityDescription',
-            'attachments'
+            'attachments',
+            'repeat'
         )->find($id);
 
         // check if task exists
@@ -579,8 +596,7 @@ class TaskController extends Controller
 
     public function delete(Request $request)
     {
-        $task = Task::find($request->id);
-
+        $task = Task::with('repeat')->find($request->id);
         $task->timeSets()->delete();
         $task->history()->delete();
         $task->polls()->delete();
@@ -589,6 +605,19 @@ class TaskController extends Controller
         $task->forms()->delete();
         $task->questionTasks()->delete();
         $task->messages()->delete();
+
+        if ($task->repeat) {
+
+            $repeatTask = Repitition::findOrFail($task->repeat->id);
+            foreach($repeatTask->tasks as $taskRepeat) {
+                $task->repeat_id = null;
+                $task->save();
+            } 
+
+            if (count($repeatTask->tasks) == 0) {
+                $repeatTask->delete();
+            }
+        }
 
         $task->delete();
     }
@@ -823,32 +852,32 @@ class TaskController extends Controller
         // Return tags
         return $task->tags;
     }
-    
-    public function downloadAttachments($id){
-        
+
+    public function downloadAttachments($id)
+    {
+
         $attachments = Task::find($id)->attachments;
 
         $files = [];
 
         $zipFileName = public_path('storage/task-' . $id . '-files.zip');
 
-        if(file_exists($zipFileName)){
+        if (file_exists($zipFileName)) {
             File::delete($zipFileName);
         }
 
         $zipper = Zipper::make($zipFileName);
 
         // Get attachments url's
-        foreach($attachments as $attachment) {
+        foreach ($attachments as $attachment) {
 
             $files[] = strpos($attachment->mimeType, 'image') !== false ? public_path('img/' . $attachment->name) : public_path('storage/' . $attachment->name);
-
         }
 
         // Zip and store files
         $zipper->add($files)->close();
 
-        
+
         return response()->download($zipFileName);
     }
 
@@ -899,7 +928,6 @@ class TaskController extends Controller
         $task->load('from');
 
         return $task->from;
-
     }
 
     public function watchers($id, Request $request)
@@ -954,7 +982,7 @@ class TaskController extends Controller
             'description' =>
             '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) приоритет задачи с
             <span class="primary--text">' . $this->priorities[$task->priority]['label'] .  '</span> на 
-            <span class="primary--text">'.$this->priorities[$request->priority]['label'].'</span>',
+            <span class="primary--text">' . $this->priorities[$request->priority]['label'] . '</span>',
             'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
             'historyable_id' => $task->id,
             'historyable_type' => 'App\Task',
@@ -977,13 +1005,15 @@ class TaskController extends Controller
         return $tasks;
     }
 
-    public function createCalendarEvent(Request $request) 
+    public function createCalendarEvent(Request $request)
     {
         $task = Task::find($request->id);
 
         $task->start_date = $request->startDate;
 
         $task->save();
+
+        $task->load('repeat');
 
         return $task;
     }
@@ -997,12 +1027,37 @@ class TaskController extends Controller
         $task->save();
     }
 
-    public function tasksForCalendarEvents() {
+    public function tasksForCalendarEvents()
+    {
 
         $tasks = Task::where([
             'responsible_id' => auth()->user()->id
-        ])->whereNotNull('start_date')->get();
+        ])->whereNotNull('start_date')->with('repeat')->get();
 
         return $tasks;
+    }
+
+    public function checkStartDate(Request $request)
+    {
+        $repeatTaskStartDate = $request->startTime;
+
+        $tasks = $this->tasksForCalendarEvents();
+
+        $res = null;
+
+        foreach ($tasks as $task) {
+
+            if ($task->start_date) {
+                $repeatTaskStart = Carbon::createFromTimestamp((int) $repeatTaskStartDate / 1000, '+05:00')->toTimeString();
+                $taskStart = Carbon::createFromTimestamp((int) $task->start_date / 1000, '+05:00')->toTimeString();
+                $res = ($repeatTaskStart == $taskStart) ? 1 : 0;
+                
+            } else if ($task->start_date && count($task->repeat) > 0) {
+                $weekdaysIncludes = array_intersect(json_decode($task->repeat[0]->weekdays), json_decode($request->weekDays));
+                $res = ($repeatTaskStart == $taskStart && $weekdaysIncludes) ? 1 : 0;
+            }
+        }
+
+        return $res;
     }
 }

@@ -135,6 +135,7 @@ Route::prefix('api')->group(function () {
     Route::put('/tasks/{id}/tags', 'TaskController@attachTag')->name('api.tasks.attachTag');
     Route::post('/tasks', 'TaskController@store')->name('tasks.store');
     Route::put('/tasks/{id}/priority', 'TaskController@updatePriority')->name('api.tasks.updatePriority');
+    Route::post('/tasks/checkStartDate', 'TaskController@checkStartDate')->name('api.tasks.checkStartDate');
 
     Route::get('/users', 'UserController@getUsers')->name('api.getUsers');
     Route::get('/tasks/groupBy/{field}', 'TaskController@group')->name('api.tasks.group');
@@ -165,5 +166,8 @@ Route::prefix('api')->group(function () {
 
     Route::post('/users/edit', 'UserController@edit')->name('user.edit');
 
+    Route::post('/repeatition/{id}', 'RepititionController@edit')->name('repeatition.edit');
+    Route::post('/repeatition', 'RepititionController@create')->name('repeatition.create');
+    Route::post('/repeatition/{id}/delete', 'RepititionController@delete')->name('repeatition.delete');
 
 });

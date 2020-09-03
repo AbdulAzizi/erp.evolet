@@ -2,7 +2,7 @@
   <v-list-item>
     <v-dialog ref="deadlineDialog" v-model="dialog" max-width="400" v-if="edit">
       <template v-slot:activator="{ on }">
-        <v-btn v-on="on" height="40" width="40" icon @click class="mr-4 my-2">
+        <v-btn v-on="on" height="40" width="40" icon class="mr-4 my-2">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </template>
