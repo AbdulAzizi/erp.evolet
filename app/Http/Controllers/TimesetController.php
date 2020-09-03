@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Division;
+use App\Entry;
 use App\Filters\TimesetFilters;
 use App\Timeset;
 use App\User;
@@ -29,16 +30,30 @@ class TimesetController extends Controller
 
     public function getTimesets(Request $request, TimesetFilters $filters)
     {
-        $timesets = Timeset::filter($filters)
+        $data = [];
+
+        $data['timesets'] = Timeset::filter($filters)
             ->with('task')
             ->get();
 
         if ($request->has('division_id')) {
-            $users = TimesetFilters::getUsers();
+
+            $data['users'] = TimesetFilters::getUsers();
+
         } else {
-            $users = User::alone()->get();
+
+            $result = explode("-", $request->month);
+            $year = $result[0];
+            $month = $result[1];
+
+            $data['entries'] = Entry::where('user_id', $request->user_id)
+                                    ->whereYear('date', '=', $year)
+                                    ->whereMonth('date', '=', $month)
+                                    ->get();
+
+            $data['users'] = User::alone()->get();
         }
-        return compact('users', 'timesets');
+        return $data;
     }
 
     private function isExeption()

@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
         Route::get('/users/{id}/positions', 'ProfileController@positions')->name('profile.positions');
         Route::get('/users/{id}', 'ProfileController@dashboard')->name('users.dashboard');
         Route::get('/users/{id}/setTasks', 'ProfileController@setTasks')->name('users.setTasks');
+        Route::get('/users/{id}/entries', 'ProfileController@entries')->name('users.entries');
     });
 
     Route::get('/profile', 'UserController@show')->name('profile');
@@ -93,6 +94,8 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     Route::group(['prefix' => 'hr', 'middleware' => 'hr'], function () {
         Route::get('/users', 'UserController@usersForHr')->name('hr.users');
         Route::get('/positions', 'PositionController@index')->name('position.index');
+        Route::get('/entries', 'EntryController@index')->name('entries.index');
+        Route::post('/entries', 'EntryController@store')->name('entries.store');
     });
 
     Route::get('/factories/create', 'FactoryController@create')->name('factories.create');
@@ -170,4 +173,6 @@ Route::prefix('api')->group(function () {
     Route::post('/repeatition', 'RepititionController@create')->name('repeatition.create');
     Route::post('/repeatition/{id}/delete', 'RepititionController@delete')->name('repeatition.delete');
 
+    
+    Route::put('/entries/{id}', 'EntryController@update')->name('entries.update');
 });

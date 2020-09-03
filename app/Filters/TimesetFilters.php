@@ -52,17 +52,15 @@ class TimesetFilters extends QueryFilters
         });
     }
 
-    public function date($term)
+    public function month($term)
     {
-        $date = new Carbon($term);
-        $startOfWeek = $date->startOfWeek();
-        
-        $date = new Carbon($term);
-        $endOfWeek = $date->endOfWeek();
+        $result = explode("-", $term);
+        $year = $result[0];
+        $month =  $result[1];
         
         return $this->builder
-            ->whereDate('start_time', '>=', $startOfWeek)
-            ->whereDate('end_time', '<=', $endOfWeek);
+                    ->whereYear('start_time', '=', $year)
+                    ->whereMonth('start_time', '=', $month);
     }
 
     public static function getUsers()

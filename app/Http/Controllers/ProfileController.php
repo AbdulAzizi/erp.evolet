@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entry;
 use App\Status;
 use App\Task;
 use App\Timeset;
@@ -105,5 +106,11 @@ class ProfileController extends Controller
         $toTasks = Task::where('from_id', $id)->with('responsibilityDescription', 'from', 'responsible', 'tags', 'status')->get()->groupBy('responsible_id');
 
         return view('users.setTasks', compact('fromTasks', 'toTasks'));
+    }
+
+    public function entries($id)
+    {
+        $entries = Entry::where('user_id', $id)->with('user')->get();
+        return view('users.entries', compact('entries'));
     }
 }

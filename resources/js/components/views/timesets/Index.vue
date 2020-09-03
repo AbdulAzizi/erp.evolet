@@ -12,7 +12,7 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="filters.date"
+              v-model="filters.month"
               label="Дата"
               readonly
               v-bind="attrs"
@@ -22,7 +22,7 @@
               dense
             ></v-text-field>
           </template>
-          <v-date-picker v-model="filters.date" @input="dateMenu = false"></v-date-picker>
+          <v-date-picker v-model="filters.month" @input="dateMenu = false" type="month"></v-date-picker>
         </v-menu>
       </v-col>
 
@@ -122,22 +122,90 @@
             ></timeline>
           </v-card>
         </v-col>
-        <v-col v-else>
-          <v-sheet height="600">
+        <!-- <v-col v-else>
+          <v-sheet height="calc( 100vh - 125px )">
             <v-calendar
               ref="calendar"
               :now="moment().format('YYYY-MM-DD')"
-              :value="filters.date"
+              v-model="filters.month"
               :events="events"
               color="primary"
               type="week"
-              :first-interval="16"
+              :first-interval="13"
               :interval-minutes="30"
-              :interval-count="20"
+              :interval-count="36"
               :interval-height="48"
             ></v-calendar>
           </v-sheet>
-        </v-col>
+        </v-col>-->
+        <v-container v-else fluid class="white pa-0 ma-2" style="position:relative;overflow:hidden">
+          <v-row style="margin-left:90px;margin-right:0;" ref="timeline">
+            <span
+              class="text-caption"
+              :style="'margin-right:' + zoom + 'px; color: #9b9b9b;'"
+              v-for="(hour,index) in timeline"
+              :key="index"
+            >{{hour}}</span>
+          </v-row>
+          <v-divider class="grey lighten-3" />
+
+          <template v-for="(day,index) in localDays">
+            <v-row :key="'day-'+index" style="position:relative;" class="ma-0" align="center">
+              <span style="color: #9b9b9b; width:90px;" class="text-caption px-3">{{day.text}}</span>
+
+              <v-tooltip top v-for="(timeset,index) in day.timesets" :key="'timeset-'+index">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-chip
+                    x-small
+                    label
+                    :style="'min-width:3px; width:' + ((moment(timeset.end_time).diff(moment(timeset.start_time)) / 1000) * 0.015555) + 'px; z-index:2; position: absolute; left:' + calculateLeftSpace(timeset.start_time) + 'px;'"
+                    :class="day.color + ' white--text px-1'"
+                    v-on="on"
+                  >{{timeset.task.description}}</v-chip>
+                </template>
+                <span>{{timeset.task.description}}</span>
+              </v-tooltip>
+              <template v-for="(entry,index) in day.entries">
+
+
+                <v-tooltip top :key="'entry-sign_in-'+index" v-if="entry.sign_in">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-chip
+                      x-small
+                      :style="'border-radius:0;width:2px; height:20px; z-index:2; position: absolute; left:' + calcEntryLeft(entry.sign_in) + 'px;'"
+                      class="primary white--text px-0"
+                      v-on="on"
+                    ></v-chip>
+                  </template>
+                  <span>{{entry.sign_in}}</span>
+                </v-tooltip>
+
+
+                <v-tooltip top :key="'entry-'+index" v-if="entry.sign_out">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-chip
+                      x-small
+                      :style="'border-radius:0;width:2px; height:20px; z-index:2; position: absolute; left:' + calcEntryLeft(entry.sign_out) + 'px;'"
+                      class="primary white--text px-0"
+                      v-on="on"
+                    ></v-chip>
+                  </template>
+                  <span>{{entry.sign_out}}</span>
+                </v-tooltip>
+
+
+              </template>
+            </v-row>
+            <v-divider :key="'divider-'+index" class="grey lighten-3" />
+          </template>
+
+          <v-divider
+            vertical
+            v-for="(hour,index) in timeline"
+            :key="'vertical-divider'+index"
+            :style="'position:absolute; top:21px;left:'+(90+16+(56*index))+'px'"
+          />
+        </v-container>
       </template>
     </v-row>
   </v-container>
@@ -149,14 +217,14 @@ import "vue2vis/dist/vue2vis.css";
 export default {
   props: {
     divisions: {
-      required: true
+      required: true,
     },
     users: {
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    Timeline
+    Timeline,
   },
   data() {
     return {
@@ -166,20 +234,20 @@ export default {
         configure: false,
         editable: false,
         stack: false,
-        template: function(item, element, data) {
+        template: function (item, element, data) {
           // console.log(item);
           // console.log(element);
           // console.log(data);
           return `<span>${item.content}</span>`;
         },
         orientation: {
-          axis: "both"
+          axis: "both",
         },
         zoomMax: 31557600000,
         zoomMin: 3600000,
         tooltip: {
-          followMouse: true
-        }
+          followMouse: true,
+        },
       },
       colors: [
         "red",
@@ -197,14 +265,14 @@ export default {
         "amber",
         "orange",
         "deep-orange",
-        "blue-grey"
+        "blue-grey",
       ],
       filters: {
-        date: null,
+        month: null,
         start_time: null,
         end_time: null,
         division_id: null,
-        user_id: null
+        user_id: null,
       },
       dateMenu: null,
       fromMenu: null,
@@ -212,7 +280,12 @@ export default {
       timesets: [],
       timelineUsers: [],
       timelineKey: 0, // Needed to rerender component,
-      loading: false
+      loading: false,
+
+      timeline: [],
+      zoom: 24,
+      localDays: [],
+      entries: [],
     };
   },
   async created() {
@@ -229,22 +302,75 @@ export default {
     }
   },
   methods: {
+    prepareCustomTimeline() {
+      this.timeline = [];
+      this.localDays = [];
+
+      for (let i = 0; i < 24; i++) {
+        this.timeline.push((i < 10 ? "0" + i : i) + ":00");
+      }
+      let res = this.filters.month.split("-");
+      let year = res[0];
+      let month = parseInt(res[1]) - 1;
+
+      let date = this.moment().set({ year: year, month: month });
+
+      let startMonth = this.moment(date).startOf("month");
+      let endMonth = this.moment(date).endOf("month");
+
+      while (startMonth <= endMonth) {
+        this.localDays.push({
+          text: startMonth.format("YYYY-MM-DD"),
+          timesets: [],
+          color: this.colors[this.rand(0, this.colors.length - 1)],
+        });
+        startMonth = startMonth.add(1, "days");
+      }
+      // push timeset for each day
+      this.localDays.forEach((day) => {
+        day.timesets = [];
+        day.entries = [];
+        this.timesets.forEach((timeset) => {
+          if (
+            this.moment(timeset.start_time).format("YYYY-MM-DD") == day.text
+          ) {
+            day.timesets.push(timeset);
+          }
+        });
+        this.entries.forEach((ent) => {
+          if (this.moment(ent.date).format("YYYY-MM-DD") == day.text) {
+            day.entries.push(ent);
+          }
+        });
+      });
+    },
     prepareData() {
-      this.preparedUsers = this.timelineUsers.map(user => {
+      this.preparedUsers = this.timelineUsers.map((user) => {
         return {
           id: user.id,
           content: user.fullname,
           color: this.colors[this.rand(0, this.colors.length - 1)],
           content:
-            '<div tabindex="0" role="listitem" aria-selected="false" class="px-2 v-list-item v-list-item--dense theme--light" style="min-height:30px;"><div class="v-avatar my-0 v-list-item__avatar" style="height: 27px; min-width: 27px; width: 27px;"><div class="v-responsive v-image"><div class="v-responsive__sizer" style="padding-bottom: 100%;"></div><div class="v-image__image v-image__image--cover" style="background-image: url(&quot;' +
+            '<div tabindex="0" role="listitem" aria-selected="false" class="px-2 v-list-item v-list-item--dense theme--light" style="min-height:30px;">' +
+            '<div class="v-avatar my-0 v-list-item__avatar" style="height: 27px; min-width: 27px; width: 27px;">' +
+            '<div class="v-responsive v-image">' +
+            '<div class="v-responsive__sizer" style="padding-bottom: 100%;"></div>' +
+            '<div class="v-image__image v-image__image--cover" style="background-image: url(&quot;' +
             this.photo(user.img) +
-            '&quot;); background-position: center center;"></div><div class="v-responsive__content" style="width: 128px;"></div></div></div><div class="v-list-item__content py-0"><div class="v-list-item__title">' +
+            '&quot;); background-position: center center;"></div>' +
+            '<div class="v-responsive__content" style="width: 128px;"></div>' +
+            "</div>" +
+            "</div>" +
+            '<div class="v-list-item__content py-0">' +
+            '<div class="v-list-item__title">' +
             user.fullname +
-            "</div></div></div>"
+            "</div>" +
+            "</div>" +
+            "</div>",
         };
       });
 
-      this.preparedTimesets = this.timesets.map(timeset => {
+      this.preparedTimesets = this.timesets.map((timeset) => {
         return {
           id: timeset.id,
           title: timeset.task.description,
@@ -253,13 +379,19 @@ export default {
           start: this.moment(timeset.start_time),
           end: this.moment(timeset.end_time),
           className:
-            this.preparedUsers.filter(user => {
+            this.preparedUsers.filter((user) => {
               return user.id == timeset.task.responsible_id;
             })[0].color +
             " " +
-            "white--text caption"
+            "white--text caption",
         };
       });
+
+      // initialize custom timeline
+      if (this.filters.month) {
+        this.prepareCustomTimeline();
+      }
+
       this.loading = false;
       this.timelineKey += 1; // Needed to rerender component
     },
@@ -270,11 +402,12 @@ export default {
       this.loading = true;
       axios
         .get(this.appPath(`api/timesets`), {
-          params: this.filters
+          params: this.filters,
         })
-        .then(resp => {
+        .then((resp) => {
           this.timelineUsers = resp.data.users;
           this.timesets = resp.data.timesets;
+          this.entries = resp.data.entries;
 
           this.prepareData();
         });
@@ -282,11 +415,25 @@ export default {
     isExeption() {
       let exeptions = ["ОРПО", "ОУПС", "Evolet"];
 
-      exeptions.forEach(ex => {
+      exeptions.forEach((ex) => {
         if (ex == this.auth.division.abbreviation) return true;
       });
 
       return false;
+    },
+    calculateLeftSpace(date) {
+      return (
+        106 +
+        this.moment(date).local().hours() * 56 +
+        this.moment(date).local().minutes() * (56 / 60)
+      );
+    },
+    calcEntryLeft(time){
+      return (
+        106 +
+        this.moment(time, "HH:mm").hours() * 56 +
+        this.moment(time, "HH:mm").minutes() * (56 / 60)
+      );
     }
   },
   watch: {
@@ -303,26 +450,26 @@ export default {
     division_id(val) {
       if (val != null) {
         this.filters.user_id = null;
-        this.filters.date = null;
+        this.filters.month = null;
         this.fetchTimesets();
       }
     },
     user_id(val) {
       if (val != null) {
         this.filters.division_id = null;
-        this.filters.date = this.moment().format("YYYY-MM-DD");
+        this.filters.month = this.moment().format("YYYY-MM");
         this.fetchTimesets();
       }
     },
-    date(val) {
+    month(val) {
       this.filters.start_time = null;
       this.filters.end_time = null;
       this.fetchTimesets();
-    }
+    },
   },
   computed: {
     events() {
-      return this.timesets.map(timeset => {
+      return this.timesets.map((timeset) => {
         return {
           start: this.moment(timeset.start_time)
             .local()
@@ -330,7 +477,7 @@ export default {
           end: this.moment(timeset.end_time)
             .local()
             .format("YYYY-MM-DD HH:mm:ss"),
-          name: timeset.task.description
+          name: timeset.task.description,
         };
       });
     },
@@ -346,10 +493,10 @@ export default {
     user_id() {
       return this.filters.user_id;
     },
-    date() {
-      return this.filters.date;
-    }
-  }
+    month() {
+      return this.filters.month;
+    },
+  },
 };
 </script>
 <style>

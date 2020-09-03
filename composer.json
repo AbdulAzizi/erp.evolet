@@ -18,6 +18,8 @@
         "kalnoy/nestedset": "^4.3",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "maatwebsite/excel": "^3.1",
+        "phpoffice/phpspreadsheet": "^1.14",
         "pusher/pusher-php-server": "^4.0"
     },
     "require-dev": {
