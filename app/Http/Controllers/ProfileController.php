@@ -110,7 +110,7 @@ class ProfileController extends Controller
 
     public function entries($id)
     {
-        $entries = Entry::where('user_id', $id)->with('user')->get();
+        $entries = Entry::where('user_id', $id)->with('user')->orderBy('date')->get();
         return view('users.entries', compact('entries'));
     }
 }

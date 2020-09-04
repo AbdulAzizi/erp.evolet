@@ -3,6 +3,7 @@
     <template v-slot:default>
       <thead>
         <tr>
+          <th class="text-left"></th>
           <th class="text-left">Сотрудник</th>
           <th class="text-left">Дата</th>
           <th class="text-left">Вход</th>
@@ -10,17 +11,18 @@
           <th class="text-left">Присут.</th>
           <th class="text-left">Опозд.</th>
           <th class="text-left">Овертайм</th>
-          <th class="text-left">Ушел раньше</th>
-          <th class="text-left">Коментарий</th>
+          <th class="text-left">Ушел ран.</th>
+          <th class="text-left">Коментарии</th>
         </tr>
       </thead>
       <tbody>
         <tr
           v-for="(entry,index) in preparedEntries"
           :key="index"
-          :class="((moment(entry.date,'YYYY:MM:DD').day() == 6) || (moment(entry.date,'YYYY:MM:DD').day() == 0)) ? 'grey lighten-4' : '' "
+          :class="((moment(entry.date,'YYYY:MM:DD').day() == 6 && entry.user.position_level_id != 1) || (moment(entry.date,'YYYY:MM:DD').day() == 0)) ? 'grey lighten-4' : '' "
         >
-          <td>{{ entry.user }}</td>
+          <td>{{ preparedEntries.length-1 != index ? (index+1) : '' }}</td>
+          <td>{{ entry.user_name }}</td>
           <td>{{ entry.date }}</td>
           <td
             :class="entry.sign_in == 'Unknown' ? 'grey--text text--lighten-1' : '' "
@@ -31,7 +33,9 @@
           <td
             :class="entry.present == 'Unknown' ? 'grey--text text--lighten-1' : '' "
           >{{ entry.present }}</td>
-          <td :class="entry.late == 'Unknown' ? 'grey--text text--lighten-1' : '' ">{{ entry.late }}</td>
+          <td
+            :class="((preparedEntries.length-1 != index) ? lateBackgroundColor(entry) : '') + (entry.late == 'Unknown' ? ' grey--text text--lighten-1 ' : '') "
+          >{{ entry.late }}</td>
           <td
             :class="entry.overtime == 'Unknown' ? 'grey--text text--lighten-1' : '' "
           >{{ entry.overtime }}</td>
@@ -130,7 +134,9 @@ export default {
           this.hoursPerDay = 9;
           this.timeToLeave = "17:30:00";
         }
-        entry["user"] = e.user ? e.user.name + " " + e.user.surname : "Unknown";
+        entry["user_name"] = e.user
+          ? e.user.name + " " + e.user.surname
+          : "Unknown";
         entry["date"] = e.date;
         if (
           this.moment(e.date, "YYYY:MM:DD").day() != 6 &&
@@ -172,11 +178,6 @@ export default {
               this.moment(e.sign_in, "HH:mm")
             )
           ).format("HH:mm:ss");
-          console.log(e.id + ' '+
-            this.moment(e.sign_out, "HH:mm").diff(
-              this.moment(e.sign_in, "HH:mm")
-            )
-          );
           // ----------------------------------------------
 
           if (
@@ -224,7 +225,7 @@ export default {
       });
 
       this.preparedEntries.push({
-        user: "",
+        user_name: "",
         date: "",
         sign_in: "",
         sign_out: "",
@@ -235,6 +236,14 @@ export default {
         early: this.msToTime(totalEarly),
         comment: "",
       });
+    },
+    lateBackgroundColor(entry) {
+      if (
+        entry.late != "00:00:00" &&
+        entry.late != "Unknown" &&
+        !entry.comment.text
+      )
+        return "red lighten-4";
     },
   },
 };
