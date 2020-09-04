@@ -19,28 +19,28 @@
         <tr
           v-for="(entry,index) in preparedEntries"
           :key="index"
-          :class="((moment(entry.date,'YYYY:MM:DD').day() == 6 && entry.user.position_level_id != 1) || (moment(entry.date,'YYYY:MM:DD').day() == 0)) ? 'grey lighten-4' : '' "
+          :class="rowBackgroundColor(entry)"
         >
           <td>{{ preparedEntries.length-1 != index ? (index+1) : '' }}</td>
           <td>{{ entry.user_name }}</td>
           <td>{{ entry.date }}</td>
           <td
-            :class="entry.sign_in == 'Unknown' ? 'grey--text text--lighten-1' : '' "
+            :class="entry.sign_in == 'нет данных' ? 'grey--text text--lighten-1' : '' "
           >{{ entry.sign_in }}</td>
           <td
-            :class="entry.sign_out == 'Unknown' ? 'grey--text text--lighten-1' : '' "
+            :class="entry.sign_out == 'нет данных' ? 'grey--text text--lighten-1' : '' "
           >{{ entry.sign_out }}</td>
           <td
-            :class="entry.present == 'Unknown' ? 'grey--text text--lighten-1' : '' "
+            :class="entry.present == 'нет данных' ? 'grey--text text--lighten-1' : '' "
           >{{ entry.present }}</td>
           <td
-            :class="((preparedEntries.length-1 != index) ? lateBackgroundColor(entry) : '') + (entry.late == 'Unknown' ? ' grey--text text--lighten-1 ' : '') "
+            :class="((preparedEntries.length-1 != index) ? lateBackgroundColor(entry) : '') + (entry.late == 'нет данных' ? ' grey--text text--lighten-1 ' : '') "
           >{{ entry.late }}</td>
           <td
-            :class="entry.overtime == 'Unknown' ? 'grey--text text--lighten-1' : '' "
+            :class="entry.overtime == 'нет данных' ? 'grey--text text--lighten-1' : '' "
           >{{ entry.overtime }}</td>
           <td
-            :class="entry.early == 'Unknown' ? 'grey--text text--lighten-1' : '' "
+            :class="entry.early == 'нет данных' ? 'grey--text text--lighten-1' : '' "
           >{{ entry.early }}</td>
           <v-hover v-slot:default="{ hover }">
             <td style="position:relative;">
@@ -136,7 +136,7 @@ export default {
         }
         entry["user_name"] = e.user
           ? e.user.name + " " + e.user.surname
-          : "Unknown";
+          : "нет данных";
         entry["date"] = e.date;
         if (
           this.moment(e.date, "YYYY:MM:DD").day() != 6 &&
@@ -155,8 +155,8 @@ export default {
             entry["late"] = "00:00:00";
           }
         } else {
-          entry["sign_in"] = "Unknown";
-          entry["late"] = "Unknown";
+          entry["sign_in"] = "нет данных";
+          entry["late"] = "нет данных";
         }
         if (e.sign_out) {
           if (this.timeToLeave > e.sign_out) {
@@ -169,8 +169,8 @@ export default {
             entry["early"] = "00:00:00";
           }
         } else {
-          entry["sign_out"] = "Unknown";
-          entry["early"] = "Unknown";
+          entry["sign_out"] = "нет данных";
+          entry["early"] = "нет данных";
         }
         if (e.sign_in && e.sign_out) {
           entry["present"] = this.moment(
@@ -192,8 +192,8 @@ export default {
             entry["overtime"] = "00:00:00";
           }
         } else {
-          entry["present"] = "Unknown";
-          entry["overtime"] = "Unknown";
+          entry["present"] = "нет данных";
+          entry["overtime"] = "нет данных";
         }
 
         entry["comment"] = {
@@ -202,16 +202,16 @@ export default {
           editing: false,
         };
 
-        if (entry["present"] != "Unknown") {
+        if (entry["present"] != "нет данных") {
           totalPresent.add(this.moment.duration(entry["present"]));
         }
-        if (entry["late"] != "Unknown") {
+        if (entry["late"] != "нет данных") {
           totalLate.add(this.moment.duration(entry["late"]));
         }
-        if (entry["overtime"] != "Unknown") {
+        if (entry["overtime"] != "нет данных") {
           totalOvertime.add(this.moment.duration(entry["overtime"]));
         }
-        if (entry["early"] != "Unknown") {
+        if (entry["early"] != "нет данных") {
           totalEarly.add(this.moment.duration(entry["early"]));
         }
 
@@ -240,10 +240,22 @@ export default {
     lateBackgroundColor(entry) {
       if (
         entry.late != "00:00:00" &&
-        entry.late != "Unknown" &&
+        entry.late != "нет данных" &&
         !entry.comment.text
       )
         return "red lighten-4";
+    },
+    rowBackgroundColor(entry) {
+      if((entry.sign_in == 'нет данных' || entry.sign_out == 'нет данных') &&  !entry.comment.text){
+        return "red lighten-4";
+      }
+      if (
+        (this.moment(entry.date, "YYYY:MM:DD").day() == 6 &&
+          entry.user.position_level_id != 1) ||
+        this.moment(entry.date, "YYYY:MM:DD").day() == 0
+      ) {
+        return "grey lighten-4";
+      }
     },
   },
 };
