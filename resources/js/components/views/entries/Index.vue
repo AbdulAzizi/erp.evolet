@@ -15,7 +15,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(entry,index) in preparedEntries" :key="index" :class="((moment(entry.date,'YYYY:MM:DD').day() == 6) || (moment(entry.date,'YYYY:MM:DD').day() == 0)) ? 'grey lighten-4' : '' ">
+        <tr
+          v-for="(entry,index) in preparedEntries"
+          :key="index"
+          :class="((moment(entry.date,'YYYY:MM:DD').day() == 6) || (moment(entry.date,'YYYY:MM:DD').day() == 0)) ? 'grey lighten-4' : '' "
+        >
           <td>{{ entry.user }}</td>
           <td>{{ entry.date }}</td>
           <td
@@ -72,9 +76,9 @@ export default {
   data() {
     return {
       preparedEntries: [],
-      workDays:0,
+      workDays: 0,
       timeToLeave: null,
-      hoursPerDay: null
+      hoursPerDay: null,
     };
   },
   created() {
@@ -103,7 +107,7 @@ export default {
       var milliseconds = parseInt((duration % 1000) / 100),
         seconds = Math.floor((duration / 1000) % 60),
         minutes = Math.floor((duration / (1000 * 60)) % 60),
-        hours = Math.floor((duration / (1000 * 60 * 60)) );
+        hours = Math.floor(duration / (1000 * 60 * 60));
 
       hours = hours < 10 ? "0" + hours : hours;
       minutes = minutes < 10 ? "0" + minutes : minutes;
@@ -128,8 +132,10 @@ export default {
         }
         entry["user"] = e.user ? e.user.name + " " + e.user.surname : "Unknown";
         entry["date"] = e.date;
-        if(((this.moment(e.date,'YYYY:MM:DD').day() != 6) && (this.moment(e.date,'YYYY:MM:DD').day() != 0)))
-        {
+        if (
+          this.moment(e.date, "YYYY:MM:DD").day() != 6 &&
+          this.moment(e.date, "YYYY:MM:DD").day() != 0
+        ) {
           this.workDays++;
         }
         if (e.sign_in) {
@@ -166,9 +172,17 @@ export default {
               this.moment(e.sign_in, "HH:mm")
             )
           ).format("HH:mm:ss");
+          console.log(e.id + ' '+
+            this.moment(e.sign_out, "HH:mm").diff(
+              this.moment(e.sign_in, "HH:mm")
+            )
+          );
           // ----------------------------------------------
 
-          if (entry["present"] > this.moment(this.hoursPerDay, "H").format("HH:mm:ss")) {
+          if (
+            entry["present"] >
+            this.moment(this.hoursPerDay, "H").format("HH:mm:ss")
+          ) {
             entry["overtime"] = this.moment(
               this.moment(entry["present"], "HH:mm:ss") -
                 this.moment(this.hoursPerDay, "H")
@@ -187,17 +201,17 @@ export default {
           editing: false,
         };
 
-        if(entry["present"] != "Unknown"){
-          totalPresent.add( this.moment.duration(entry["present"]) );
+        if (entry["present"] != "Unknown") {
+          totalPresent.add(this.moment.duration(entry["present"]));
         }
-        if(entry["late"] != "Unknown"){
-          totalLate.add( this.moment.duration(entry["late"]) );
+        if (entry["late"] != "Unknown") {
+          totalLate.add(this.moment.duration(entry["late"]));
         }
-        if(entry["overtime"] != "Unknown"){
-          totalOvertime.add( this.moment.duration(entry["overtime"]) );
+        if (entry["overtime"] != "Unknown") {
+          totalOvertime.add(this.moment.duration(entry["overtime"]));
         }
-        if(entry["early"] != "Unknown"){
-          totalEarly.add( this.moment.duration(entry["early"]) );
+        if (entry["early"] != "Unknown") {
+          totalEarly.add(this.moment.duration(entry["early"]));
         }
 
         this.preparedEntries.push(entry);
@@ -214,7 +228,8 @@ export default {
         date: "",
         sign_in: "",
         sign_out: "",
-        present: this.msToTime(totalPresent) + '/' + (this.hoursPerDay * this.workDays),
+        present:
+          this.msToTime(totalPresent) + "/" + this.hoursPerDay * this.workDays,
         late: this.msToTime(totalLate),
         overtime: this.msToTime(totalOvertime),
         early: this.msToTime(totalEarly),

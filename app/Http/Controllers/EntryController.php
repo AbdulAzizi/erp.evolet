@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Entry;
 use App\Imports\EntriesImport;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EntryController extends Controller
 {
     public function index()
     {
-        $entries = Entry::with('user')->get();
-        return view('hr.entries', compact('entries'));
+        $users = User::with('entries')->get();
+        return view('hr.entries', compact('users'));
     }
 
     public function store(Request $request)

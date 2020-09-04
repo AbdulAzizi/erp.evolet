@@ -2,5 +2,5 @@
 
 @section('content')
     <views-entries-add></views-entries-add>
-    <views-entries-index class="mt-3" :entries="{{$entries}}"></views-entries-index>
+    <views-entries-totals class="mt-3" :users="{{$users}}"></views-entries-totals>
 @endsection
