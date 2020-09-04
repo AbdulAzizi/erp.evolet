@@ -44,10 +44,7 @@
               <v-tab href="#messages">Комментарии</v-tab>
               <v-tab href="#history">История</v-tab>
               <v-tab href="#attachments">
-                <v-badge
-                  v-if="countFiles"
-                  :content="countFiles"
-                >Вложения</v-badge>
+                <v-badge v-if="countFiles" :content="countFiles">Вложения</v-badge>
                 <span v-if="!countFiles">Вложения</span>
               </v-tab>
               <dynamic-form
@@ -162,6 +159,8 @@
 
           <tasks-priority :task="task" :edit="edit" />
 
+          <task-repeat :task="task" :edit="edit && isTaskAuthor"  />
+
           <v-list-item>
             <v-list-item-avatar>
               <v-icon>mdi-format-list-checks</v-icon>
@@ -191,7 +190,7 @@
               <v-list-item-subtitle>Дата добавления</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-
+          
           <task-control-buttons v-if="isTaskResponsible" class="mr-5" :task="task" />
 
           <tasks-tags :task="task" :edit="edit" />
@@ -301,7 +300,6 @@ export default {
     Event.listen("taskPriorityChanged", priority => {
       this.task.priority = priority;
     });
-    
   },
   watch: {
     item(v) {

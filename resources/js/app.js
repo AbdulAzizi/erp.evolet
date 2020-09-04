@@ -413,6 +413,7 @@ Vue.component("poll-create", () => import ("./components/tasks/PollCreate.vue"))
 Vue.component("poll-display", () => import ("./components/tasks/PollDisplay.vue"));
 Vue.component("poll-form", () => import ("./components/tasks/PollForm.vue"));
 Vue.component("task-control-buttons", () => import ("./components/tasks/ControlButtons.vue"));
+Vue.component("task-repeat", () => import("./components/tasks/Repeat.vue"));
 
 /****************************HELPERS********************************/
 Vue.component("helpers-offset", () => import ("./components/helpers/Offset.vue"));

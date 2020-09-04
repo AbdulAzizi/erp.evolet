@@ -214,11 +214,11 @@
                   <v-card-text class="pa-6">
                     <form-field
                       :field="{
-                                                type: 'select',
-                                                items: priorities,
-                                                label: 'Приоритет',
-                                                props: {'item-text': 'label'},
-                                                hideDetails: true
+                              type: 'select',
+                              items: priorities,
+                              label: 'Приоритет',
+                              props: {'item-text': 'label'},
+                              hideDetails: true
                                             }"
                       v-model="selectedPriority"
                     >
@@ -250,7 +250,7 @@
                       >
                         <v-icon :color="startTimeValue ? 'primary' : '' ">mdi-clock</v-icon>
                       </v-btn>
-                      <input type="hidden" name="start_date" :value="startTimeValue" />
+                      <input type="hidden" name="startDate" :value="startTimeValue" />
                     </template>
                     <span>Дата</span>
                   </v-tooltip>
@@ -259,11 +259,11 @@
                   <v-card-text>
                     <form-field
                       :field="{
-                                                type: 'date-time',
-                                                name: 'start_date',
-                                                label: 'Когда планируете начать ?',
-                                                icon: 'mdi-clock',
-                                                }"
+                              type: 'date-time',
+                              name: 'startDate',
+                              label: 'Когда планируете начать ?',
+                              icon: 'mdi-clock',
+                              }"
                       v-model="startTimeValue"
                     />
                   </v-card-text>
@@ -380,131 +380,87 @@
                 </v-tooltip>
               </v-btn>
 
-              <v-dialog v-model="reapeatTaskDialog" width="600" v-if="false">
-                <template v-slot:activator="{ on:dialog }">
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on:tooltip }">
-                      <v-btn
-                        v-on="{ ...tooltip, ...dialog }"
-                        text
-                        rounded
-                        min-width="0"
-                        style="min-width:0"
-                        class="ma-0 grey--text px-2 text--darken-1"
+              <task-repeat />
+
+              <v-dialog v-model="startDateTimeDialog" width="500" v-if="!repeatTask">
+                  <template v-slot:activator="{ on:dialog }">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on:tooltip }">
+                        <v-btn
+                          v-on="{ ...tooltip, ...dialog }"
+                          text
+                          rounded
+                          min-width="0"
+                          style="min-width:0"
+                          class="ma-0 grey--text px-2 text--darken-1"
+                        >
+                          <v-icon>mdi-clock</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Дата и время начала задачи</span>
+                    </v-tooltip>
+                  </template>
+                <v-card>
+                  <v-toolbar flat dark dense color="primary">
+                    <v-toolbar-title>Добавить время начала задачи</v-toolbar-title>
+                  </v-toolbar>
+                  <v-card-text>
+                  <v-form ref="startDateTimeForm">
+                  <v-row>
+                    <v-col cols="6">
+                      <v-menu
+                        ref="startDateMenu"
+                        v-model="startDateMenu"
+                        :close-on-content-click="false"
+                        :return-value.sync="startDate"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="200px"
                       >
-                        <v-icon>mdi-repeat</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Повторение</span>
-                  </v-tooltip>
-                </template>
-
-                <v-card class="grey lighten-3">
-                  <v-container grid-list-md>
-                    <v-row row>
-                      <v-col xs3>
-                        <v-subheader class="justify-end">каждый</v-subheader>
-                      </v-col>
-                      <v-col xs2>
-                        <v-text-field
-                          type="number"
-                          v-model="intervalNumber"
-                          min="1"
-                          single-line
-                          solo
-                          class="text-xs-center"
-                          rounded
-                          filled
-                        ></v-text-field>
-                      </v-col>
-                      <v-col xs7>
-                        <v-select
-                          v-model="selectedInterval"
-                          :items="timeIntervals[ selectedIntervals ]"
-                          item-value="index"
-                          item-text="name"
-                          return-object
-                          solo
-                          rounded
-                          filled
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-                    <v-row row>
-                      <v-col xs3>
-                        <v-subheader class="justify-end">в</v-subheader>
-                      </v-col>
-                      <v-col xs9>
-                        <form-field
-                          :field="{
-                            type: 'time',
-                            name: 'time',
-                            label: 'Выберите время',
-                            props: {
-                            textField: {
-                                'readonly': true,
-                                'single-line': true,
-                                solo: true,
-                                'single-line': true,
-                                'prepend-inner-icon': 'mdi-clock-outline'
-                            }
-                            }
-                        }"
-                        />
-                      </v-col>
-                    </v-row>
-                    <v-row row>
-                      <v-col xs3>
-                        <v-subheader class="justify-end">заканчивается</v-subheader>
-                      </v-col>
-                      <v-col v-bind="endTimeMenuSizes[endTime.index]">
-                        <v-select
-                          v-model="endTime"
-                          :items="endTimeMenu"
-                          item-value="index"
-                          item-text="label"
-                          return-object
-                          solo
-                          rounded
-                          filled
-                        ></v-select>
-                      </v-col>
-
-                      <v-col v-if="endTime.index == 1" xs3>
-                        <v-text-field
-                          type="number"
-                          v-model="endsAfterTimes"
-                          min="1"
-                          single-line
-                          solo
-                          rounded
-                          filled
-                        ></v-text-field>
-                      </v-col>
-                      <v-col v-if="endTime.index == 1" xs3>
-                        <v-subheader>раза</v-subheader>
-                      </v-col>
-
-                      <v-col v-if="endTime.index == 2" xs5>
-                        <form-field
-                          :field="{
-                            type: 'date',
-                            name: 'endsOnDate',
-                            label: 'Выберите день',
-                            props: {
-                            textField: {
-                                'readonly': true,
-                                'single-line': true,
-                                solo: true,
-                                'single-line': true,
-                                'prepend-inner-icon': 'event'
-                                }
-                            }
-                        }"
-                        />
-                      </v-col>
-                    </v-row>
-                  </v-container>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="startDate"
+                            label="Дата начала"
+                            readonly
+                            hide-details="auto"
+                            v-bind="attrs"
+                            v-on="on"
+                            filled
+                            rounded
+                            :persistent-hint="true"
+                            :rules="[rules.required]"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="startDate" no-title scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="startDateMenu = false">Отмена</v-btn>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.startDateMenu.save(startDate)"
+                          >Добавить</v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-select
+                        v-model="startTime"
+                        :items="timeRange"
+                        label="Время начала"
+                        filled
+                        rounded
+                        hide-details="auto"
+                        :rules="[rules.required]"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                  </v-form>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer />
+                    <v-btn text color="primary" @click="cancelStartDateTime()">Отмена</v-btn>
+                    <v-btn depressed color="primary" @click="addStartDateTime()">Добавить</v-btn>
+                  </v-card-actions>
                 </v-card>
               </v-dialog>
             </v-col>
@@ -549,6 +505,11 @@ export default {
 
       estimateTime: null,
       assignees: [],
+
+      startDateMenu: false,
+      startTime: null,
+      startDate: null,
+      startDateTimeDialog: false,
 
       tagsDialog: false,
       selectedTags: [],
@@ -625,7 +586,8 @@ export default {
       previewImageDialog: false,
       description: null,
       error: false,
-      loading: false
+      loading: false,
+      repeatTask: null
     };
   },
   created() {
@@ -649,6 +611,10 @@ export default {
 
     Event.listen("fileError", data => {
       this.error = data;
+    });
+
+    Event.listen("repeatTask", data => {
+      this.repeatTask = data;
     });
   },
   watch: {
@@ -743,25 +709,25 @@ export default {
       this.loading = true;
       const FORM = this.$refs.form;
       let formData = new FormData();
-      let responsibilityDescriptions = this.selectedRespOrDescrip.map(
-        resDes => {
-          return resDes.id.split("-")[1];
-        }
-      );
+      let responsibilityDescriptions = this.selectedRespOrDescrip.map(resDes => resDes.id.split("-")[1]);
+      let startDateTime = this.moment(`${this.moment(this.startDate)
+                          .local()
+                          .format("YYYY-MM-DD")} ${this.startTime}`)
+                          .local()
+                          .valueOf()
 
       formData.append("assignees", JSON.stringify(this.assignees));
       formData.append("description", this.description);
       formData.append("estimatedTaskTime", JSON.stringify(this.estimateTime));
       formData.append("deadline", this.deadlineWithTz);
       formData.append("watchers", JSON.stringify(this.watchers));
-      formData.append(
-        "responsibility_description",
-        JSON.stringify(responsibilityDescriptions)
-      );
+      formData.append("responsibility_description",JSON.stringify(responsibilityDescriptions));
       formData.append("poll", JSON.stringify(this.poll));
       formData.append("priority", JSON.stringify(this.selectedPriority));
       formData.append("newTags", JSON.stringify(this.newTags));
+      formData.append("repeatTask", JSON.stringify(this.repeatTask));
       formData.append("existingTags", JSON.stringify(this.existingTags));
+      formData.append("startDateTime", JSON.stringify(startDateTime));
 
       this.selectedFiles.forEach((file, index) => {
         formData.append("attachments[" + index + "]", file);
@@ -775,9 +741,11 @@ export default {
             }
           })
           .then(res => {
-            this.loading = false
+            this.loading = false;
             window.location.reload();
           });
+      } else {
+        this.loading = false;
       }
     },
     cancel(form) {
@@ -790,6 +758,17 @@ export default {
     addFile() {
       let files = this.$refs.inputFiles.files;
       this.selectedFiles.push(...files);
+    },
+    addStartDateTime() {
+      const FORM = this.$refs.startDateTimeForm;
+      if(FORM.validate()) {
+        this.startDateTimeDialog = false;
+      }
+    },
+    cancelStartDateTime() {
+      const FORM = this.$refs.startDateTimeForm;
+      FORM.reset();
+      this.startDateTimeDialog = false;
     }
   },
   computed: {
@@ -818,6 +797,16 @@ export default {
     },
     tags() {
       return this.loadDivisionTags();
+    },
+    timeRange() {
+      let times = [];
+      let date = this.moment(new Date("2020-07-01 00:00"));
+
+      while (date.local().format("HH:mm") !== "23:00") {
+        date.add(15, "m");
+        times.push(date.local().format("HH:mm"));
+      }
+      return times;
     }
   }
 };

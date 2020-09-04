@@ -4,9 +4,11 @@
       <v-expansion-panel class="mb-3">
         <v-expansion-panel-header v-if="groupType == 'description'">{{ task[0].description}}</v-expansion-panel-header>
         <v-expansion-panel-header v-if="groupType == 'from_id'">
-           <avatar size="30" :user="task[0].from" :link="true" :fullname="true" />
+          <avatar size="30" :user="task[0].from" :link="true" :fullname="true" />
         </v-expansion-panel-header>
-        <v-expansion-panel-header v-if="groupType == 'responsibility_description_id'">{{ task[0].responsibility_description.text}}</v-expansion-panel-header>
+        <v-expansion-panel-header
+          v-if="groupType == 'responsibility_description_id'"
+        >{{ task[0].responsibility_description.text}}</v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-infinite-scroll style="max-height: 80vh; overflow-y: scroll;">
             <v-data-table
@@ -45,12 +47,24 @@
                     <priority :id="item.priority" icon></priority>
                   </td>
                   <td>
-                   {{item.responsibility_description.text ? item.responsibility_description.text : 'Удалено' }}
+                    {{item.responsibility_description.text ? item.responsibility_description.text : 'Удалено' }}
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on }">
                         <v-icon small v-if="item.read_at" color="green" v-on="on">mdi-check-all</v-icon>
                       </template>
                       <span>Просмотрено {{ moment(item.read_at).local().format('lll') }}</span>
+                    </v-tooltip>
+                    <v-tooltip v-if="item.attachments_count" bottom>
+                      <template v-slot:activator="{ on }">
+                        <v-icon color="grey darken-3" small v-on="on">mdi-paperclip</v-icon>
+                      </template>
+                      <span>Файлов {{ item.attachments_count }}</span>
+                    </v-tooltip>
+                    <v-tooltip v-if="item.repeat_count" bottom>
+                      <template v-slot:activator="{ on }">
+                        <v-icon color="grey darken-3" small v-on="on">mdi-repeat</v-icon>
+                      </template>
+                      <span>Повторяющаяся задача</span>
                     </v-tooltip>
                   </td>
                   <td>{{ item.description.length >= 30 ? item.description.substring(0, 30) + '...' : item.description }}</td>

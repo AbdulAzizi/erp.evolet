@@ -78,6 +78,12 @@
                 </template>
                 <span>Файлов {{ item.attachments_count }}</span>
               </v-tooltip>
+              <v-tooltip v-if="item.repeat_count" bottom>
+                <template v-slot:activator="{ on }">
+                  <v-icon color="grey darken-3" small v-on="on">mdi-repeat</v-icon>
+                </template>
+                <span>Повторяющаяся задача</span>
+              </v-tooltip>
             </td>
             <td>
               <v-tooltip bottom>

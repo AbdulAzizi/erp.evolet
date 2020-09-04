@@ -22,11 +22,14 @@ class Task extends Model
         'readed',
         'responsibility_description_id',
         'end_time',
+        'start_date',
+        'repeated',
+        'repeat_id'
     ];
 
     // protected $with = ['responsible.user','from'];
 
-    protected $appends = ['attachments_count'];
+    protected $appends = ['attachments_count', 'repeat_count'];
 
     public function from()
     {
@@ -110,5 +113,15 @@ class Task extends Model
     public function getAttachmentsCountAttribute() 
     {
         return $this->attachments()->count();
+    }
+
+    public function repeat()
+    {
+        return $this->belongsTo('App\Repitition', 'repeat_id', 'id');
+    }
+
+    public function getRepeatCountAttribute()
+    {
+        return $this->repeat()->count();
     }
 }
