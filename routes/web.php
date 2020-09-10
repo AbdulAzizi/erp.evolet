@@ -175,4 +175,5 @@ Route::prefix('api')->group(function () {
 
     
     Route::put('/entries/{id}', 'EntryController@update')->name('entries.update');
+    Route::get('/entries', 'EntryController@getEntries')->name('entries.getEntries');
 });

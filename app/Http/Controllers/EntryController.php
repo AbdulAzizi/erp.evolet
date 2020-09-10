@@ -5,16 +5,31 @@ namespace App\Http\Controllers;
 use App\Entry;
 use App\Imports\EntriesImport;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EntryController extends Controller
 {
     public function index()
     {
-        $users = User::with('entries')->get();
+        $users = $this->getEntries(new Request());
+
         return view('hr.entries', compact('users'));
+    }
+
+    public function getEntries(Request $request)
+    {
+        if( $request->month ){
+            $date = Carbon::createFromFormat('Y-m', $request->month);
+        }
+        else
+            $date = Carbon::now();
+        
+        return User::with(['entries' => function ($query) use ($date) {
+            $query->whereMonth('date', $date->month)
+                  ->whereYear('date', $date->year);
+        }])->get();
     }
 
     public function store(Request $request)
@@ -32,5 +47,4 @@ class EntryController extends Controller
 
         return $entry;
     }
-
 }

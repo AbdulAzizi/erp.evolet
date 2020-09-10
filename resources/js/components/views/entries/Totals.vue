@@ -1,42 +1,75 @@
 <template>
-  <v-simple-table v-if="localUsers.length">
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left">Сотрудник</th>
-          <th class="text-left">Рабочие дни в месяц</th>
-          <th class="text-left">Рабочие часы в день</th>
-          <th class="text-left">Рабочие часы в месяц</th>
-          <th class="text-left">Присутствовал месяц часы</th>
-          <th class="text-left">Опоздал на работу</th>
-          <th class="text-left">Ушел с работы пораньше</th>
-          <th class="text-left">Присутствовал на работе</th>
-          <th class="text-left">Не отработанные дни</th>
-          <th class="text-left">Не отработанные часы</th>
-          <th class="text-left">Овертайм</th>
-          <th class="text-left">Количество опозданий в месяц</th>
-          <th class="text-left">Присутствовал в %.</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(user,index) in localUsers" :key="index">
-          <td>{{ user.name }}</td>
-          <td>{{ user.workDays }}</td>
-          <td>{{ user.hoursPerDay+':00:00' }}</td>
-          <td>{{ (user.workDays * user.hoursPerDay)+':00:00' }}</td>
-          <td>{{ msToTime(user.totalPresent) }}</td>
-          <td>{{ msToTime(user.totalLate) }}</td>
-          <td>{{ msToTime(user.totalEarly) }}</td>
-          <td>{{ user.presentDays }}</td>
-          <td>{{ user.workDays - user.presentDays}}</td>
-          <td>{{ ((user.workDays - user.presentDays) * user.hoursPerDay)+':00:00' }}</td>
-          <td>{{ msToTime(user.totalOvertime) }}</td>
-          <td>{{ user.totalLateDays }}</td>
-          <td>{{Number.isNaN(user.presentPercentage) ? 0 : user.presentPercentage}}%</td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
+  <v-container fluid class="pt-0">
+    <v-row class="pb-3" justify="space-between" align="center">
+      <v-menu
+        ref="monthMenu"
+        v-model="monthMenu"
+        :close-on-content-click="false"
+        transition="scale-transition"
+        offset-y
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="month"
+            label="Месяц"
+            prepend-inner-icon="mdi-calendar"
+            readonly
+            solo
+            single-line
+            hide-details
+            dense
+            flat
+            v-bind="attrs"
+            v-on="on"
+            style="max-width:290px;"
+          ></v-text-field>
+        </template>
+        <v-date-picker type="month" v-model="month" @input="monthMenu = false" no-title scrollable />
+      </v-menu>
+      <views-entries-add />
+    </v-row>
+    <v-row>
+      <v-simple-table v-if="preparedUsers.length">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Сотрудник</th>
+              <th class="text-left">Рабочие дни в месяц</th>
+              <th class="text-left">Рабочие часы в день</th>
+              <th class="text-left">Рабочие часы в месяц</th>
+              <th class="text-left">Присутствовал месяц часы</th>
+              <th class="text-left">Опоздал на работу</th>
+              <th class="text-left">Ушел с работы пораньше</th>
+              <th class="text-left">Присутствовал на работе</th>
+              <th class="text-left">Не отработанные дни</th>
+              <th class="text-left">Не отработанные часы</th>
+              <th class="text-left">Овертайм</th>
+              <th class="text-left">Количество опозданий в месяц</th>
+              <th class="text-left">Присутствовал в %.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(user,index) in preparedUsers" :key="index">
+              <td>{{ user.name }}</td>
+              <td>{{ user.workDays }}</td>
+              <td>{{ user.hoursPerDay+':00:00' }}</td>
+              <td>{{ (user.workDays * user.hoursPerDay)+':00:00' }}</td>
+              <td>{{ msToTime(user.totalPresent) }}</td>
+              <td>{{ msToTime(user.totalLate) }}</td>
+              <td>{{ msToTime(user.totalEarly) }}</td>
+              <td>{{ user.presentDays }}</td>
+              <td>{{ user.workDays - user.presentDays}}</td>
+              <td>{{ ((user.workDays - user.presentDays) * user.hoursPerDay)+':00:00' }}</td>
+              <td>{{ msToTime(user.totalOvertime) }}</td>
+              <td>{{ user.totalLateDays }}</td>
+              <td>{{Number.isNaN(user.presentPercentage) ? 0 : user.presentPercentage}}%</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </v-row>
+  </v-container>
 </template>
 <script>
 export default {
@@ -47,7 +80,10 @@ export default {
   },
   data() {
     return {
-      localUsers: [],
+      preparedUsers: [],
+      localUsers:[...this.users],
+      month: null,
+      monthMenu: null,
     };
   },
   created() {
@@ -55,7 +91,8 @@ export default {
   },
   methods: {
     prepareEntries() {
-      this.users.forEach((u) => {
+      this.preparedUsers = [];
+      this.localUsers.forEach((u) => {
         let user = {
           name: u.name + " " + u.surname,
           totalPresent: this.moment.duration(),
@@ -135,7 +172,7 @@ export default {
             (user.workDays * user.hoursPerDay)
         );
 
-        this.localUsers.push(user);
+        this.preparedUsers.push(user);
       });
     },
     msToTime(duration) {
@@ -146,6 +183,21 @@ export default {
         ":" +
         duration.seconds()
       );
+    },
+  },
+  watch: {
+    month(val) {
+      axios
+        .get(this.appPath("api/entries"), {
+          params: {
+            month: this.month,
+          },
+        })
+        .then((resp) => {
+          console.log(resp.data);
+          this.localUsers = resp.data;
+          this.prepareEntries();
+        });
     },
   },
 };
