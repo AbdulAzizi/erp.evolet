@@ -320,7 +320,7 @@
     </v-row>
 
     <tasks-table :tasks="filteredTasks" v-if="isTable && !displayGroupTasks"></tasks-table>
-    <tasks-calendar v-show="isCalendar"></tasks-calendar>
+    <tasks-calendar v-if="isCalendar"></tasks-calendar>
     <!-- <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser" /> -->
     <tasks-group-view :tasks="filteredTasks" v-if="displayGroupTasks" />
     <tasks-add :divisions="divisions" :users="users" :errors="errors" />
