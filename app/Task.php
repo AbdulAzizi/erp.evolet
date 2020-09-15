@@ -29,7 +29,7 @@ class Task extends Model
 
     // protected $with = ['responsible.user','from'];
 
-    protected $appends = ['attachments_count', 'repeat_count'];
+    protected $appends = ['repeat_count'];
 
     public function from()
     {
@@ -108,11 +108,6 @@ class Task extends Model
     public function attachments()
     {
         return $this->morphMany('App\Attachment', 'attachable');
-    }
-
-    public function getAttachmentsCountAttribute() 
-    {
-        return $this->attachments()->count();
     }
 
     public function repeat()

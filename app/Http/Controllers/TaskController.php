@@ -43,7 +43,9 @@ class TaskController extends Controller
         $authUser = \Auth::user();
         $statuses = Status::all();
 
-        // $groupTasks = Task::filter($filters)->with(
+        // $groupTasks = Task::filter($filters)
+        // ->withCount('attachments')
+        // ->with(
         //     'from',
         //     'responsible',
         //     'watchers',
@@ -561,7 +563,9 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->paginate(30);
+        )
+        ->withCount('attachments')
+        ->orderBy('created_at', 'desc')->paginate(30);
 
         return $tasks;
     }
@@ -575,7 +579,9 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->get();
+        )
+        ->withCount('attachments')
+        ->orderBy('created_at', 'desc')->get();
 
         return $tasks;
     }
@@ -589,7 +595,9 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->get()->groupBy($field)->all();
+        )
+        ->withCount('attachments')
+        ->orderBy('created_at', 'desc')->get()->groupBy($field)->all();
 
         return $tasks;
     }
@@ -702,7 +710,9 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->get();
+        )
+        ->withCount('attachments')
+        ->orderBy('created_at', 'desc')->get();
 
         return $tasks;
     }
@@ -740,7 +750,9 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->get();
+        )
+        ->withCount('attachments')
+        ->orderBy('created_at', 'desc')->get();
 
         return $tasks;
     }
