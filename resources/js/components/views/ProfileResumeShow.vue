@@ -3,8 +3,8 @@
     <profile-banner :user="user" />
     <resume-create :user="user" v-if="!user.resume[0]" :permit="permit"></resume-create>
     <v-row v-if="user.resume[0]">
-      <v-col cols="12" sm="6" md="4">
-        <v-card>
+      <v-col cols="12">
+        <v-card outlined>
           <v-toolbar dark flat dense color="primary">
             <v-toolbar-title>
               <h4>Основное</h4>
@@ -69,6 +69,24 @@
                   </v-text-field>
                 </v-list-item-content>
               </v-list-item>
+              <v-list-item v-if="!edit && phone_2">
+                <v-list-item-icon>
+                  <v-icon>mdi-phone-plus</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>{{phone_2}}</v-list-item-content>
+              </v-list-item>
+              <v-list-item v-show="edit">
+                <v-list-item-content>
+                  <v-text-field
+                  v-model="phone_2"
+                  v-mask="'###-##-##-##'"
+                  label="Доп. номер телефона"
+                  outlined
+                  dense
+                  hide-details>
+                  </v-text-field>
+                </v-list-item-content>
+              </v-list-item>
               <v-list-item v-if="!edit">
                 <v-list-item-icon>
                   <v-icon>mdi-email</v-icon>
@@ -86,6 +104,48 @@
                   hide-details
                   >
                   </v-text-field>
+                </v-list-item-content>
+              </v-list-item>
+               <v-list-item v-if="!edit && address">
+                <v-list-item-icon>
+                  <v-icon>mdi-map-marker</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>{{address}}</v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="edit">
+                <v-list-item-content>
+                  <v-text-field
+                  v-model="address"
+                  label="Домашний адрес"
+                  outlined
+                  dense
+                  hide-details
+                  >
+                  </v-text-field>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="!edit && citizenship">
+                <v-list-item-icon>
+                  <v-icon>mdi-passport</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <div>
+                      <span v-for="(citizen, index) in citizenship" :key="index">{{citizen}}<span v-if="index !== citizenship.length - 1">, </span></span>
+                  </div>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="edit">
+                <v-list-item-content>
+                  <v-select
+                  v-model="citizenship"
+                  label="Гражданство"
+                  outlined
+                  dense
+                  hide-details
+                  multiple
+                  :items="countries"
+                  >
+                  </v-select>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="!edit">
@@ -120,7 +180,7 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12">
         <resume-card
           :user="user"
           :check="user.id == permit"
@@ -143,7 +203,7 @@
           />
         </resume-card>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12">
         <resume-card
           :user="user"
           :check="user.id == permit"
@@ -166,7 +226,7 @@
           />
         </resume-card>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12">
         <resume-card
           :user="user"
           :check="user.id == permit"
@@ -188,7 +248,7 @@
           />
         </resume-card>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12">
         <resume-card
           :check="user.id == permit"
           :user="user"
@@ -210,7 +270,7 @@
           />
         </resume-card>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12">
         <resume-card
           :check="user.id == permit"
           :user="user"
@@ -232,7 +292,7 @@
         </resume-card>
       </v-col>
 
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12">
         <resume-card
           :check="user.id == permit"
           :user="user"
@@ -271,8 +331,11 @@ export default {
       localUser: this.user,
       birthday: this.user.resume[0].birthday,
       phone: this.user.resume[0].phone,
+      phone_2: this.user.resume[0].phone_2,
       email: this.user.resume[0].email,
       gender: this.user.resume[0].male_female,
+      address: this.user.resume[0].address,
+      citizenship: JSON.parse(this.user.resume[0].citizenship),
       showEdit: false,
       listenEventName: null,
       education: {
@@ -421,7 +484,14 @@ export default {
             rules: ["required"]
           }
         ]
-      }
+      },
+      countries: [
+        'Таджикистан',
+        'Узбекистан',
+        'Россия',
+        'Индия',
+        'США'
+      ]
     };
   },
 
@@ -443,15 +513,21 @@ export default {
       if(formValid){
         axios.post(this.appPath(`api/resume/${this.user.resume[0].id}/edit`), {
           phone: this.phone.split('-').join(),
+          phone_2: this.phone_2.split('-').join(),
           email: this.email,
           gender: this.gender,
-          birthday: this.birthday
+          birthday: this.birthday,
+          address: this.address,
+          citizenship: JSON.stringify(this.citizenship)
         }).then(res => {
           this.edit = false;
           this.birthday = res.data.birthday;
-          this.phone = res.data.phone;
+          this.phone = res.data.phone.split(',').join('-');
+          this.phone_2 = res.data.phone_2.split(',').join('-');
           this.email = res.data.email;
           this.gender = res.data.male_female;
+          this.address = res.data.address;
+          this.citizenship = JSON.parse(res.data.citizenship);
         }).catch(err => console.error(err));
       }
     },

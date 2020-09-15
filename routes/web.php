@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
         Route::get('/users/{id}', 'ProfileController@dashboard')->name('users.dashboard');
         Route::get('/users/{id}/setTasks', 'ProfileController@setTasks')->name('users.setTasks');
         Route::get('/users/{id}/entries', 'ProfileController@entries')->name('users.entries');
+        Route::get('/users/{id}/facilities', 'FacilityController@index')->name('users.facilities');
     });
 
     Route::get('/profile', 'UserController@show')->name('profile');
@@ -175,4 +176,6 @@ Route::prefix('api')->group(function () {
 
     
     Route::put('/entries/{id}', 'EntryController@update')->name('entries.update');
+
+    Route::post('/facilities', 'FacilityController@create')->name('facilities.create');
 });

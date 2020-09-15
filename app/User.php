@@ -165,4 +165,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Entry');
     }
+
+    public function facilities()
+    {
+        return $this->hasMany('App\Facility');
+    }
 }

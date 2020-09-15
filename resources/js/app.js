@@ -392,6 +392,7 @@ Vue.component("views-users-tasks", () => import ("./components/views/users/Tasks
 Vue.component("views-entries-add", () => import ("./components/views/entries/Add.vue"));
 Vue.component("views-entries-index", () => import ("./components/views/entries/Index.vue"));
 Vue.component("views-entries-totals", () => import ("./components/views/entries/Totals.vue"));
+Vue.component("views-facilities-index", () => import ("./components/views/users/Facilities.vue"));
 
 /****************************TASKS********************************/
 Vue.component("tasks-priority", () => import ("./components/tasks/Priority.vue"));

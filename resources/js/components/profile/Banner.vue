@@ -262,6 +262,11 @@ export default {
                     title: "Турникет",
                     path: `/users/${this.user.id}/entries`,
                     icon: "mdi-door-open"
+                },
+                {
+                    title: "Оборудования",
+                    path: `/users/${this.user.id}/facilities`,
+                    icon: "mdi-desktop-classic"
                 }
             ],
             url: window.location.pathname
