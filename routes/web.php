@@ -178,4 +178,5 @@ Route::prefix('api')->group(function () {
     Route::put('/entries/{id}', 'EntryController@update')->name('entries.update');
 
     Route::post('/facilities', 'FacilityController@create')->name('facilities.create');
+    Route::get('/entries', 'EntryController@getEntries')->name('entries.getEntries');
 });
