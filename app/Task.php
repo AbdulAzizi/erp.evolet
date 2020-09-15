@@ -29,8 +29,6 @@ class Task extends Model
 
     // protected $with = ['responsible.user','from'];
 
-    protected $appends = ['repeat_count'];
-
     public function from()
     {
         return $this->morphTo();
@@ -113,10 +111,5 @@ class Task extends Model
     public function repeat()
     {
         return $this->belongsTo('App\Repitition', 'repeat_id', 'id');
-    }
-
-    public function getRepeatCountAttribute()
-    {
-        return $this->repeat()->count();
     }
 }

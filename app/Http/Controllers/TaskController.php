@@ -45,6 +45,7 @@ class TaskController extends Controller
 
         // $groupTasks = Task::filter($filters)
         // ->withCount('attachments')
+        // ->withCount('repeat')
         // ->with(
         //     'from',
         //     'responsible',
@@ -565,6 +566,7 @@ class TaskController extends Controller
             'responsibilityDescription'
         )
         ->withCount('attachments')
+        ->withCount('repeat')
         ->orderBy('created_at', 'desc')->paginate(30);
 
         return $tasks;
@@ -581,6 +583,7 @@ class TaskController extends Controller
             'responsibilityDescription'
         )
         ->withCount('attachments')
+        ->withCount('repeat')
         ->orderBy('created_at', 'desc')->get();
 
         return $tasks;
@@ -597,6 +600,7 @@ class TaskController extends Controller
             'responsibilityDescription'
         )
         ->withCount('attachments')
+        ->withCount('repeat')
         ->orderBy('created_at', 'desc')->get()->groupBy($field)->all();
 
         return $tasks;
@@ -712,6 +716,7 @@ class TaskController extends Controller
             'responsibilityDescription'
         )
         ->withCount('attachments')
+        ->withCount('repeat')
         ->orderBy('created_at', 'desc')->get();
 
         return $tasks;
@@ -752,6 +757,7 @@ class TaskController extends Controller
             'responsibilityDescription'
         )
         ->withCount('attachments')
+        ->withCount('repeat')
         ->orderBy('created_at', 'desc')->get();
 
         return $tasks;
