@@ -536,7 +536,7 @@ export default {
         });
       }
     },
-    tasksTags() {
+    getTaskTags() {
       if (this.localTags.length == 0) {
         axios.get(this.appPath(`api/tasks/tags`)).then((res) => {
           this.localTags.push(...res.data);
@@ -591,6 +591,12 @@ export default {
     },
   },
   watch: {
+    filtersMenu(val) {
+      if (val) {
+        this.getTaskTags();
+        this.getStatuses();
+      }
+    },
     currentView(value) {
       localStorage.currentView = value;
       if (value == 3) {
@@ -719,8 +725,6 @@ export default {
   },
   created() {
     // localStorage.clear(); // Remove after localstorage cleared
-    this.tasksTags();
-    this.getStatuses();
     Event.listen("loadTasks", (data) => this.paginate());
     Event.listen("filterByPriority", (data) => {
       this.priorityItems.forEach((item) => {
