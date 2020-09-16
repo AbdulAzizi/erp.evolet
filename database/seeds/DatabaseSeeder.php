@@ -37,6 +37,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FilesTableSeeder::class);
         // $this->call(FactorySeeder::class);
         $this->call(ResponsibilityDescriptionSeeder::class);
-        $this->call(TaskTableSeeder::class);
+        // $this->call(TaskTableSeeder::class);
     }
 }

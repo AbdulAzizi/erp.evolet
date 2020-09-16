@@ -10,7 +10,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-card class="pb-1">
+    <v-card class="pb-1" outlined>
       <v-toolbar dark flat dense color="primary">
         <v-toolbar-title>
           <h4>{{title}}</h4>

@@ -22,7 +22,7 @@ class TaskObserver
         // Dont notify when author and assignee are the same person
         if( $task->responsible->id !=  $task->from->id && $task->from_type == "App\User"){
             // Notify Assignees
-            $task->responsible->notify(new AssignedToTask($task->from, $task));
+            // $task->responsible->notify(new AssignedToTask($task->from, $task));
             // Notify Author
             // $task->from->notify(new AssignedAsAuthor($task));
         }

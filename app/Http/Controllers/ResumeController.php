@@ -39,7 +39,10 @@ class ResumeController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'birthday' => $request->birthday,
-            'male_female' => $request->gender
+            'male_female' => $request->gender,
+            'phone_2' => $request->phone_2,
+            'address' => $request->address,
+            'citizenship' => $request->citizenship
         ]);
 
         $resume->save();
@@ -58,6 +61,7 @@ class ResumeController extends Controller
                 'birthday' => $request->birthday,
                 'male_female' => $gender,
                 'phone' => $request->phone,
+                'phone_2' => $request->phone_2,
                 'email' => $request->email,
                 'creator' => auth()->id()
             ]);
@@ -74,6 +78,7 @@ class ResumeController extends Controller
                 'birthday' => $request->birthday,
                 'male_female' => $gender,
                 'phone' => $request->phone,
+                'phone_2' => $request->phone_2,
                 'email' => $user->email,
                 'creator' => auth()->id()
             ]);
