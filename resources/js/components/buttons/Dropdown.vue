@@ -18,27 +18,6 @@
         <span>{{ tooltip }}</span>
       </v-tooltip>
     </template>
-    <!-- <v-list three-lines dense class="dropdown-btn-list">
-                <v-list-item v-if="items.length == 0">
-                    <v-list-item-content>
-                        <v-list-item-title>{{ tooltip }} отсутствуют</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-
-                <template v-for="(item, key) in items">
-                    <v-list-item :key="'item-'+key" href="#">
-                        <v-list-item-avatar class="mt-2">
-                            <img :src="item.data.avatar" />
-                        </v-list-item-avatar>
-
-                        <v-list-item-content>
-                            <v-list-item-title v-html="item.data.title"></v-list-item-title>
-                            <v-list-item-subtitle>{{ moment(item.created_at).fromNow() }}</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-divider :key="'item-divider-'+key" v-if="key !== items.length-1"></v-divider>
-                </template>
-    </v-list>-->
 
     <v-card id="notifications-menu">
       <v-infinite-scroll
@@ -113,9 +92,6 @@ import InfiniteScroll from "v-infinite-scroll";
 import "v-infinite-scroll/dist/v-infinite-scroll.css";
 export default {
   props: {
-    items: {
-      required: true
-    },
     tooltip: {
       required: true
     },
@@ -143,7 +119,7 @@ export default {
       sound: new Audio("/audio/q.mp3"),
       muted: 0,
       page: 1,
-      unreadNotifications: this.user.unreadNotifications_count,
+      unreadNotifications: this.user.unread_notifications_count,
       allNotificationsLoaded: false,
       loading: false
     };

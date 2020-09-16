@@ -57,7 +57,6 @@
       </v-tooltip>
 
       <dropdown-btn
-        :items="auth.notifications"
         :user="user"
         tooltip="Уведомления"
         icon="mdi-bell"

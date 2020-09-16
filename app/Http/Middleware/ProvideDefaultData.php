@@ -20,8 +20,8 @@ class ProvideDefaultData
     {
         $authUser = auth()->user()->load([
             'division',
-            'notifications',
-        ]);
+        ])
+        ->loadCount('unreadNotifications');
 
         $currentTask = Task::whereHas('status', function (Builder $query) {
             $query->where('name', 'В процессе');

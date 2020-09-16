@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public $with = ['positionLevel', 'positions'];
 
-    protected $appends = ['fullname', 'unreadNotifications_count'];
+    protected $appends = ['fullname'];
 
     /**
      * Send the password reset notification.
@@ -150,15 +150,6 @@ class User extends Authenticatable
     public function responsibilities()
     {
         return $this->belongsToMany('App\Responsibility');
-    }
-
-    public function getUnreadNotificationsCountAttribute()
-    {
-        $user = User::find(auth()->user()->id);
-
-        $unreadNotifications = count($user->unreadNotifications);
-
-        return $unreadNotifications;
     }
     
     public function entries()
