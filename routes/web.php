@@ -178,5 +178,7 @@ Route::prefix('api')->group(function () {
     Route::put('/entries/{id}', 'EntryController@update')->name('entries.update');
 
     Route::post('/facilities', 'FacilityController@create')->name('facilities.create');
+    Route::post('/facilities/{id}', 'FacilityController@edit')->name('facilities.edit');
+    Route::delete('/facilities/{id}', 'FacilityController@delete')->name('facilities.delete');
     Route::get('/entries', 'EntryController@getEntries')->name('entries.getEntries');
 });

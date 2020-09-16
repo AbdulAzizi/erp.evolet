@@ -5,7 +5,7 @@
         <v-row align="center">
           <v-col class="grow">Вы не добавляли оборудования</v-col>
           <v-col class="shrink">
-            <v-btn color="secondary" @click="addFacility()">Добавить</v-btn>
+            <v-btn v-if="userid == auth.id" color="secondary" @click="addFacility()">Добавить</v-btn>
           </v-col>
         </v-row>
       </v-alert>
@@ -14,6 +14,15 @@
       <v-card>
         <v-toolbar flat dense dark color="primary">
           <v-toolbar-title>{{ facility.name }}</v-toolbar-title>
+          <v-spacer />
+          <div v-if="userid == auth.id">
+            <v-btn icon small @click="editFacility(facility.id)">
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn icon small>
+              <v-icon @click="deleteTaskDialog = true, facilityId = facility.id">mdi-delete</v-icon>
+            </v-btn>
+          </div>
         </v-toolbar>
         <v-card-text>
           <v-simple-table dense>
@@ -25,7 +34,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="pr-4" v-for="(attribute, index) in facility.attributes" :key="`attribute-${index}`">
+                <tr
+                  class="pr-4"
+                  v-for="(attribute, index) in facility.attributes"
+                  :key="`attribute-${index}`"
+                >
                   <td style="width:50%">{{ attribute.name }}</td>
                   <td style="width:50%">{{ attribute.value }}</td>
                 </tr>
@@ -90,15 +103,31 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn v-if="localFacilities.length > 0" @click="addFacility()" color="primary" fab fixed right bottom>
+    <v-btn
+      v-if="localFacilities.length > 0"
+      @click="addFacility()"
+      color="primary"
+      fab
+      fixed
+      right
+      bottom
+    >
       <v-icon>mdi-plus</v-icon>
     </v-btn>
+    <delete-record
+      :visible="deleteTaskDialog"
+      @close="deleteTaskDialog = false"
+      :route="`/api/facilities/${facilityId}`"
+    ></delete-record>
   </v-row>
 </template>
 <script>
 export default {
   props: {
     facilities: {
+      required: true
+    },
+    userid: {
       required: true
     }
   },
@@ -114,12 +143,17 @@ export default {
         "Диагональ",
         "Модель"
       ],
-      facilityAttributes: [{
-        name: null,
-        value: null
-      }],
+      facilityAttributes: [
+        {
+          name: null,
+          value: null
+        }
+      ],
       localFacilities: this.facilities,
       required: [v => !!v || "Обязательное поле"],
+      deleteTaskDialog: false,
+      facilityId: null,
+      route: null
     };
   },
   created() {
@@ -127,6 +161,7 @@ export default {
   },
   methods: {
     addFacility() {
+      this.route = `/api/facilities`;
       this.dialog = true;
     },
     addAttribute() {
@@ -137,18 +172,28 @@ export default {
     },
     createFacility() {
       const FORM = this.$refs.form;
-      if(FORM.validate()) {
+      if (FORM.validate()) {
         axios
-          .post("/api/facilities", {
+          .post(this.route, {
             type: this.type,
             facilityAttributes: this.facilityAttributes
           })
           .then(res => {
-            this.localFacilities.push(res.data);
             this.dialog = false;
-            Event.fire('notify', ['Оборудование успешно добавлено']);
+            Event.fire("notify", ["Оборудование успешно добавлено"]);
+            window.location.reload();
           });
       }
+    },
+    editFacility(id) {
+      this.localFacilities.forEach(facility => {
+        if (facility.id === id) {
+          this.type = facility.name;
+          this.facilityAttributes = [...facility.attributes];
+        }
+      });
+      this.route = `/api/facilities/${id}`;
+      this.dialog = true;
     }
   }
 };
