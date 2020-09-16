@@ -433,10 +433,13 @@ export default {
     this.responsible = this.setLocalFilter("responsible", this.responsible);
     this.groupTask = this.setLocalFilter("groupTask", this.groupTask);
 
-    this.filter();
+    if (this.filters.all && Object.keys(this.filters).length == 1) {
+      this.filter();
+    }
   },
   methods: {
     filterTask() {
+      console.log("Asdasd");
       this.loading = true;
       axios
         .get(this.appPath("api/tasks/filter"), {
