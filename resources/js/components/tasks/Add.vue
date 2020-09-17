@@ -476,7 +476,7 @@
 
 <script>
 export default {
-  props: [ "errors"],
+  props: ["errors"],
   data() {
     return {
       deadline: null,
@@ -591,6 +591,7 @@ export default {
       repeatTask: null,
       users: [],
       divisions: [],
+      tags: [],
     };
   },
   created() {
@@ -691,6 +692,8 @@ export default {
           .then((resp) => {
             this.divisions = resp.data;
           });
+
+        this.tags = this.loadDivisionTags();
       }
     },
   },
@@ -817,9 +820,6 @@ export default {
         (tag) => tag.id !== -1
       );
       return this.pluck(filteredExistingTags, "id");
-    },
-    tags() {
-      return this.loadDivisionTags();
     },
     timeRange() {
       let times = [];
