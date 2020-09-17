@@ -323,7 +323,7 @@
     <tasks-calendar v-if="isCalendar"></tasks-calendar>
     <!-- <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser" /> -->
     <tasks-group-view :tasks="filteredTasks" v-if="displayGroupTasks" />
-    <tasks-add :divisions="divisions" :errors="errors" />
+    <tasks-add :errors="errors" />
     <v-card flat class="pa-3" v-if="loading">
       <v-progress-linear color="primary" indeterminate rounded height="6"></v-progress-linear>
     </v-card>
@@ -332,7 +332,7 @@
 
 <script>
 export default {
-  props: ["divisions", "errors", "authuser"],
+  props: ["errors", "authuser"],
   data() {
     return {
       selectedTags: [],

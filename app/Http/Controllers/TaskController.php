@@ -38,13 +38,9 @@ class TaskController extends Controller
         ["id" => 2, "label" => "Высокий"],
     ];
 
-    public function index(Request $request, TaskFilters $filters)
+    public function index()
     {
-        $divisions = Division::with('users')->whereHas('users')->get();
-
-        return view('tasks.index', compact(
-            'divisions'
-        ));
+        return view('tasks.index');
     }
 
     public function store(Request $request)

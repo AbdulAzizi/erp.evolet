@@ -476,7 +476,7 @@
 
 <script>
 export default {
-  props: ["divisions", "errors"],
+  props: [ "errors"],
   data() {
     return {
       deadline: null,
@@ -590,6 +590,7 @@ export default {
       loading: false,
       repeatTask: null,
       users: [],
+      divisions: [],
     };
   },
   created() {
@@ -684,6 +685,12 @@ export default {
         axios.get(this.appPath("api/users?division=true")).then((resp) => {
           this.users = resp.data;
         });
+
+        axios
+          .get(this.appPath("api/divisions?users=true&has_users=true"))
+          .then((resp) => {
+            this.divisions = resp.data;
+          });
       }
     },
   },
