@@ -538,14 +538,20 @@ class TaskController extends Controller
 
     public function filter(TaskFilters $filters)
     {
-        $tasks = Task::filter($filters)->with(
-            'from',
-            'responsible',
-            'watchers',
+        $tasks = Task::filter($filters)->with([
+            'from' => function ($q) {
+                $q->without(['positionLevel', 'positions']);
+            },
+            'responsible' => function ($q) {
+                $q->without(['positionLevel', 'positions']);
+            },
+            'watchers' => function ($q) {
+                $q->without(['positionLevel', 'positions']);
+            },
             'status',
             'tags',
-            'responsibilityDescription'
-        )
+            'responsibilityDescription',
+        ])
             ->withCount('attachments')
             ->withCount('repeat')
             ->orderBy('created_at', 'desc')->get();
