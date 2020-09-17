@@ -160,9 +160,15 @@ class UserController extends Controller
         return $notifications;
     }
 
-    public function getUsers()
+    public function getUsers(Request $request)
     {
-        return User::all();
+        $query = User::query();
+
+        if($request->division){
+            $query->with('division');
+        }
+
+        return $query->get();
     }
 
     public function changeAvatar(Request $request)

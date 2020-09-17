@@ -323,7 +323,7 @@
     <tasks-calendar v-if="isCalendar"></tasks-calendar>
     <!-- <kanban-view v-show="isKanban" :taskStatuses="statuses" :authuser="authuser" /> -->
     <tasks-group-view :tasks="filteredTasks" v-if="displayGroupTasks" />
-    <tasks-add :divisions="divisions" :users="users" :errors="errors" />
+    <tasks-add :divisions="divisions" :errors="errors" />
     <v-card flat class="pa-3" v-if="loading">
       <v-progress-linear color="primary" indeterminate rounded height="6"></v-progress-linear>
     </v-card>
@@ -332,7 +332,7 @@
 
 <script>
 export default {
-  props: ["divisions", "users", "errors", "statuses", "authuser"],
+  props: ["divisions", "errors", "authuser"],
   data() {
     return {
       selectedTags: [],
@@ -344,7 +344,7 @@ export default {
       taskStatuses: [],
       selectedStatuses: [],
       employees: [],
-      localUsers: this.users,
+      localUsers: [],
       author: null,
       groupTask: null,
       responsible: null,
@@ -439,7 +439,6 @@ export default {
   },
   methods: {
     filterTask() {
-      console.log("Asdasd");
       this.loading = true;
       axios
         .get(this.appPath("api/tasks/filter"), {
@@ -598,6 +597,10 @@ export default {
       if (val) {
         this.getTaskTags();
         this.getStatuses();
+        
+        axios.get(this.appPath("api/users")).then((resp) => {
+          this.localUsers = resp.data;
+        });
       }
     },
     currentView(value) {
