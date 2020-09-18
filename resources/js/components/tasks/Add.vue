@@ -179,7 +179,7 @@
                 </v-row>
               </v-container>
             </v-col>
-            <v-col cols="12" class="pt-0">
+            <v-col cols="12" class="pt-0" v-if="selectedFiles.length">
               <attachments :files="selectedFiles" :deleteBtn="true" />
             </v-col>
             <v-dialog v-model="previewImageDialog" width="500">
