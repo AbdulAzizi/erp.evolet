@@ -179,7 +179,7 @@
                 </v-row>
               </v-container>
             </v-col>
-            <v-col cols="12" class="pt-0">
+            <v-col cols="12" class="pt-0" v-if="selectedFiles.length">
               <attachments :files="selectedFiles" :deleteBtn="true" />
             </v-col>
             <v-dialog v-model="previewImageDialog" width="500">
@@ -383,78 +383,78 @@
               <task-repeat />
 
               <v-dialog v-model="startDateTimeDialog" width="500" v-if="!repeatTask">
-                  <template v-slot:activator="{ on:dialog }">
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on:tooltip }">
-                        <v-btn
-                          v-on="{ ...tooltip, ...dialog }"
-                          text
-                          rounded
-                          min-width="0"
-                          style="min-width:0"
-                          class="ma-0 grey--text px-2 text--darken-1"
-                        >
-                          <v-icon>mdi-clock</v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Дата и время начала задачи</span>
-                    </v-tooltip>
-                  </template>
+                <template v-slot:activator="{ on:dialog }">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on:tooltip }">
+                      <v-btn
+                        v-on="{ ...tooltip, ...dialog }"
+                        text
+                        rounded
+                        min-width="0"
+                        style="min-width:0"
+                        class="ma-0 grey--text px-2 text--darken-1"
+                      >
+                        <v-icon>mdi-clock</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Дата и время начала задачи</span>
+                  </v-tooltip>
+                </template>
                 <v-card>
                   <v-toolbar flat dark dense color="primary">
                     <v-toolbar-title>Добавить время начала задачи</v-toolbar-title>
                   </v-toolbar>
                   <v-card-text>
-                  <v-form ref="startDateTimeForm">
-                  <v-row>
-                    <v-col cols="6">
-                      <v-menu
-                        ref="startDateMenu"
-                        v-model="startDateMenu"
-                        :close-on-content-click="false"
-                        :return-value.sync="startDate"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="200px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="startDate"
-                            label="Дата начала"
-                            readonly
-                            hide-details="auto"
-                            v-bind="attrs"
-                            v-on="on"
+                    <v-form ref="startDateTimeForm">
+                      <v-row>
+                        <v-col cols="6">
+                          <v-menu
+                            ref="startDateMenu"
+                            v-model="startDateMenu"
+                            :close-on-content-click="false"
+                            :return-value.sync="startDate"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="200px"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                v-model="startDate"
+                                label="Дата начала"
+                                readonly
+                                hide-details="auto"
+                                v-bind="attrs"
+                                v-on="on"
+                                filled
+                                rounded
+                                :persistent-hint="true"
+                                :rules="[rules.required]"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="startDate" no-title scrollable>
+                              <v-spacer></v-spacer>
+                              <v-btn text color="primary" @click="startDateMenu = false">Отмена</v-btn>
+                              <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.startDateMenu.save(startDate)"
+                              >Добавить</v-btn>
+                            </v-date-picker>
+                          </v-menu>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-select
+                            v-model="startTime"
+                            :items="timeRange"
+                            label="Время начала"
                             filled
                             rounded
-                            :persistent-hint="true"
+                            hide-details="auto"
                             :rules="[rules.required]"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker v-model="startDate" no-title scrollable>
-                          <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="startDateMenu = false">Отмена</v-btn>
-                          <v-btn
-                            text
-                            color="primary"
-                            @click="$refs.startDateMenu.save(startDate)"
-                          >Добавить</v-btn>
-                        </v-date-picker>
-                      </v-menu>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-select
-                        v-model="startTime"
-                        :items="timeRange"
-                        label="Время начала"
-                        filled
-                        rounded
-                        hide-details="auto"
-                        :rules="[rules.required]"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                  </v-form>
+                          ></v-select>
+                        </v-col>
+                      </v-row>
+                    </v-form>
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer />
@@ -476,22 +476,23 @@
 
 <script>
 export default {
-  props: ["divisions", "users", "errors"],
+  props: ["errors"],
   data() {
     return {
       deadline: null,
       searchText: null,
 
       rules: {
-        required: value => !!value || "Обязательное поле",
-        notEmptyArray: value => {
+        required: (value) => !!value || "Обязательное поле",
+        notEmptyArray: (value) => {
           return value.length != 0 || "Обязательное поле";
         },
         taskTimeRule: () => !!this.estimateTime || "Обязательное поле",
-        day: val => val < 366 || "Должно быть меньше 366",
-        hour: val => val < 24 || "Должно быть меньше 24",
-        minute: val => val < 60 || "Должно быть меньше 60",
-        date: val => !isNaN(new Date(val.replace(/-/g, "/"))) || "Выберите дату"
+        day: (val) => val < 366 || "Должно быть меньше 366",
+        hour: (val) => val < 24 || "Должно быть меньше 24",
+        minute: (val) => val < 60 || "Должно быть меньше 60",
+        date: (val) =>
+          !isNaN(new Date(val.replace(/-/g, "/"))) || "Выберите дату",
       },
       formHasErrors: false,
       csrf_token: window.Laravel.csrf_token,
@@ -521,7 +522,7 @@ export default {
       priorities: [
         { id: 0, label: "Низкий", color: "green lighten-3" },
         { id: 1, label: "Средний", color: "blue lighten-3" },
-        { id: 2, label: "Высокий", color: "red lighten-3" }
+        { id: 2, label: "Высокий", color: "red lighten-3" },
       ],
 
       reapeatTaskDialog: false,
@@ -538,26 +539,26 @@ export default {
           { index: 0, name: "день" },
           { index: 1, name: "неделю" },
           { index: 2, name: "месяц" },
-          { index: 3, name: "год" }
+          { index: 3, name: "год" },
         ],
         [
           { index: 0, name: "дня" },
           { index: 1, name: "недели" },
           { index: 2, name: "месяца" },
-          { index: 3, name: "года" }
+          { index: 3, name: "года" },
         ],
         [
           { index: 0, name: "дней" },
           { index: 1, name: "недель" },
           { index: 2, name: "месяцев" },
-          { index: 3, name: "лет" }
-        ]
+          { index: 3, name: "лет" },
+        ],
       ],
       endTime: { index: 0, label: "никогда" },
       endTimeMenu: [
         { index: 0, label: "никогда" },
         { index: 1, label: "после" },
-        { index: 2, label: "в день" }
+        { index: 2, label: "в день" },
       ],
       endTimeMenuSizes: [{ xs9: true }, { xs3: true }, { xs4: true }],
       endsAfterTimes: 1,
@@ -587,19 +588,22 @@ export default {
       description: null,
       error: false,
       loading: false,
-      repeatTask: null
+      repeatTask: null,
+      users: [],
+      divisions: [],
+      tags: [],
     };
   },
   created() {
     this.selectedIntervals = 0;
-    Event.listen("pollAdded", data => {
+    Event.listen("pollAdded", (data) => {
       this.poll = data;
       this.pollDialog = false;
     });
-    Event.listen("watchersAdded", data => {
+    Event.listen("watchersAdded", (data) => {
       this.watchers.push(...data);
     });
-    Event.listen("selectedAssignee", userIDs => {
+    Event.listen("selectedAssignee", (userIDs) => {
       // console.log("new user selected");
       // console.log(userIDs.length);
 
@@ -609,11 +613,11 @@ export default {
       // console.log(this.userResponsibilityDescriptions);
     });
 
-    Event.listen("fileError", data => {
+    Event.listen("fileError", (data) => {
       this.error = data;
     });
 
-    Event.listen("repeatTask", data => {
+    Event.listen("repeatTask", (data) => {
       this.repeatTask = data;
     });
   },
@@ -621,14 +625,14 @@ export default {
     selectedRespOrDescrip(newVal, oldVal) {
       if (oldVal.length === newVal.length) return;
       let resps = 0;
-      newVal.forEach(val => {
+      newVal.forEach((val) => {
         let splitedVal = val.id.split("-");
         if (splitedVal[0] == "resp") {
           resps++;
         } else {
           let responsibility_id = newVal[newVal.length - 1].responsibility_id;
           this.selectedRespOrDescrip = this.selectedRespOrDescrip.filter(
-            sel => {
+            (sel) => {
               if ("responsibility_id" in sel) {
                 if (sel.responsibility_id == responsibility_id) return sel;
               }
@@ -676,27 +680,42 @@ export default {
         this.estimateHours,
         value
       );
-    }
+    },
+    dialog(val) {
+      if (val) {
+        axios.get(this.appPath("api/users?division=true")).then((resp) => {
+          this.users = resp.data;
+        });
+
+        axios
+          .get(this.appPath("api/divisions?users=true&has_users=true"))
+          .then((resp) => {
+            this.divisions = resp.data;
+          });
+
+        this.tags = this.loadDivisionTags();
+      }
+    },
   },
   methods: {
     fetchResponsibilities(userIDs) {
       axios
         .post(this.appPath(`api/users/responsibilities`), {
-          userIDs: userIDs
+          userIDs: userIDs,
         })
-        .then(response => {
+        .then((response) => {
           this.responsibilities = response.data;
-          this.responsibilities.forEach(resp => {
+          this.responsibilities.forEach((resp) => {
             resp.id = "resp-" + resp.id;
-            resp.descriptions.forEach(desc => {
+            resp.descriptions.forEach((desc) => {
               desc.id = "desc-" + desc.id;
             });
           });
 
           this.userResponsibilityDescriptions = [];
-          response.data.forEach(resp => {
+          response.data.forEach((resp) => {
             this.userResponsibilityDescriptions.push(resp);
-            resp.descriptions.forEach(descr => {
+            resp.descriptions.forEach((descr) => {
               this.userResponsibilityDescriptions.push(descr);
             });
           });
@@ -709,19 +728,26 @@ export default {
       this.loading = true;
       const FORM = this.$refs.form;
       let formData = new FormData();
-      let responsibilityDescriptions = this.selectedRespOrDescrip.map(resDes => resDes.id.split("-")[1]);
-      let startDateTime = this.moment(`${this.moment(this.startDate)
-                          .local()
-                          .format("YYYY-MM-DD")} ${this.startTime}`)
-                          .local()
-                          .valueOf()
+      let responsibilityDescriptions = this.selectedRespOrDescrip.map(
+        (resDes) => resDes.id.split("-")[1]
+      );
+      let startDateTime = this.moment(
+        `${this.moment(this.startDate).local().format("YYYY-MM-DD")} ${
+          this.startTime
+        }`
+      )
+        .local()
+        .valueOf();
 
       formData.append("assignees", JSON.stringify(this.assignees));
       formData.append("description", this.description);
       formData.append("estimatedTaskTime", JSON.stringify(this.estimateTime));
       formData.append("deadline", this.deadlineWithTz);
       formData.append("watchers", JSON.stringify(this.watchers));
-      formData.append("responsibility_description",JSON.stringify(responsibilityDescriptions));
+      formData.append(
+        "responsibility_description",
+        JSON.stringify(responsibilityDescriptions)
+      );
       formData.append("poll", JSON.stringify(this.poll));
       formData.append("priority", JSON.stringify(this.selectedPriority));
       formData.append("newTags", JSON.stringify(this.newTags));
@@ -737,10 +763,10 @@ export default {
         axios
           .post("/api/tasks", formData, {
             headers: {
-              "Content-Type": "multipart/form-data"
-            }
+              "Content-Type": "multipart/form-data",
+            },
           })
-          .then(res => {
+          .then((res) => {
             this.loading = false;
             window.location.reload();
           });
@@ -761,7 +787,7 @@ export default {
     },
     addStartDateTime() {
       const FORM = this.$refs.startDateTimeForm;
-      if(FORM.validate()) {
+      if (FORM.validate()) {
         this.startDateTimeDialog = false;
       }
     },
@@ -769,7 +795,7 @@ export default {
       const FORM = this.$refs.startDateTimeForm;
       FORM.reset();
       this.startDateTimeDialog = false;
-    }
+    },
   },
   computed: {
     deadlineWithTz() {
@@ -782,21 +808,18 @@ export default {
       return {
         days: this.estimateDays,
         hours: this.estimateHours,
-        minutes: this.estimateMinutes
+        minutes: this.estimateMinutes,
       };
     },
     newTags() {
-      const filteredNewTags = this.selectedTags.filter(tag => tag.id === -1);
+      const filteredNewTags = this.selectedTags.filter((tag) => tag.id === -1);
       return this.pluck(filteredNewTags, "name");
     },
     existingTags() {
       const filteredExistingTags = this.selectedTags.filter(
-        tag => tag.id !== -1
+        (tag) => tag.id !== -1
       );
       return this.pluck(filteredExistingTags, "id");
-    },
-    tags() {
-      return this.loadDivisionTags();
     },
     timeRange() {
       let times = [];
@@ -807,8 +830,8 @@ export default {
         times.push(date.local().format("HH:mm"));
       }
       return times;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -138,4 +138,18 @@ class DivisionController extends Controller
             return $users;
         }
     }
+
+    public function getDivisions(Request $request)
+    {
+        $query = Division::query();
+
+        if($request->users){
+            $query->with('users');
+        }
+        if($request->has_users){
+            $query->whereHas('users');
+        }
+
+        return $query->get();
+    }
 }

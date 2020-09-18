@@ -38,40 +38,9 @@ class TaskController extends Controller
         ["id" => 2, "label" => "Высокий"],
     ];
 
-    public function index(Request $request, TaskFilters $filters)
+    public function index()
     {
-        $authUser = \Auth::user();
-        $statuses = Status::all();
-
-        // $groupTasks = Task::filter($filters)->with(
-        //     'from',
-        //     'responsible',
-        //     'watchers',
-        //     'status',
-        //     'tags',
-        //     'responsibilityDescription'
-        // )->get()->groupBy('responsibility_description_id')->all();
-
-        // foreach ($tasks as $task) {
-        //     // If task is from process
-        //     if ($task->from_type == "App\Process") {
-        //         // Load Tethers and forms for each tether
-        //         $task->from->load('frontTethers.form.fields.type', 'backTethers');
-        //         // return $task;
-        //     }
-        // }
-        // All Users needed while choosing watchers
-        $users = User::with(['division'])->get();
-        $divisions = Division::with('users')->whereHas('users')->get();
-
-        // $notifications = $authUser->notifications;
-
-        return view('tasks.index', compact(
-            'users',
-            'statuses',
-            'authUser',
-            'divisions'
-        ));
+        return view('tasks.index');
     }
 
     public function store(Request $request)
@@ -80,7 +49,7 @@ class TaskController extends Controller
         // return $request->all();
 
         $validator = Validator::make($request->all(), [
-            'attachments.*' => 'max:20000'
+            'attachments.*' => 'max:20000',
         ]);
 
         $descriptions = json_decode($request->responsibility_description);
@@ -103,7 +72,6 @@ class TaskController extends Controller
 
         $repitition = '';
 
-
         if ($validator->fails()) {
             return ['attachmentError' => $validator->errors()->first()];
         } else {
@@ -114,7 +82,7 @@ class TaskController extends Controller
                     'range' => $repeatTask->range,
                     'end_date' => $repeatTask->end_date,
                     'action' => $repeatTask->action,
-                    'weekDays' => json_encode($repeatTask->weekDays)
+                    'weekDays' => json_encode($repeatTask->weekDays),
                 ]);
             }
 
@@ -136,7 +104,7 @@ class TaskController extends Controller
                         'from_type' => User::class,
                         'responsibility_description_id' => $description,
                         'start_date' => $repeatTask ? $repeatTask->startTime : ($startDateTime ? $startDateTime : null),
-                        'repeat_id' => $repitition ? $repitition->id : null
+                        'repeat_id' => $repitition ? $repitition->id : null,
                     ]);
                 }
             }
@@ -194,13 +162,12 @@ class TaskController extends Controller
                             Storage::disk('public')->put($file->getClientOriginalName(), file_get_contents($file));
                         }
 
-
                         $attachment = Attachment::create([
                             'name' => $file->getClientOriginalName(),
                             'size' => $file->getSize(),
                             'attachable_type' => 'App\Task',
                             'attachable_id' => $task->id,
-                            'mimeType' => $file->getMimeType()
+                            'mimeType' => $file->getMimeType(),
                         ]);
 
                         $attachment->save();
@@ -561,21 +528,33 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->paginate(30);
+        )
+            ->withCount('attachments')
+            ->withCount('repeat')
+            ->orderBy('created_at', 'desc')->paginate(30);
 
         return $tasks;
     }
 
     public function filter(TaskFilters $filters)
     {
-        $tasks = Task::filter($filters)->with(
-            'from',
-            'responsible',
-            'watchers',
+        $tasks = Task::filter($filters)->with([
+            'from' => function ($q) {
+                $q->without(['positionLevel', 'positions']);
+            },
+            'responsible' => function ($q) {
+                $q->without(['positionLevel', 'positions']);
+            },
+            'watchers' => function ($q) {
+                $q->without(['positionLevel', 'positions']);
+            },
             'status',
             'tags',
-            'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->get();
+            'responsibilityDescription',
+        ])
+            ->withCount('attachments')
+            ->withCount('repeat')
+            ->orderBy('created_at', 'desc')->get();
 
         return $tasks;
     }
@@ -589,7 +568,10 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->get()->groupBy($field)->all();
+        )
+            ->withCount('attachments')
+            ->withCount('repeat')
+            ->orderBy('created_at', 'desc')->get()->groupBy($field)->all();
 
         return $tasks;
     }
@@ -609,10 +591,10 @@ class TaskController extends Controller
         if ($task->repeat) {
 
             $repeatTask = Repitition::findOrFail($task->repeat->id);
-            foreach($repeatTask->tasks as $taskRepeat) {
+            foreach ($repeatTask->tasks as $taskRepeat) {
                 $task->repeat_id = null;
                 $task->save();
-            } 
+            }
 
             if (count($repeatTask->tasks) == 0) {
                 $repeatTask->delete();
@@ -702,7 +684,10 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->get();
+        )
+            ->withCount('attachments')
+            ->withCount('repeat')
+            ->orderBy('created_at', 'desc')->get();
 
         return $tasks;
     }
@@ -740,7 +725,10 @@ class TaskController extends Controller
             'status',
             'tags',
             'responsibilityDescription'
-        )->orderBy('created_at', 'desc')->get();
+        )
+            ->withCount('attachments')
+            ->withCount('repeat')
+            ->orderBy('created_at', 'desc')->get();
 
         return $tasks;
     }
@@ -877,7 +865,6 @@ class TaskController extends Controller
         // Zip and store files
         $zipper->add($files)->close();
 
-
         return response()->download($zipFileName);
     }
 
@@ -981,7 +968,7 @@ class TaskController extends Controller
             'user_id' => auth()->user()->id,
             'description' =>
             '<a href="' . route('users.dashboard', auth()->user()->id) . '">' . auth()->user()->fullname . '</a> изменил(а) приоритет задачи с
-            <span class="primary--text">' . $this->priorities[$task->priority]['label'] .  '</span> на 
+            <span class="primary--text">' . $this->priorities[$task->priority]['label'] . '</span> на
             <span class="primary--text">' . $this->priorities[$request->priority]['label'] . '</span>',
             'link' => "<a href=" . route("tasks.show", $task->id) . '>' . mb_strimwidth($task->description, 0, 40, "...") . '</a>',
             'historyable_id' => $task->id,
@@ -999,7 +986,7 @@ class TaskController extends Controller
     {
         $tasks = Task::where([
             'responsible_id' => auth()->user()->id,
-            'start_date' => null
+            'start_date' => null,
         ])->where('status_id', '!=', 4)->get();
 
         return $tasks;
@@ -1031,7 +1018,7 @@ class TaskController extends Controller
     {
 
         $tasks = Task::where([
-            'responsible_id' => auth()->user()->id
+            'responsible_id' => auth()->user()->id,
         ])->whereNotNull('start_date')->with('repeat')->get();
 
         return $tasks;
@@ -1051,7 +1038,7 @@ class TaskController extends Controller
                 $repeatTaskStart = Carbon::createFromTimestamp((int) $repeatTaskStartDate / 1000, '+05:00')->toTimeString();
                 $taskStart = Carbon::createFromTimestamp((int) $task->start_date / 1000, '+05:00')->toTimeString();
                 $res = ($repeatTaskStart == $taskStart) ? 1 : 0;
-                
+
             } else if ($task->start_date && count($task->repeat) > 0) {
                 $weekdaysIncludes = array_intersect(json_decode($task->repeat[0]->weekdays), json_decode($request->weekDays));
                 $res = ($repeatTaskStart == $taskStart && $weekdaysIncludes) ? 1 : 0;

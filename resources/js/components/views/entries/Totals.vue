@@ -30,44 +30,34 @@
       <views-entries-add />
     </v-row>
     <v-row>
-      <v-simple-table v-if="preparedUsers.length">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Сотрудник</th>
-              <th class="text-left">Рабочие дни в месяц</th>
-              <th class="text-left">Рабочие часы в день</th>
-              <th class="text-left">Рабочие часы в месяц</th>
-              <th class="text-left">Присутствовал месяц часы</th>
-              <th class="text-left">Опоздал на работу</th>
-              <th class="text-left">Ушел с работы пораньше</th>
-              <th class="text-left">Присутствовал на работе</th>
-              <th class="text-left">Не отработанные дни</th>
-              <th class="text-left">Не отработанные часы</th>
-              <th class="text-left">Овертайм</th>
-              <th class="text-left">Количество опозданий в месяц</th>
-              <th class="text-left">Присутствовал в %.</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(user,index) in preparedUsers" :key="index">
-              <td>{{ user.name }}</td>
-              <td>{{ user.workDays }}</td>
-              <td>{{ user.hoursPerDay+':00:00' }}</td>
-              <td>{{ (user.workDays * user.hoursPerDay)+':00:00' }}</td>
-              <td>{{ msToTime(user.totalPresent) }}</td>
-              <td>{{ msToTime(user.totalLate) }}</td>
-              <td>{{ msToTime(user.totalEarly) }}</td>
-              <td>{{ user.presentDays }}</td>
-              <td>{{ user.workDays - user.presentDays}}</td>
-              <td>{{ ((user.workDays - user.presentDays) * user.hoursPerDay)+':00:00' }}</td>
-              <td>{{ msToTime(user.totalOvertime) }}</td>
-              <td>{{ user.totalLateDays }}</td>
-              <td>{{Number.isNaN(user.presentPercentage) ? 0 : user.presentPercentage}}%</td>
-            </tr>
-          </tbody>
+      <v-data-table
+        v-if="preparedUsers.length"
+        :items="preparedUsers"
+        :headers="headers"
+        item-key="name"
+        :items-per-page="-1"
+        hide-default-footer
+        fixed-header
+        dense
+      >
+        <template v-slot:item="{ item }">
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.workDays }}</td>
+            <td>{{ item.hoursPerDay+':00:00' }}</td>
+            <td>{{ item.hoursPerMonth +':00:00' }}</td>
+            <td>{{ msToTime(item.totalPresent) }}</td>
+            <td>{{ msToTime(item.totalLate) }}</td>
+            <td>{{ msToTime(item.totalEarly) }}</td>
+            <td>{{ item.presentDays }}</td>
+            <td>{{ item.unworkedDays}}</td>
+            <td>{{ item.unworkedHours+':00:00' }}</td>
+            <td>{{ msToTime(item.totalOvertime) }}</td>
+            <td>{{ item.totalLateDays }}</td>
+            <td>{{Number.isNaN(item.presentPercentage) ? 0 : item.presentPercentage}}%</td>
+          </tr>
         </template>
-      </v-simple-table>
+      </v-data-table>
     </v-row>
   </v-container>
 </template>
@@ -81,13 +71,29 @@ export default {
   data() {
     return {
       preparedUsers: [],
-      localUsers:[...this.users],
+      localUsers: [...this.users],
       month: null,
       monthMenu: null,
+      headers: [
+        { text: "Сотрудник", value: "name" },
+        { text: "Рабочие дни в месяц", value: "workDays" },
+        { text: "Рабочие часы в день", value: "hoursPerDay" },
+        { text: "Рабочие часы в месяц", value: "hoursPerMonth" },
+        { text: "Присутствовал месяц часы", value: "totalPresent" },
+        { text: "Опоздал на работу", value: "totalLate" },
+        { text: "Ушел с работы пораньше", value: "totalEarly" },
+        { text: "Присутствовал на работе", value: "presentDays" },
+        { text: "Неотработанные дни", value: "unworkedDays" },
+        { text: "Неотработанные часы", value: "unworkedHours" },
+        { text: "Овертайм", value: "totalOvertime" },
+        { text: "Количество опозданий в месяц", value: "totalLateDays" },
+        { text: "Присутствовал в %.", value: "presentPercentage" },
+      ],
     };
   },
   created() {
     this.prepareEntries();
+    console.log(this.preparedUsers);
   },
   methods: {
     prepareEntries() {
@@ -171,6 +177,9 @@ export default {
           (this.moment.duration(user.totalPresent).asHours() * 100) /
             (user.workDays * user.hoursPerDay)
         );
+        user.hoursPerMonth = user.workDays * user.hoursPerDay;
+        user.unworkedDays = user.workDays - user.presentDays;
+        user.unworkedHours = user.unworkedDays * user.hoursPerDay;
 
         this.preparedUsers.push(user);
       });
