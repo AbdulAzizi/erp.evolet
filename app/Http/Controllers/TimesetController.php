@@ -54,6 +54,7 @@ class TimesetController extends Controller
             ->with(['user' => function ($query) {
                 $query->without(['positionLevel', 'positions']);
             }])
+            ->orderBy('date')
             ->get();
         return $data;
     }
