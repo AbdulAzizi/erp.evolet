@@ -388,6 +388,7 @@ Vue.component("bp-forms", () => import ("./components/BP/BPForms.vue"));
 Vue.component("bp-form", () => import ("./components/BP/BPForm.vue"));
 Vue.component("division-tags", () => import ("./components/division/Tags.vue"));
 Vue.component("views-timesets-index", () => import ("./components/views/timesets/Index.vue"));
+Vue.component("views-timesets-index-new", () => import ("./components/views/timesets/IndexNew.vue"));
 Vue.component("views-users-tasks", () => import ("./components/views/users/Tasks.vue"));
 Vue.component("views-entries-add", () => import ("./components/views/entries/Add.vue"));
 Vue.component("views-entries-index", () => import ("./components/views/entries/Index.vue"));

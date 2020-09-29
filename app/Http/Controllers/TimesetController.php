@@ -36,23 +36,25 @@ class TimesetController extends Controller
             ->with('task')
             ->get();
 
+        $result = explode("-", $request->month);
+        $year = $result[0];
+        $month = $result[1];
+
         if ($request->has('division_id')) {
 
-            $data['users'] = TimesetFilters::getUsers();
+            $users = TimesetFilters::getUsers()->pluck('id');
 
         } else {
-
-            $result = explode("-", $request->month);
-            $year = $result[0];
-            $month = $result[1];
-
-            $data['entries'] = Entry::where('user_id', $request->user_id)
-                                    ->whereYear('date', '=', $year)
-                                    ->whereMonth('date', '=', $month)
-                                    ->get();
-
-            $data['users'] = User::alone()->get();
+            $users = [$request->user_id];
         }
+
+        $data['entries'] = Entry::whereIn('user_id', $users)
+            ->whereYear('date', '=', $year)
+            ->whereMonth('date', '=', $month)
+            ->with(['user' => function ($query) {
+                $query->without(['positionLevel', 'positions']);
+            }])
+            ->get();
         return $data;
     }
 
