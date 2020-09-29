@@ -16,11 +16,11 @@
           <v-toolbar-title>{{ facility.name }}</v-toolbar-title>
           <v-spacer />
           <div v-if="userid == auth.id">
-            <v-btn icon small @click="editFacility(facility.id)">
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
             <v-btn icon small>
               <v-icon @click="deleteTaskDialog = true, facilityId = facility.id">mdi-delete</v-icon>
+            </v-btn>
+            <v-btn icon small @click="editFacility(facility.id)">
+              <v-icon>mdi-pencil</v-icon>
             </v-btn>
           </div>
         </v-toolbar>
@@ -134,15 +134,9 @@ export default {
   data() {
     return {
       dialog: false,
-      equipmentType: ["ПК", "Ноутбук", "Монитор", "Клавиатура", "Мышь"],
+      equipmentType: ["ПК", "Ноутбук", "Монитор", "Клавиатура", "Мышь", "Наушник"],
       type: null,
-      attributeType: [
-        "Видеокарта",
-        "Оперативная память",
-        "Жесткий диск",
-        "Диагональ",
-        "Модель"
-      ],
+      attributeType: [],
       facilityAttributes: [
         {
           name: null,
@@ -156,13 +150,18 @@ export default {
       route: null
     };
   },
-  created() {
-    // console.log(this.facilities);
-  },
   methods: {
     addFacility() {
+      const FORM = this.$refs.form;
       this.route = `/api/facilities`;
       this.dialog = true;
+      this.facilityAttributes = [
+        {
+          name: null,
+          value: null
+        }
+      ],
+      this.type = null;
     },
     addAttribute() {
       this.facilityAttributes.push({
@@ -194,6 +193,43 @@ export default {
       });
       this.route = `/api/facilities/${id}`;
       this.dialog = true;
+    }
+  },
+  watch: {
+    type(val) {
+      switch (val) {
+        case "ПК":
+          this.attributeType = [
+            "Видеокарта",
+            "Оперативная память",
+            "Жесткий диск"
+          ];
+          break;
+        case "Ноутбук":
+          this.attributeType = ["Видеокарта",
+            "Оперативная память",
+            "Жесткий диск",
+            "Диагональ",
+            "Модель"];
+          break;
+        case "Монитор":
+          this.attributeType = ["Диагональ", "Модель"];
+          break;
+        case "Клавиатура":
+        case "Мышь":
+        case "Наушник":
+          this.attributeType = ["Модель"];
+          break;
+        default:
+          this.attributeType = [
+            "Видеокарта",
+            "Оперативная память",
+            "Жесткий диск",
+            "Диагональ",
+            "Модель"
+          ];
+          break;
+      }
     }
   }
 };
