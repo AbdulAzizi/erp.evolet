@@ -59,8 +59,15 @@
           />
         </v-col>
       </v-row>
+      <v-row v-if="loading" align="center" justify="center" style="height:80vh">
+        <v-progress-circular
+          :size="100"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+      </v-row>
     </v-container>
-    <v-container fluid class="pa-0 mt-3 white">
+    <v-container fluid class="pa-0 mt-3 white" v-if="!loading">
       <v-row no-gutters>
         <div>
           <span style="color: #9b9b9b" class="text-caption px-1"
@@ -249,6 +256,7 @@ export default {
         "deep-orange",
         "blue-grey",
       ],
+      loading: false,
     };
   },
   async created() {
@@ -287,6 +295,7 @@ export default {
               }
             });
           });
+          this.loading = false;
         });
     },
     rand(min, max) {
