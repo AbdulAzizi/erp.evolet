@@ -156,6 +156,60 @@
               </v-list-item>
               <v-list-item v-if="edit">
                 <v-list-item-content>
+                  <v-text-field
+                  v-model="birthPlace"
+                  label="Место рождения"
+                  outlined
+                  dense
+                  hide-details
+                  >
+                  </v-text-field>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="!edit && birthPlace">
+                <v-list-item-icon>
+                  <v-icon>mdi-earth</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>{{birthPlace}}</v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="edit">
+                <v-list-item-content>
+                  <v-text-field
+                  v-model="nationality"
+                  label="Национальность"
+                  outlined
+                  dense
+                  hide-details
+                  >
+                  </v-text-field>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="!edit && nationality">
+                <v-list-item-icon>
+                  <v-icon>mdi-map-marker-multiple</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>{{nationality}}</v-list-item-content>
+              </v-list-item>
+               <v-list-item v-if="edit">
+                <v-list-item-content>
+                   <v-select
+                    v-model="maritalStatus"
+                    label="Семейное положение"
+                    :items="['Женат', 'Не женат', 'Замужем', 'Не замужем']"
+                    outlined
+                    dense
+                    hide-details>
+                  </v-select>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="!edit && maritalStatus">
+                <v-list-item-icon>
+                  <v-icon>mdi-home-heart</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>{{maritalStatus}}</v-list-item-content>
+              </v-list-item>
+              <v-list-item v-if="edit">
+                <v-list-item-content>
                   <v-select
                   v-model="gender"
                   label="Выберите пол"
@@ -337,6 +391,9 @@ export default {
       gender: this.user.resume[0].male_female,
       address: this.user.resume[0].address,
       citizenship: JSON.parse(this.user.resume[0].citizenship),
+      birthPlace: this.user.resume[0].birth_place,
+      maritalStatus: this.user.resume[0].marital_status,
+      nationality: this.user.resume[0].nationality,
       showEdit: false,
       listenEventName: null,
       education: {
@@ -519,12 +576,15 @@ export default {
       if(formValid){
         axios.post(this.appPath(`api/resume/${this.user.resume[0].id}/edit`), {
           phone: this.phone.split('-').join(),
-          phone_2: this.phone_2.split('-').join(),
+          phone_2: this.phone_2 && this.phone_2.split('-').join(),
           email: this.email,
           gender: this.gender,
           birthday: this.birthday,
           address: this.address,
-          citizenship: JSON.stringify(this.citizenship)
+          citizenship: JSON.stringify(this.citizenship),
+          birthPlace: this.birthPlace,
+          maritalStatus: this.maritalStatus,
+          nationality: this.nationality
         }).then(res => {
           this.edit = false;
           this.birthday = res.data.birthday;
@@ -534,6 +594,10 @@ export default {
           this.gender = res.data.male_female;
           this.address = res.data.address;
           this.citizenship = JSON.parse(res.data.citizenship);
+          this.birthPlace = res.data.birth_place;
+          this.maritalStatus = res.data.marital_status;
+          this.nationality = res.data.nationality;
+
         }).catch(err => console.error(err));
       }
     },

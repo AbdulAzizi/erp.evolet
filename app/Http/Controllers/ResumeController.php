@@ -42,7 +42,10 @@ class ResumeController extends Controller
             'male_female' => $request->gender,
             'phone_2' => $request->phone_2,
             'address' => $request->address,
-            'citizenship' => $request->citizenship
+            'citizenship' => $request->citizenship,
+            'birth_place' => $request->birthPlace,
+            'marital_status' => $request->maritalStatus,
+            'nationality' => $request->nationality
         ]);
 
         $resume->save();
@@ -63,7 +66,10 @@ class ResumeController extends Controller
                 'phone' => $request->phone,
                 'phone_2' => $request->phone_2,
                 'email' => $request->email,
-                'creator' => auth()->id()
+                'creator' => auth()->id(),
+                'birth_place' => $request->birthPlace,
+                'marital_status' => $request->maritalStatus,
+                'nationality' => $request->nationality
             ]);
 
             return redirect('/resume/' . $resume->id);
@@ -80,7 +86,10 @@ class ResumeController extends Controller
                 'phone' => $request->phone,
                 'phone_2' => $request->phone_2,
                 'email' => $user->email,
-                'creator' => auth()->id()
+                'creator' => auth()->id(),
+                'birth_place' => $request->birthPlace,
+                'marital_status' => $request->maritalStatus,
+                'nationality' => $request->nationality
             ]);
 
             $resume->owner()->attach($user->id);
