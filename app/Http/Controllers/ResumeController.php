@@ -26,7 +26,8 @@ class ResumeController extends Controller
             'resume.achievments',
             'resume.languages',
             'resume.skills',
-            'resume.hobbies'
+            'resume.hobbies',
+            'resume.informations'
         )->find($request->id);
 
         return view('profile.curriculum', compact('user'));

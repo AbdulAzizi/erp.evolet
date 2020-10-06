@@ -59,14 +59,14 @@
               <v-list-item v-show="edit">
                 <v-list-item-content>
                   <v-text-field
-                  v-model="phone"
-                  v-mask="'###-##-##-##'"
-                  label="Номер телефона"
-                  outlined
-                  dense
-                  :rules="required"
-                  hide-details>
-                  </v-text-field>
+                    v-model="phone"
+                    v-mask="'###-##-##-##'"
+                    label="Номер телефона"
+                    outlined
+                    dense
+                    :rules="required"
+                    hide-details
+                  ></v-text-field>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="!edit && phone_2">
@@ -78,13 +78,13 @@
               <v-list-item v-show="edit">
                 <v-list-item-content>
                   <v-text-field
-                  v-model="phone_2"
-                  v-mask="'###-##-##-##'"
-                  label="Доп. номер телефона"
-                  outlined
-                  dense
-                  hide-details>
-                  </v-text-field>
+                    v-model="phone_2"
+                    v-mask="'###-##-##-##'"
+                    label="Доп. номер телефона"
+                    outlined
+                    dense
+                    hide-details
+                  ></v-text-field>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="!edit">
@@ -96,17 +96,16 @@
               <v-list-item v-if="edit">
                 <v-list-item-content>
                   <v-text-field
-                  v-model="email"
-                  label="Эл. почта"
-                  outlined
-                  dense
-                  :rules="required"
-                  hide-details
-                  >
-                  </v-text-field>
+                    v-model="email"
+                    label="Эл. почта"
+                    outlined
+                    dense
+                    :rules="required"
+                    hide-details
+                  ></v-text-field>
                 </v-list-item-content>
               </v-list-item>
-               <v-list-item v-if="!edit && address">
+              <v-list-item v-if="!edit && address">
                 <v-list-item-icon>
                   <v-icon>mdi-map-marker</v-icon>
                 </v-list-item-icon>
@@ -115,13 +114,12 @@
               <v-list-item v-if="edit">
                 <v-list-item-content>
                   <v-text-field
-                  v-model="address"
-                  label="Домашний адрес"
-                  outlined
-                  dense
-                  hide-details
-                  >
-                  </v-text-field>
+                    v-model="address"
+                    label="Домашний адрес"
+                    outlined
+                    dense
+                    hide-details
+                  ></v-text-field>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="!edit && citizenship">
@@ -130,22 +128,24 @@
                 </v-list-item-icon>
                 <v-list-item-content>
                   <div>
-                      <span v-for="(citizen, index) in citizenship" :key="index">{{citizen}}<span v-if="index !== citizenship.length - 1">, </span></span>
+                    <span v-for="(citizen, index) in citizenship" :key="index">
+                      {{citizen}}
+                      <span v-if="index !== citizenship.length - 1">,</span>
+                    </span>
                   </div>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="edit">
                 <v-list-item-content>
                   <v-select
-                  v-model="citizenship"
-                  label="Гражданство"
-                  outlined
-                  dense
-                  hide-details
-                  multiple
-                  :items="countries"
-                  >
-                  </v-select>
+                    v-model="citizenship"
+                    label="Гражданство"
+                    outlined
+                    dense
+                    hide-details
+                    multiple
+                    :items="countries"
+                  ></v-select>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="!edit">
@@ -157,13 +157,12 @@
               <v-list-item v-if="edit">
                 <v-list-item-content>
                   <v-text-field
-                  v-model="birthPlace"
-                  label="Место рождения"
-                  outlined
-                  dense
-                  hide-details
-                  >
-                  </v-text-field>
+                    v-model="birthPlace"
+                    label="Место рождения"
+                    outlined
+                    dense
+                    hide-details
+                  ></v-text-field>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="!edit && birthPlace">
@@ -175,13 +174,12 @@
               <v-list-item v-if="edit">
                 <v-list-item-content>
                   <v-text-field
-                  v-model="nationality"
-                  label="Национальность"
-                  outlined
-                  dense
-                  hide-details
-                  >
-                  </v-text-field>
+                    v-model="nationality"
+                    label="Национальность"
+                    outlined
+                    dense
+                    hide-details
+                  ></v-text-field>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="!edit && nationality">
@@ -190,16 +188,16 @@
                 </v-list-item-icon>
                 <v-list-item-content>{{nationality}}</v-list-item-content>
               </v-list-item>
-               <v-list-item v-if="edit">
+              <v-list-item v-if="edit">
                 <v-list-item-content>
-                   <v-select
+                  <v-select
                     v-model="maritalStatus"
                     label="Семейное положение"
                     :items="['Женат', 'Не женат', 'Замужем', 'Не замужем']"
                     outlined
                     dense
-                    hide-details>
-                  </v-select>
+                    hide-details
+                  ></v-select>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="!edit && maritalStatus">
@@ -211,26 +209,22 @@
               <v-list-item v-if="edit">
                 <v-list-item-content>
                   <v-select
-                  v-model="gender"
-                  label="Выберите пол"
-                  :items="['Мужской', 'Женский']"
-                  outlined
-                  dense
-                  :rules="required"
-                  hide-details>
-                  </v-select>
+                    v-model="gender"
+                    label="Выберите пол"
+                    :items="['Мужской', 'Женский']"
+                    outlined
+                    dense
+                    :rules="required"
+                    hide-details
+                  ></v-select>
                 </v-list-item-content>
               </v-list-item>
             </v-form>
           </v-list>
           <v-card-actions v-if="edit">
             <v-spacer />
-            <v-btn text color="primary" @click="cancelEdit()">
-              Отмена
-            </v-btn>
-            <v-btn color="primary" @click="editMainInfo()">
-              Изменить
-            </v-btn>
+            <v-btn text color="primary" @click="cancelEdit()">Отмена</v-btn>
+            <v-btn color="primary" @click="editMainInfo()">Изменить</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -368,7 +362,7 @@
           />
         </resume-card>
       </v-col>
-       <v-col cols="12">
+      <v-col cols="12">
         <resume-card
           :check="user.id == permit"
           :user="user"
@@ -389,13 +383,34 @@
           />
         </resume-card>
       </v-col>
+      <v-col cols="12">
+        <resume-card
+          :check="user.id == permit"
+          :user="user"
+          title="Дополнительная информация"
+          :resume="user.resume[0].informations"
+          main_icon="mdi-star"
+          deleteUrl="/api/extraInformations/"
+          firstMainLine="type"
+          :secondLineItems="['description']"
+        >
+          <resume-add-item
+            :user="user"
+            title="Добавить дополнительную информацию"
+            url="/api/extraInformations"
+            :form="extraInformations"
+            :returnDataEvent="extraInformations.event"
+            v-if="user.id == permit"
+          />
+        </resume-card>
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-import { VueMaskDirective } from 'v-mask';
-Vue.directive('mask', VueMaskDirective);
+import { VueMaskDirective } from "v-mask";
+Vue.directive("mask", VueMaskDirective);
 export default {
   props: ["user", "permit"],
 
@@ -557,7 +572,7 @@ export default {
           }
         ]
       },
-       hobbies: {
+      hobbies: {
         colsPerRow: [12],
         event: "hobbies",
         fields: [
@@ -587,13 +602,27 @@ export default {
           }
         ]
       },
-      countries: [
-        'Таджикистан',
-        'Узбекистан',
-        'Россия',
-        'Индия',
-        'США'
-      ]
+      extraInformations: {
+        colsPerRow: [12],
+        event: "informations",
+        fields: [
+          {
+            label: "Выберите тип",
+            type: "select",
+            name: "type",
+            items: ["Автомобиль", "Жилье"],
+            rules: ["required"]
+          },
+          {
+            label: "Выберите вариант",
+            type: "select",
+            name: "description",
+            items: ["Личное", "Рабочий", "В аренду"],
+            rules: ["required"]
+          }
+        ]
+      },
+      countries: ["Таджикистан", "Узбекистан", "Россия", "Индия", "США"]
     };
   },
 
@@ -603,41 +632,43 @@ export default {
       let b = this.moment(start);
       return a.diff(b, "years");
     },
-    cancelEdit(){
+    cancelEdit() {
       this.edit = false;
       this.birthday = this.user.resume[0].birthday;
       this.phone = this.user.resume[0].phone;
       this.email = this.user.resume[0].email;
       this.gender = this.user.resume[0].male_female;
     },
-    editMainInfo(){
+    editMainInfo() {
       const formValid = this.$refs.editForm.validate();
-      if(formValid){
-        axios.post(this.appPath(`api/resume/${this.user.resume[0].id}/edit`), {
-          phone: this.phone.split('-').join(),
-          phone_2: this.phone_2 && this.phone_2.split('-').join(),
-          email: this.email,
-          gender: this.gender,
-          birthday: this.birthday,
-          address: this.address,
-          citizenship: JSON.stringify(this.citizenship),
-          birthPlace: this.birthPlace,
-          maritalStatus: this.maritalStatus,
-          nationality: this.nationality
-        }).then(res => {
-          this.edit = false;
-          this.birthday = res.data.birthday;
-          this.phone = res.data.phone.split(',').join('-');
-          this.phone_2 = res.data.phone_2.split(',').join('-');
-          this.email = res.data.email;
-          this.gender = res.data.male_female;
-          this.address = res.data.address;
-          this.citizenship = JSON.parse(res.data.citizenship);
-          this.birthPlace = res.data.birth_place;
-          this.maritalStatus = res.data.marital_status;
-          this.nationality = res.data.nationality;
-
-        }).catch(err => console.error(err));
+      if (formValid) {
+        axios
+          .post(this.appPath(`api/resume/${this.user.resume[0].id}/edit`), {
+            phone: this.phone.split("-").join(),
+            phone_2: this.phone_2 && this.phone_2.split("-").join(),
+            email: this.email,
+            gender: this.gender,
+            birthday: this.birthday,
+            address: this.address,
+            citizenship: JSON.stringify(this.citizenship),
+            birthPlace: this.birthPlace,
+            maritalStatus: this.maritalStatus,
+            nationality: this.nationality
+          })
+          .then(res => {
+            this.edit = false;
+            this.birthday = res.data.birthday;
+            this.phone = res.data.phone.split(",").join("-");
+            this.phone_2 = res.data.phone_2.split(",").join("-");
+            this.email = res.data.email;
+            this.gender = res.data.male_female;
+            this.address = res.data.address;
+            this.citizenship = JSON.parse(res.data.citizenship);
+            this.birthPlace = res.data.birth_place;
+            this.maritalStatus = res.data.marital_status;
+            this.nationality = res.data.nationality;
+          })
+          .catch(err => console.error(err));
       }
     },
     defineEvent() {

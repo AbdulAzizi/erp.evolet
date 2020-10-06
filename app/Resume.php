@@ -53,4 +53,9 @@ class Resume extends Model
     {
         return $this->hasMany('App\Hobbie');
     }
+
+    public function informations()
+    {
+        return $this->hasMany('App\Extrainformation');
+    }
 }

@@ -41,6 +41,8 @@ Route::post('/achievment', 'AchievmentController@create')->name('achievment.crea
 Route::delete('/deleteAchievment/{id}', 'AchievmentController@delete')->name('achievment.delete');
 Route::post('/hobbies', 'HobbieController@create')->name('hobbies.create');
 Route::delete('/hobbies/{id}', 'HobbieController@delete')->name('hobbies.delete');
+Route::post('/extraInformations', 'ExtrainformationController@create')->name('information.create');
+Route::delete('/extraInformations/{id}', 'ExtrainformationController@delete')->name('information.delete');
 Route::post('/mark-notifications', 'UserController@markAsRead')->name('user.markAsRead');
 Route::put('/change-task-status/{id}', 'TaskController@changeStatus')->name('change.task.status');
 Route::post('/addStatus', 'TaskController@addStatus')->name('add.status');
