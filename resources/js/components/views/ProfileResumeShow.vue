@@ -368,6 +368,27 @@
           />
         </resume-card>
       </v-col>
+       <v-col cols="12">
+        <resume-card
+          :check="user.id == permit"
+          :user="user"
+          title="Хобби"
+          :resume="user.resume[0].hobbies"
+          main_icon="mdi-star"
+          deleteUrl="/api/hobbies/"
+          firstMainLine="type"
+          :secondLineItems="['description']"
+        >
+          <resume-add-item
+            :user="user"
+            title="Добавить хобби"
+            url="/api/hobbies"
+            :form="hobbies"
+            :returnDataEvent="hobbies.event"
+            v-if="user.id == permit"
+          />
+        </resume-card>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -527,6 +548,24 @@ export default {
             label: "Дата получения награды",
             type: "date",
             name: "date"
+          },
+          {
+            label: "Описание",
+            type: "text",
+            name: "description",
+            rules: ["required"]
+          }
+        ]
+      },
+       hobbies: {
+        colsPerRow: [12],
+        event: "hobbies",
+        fields: [
+          {
+            label: "Тип",
+            type: "string",
+            name: "type",
+            rules: ["required"]
           },
           {
             label: "Описание",
