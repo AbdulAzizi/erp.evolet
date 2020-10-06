@@ -279,6 +279,7 @@
           main_icon="mdi-certificate"
           deleteUrl="/api/deleteAchievment/"
           firstMainLine="type"
+          firstSecondaryLine="date"
           :secondLineItems="['description']"
         >
           <resume-add-item
@@ -305,7 +306,7 @@
         >
           <resume-add-item
             :user="user"
-            title="Добавить достижение"
+            title="Добавить сильные стороны"
             url="/api/skill"
             :form="skills"
             :returnDataEvent="skills.event"
@@ -464,6 +465,11 @@ export default {
             type: "string",
             name: "type",
             rules: ["required"]
+          },
+          {
+            label: "Дата получения награды",
+            type: "date",
+            name: "date"
           },
           {
             label: "Описание",

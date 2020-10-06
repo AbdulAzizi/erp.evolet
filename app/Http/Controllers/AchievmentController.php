@@ -12,7 +12,8 @@ class AchievmentController extends Controller
         return Achievment::create([
             'type' => $request->type,
             'description' => $request->description,
-            'resume_id' => $request->resume_id
+            'resume_id' => $request->resume_id,
+            'date' => $request->date
         ]);
     }
     public function delete(Request $request)

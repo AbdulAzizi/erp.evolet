@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Achievment extends Model
 {
-    protected $fillable = ['resume_id', 'type', 'description'];
+    protected $fillable = ['resume_id', 'type', 'description', 'date'];
 
     public $timestamps = false;
 
