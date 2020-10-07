@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Achievment extends Model
+class Extrainformation extends Model
 {
-    protected $fillable = ['resume_id', 'type', 'description', 'date'];
+    protected $fillable = ['resume_id', 'type', 'description'];
 
     public $timestamps = false;
 

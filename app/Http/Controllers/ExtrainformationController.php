@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Achievment;
+use App\Extrainformation;
 use Illuminate\Http\Request;
 
-class AchievmentController extends Controller
+class ExtrainformationController extends Controller
 {
     public function create(Request $request)
     {
-        return Achievment::create([
+        return Extrainformation::create([
             'type' => $request->type,
             'description' => $request->description,
-            'resume_id' => $request->resume_id,
-            'date' => $request->date
+            'resume_id' => $request->resume_id
         ]);
     }
     public function delete(Request $request)
     {
-        Achievment::find($request->id)->delete();
+        Extrainformation::find($request->id)->delete();
 
         return 'success';
     }
