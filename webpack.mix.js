@@ -13,8 +13,8 @@ const mix = require("laravel-mix");
 
 mix.js("resources/js/app.js", "public/js");
 
-mix.webpackConfig({
-    output: {
-        chunkFilename: 'js/[name].js',
-    }
-});
+// mix.webpackConfig({
+//     output: {
+//         chunkFilename: 'js/[name].js',
+//     }
+// });
