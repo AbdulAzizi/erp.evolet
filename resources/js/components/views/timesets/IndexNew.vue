@@ -483,17 +483,15 @@ export default {
         .then((resp) => {
           this.timesets = resp.data.timesets;
           this.entries = resp.data.entries;
-          // get the id of the first
-          let userID = this.entries.length ? this.entries[0].user_id : 0;
           // initialize totals
           let totalPresent = this.moment.duration("00:00:00");
           let totalLate = this.moment.duration("00:00:00");
           let totalOvertime = this.moment.duration("00:00:00");
           let totalEarly = this.moment.duration("00:00:00");
-          // make own index
-          let index = 0;
 
-          this.entries.forEach((entry) => {
+          for (let i = 0; i < this.entries.length; i++) {
+            const entry = this.entries[i];
+
             if (entry.user.position_level_id == 1) {
               entry.hoursPerDay = 11;
               entry.timeToLeave = "19:30";
@@ -576,7 +574,7 @@ export default {
               entry["overtime"] = "";
             }
             // if it is different User or the last one
-            if (userID == entry.user_id && index != this.entries.length - 1) {
+            if (this.entries[i + 1] && this.entries[i + 1].user_id == entry.user_id) {
               // add to totals
               if (entry["present"] != "") {
                 totalPresent.add(this.moment.duration(entry["present"]));
@@ -591,8 +589,6 @@ export default {
                 totalEarly.add(this.moment.duration(entry["early"]));
               }
             } else {
-              // get id of a new user
-              userID = entry.user_id;
               // make total row object and push totals
               let tempEntry = { user: {} };
               tempEntry.user_id = entry.user_id;
@@ -604,25 +600,17 @@ export default {
               tempEntry.late = this.msToTime(totalLate);
               tempEntry.overtime = this.msToTime(totalOvertime);
               tempEntry.early = this.msToTime(totalEarly);
-              // if last user push
-              if (index == this.entries.length - 1) {
-                this.entries.push(tempEntry);
-              }
-              // if not push with index 
-              else {
-                this.entries.splice(index, 0, tempEntry);
-              }
+
+              this.entries[i+1] = tempEntry;
+              i++;
+
               // clear totals
               totalPresent = this.moment.duration("00:00:00");
               totalLate = this.moment.duration("00:00:00");
               totalOvertime = this.moment.duration("00:00:00");
               totalEarly = this.moment.duration("00:00:00");
-              // increment after total row push
-              index++;
             }
-            // increment index
-            index++;
-          });
+          }
           this.loading = false;
         });
     },
