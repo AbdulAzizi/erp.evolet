@@ -42,7 +42,7 @@ class EntryController extends Controller
     public function update(Request $request, $id)
     {
         $entry = Entry::find($id);
-        $entry->comment = $request->comment;
+        $entry[$request->comment_type] = $request->comment_value;
         $entry->save();
 
         return $entry;

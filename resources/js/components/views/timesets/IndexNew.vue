@@ -236,7 +236,7 @@
 
         <v-row no-gutters>
           <v-col
-            cols="10"
+            cols="8"
             class="pa-0"
             style="position: relative; overflow: hidden"
           >
@@ -329,7 +329,7 @@
 
             <template v-for="(entry, index) in entries">
               <v-hover
-                :key="'timeset-comment-' + index"
+                :key="'timeset-manager-comment-' + index"
                 v-slot:default="{ hover }"
               >
                 <div style="position: relative">
@@ -349,7 +349,54 @@
                     v-if="hover"
                     icon
                     absolute
-                    @click="editComment(entry)"
+                    @click="editComment(entry, 'comment')"
+                    x-small
+                    style="top: 0px; right: 0px"
+                  >
+                    <v-icon size="12">mdi-pencil</v-icon>
+                  </v-btn>
+                </div>
+              </v-hover>
+              <v-divider :key="'timeset-manager-comment-divider-' + index" />
+            </template>
+          </v-col>
+          <v-divider vertical />
+          <v-col
+            ><span
+              style="
+                padding-left: 4px;
+                color: #9b9b9b;
+                display: block;
+                min-height: 20px;
+              "
+              class="text-caption"
+              >Ком. Рук</span
+            >
+            <v-divider />
+
+            <template v-for="(entry, index) in entries">
+              <v-hover
+                :key="'timeset-comment-' + index"
+                v-slot:default="{ hover }"
+              >
+                <div style="position: relative">
+                  <span
+                    style="
+                      color: #9b9b9b;
+                      display: block;
+                      min-height: 20px;
+                      margin-left: 1px;
+                    "
+                    :class="
+                      'text-caption px-1 text-truncate ' + getRowColor(entry)
+                    "
+                    >{{ entry.manager_comment }}</span
+                  >
+                  <v-btn
+                    v-if="hover"
+                    icon
+                    absolute
+                    @click="editComment(entry, 'manager_comment')"
                     x-small
                     style="top: 0px; right: 0px"
                   >
@@ -420,6 +467,7 @@ export default {
       ],
       loading: false,
       comment: {
+        type: null,
         dialog: null,
         model: null,
         entry: null,
@@ -436,23 +484,28 @@ export default {
       this.comment.dialog = false;
     },
     saveComment() {
+      let type = this.comment.type;
+      
       axios
         .put(this.appPath(`api/entries/${this.comment.entry.id}`), {
-          comment: this.comment.model,
+          comment_type: this.comment.type,
+          comment_value: this.comment.model
         })
         .then((resp) => {
+          console.log(resp.data);
           this.entries.forEach((e) => {
             if (e.id == this.comment.entry.id) {
-              e.comment = resp.data.comment;
+              e[type] = resp.data[type];
             }
           });
           this.comment.dialog = false;
           Event.fire("notify", ["Сохранено успешно!"]);
         });
     },
-    editComment(entry) {
+    editComment(entry, type) {
+      this.comment.type = type;
       this.comment.dialog = true;
-      this.comment.model = entry.comment;
+      this.comment.model = entry[type];
       this.comment.entry = entry;
     },
     getRowColor(entry) {
@@ -574,7 +627,10 @@ export default {
               entry["overtime"] = "";
             }
             // if it is different User or the last one
-            if (this.entries[i + 1] && this.entries[i + 1].user_id == entry.user_id) {
+            if (
+              this.entries[i + 1] &&
+              this.entries[i + 1].user_id == entry.user_id
+            ) {
               // add to totals
               if (entry["present"] != "") {
                 totalPresent.add(this.moment.duration(entry["present"]));
@@ -601,7 +657,7 @@ export default {
               tempEntry.overtime = this.msToTime(totalOvertime);
               tempEntry.early = this.msToTime(totalEarly);
 
-              this.entries[i+1] = tempEntry;
+              this.entries[i + 1] = tempEntry;
               i++;
 
               // clear totals
