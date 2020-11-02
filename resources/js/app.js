@@ -281,43 +281,43 @@ Vue.mixin({
 });
 
 /****************************COMPONENTS********************************/
-Vue.component("alert", () => import("./components/Alert.vue"));
-Vue.component("alerts", () => import("./components/Alerts.vue"));
-Vue.component("navbar", () => import("./components/Navbar.vue"));
-Vue.component("right-drawer", () => import("./components/RightDrawer.vue"));
-Vue.component("left-drawer", () => import("./components/LeftDrawer.vue"));
-Vue.component("priority", () => import("./components/Priority.vue"));
-Vue.component("card", () => import("./components/Card.vue"));
-Vue.component("user-card", () => import("./components/UserCard.vue"));
-Vue.component("division-structure", () => import("./components/DivisionStructure.vue"));
-Vue.component("avatars-set", () => import("./components/AvatarsSet.vue"));
-Vue.component("dropdown-btn", () => import("./components/buttons/Dropdown.vue"));
-Vue.component("stats-card", () => import("./components/StatsCard.vue"));
-Vue.component("avatar", () => import("./components/Avatar.vue"));
-Vue.component("projects-card", () => import("./components/projects/Card.vue"));
-Vue.component("projects-list", () => import("./components/projects/List.vue"));
-Vue.component("resume-add-item", () => import("./components/profile/AddItem.vue"));
-Vue.component("resume-card", () => import("./components/profile/ResumeCard.vue"));
-Vue.component("resume-create", () => import("./components/profile/ResumeCreate.vue"));
-Vue.component("projects-card", () => import("./components/projects/Card.vue"));
-Vue.component("projects-list", () => import("./components/projects/List.vue"));
-Vue.component("projects-create", () => import("./components/projects/Create.vue"));
-Vue.component("history", () => import("./components/History.vue"));
-Vue.component("messages", () => import("./components/Messages.vue"));
-Vue.component("kanban-view", () => import("./components/Kanban.vue"));
-Vue.component("factories-vertical-card", () => import("./components/factories/VerticalCard.vue"));
-Vue.component("factories-card", () => import("./components/factories/Card.vue"));
-Vue.component("factories-product-form", () => import("./components/factories/ProductForm.vue"));
-Vue.component("factories-product-table", () => import("./components/factories/ProductTable.vue"));
-Vue.component("process-task-add", () => import("./components/processTask/Add.vue"));
-Vue.component("process-task-actions", () => import("./components/processTask/Actions.vue"));
-Vue.component("process-task-delete", () => import("./components/processTask/Delete.vue"));
-Vue.component("process-task-edit", () => import("./components/processTask/Edit.vue"));
-Vue.component("process-task-add-form", () => import("./components/processTask/AddForm.vue"));
-Vue.component("edit-add-actions", () => import("./components/division/EditAddActions.vue"));
-Vue.component("add-employee", () => import("./components/division/AddEmployee.vue"));
-Vue.component("edit-record", () => import("./components/EditRecord.vue"));
-Vue.component("attachments", () => import("./components/Attachments.vue"));
+Vue.component("alert", require("./components/Alert.vue").default);
+Vue.component("alerts", require("./components/Alerts.vue").default);
+Vue.component("navbar", require("./components/Navbar.vue").default);
+Vue.component("right-drawer", require("./components/RightDrawer.vue").default);
+Vue.component("left-drawer", require("./components/LeftDrawer.vue").default);
+Vue.component("priority", require("./components/Priority.vue").default);
+Vue.component("card", require("./components/Card.vue").default);
+Vue.component("user-card", require("./components/UserCard.vue").default);
+Vue.component("division-structure", require("./components/DivisionStructure.vue").default);
+Vue.component("avatars-set", require("./components/AvatarsSet.vue").default);
+Vue.component("dropdown-btn", require("./components/buttons/Dropdown.vue").default);
+Vue.component("stats-card", require("./components/StatsCard.vue").default);
+Vue.component("avatar", require("./components/Avatar.vue").default);
+Vue.component("projects-card", require("./components/projects/Card.vue").default);
+Vue.component("projects-list", require("./components/projects/List.vue").default);
+Vue.component("resume-add-item", require("./components/profile/AddItem.vue").default);
+Vue.component("resume-card", require("./components/profile/ResumeCard.vue").default);
+Vue.component("resume-create", require("./components/profile/ResumeCreate.vue").default);
+Vue.component("projects-card", require("./components/projects/Card.vue").default);
+Vue.component("projects-list", require("./components/projects/List.vue").default);
+Vue.component("projects-create", require("./components/projects/Create.vue").default);
+Vue.component("history", require("./components/History.vue").default);
+Vue.component("messages", require("./components/Messages.vue").default);
+Vue.component("kanban-view", require("./components/Kanban.vue").default);
+Vue.component("factories-vertical-card", require("./components/factories/VerticalCard.vue").default);
+Vue.component("factories-card", require("./components/factories/Card.vue").default);
+Vue.component("factories-product-form", require("./components/factories/ProductForm.vue").default);
+Vue.component("factories-product-table", require("./components/factories/ProductTable.vue").default);
+Vue.component("process-task-add", require("./components/processTask/Add.vue").default);
+Vue.component("process-task-actions", require("./components/processTask/Actions.vue").default);
+Vue.component("process-task-delete", require("./components/processTask/Delete.vue").default);
+Vue.component("process-task-edit", require("./components/processTask/Edit.vue").default);
+Vue.component("process-task-add-form", require("./components/processTask/AddForm.vue").default);
+Vue.component("edit-add-actions", require("./components/division/EditAddActions.vue").default);
+Vue.component("add-employee", require("./components/division/AddEmployee.vue").default);
+Vue.component("edit-record", require("./components/EditRecord.vue").default);
+Vue.component("attachments", require("./components/Attachments.vue").default);
 
 // ************************* REQUESTS ***************************************
 Vue.component("requests-table", () => import("./components/request/Table.vue"));
@@ -326,114 +326,114 @@ Vue.component("update-request-btn", () => import("./components/request/Update.vu
 Vue.component("delete-request-btn", () => import("./components/request/Delete.vue"));
 
 /****************************RESPONSIBILITIES********************************/
-Vue.component("attach-responsibilities-btn", () => import ("./components/responsibility/AttachResponsibilityBtn.vue"));
-Vue.component("add-responsibility", () => import ("./components/responsibility/AddResponsibility.vue"));
-Vue.component("edit-responsibility", () => import ("./components/responsibility/EditResponsibility.vue"));
-Vue.component("delete-responsibility", () => import ("./components/responsibility/DeleteResponsibility.vue"));
-Vue.component("add-responsibility-description", () => import ("./components/responsibility/AddResponsibilityDescription.vue"));
-Vue.component("edit-responsibility-description", () => import ("./components/responsibility/EditResponsibilityDescription.vue"));
-Vue.component("delete-responsibility-description", () => import ("./components/responsibility/DeleteResponsibilityDescription.vue"));
-Vue.component("add-division", () => import ("./components/division/AddDivision.vue"));
-Vue.component("delete-record", () => import ("./components/DeleteRecord.vue"));
+Vue.component("attach-responsibilities-btn", require("./components/responsibility/AttachResponsibilityBtn.vue").default);
+Vue.component("add-responsibility", require("./components/responsibility/AddResponsibility.vue").default);
+Vue.component("edit-responsibility", require("./components/responsibility/EditResponsibility.vue").default);
+Vue.component("delete-responsibility", require("./components/responsibility/DeleteResponsibility.vue").default);
+Vue.component("add-responsibility-description", require("./components/responsibility/AddResponsibilityDescription.vue").default);
+Vue.component("edit-responsibility-description", require("./components/responsibility/EditResponsibilityDescription.vue").default);
+Vue.component("delete-responsibility-description", require("./components/responsibility/DeleteResponsibilityDescription.vue").default);
+Vue.component("add-division", require("./components/division/AddDivision.vue").default);
+Vue.component("delete-record", require("./components/DeleteRecord.vue").default);
 /****************************VIEWS********************************/
-Vue.component("views-login", () => import ("./components/views/Login.vue"));
-Vue.component("views-password-email", () => import ("./components/views/PasswordEmail.vue"));
-Vue.component("views-password-reset", () => import ("./components/views/PasswordReset.vue"));
-Vue.component("factories", () => import ("./components/views/factories/Index.vue"));
-Vue.component("views-factories-create", () => import ("./components/views/factories/Create.vue"));
-Vue.component("views-factories-show", () => import ("./components/views/factories/Show.vue"));
+Vue.component("views-login", require("./components/views/Login.vue").default);
+Vue.component("views-password-email", require("./components/views/PasswordEmail.vue").default);
+Vue.component("views-password-reset", require("./components/views/PasswordReset.vue").default);
+Vue.component("factories", require("./components/views/factories/Index.vue").default);
+Vue.component("views-factories-create", require("./components/views/factories/Create.vue").default);
+Vue.component("views-factories-show", require("./components/views/factories/Show.vue").default);
 
-Vue.component("tasks-view", () => import ("./components/views/Tasks.vue"));
-Vue.component("profile-banner", () => import ("./components/profile/Banner.vue"));
-Vue.component("products-view", () => import ("./components/views/Products.vue"));
-Vue.component("product", () => import ("./components/Product.vue"));
-Vue.component("products-create-view", () => import ("./components/views/products/Create.vue"));
-Vue.component("projects-view", () => import ("./components/views/Projects.vue"));
-Vue.component("bp", () => import ("./components/views/BP.vue"));
-Vue.component("users-show", () => import ("./components/views/users/Show.vue"));
-Vue.component("profile-resume", () => import ("./components/views/ProfileResumeShow.vue"));
-Vue.component("views-profile-tasks", () => import ("./components/views/profile/Tasks.vue"));
-Vue.component("tasks-group-view", () => import ("./components/tasks/GroupTasks.vue"));
-Vue.component("views-users-set-tasks", () => import ("./components/views/users/SetTasks.vue"));
+Vue.component("tasks-view", require("./components/views/Tasks.vue").default);
+Vue.component("profile-banner", require("./components/profile/Banner.vue").default);
+Vue.component("products-view", require("./components/views/Products.vue").default);
+Vue.component("product", require("./components/Product.vue").default);
+Vue.component("products-create-view", require("./components/views/products/Create.vue").default);
+Vue.component("projects-view", require("./components/views/Projects.vue").default);
+Vue.component("bp", require("./components/views/BP.vue").default);
+Vue.component("users-show", require("./components/views/users/Show.vue").default);
+Vue.component("profile-resume", require("./components/views/ProfileResumeShow.vue").default);
+Vue.component("views-profile-tasks", require("./components/views/profile/Tasks.vue").default);
+Vue.component("tasks-group-view", require("./components/tasks/GroupTasks.vue").default);
+Vue.component("views-users-set-tasks", require("./components/views/users/SetTasks.vue").default);
 
-Vue.component("positions", () => import ("./components/Positions.vue"));
-Vue.component("position-card", () => import ("./components/positions/Card.vue"));
-Vue.component("add-position", () => import ("./components/positions/AddPosition.vue"));
+Vue.component("positions", require("./components/Positions.vue").default);
+Vue.component("position-card", require("./components/positions/Card.vue").default);
+Vue.component("add-position", require("./components/positions/AddPosition.vue").default);
 
-Vue.component("user-card-vertical", () => import ("./components/profile/UserCard.vue"));
+Vue.component("user-card-vertical", require("./components/profile/UserCard.vue").default);
 
-Vue.component("user-card-horizontal", () => import ("./components/profile/UserCardHorizontal.vue"));
+Vue.component("user-card-horizontal", require("./components/profile/UserCardHorizontal.vue").default);
 
-Vue.component("human-resources-view", () => import ("./components/views/HumanResources.vue"));
+Vue.component("human-resources-view", require("./components/views/HumanResources.vue").default);
 
-Vue.component("views-users-index", () => import ("./components/views/users/Index.vue"));
-Vue.component("views-hr-users", () => import ("./components/views/hr/Users.vue"));
+Vue.component("views-users-index", require("./components/views/users/Index.vue").default);
+Vue.component("views-hr-users", require("./components/views/hr/Users.vue").default);
 
-Vue.component("resumes-view", () => import ("./components/views/Resume.vue"));
+Vue.component("resumes-view", require("./components/views/Resume.vue").default);
 
-Vue.component("resume-show", () => import ("./components/views/ResumeShow.vue"));
+Vue.component("resume-show", require("./components/views/ResumeShow.vue").default);
 
-Vue.component("human-resources-resumes", () => import ("./components/views/HumanResourcesResumes.vue"));
+Vue.component("human-resources-resumes", require("./components/views/HumanResourcesResumes.vue").default);
 
-Vue.component("kanban-view", () => import ("./components/Kanban.vue"));
-Vue.component("resumes-head-view", () => import ("./components/views/HeadResume.vue"));
+Vue.component("kanban-view", require("./components/Kanban.vue").default);
+Vue.component("resumes-head-view", require("./components/views/HeadResume.vue").default);
 
-Vue.component("resume-index-card", () => import ("./components/ResumeIndexCard.vue"));
-Vue.component("views-division", () => import ("./components/views/Division.vue"));
-Vue.component("chats-view", () => import ("./components/views/Chats.vue"));
+Vue.component("resume-index-card", require("./components/ResumeIndexCard.vue").default);
+Vue.component("views-division", require("./components/views/Division.vue").default);
+Vue.component("chats-view", require("./components/views/Chats.vue").default);
 
-Vue.component("products-admin-view", () => import ("./components/ProductsAdmin"));
+Vue.component("products-admin-view", require("./components/ProductsAdmin"));
 
-Vue.component("edit-product-forms", () => import ("./components/views/products/Edit.vue"));
-Vue.component("file-card", () => import ("./components/files/Card.vue"));
-Vue.component("file-cards", () => import ("./components/files/Cards.vue"));
+Vue.component("edit-product-forms", require("./components/views/products/Edit.vue").default);
+Vue.component("file-card", require("./components/files/Card.vue").default);
+Vue.component("file-cards", require("./components/files/Cards.vue").default);
 
-Vue.component("file-add", () => import ("./components/files/Add.vue"));
-Vue.component("add-field", () => import ("./components/files/AddField.vue"));
-Vue.component("bp-forms", () => import ("./components/BP/BPForms.vue"));
-Vue.component("bp-form", () => import ("./components/BP/BPForm.vue"));
-Vue.component("division-tags", () => import ("./components/division/Tags.vue"));
-Vue.component("views-timesets-index", () => import ("./components/views/timesets/Index.vue"));
-Vue.component("views-timesets-index-new", () => import ("./components/views/timesets/IndexNew.vue"));
-Vue.component("views-users-tasks", () => import ("./components/views/users/Tasks.vue"));
-Vue.component("views-entries-add", () => import ("./components/views/entries/Add.vue"));
-Vue.component("views-entries-index", () => import ("./components/views/entries/Index.vue"));
-Vue.component("views-entries-totals", () => import ("./components/views/entries/Totals.vue"));
-Vue.component("views-facilities-index", () => import ("./components/views/users/Facilities.vue"));
+Vue.component("file-add", require("./components/files/Add.vue").default);
+Vue.component("add-field", require("./components/files/AddField.vue").default);
+Vue.component("bp-forms", require("./components/BP/BPForms.vue").default);
+Vue.component("bp-form", require("./components/BP/BPForm.vue").default);
+Vue.component("division-tags", require("./components/division/Tags.vue").default);
+// Vue.component("views-timesets-index", require("./components/views/timesets/Index.vue").default);
+Vue.component("views-timesets-index-new", require("./components/views/timesets/IndexNew.vue").default);
+Vue.component("views-users-tasks", require("./components/views/users/Tasks.vue").default);
+Vue.component("views-entries-add", require("./components/views/entries/Add.vue").default);
+Vue.component("views-entries-index", require("./components/views/entries/Index.vue").default);
+Vue.component("views-entries-totals", require("./components/views/entries/Totals.vue").default);
+Vue.component("views-facilities-index", require("./components/views/users/Facilities.vue").default);
 
 /****************************REQUESTS*************************************************************/
 Vue.component("views-requests-index", () => import("./components/views/request/Index.vue"));
 
 /****************************TASKS********************************/
-Vue.component("tasks-priority", () => import ("./components/tasks/Priority.vue"));
-Vue.component("tasks-tags", () => import ("./components/tasks/Tags.vue"));
-Vue.component("tasks-participants", () => import ("./components/tasks/Participants.vue"));
-Vue.component("tasks-planned-time", () => import ("./components/tasks/PlannedTime.vue"));
-Vue.component("tasks-deadline", () => import ("./components/tasks/Deadline.vue"));
-Vue.component("task-description", () => import ("./components/tasks/Description.vue"));
-Vue.component("task-title", () => import ("./components/tasks/Title.vue"));
-Vue.component("tasks-add", () => import ("./components/tasks/Add.vue"));
-Vue.component("tasks-table", () => import ("./components/tasks/Table.vue"));
-Vue.component("tasks-calendar", () => import ("./components/tasks/Calendar.vue"));
-Vue.component("tasks-watchers", () => import ("./components/tasks/Watchers.vue"));
-Vue.component("tasks", () => import ("./components/Tasks.vue"));
-Vue.component("task", () => import ("./components/Task.vue"));
-Vue.component("form-field", () => import ("./components/form/FormField.vue"));
-Vue.component("dynamic-form", () => import ("./components/form/Form.vue"));
-Vue.component("poll-create", () => import ("./components/tasks/PollCreate.vue"));
-Vue.component("poll-display", () => import ("./components/tasks/PollDisplay.vue"));
-Vue.component("poll-form", () => import ("./components/tasks/PollForm.vue"));
-Vue.component("task-control-buttons", () => import ("./components/tasks/ControlButtons.vue"));
-Vue.component("task-repeat", () => import("./components/tasks/Repeat.vue"));
+Vue.component("tasks-priority", require("./components/tasks/Priority.vue").default);
+Vue.component("tasks-tags", require("./components/tasks/Tags.vue").default);
+Vue.component("tasks-participants", require("./components/tasks/Participants.vue").default);
+Vue.component("tasks-planned-time", require("./components/tasks/PlannedTime.vue").default);
+Vue.component("tasks-deadline", require("./components/tasks/Deadline.vue").default);
+Vue.component("task-description", require("./components/tasks/Description.vue").default);
+Vue.component("task-title", require("./components/tasks/Title.vue").default);
+Vue.component("tasks-add", require("./components/tasks/Add.vue").default);
+Vue.component("tasks-table", require("./components/tasks/Table.vue").default);
+Vue.component("tasks-calendar", require("./components/tasks/Calendar.vue").default);
+Vue.component("tasks-watchers", require("./components/tasks/Watchers.vue").default);
+Vue.component("tasks", require("./components/Tasks.vue").default);
+Vue.component("task", require("./components/Task.vue").default);
+Vue.component("form-field", require("./components/form/FormField.vue").default);
+Vue.component("dynamic-form", require("./components/form/Form.vue").default);
+Vue.component("poll-create", require("./components/tasks/PollCreate.vue").default);
+Vue.component("poll-display", require("./components/tasks/PollDisplay.vue").default);
+Vue.component("poll-form", require("./components/tasks/PollForm.vue").default);
+Vue.component("task-control-buttons", require("./components/tasks/ControlButtons.vue").default);
+Vue.component("task-repeat", require("./components/tasks/Repeat.vue").default);
 
 /****************************HELPERS********************************/
-Vue.component("helpers-offset", () => import ("./components/helpers/Offset.vue"));
+Vue.component("helpers-offset", require("./components/helpers/Offset.vue").default);
 /***************************DYNAMIC FIELDS*******************************/
-Vue.component("picker", () => import ("./components/form/Picker.vue"));
-Vue.component("user-selector", () => import ("./components/form/UserSelector.vue"));
-Vue.component("many-to-many-select", () => import ("./components/form/ManyToManySelect.vue"));
-Vue.component("autocomplete", () => import ("./components/form/Autocomplete.vue"));
-Vue.component("combobox", () => import ("./components/form/Combobox.vue"));
+Vue.component("picker", require("./components/form/Picker.vue").default);
+Vue.component("user-selector", require("./components/form/UserSelector.vue").default);
+Vue.component("many-to-many-select", require("./components/form/ManyToManySelect.vue").default);
+Vue.component("autocomplete", require("./components/form/Autocomplete.vue").default);
+Vue.component("combobox", require("./components/form/Combobox.vue").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
