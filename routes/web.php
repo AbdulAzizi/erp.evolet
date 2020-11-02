@@ -109,6 +109,8 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/users-tasks', 'UserController@tasks')->name('users.tasks');
     Route::get('/tasks/{id}/downloadAttachments', 'TaskController@downloadAttachments')->name('api.downloadAttachemnts');
+
+    Route::get('/requests', 'RequestController@index')->name('requests.index');
 });
 
 Route::prefix('api')->group(function () {
@@ -182,4 +184,8 @@ Route::prefix('api')->group(function () {
     Route::post('/facilities/{id}', 'FacilityController@edit')->name('facilities.edit');
     Route::delete('/facilities/{id}', 'FacilityController@delete')->name('facilities.delete');
     Route::get('/entries', 'EntryController@getEntries')->name('entries.getEntries');
+
+    Route::post('/requests', 'RequestController@store')->name('requests.create');
+    Route::put('/requests/{id}', 'RequestController@store')->name('requests.store');
+    Route::delete('/requests/{id}', 'RequestController@delete')->name('requests.delete');
 });

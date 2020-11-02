@@ -137,7 +137,7 @@ export default {
                     this.planned_time = resp.data;
                     this.dialog = false;
                     this.$refs.form.reset();
-                    Event.fire("notify", ["Временя на задачу успешно изменено"]);
+                    Event.fire("notify", ["Время на задачу успешно изменено"]);
                 });
         },
         toMilliseconds(days, hours, minutes) {

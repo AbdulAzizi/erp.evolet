@@ -28,6 +28,17 @@
       </v-tooltip>
     </v-toolbar-items>
 
+     <template>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn icon v-on="on" :href="appPath('requests')">
+            <v-icon color="grey darken-1">mdi-newspaper</v-icon>
+          </v-btn>
+        </template>
+        <span>Заявки</span>
+      </v-tooltip>
+     </template>
+
     <template>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
