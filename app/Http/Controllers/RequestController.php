@@ -2,17 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Division;
 use App\Parameter;
 use Illuminate\Http\Request;
 use App\Request as UserRequest;
 
 class RequestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $requests = UserRequest::where('user_id', auth()->user()->id)->with('parameters')->get();
+        
+        return view('request.index');
+    }
 
-        return view('request.index', compact('requests'));
+    public function getRequests(Request $request) {
+        if($request->isHeadOfDivision) {
+            $users = [];
+            $division = Division::find(auth()->user()->division_id);
+            foreach($division->users as $user) {
+                $users[] = $user->id;
+            }
+            $requests = UserRequest::whereIn('user_id', $users)->with('parameters', 'user')->get();
+
+            return $requests;
+        } else {
+
+           $requests = UserRequest::where('user_id', auth()->user()->id)->with('parameters', 'user')->get();
+
+           return $requests;
+        }
     }
 
     public function store(Request $request, $id = null)
@@ -22,7 +40,8 @@ class RequestController extends Controller
                 'user_id' => auth()->user()->id,
                 'type' => $request->type,
                 'description' => $request->description,
-                'status' => 0 // 0 => На рассмотрении, 1 => Одобрено, 2 => Отклонено
+                'status' => 0, // 0 => На рассмотрении, 1 => Одобрено, 2 => Отклонено
+                'verified' => auth()->user()->division->head_id == auth()->user()->id ? 1 : 0
             ]);
     
             $this->createParameter($userRequest->id, $request->values);
@@ -67,6 +86,16 @@ class RequestController extends Controller
         }
 
         $userRequest->delete();
+    }
+
+    public function verify($id) {
+        $userRequest = UserRequest::find($id);
+
+        $userRequest->verify = 1;
+
+        $userRequest->save();
+
+        return $userRequest->verify;
     }
 
     public function createParameter($requestId, $values)

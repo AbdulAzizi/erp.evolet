@@ -15,44 +15,51 @@
 
 <script>
 export default {
-  props: {
-    requests: {
-      required: true
-    }
-  },
   data() {
     return {
-      localRequests: this.requests
+      localRequests: []
     };
   },
+  methods: {
+    loadRequests() {
+      const authID = this.auth.id;
+      const headOfDivisionID = this.auth.division.head_id;
+
+      axios
+        .post("/api/getRequests", {
+           isHeadOfDivision: authID === headOfDivisionID
+        })
+        .then(res => this.localRequests.push(...res.data))
+        .then(err => err.messages);
+    },
+    removeRequest(requestID) {
+      this.localRequests.forEach((item, i) => {
+        if(item.id === requestID) 
+          this.localRequests.splice(i, 1);
+      })
+    }
+  },
   created() {
+    this.loadRequests();
     Event.listen("requestCreated", data => {
       this.localRequests.push(data);
       Event.fire("notify", ["Ваша заявка успешно создана"]);
     });
     Event.listen("requestUpdated", data => {
-      let i = 0;
-      let len = this.localRequests.length;
-
-      for (i; i < len; i++) {
-        let item = this.localRequests[i];
-
-        if (item.id === data.id) this.localRequests.splice(i, 1);
-      }
-      this.localRequests.push(data);
+      this.localRequests.forEach(item => {
+        if(item.id === data.id) {
+          Object.assign(item, data);
+        }
+      })
       Event.fire("notify", ["Заявка успешно обновлена"]);
     });
-    Event.listen("requestRemoved", requestId => {
-      let i = 0;
-      let len = this.localRequests.length;
-
-      for (i; i < len; i++) {
-        let item = this.localRequests[i];
-
-        if (requestId === item.id) this.localRequests.splice(i, 1);
-      }
-      Event.fire("notify", ["Заявка удалена"]);
+    Event.listen("requestRemoved", requestID => {
+     this.removeRequest(requestID)
+     Event.fire("notify", ["Заявка удалена"]);
     });
+    // Event.listen('requestVerified', requestId => {
+
+    // })
   }
 };
 </script>

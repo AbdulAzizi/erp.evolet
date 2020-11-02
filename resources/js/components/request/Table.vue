@@ -1,23 +1,61 @@
 <template>
   <v-row>
-    <v-col cols="4" v-for="item in localRequests" :key="item.id">
+    <v-col class="pb-0" cols="4" v-for="item in localRequests" :key="item.id">
       <v-card flat>
         <v-toolbar flat class="px-6 custom-toolbar">
           <v-toolbar-title class="pa-0 font-weight-bold primary--text">{{ item.type }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <update-request-btn :request="item" />
-          <delete-request-btn :requestId="item.id" />
+          <update-request-btn v-if="auth.id === item.user_id" :request="item" />
+          <delete-request-btn v-if="auth.id === item.user_id" :requestId="item.id" />
+          <v-btn
+          icon
+            color="red lighten-1"
+            dark
+            small
+            depressed
+            v-if="isHead && !item.verified"
+            @click="verify(item.id)"
+          >
+            <v-icon>mdi-close-outline</v-icon>
+          </v-btn>
+          <v-btn
+          icon
+            class="ml-2"
+            color="green lighten-1"
+            dark
+            small
+            depressed
+            v-if="isHead && !item.verified"
+            @click="verify(item.id)"
+          >
+            <v-icon>mdi-check-outline</v-icon>
+          </v-btn>
         </v-toolbar>
-        <v-divider class="mx-5"></v-divider>
+        <v-divider></v-divider>
         <v-card-text class="px-5">
           <div class="d-flex justify-space-between flex-row align-center">
+            <h3 class="font-weight-bold">Сотрудник</h3>
+            <div>
+              <v-avatar size="50">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on:tooltip }">
+                    <img v-on="{ ...tooltip }" :src="thumb(item.user.img) " alt="avatar" />
+                  </template>
+                  <span >{{ item.user.name }} {{ item.user.surname }}</span>
+                </v-tooltip>
+              </v-avatar>
+            </div>
+          </div>
+          <div class="mt-2 d-flex justify-space-between flex-row align-center">
             <h3 class="font-weight-bold">Статус</h3>
-            <v-chip
-              class="font-weight-bold"
-              label
-              small
-              :color="status[item.status].color"
-            >{{ status[item.status].text }}</v-chip>
+            <div>
+              <v-chip
+                class="font-weight-bold"
+                label
+                small
+                :color="status[item.status].color"
+              >{{ status[item.status].text }}</v-chip>
+            </div>
           </div>
           <div
             :class="item.type == 'Оборудования' && item.parameters.length > 2 ? 'd-flex justify-start flex-column mt-2' : 'd-flex justify-space-between flex-row align-center mt-2'"
@@ -95,7 +133,21 @@ export default {
           return "Период";
           break;
       }
+    },
+    verify(requestID) {
+      axios
+        .post(`/api/requests/${requestID}/verify`)
+        .then(res => Event.fire("requestVerified", requestID))
+        .catch(err => console.error(err.message));
     }
+  },
+  computed: {
+    isHead() {
+      return this.auth.id === this.auth.division.head_id;
+    }
+  },
+  created() {
+    console.log(this.localRequests);
   }
 };
 </script>
