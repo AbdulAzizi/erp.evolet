@@ -1,35 +1,39 @@
 <template>
   <v-row>
-    <v-col class="pb-0" cols="4" v-for="item in localRequests" :key="item.id">
+    <v-col cols="4" v-for="item in localRequests" :key="item.id">
       <v-card flat>
         <v-toolbar flat class="px-6 custom-toolbar">
           <v-toolbar-title class="pa-0 font-weight-bold primary--text">{{ item.type }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <update-request-btn v-if="auth.id === item.user_id" :request="item" />
-          <delete-request-btn v-if="auth.id === item.user_id" :requestId="item.id" />
           <v-btn
-          icon
+            icon
             color="red lighten-1"
             dark
             small
             depressed
-            v-if="isHead && !item.verified"
-            @click="verify(item.id)"
+            v-if="isHeadOfDivision(item.user_id) && !item.verified && item.status == 0 || isHead() && item.status == 0"
+            @click="getCurrentRequestID(item.id)"
           >
             <v-icon>mdi-close-outline</v-icon>
           </v-btn>
           <v-btn
-          icon
+            icon
             class="ml-2"
             color="green lighten-1"
             dark
             small
             depressed
-            v-if="isHead && !item.verified"
+            v-if="isHeadOfDivision(item.user_id) && !item.verified && item.status == 0 || isHead() && item.status == 0"
             @click="verify(item.id)"
           >
             <v-icon>mdi-check-outline</v-icon>
           </v-btn>
+          <update-request-btn v-if="auth.id === item.user_id" :request="item" />
+          <delete-request-btn v-if="auth.id === item.user_id" :requestId="item.id" />
+          <v-icon
+            color="green lighten-1"
+            v-if="isHeadOfDivision(item.user_id) && item.verified && !isHead()"
+          >mdi-check-all</v-icon>
         </v-toolbar>
         <v-divider></v-divider>
         <v-card-text class="px-5">
@@ -41,7 +45,7 @@
                   <template v-slot:activator="{ on:tooltip }">
                     <img v-on="{ ...tooltip }" :src="thumb(item.user.img) " alt="avatar" />
                   </template>
-                  <span >{{ item.user.name }} {{ item.user.surname }}</span>
+                  <span>{{ item.user.name }} {{ item.user.surname }}</span>
                 </v-tooltip>
               </v-avatar>
             </div>
@@ -85,12 +89,52 @@
               right
               @click="more = !more"
             >
-              <v-icon>mdi-chevron-down</v-icon>
+              <v-icon v-if="!more">mdi-chevron-down</v-icon>
+              <v-icon v-if="more">mdi-chevron-up</v-icon>
+            </v-btn>
+          </div>
+          <div class="mt-2 d-flex justify-start flex-column" v-if="item.status == 2">
+            <h3 class="font-weight-bold">Сообщение</h3>
+            <p :class="msgMore ? 'ma-0 pt-1' : 'text-truncate ma-0 pt-1'">{{ item.message }}</p>
+            <v-btn
+              icon
+              small
+              v-if="item.message.length >= 60"
+              absolute
+              right
+              @click="msgMore = !msgMore"
+            >
+              <v-icon v-if="!msgMore">mdi-chevron-down</v-icon>
+              <v-icon v-if="msgMore">mdi-chevron-up</v-icon>
             </v-btn>
           </div>
         </v-card-text>
       </v-card>
     </v-col>
+    <v-dialog v-model="dialog" width="500" persistent>
+      <v-toolbar color="primary" dense dark flat>
+        <v-toolbar-title class="font-weight-bold">Причина отказа</v-toolbar-title>
+      </v-toolbar>
+      <v-card tile>
+        <v-form ref="messageForm">
+          <v-card-text>
+            <v-textarea
+              v-model="message"
+              placeholder="Напишите причину отказа"
+              filled
+              rounded
+              hide-details="auto"
+              :rules="required"
+            ></v-textarea>
+          </v-card-text>
+        </v-form>
+        <v-card-actions class="px-5 pb-3">
+          <v-spacer />
+          <v-btn text class="font-weight-bold" color="primary" @click="cancel()">Отмена</v-btn>
+          <v-btn depressed class="font-weight-bold" color="primary" @click="decline()">Отправить</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -103,9 +147,14 @@ export default {
   },
   data() {
     return {
+      dialog: false,
+      msgMore: false,
+      message: null,
+      currentRequestID: null,
       localRequests: this.requests,
       headers: ["Тип", "Статус", "Действия"],
       more: false,
+      required: [v => !!v || "Форма должна быть заполнена"],
       status: [
         {
           text: "На рассмотрении",
@@ -115,7 +164,7 @@ export default {
           text: "Одобрено",
           color: "green"
         },
-        { text: "Отклонено", color: "red" }
+        { text: "Отклонено", color: "red lighten-1" }
       ]
     };
   },
@@ -136,19 +185,51 @@ export default {
     },
     verify(requestID) {
       axios
-        .post(`/api/requests/${requestID}/verify`)
-        .then(res => Event.fire("requestVerified", requestID))
+        .post(`/api/requests/${requestID}/verify`, {
+          isHead: this.isHead()
+        })
+        .then(res => Event.fire("requestVerified", res.data))
         .catch(err => console.error(err.message));
-    }
-  },
-  computed: {
+    },
+    decline() {
+      const FORM = this.$refs.messageForm;
+      if (FORM.validate())
+        axios
+          .post(`/api/requests/${this.currentRequestID}/changeStatus`, {
+            status: 2,
+            message: this.message
+          })
+          .then(res => {
+            Event.fire("requestStatusChanged", res.data);
+            this.dialog = false;
+            FORM.reset();
+          })
+          .catch(err => this.cancel());
+    },
+    cancel() {
+      const FORM = this.$refs.messageForm;
+      FORM.reset();
+      this.dialog = false;
+    },
+    isHeadOfDivision(userID) {
+      return (
+        this.auth.id === this.auth.division.head_id && this.auth.id !== userID
+      );
+    },
     isHead() {
-      return this.auth.id === this.auth.division.head_id;
+      return (
+        (this.auth.id === this.auth.division.head_id &&
+          this.auth.positions.some(el => el.name === "ОУПС")) ||
+        (this.auth.id === this.auth.division.head_id &&
+          this.auth.positions.some(el => el.name === "РВЗ"))
+      );
+    },
+    getCurrentRequestID(requestID) {
+      this.currentRequestID = requestID;
+      this.dialog = true;
     }
   },
-  created() {
-    console.log(this.localRequests);
-  }
+  created() {}
 };
 </script>
 

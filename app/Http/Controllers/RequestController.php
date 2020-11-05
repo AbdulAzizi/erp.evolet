@@ -11,31 +11,40 @@ class RequestController extends Controller
 {
     public function index(Request $request)
     {
-        
+
         return view('request.index');
     }
 
-    public function getRequests(Request $request) {
-        if($request->isHeadOfDivision) {
+    public function getRequests(Request $request)
+    {
+        // dd($request->all());
+        if ($request->isHeadOfDivision) {
             $users = [];
             $division = Division::find(auth()->user()->division_id);
-            foreach($division->users as $user) {
+            foreach ($division->users as $user) {
                 $users[] = $user->id;
             }
             $requests = UserRequest::whereIn('user_id', $users)->with('parameters', 'user')->get();
 
             return $requests;
+
+        } else if ($request->isHead) {
+
+            $requests = UserRequest::with('parameters', 'user')->where('status', '!=', 2)->get();
+
+            return $requests;
+
         } else {
 
-           $requests = UserRequest::where('user_id', auth()->user()->id)->with('parameters', 'user')->get();
+            $requests = UserRequest::where('user_id', auth()->user()->id)->with('parameters', 'user')->get();
 
-           return $requests;
+            return $requests;
         }
     }
 
     public function store(Request $request, $id = null)
     {
-        if($request->isMethod('post')) {
+        if ($request->isMethod('post')) {
             $userRequest = UserRequest::create([
                 'user_id' => auth()->user()->id,
                 'type' => $request->type,
@@ -43,13 +52,12 @@ class RequestController extends Controller
                 'status' => 0, // 0 => На рассмотрении, 1 => Одобрено, 2 => Отклонено
                 'verified' => auth()->user()->division->head_id == auth()->user()->id ? 1 : 0
             ]);
-    
-            $this->createParameter($userRequest->id, $request->values);
-    
-            return $userRequest->load('parameters');
 
-        }else if($request->isMethod('put')) {
-            
+            $this->createParameter($userRequest->id, $request->values);
+
+            return $userRequest->load('parameters', 'user');
+        } else if ($request->isMethod('put')) {
+
             $userRequest = UserRequest::find($id);
 
             $userRequest->update([
@@ -59,18 +67,15 @@ class RequestController extends Controller
 
             $parameters = $userRequest->parameters;
 
-            foreach($parameters as $parameter) 
-            {
+            foreach ($parameters as $parameter) {
                 $parameter->delete();
             }
-            
+
             $this->createParameter($userRequest->id, $request->values);
 
             $userRequest->save();
 
-            return $userRequest->load('parameters');
-
-
+            return $userRequest->load('parameters', 'user');
         }
     }
 
@@ -80,22 +85,44 @@ class RequestController extends Controller
 
         $parameters = $userRequest->parameters;
 
-        foreach($parameters as $parameter) 
-        {
+        foreach ($parameters as $parameter) {
             $parameter->delete();
         }
 
         $userRequest->delete();
     }
 
-    public function verify($id) {
+    public function verify(Request $request, $id)
+    {
         $userRequest = UserRequest::find($id);
 
-        $userRequest->verify = 1;
+        if($request->isHeadOfHR) {
+            $userRequest->status = 1;
+        } else {
+            $userRequest->verified = 1;
+        }
+        
+        $userRequest->save();
+
+        $userRequest->load('parameters', 'user');
+        
+        return $userRequest;
+
+    }
+
+    public function changeStatus(Request $request, $id)
+    {
+        $userRequest = UserRequest::find($id);
+
+        $userRequest->status = $request->status;
+
+        $userRequest->message = $request->status == 2 ? $request->message : null;
 
         $userRequest->save();
 
-        return $userRequest->verify;
+        $userRequest->load('parameters', 'user');
+
+        return $userRequest;
     }
 
     public function createParameter($requestId, $values)

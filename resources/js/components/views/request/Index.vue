@@ -2,7 +2,7 @@
   <div>
     <v-card outlined>
       <v-card-text class="d-flex justify-space-between align-center">
-        <h1>Мои Заявки</h1>
+        <h1>Заявки</h1>
         <create-request-btn />
       </v-card-text>
     </v-card>
@@ -22,12 +22,15 @@ export default {
   },
   methods: {
     loadRequests() {
+      console.log(this.auth)
       const authID = this.auth.id;
       const headOfDivisionID = this.auth.division.head_id;
+      const isHead = this.auth.positions.some(el => el.name === 'ОУПС') || this.auth.positions.some(el => el.name === 'РВЗ');
 
       axios
         .post("/api/getRequests", {
-           isHeadOfDivision: authID === headOfDivisionID
+           isHeadOfDivision: authID === headOfDivisionID && !isHead,
+           isHead: isHead && authID === headOfDivisionID
         })
         .then(res => this.localRequests.push(...res.data))
         .then(err => err.messages);
@@ -45,10 +48,10 @@ export default {
       this.localRequests.push(data);
       Event.fire("notify", ["Ваша заявка успешно создана"]);
     });
-    Event.listen("requestUpdated", data => {
+    Event.listen("requestUpdated", request => {
       this.localRequests.forEach(item => {
-        if(item.id === data.id) {
-          Object.assign(item, data);
+        if(item.id === request.id) {
+          Object.assign(item, request);
         }
       })
       Event.fire("notify", ["Заявка успешно обновлена"]);
@@ -57,9 +60,20 @@ export default {
      this.removeRequest(requestID)
      Event.fire("notify", ["Заявка удалена"]);
     });
-    // Event.listen('requestVerified', requestId => {
-
-    // })
+    Event.listen('requestVerified', request => {
+      this.localRequests.forEach(item => {
+        if(item.id === request.id)
+          Object.assign(item, request);
+      });
+      Event.fire("notify", ["Заявка рассмотрена и передана в HR"]);
+    });
+    Event.listen('requestStatusChanged', request => {
+      this.localRequests.forEach(item => {
+        if(item.id === request.id) 
+          Object.assign(item, request)
+      });
+      Event.fire('notify', ["Заявка отклонена"]);
+    })
   }
 };
 </script>
