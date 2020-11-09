@@ -32,7 +32,7 @@
           <delete-request-btn v-if="auth.id === item.user_id" :requestId="item.id" />
           <v-icon
             color="green lighten-1"
-            v-if="isHeadOfDivision(item.user_id) && item.verified && !isHead()"
+            v-if="isHeadOfDivision(item.user_id) && item.status == 0 && item.verified && !isHead()"
           >mdi-check-all</v-icon>
         </v-toolbar>
         <v-divider></v-divider>
@@ -78,7 +78,7 @@
             </div>
           </div>
 
-          <div class="mt-2 d-flex justify-start flex-column">
+          <div v-if="item.description" class="mt-2 d-flex justify-start flex-column">
             <h3 class="font-weight-bold">Описание</h3>
             <p :class="more ? 'ma-0 pt-1' : 'text-truncate ma-0 pt-1'">{{ item.description }}</p>
             <v-btn
@@ -93,7 +93,7 @@
               <v-icon v-if="more">mdi-chevron-up</v-icon>
             </v-btn>
           </div>
-          <div class="mt-2 d-flex justify-start flex-column" v-if="item.status == 2">
+          <div class="mt-2 d-flex justify-start flex-column" v-if="item.status == 2 && item.message">
             <h3 class="font-weight-bold">Сообщение</h3>
             <p :class="msgMore ? 'ma-0 pt-1' : 'text-truncate ma-0 pt-1'">{{ item.message }}</p>
             <v-btn
