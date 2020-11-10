@@ -213,7 +213,7 @@ export default {
     },
     isHeadOfDivision(userID) {
       return (
-        this.auth.id === this.auth.division.head_id && this.auth.id !== userID
+        this.auth.id === this.auth.division.head_id && this.auth.id !== userID && !this.isHead()
       );
     },
     isHead() {
@@ -228,8 +228,7 @@ export default {
       this.currentRequestID = requestID;
       this.dialog = true;
     }
-  },
-  created() {}
+  }
 };
 </script>
 

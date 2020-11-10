@@ -41,9 +41,16 @@
 
                 <v-list-item :href="item.url">
                     <v-list-item-action v-if="item.icon">
+                        <v-badge
+                        v-if="item.icon == 'mdi-newspaper' && userRequests > 0"
+                        bordered
+                        color="primary"
+                        overlap
+                        :content="userRequests">
                         <v-icon>{{ item.icon }}</v-icon>
+                        </v-badge>
+                        <v-icon v-else>{{ item.icon }}</v-icon>
                     </v-list-item-action>
-
                     <v-list-item-content>
                         <v-list-item-title>{{ item.text }}</v-list-item-title>
                     </v-list-item-content>
@@ -186,6 +193,14 @@ export default {
                     url: "/users-tasks",
                     positions: ["РВЗ"],
                     headOf: ["ОУПС"],
+                    divisions: []
+                },
+                 {
+                    icon: "mdi-newspaper",
+                    text: "Заявки сотрудников",
+                    url: "/requests?employee=true",
+                    positions: ["РВЗ"],
+                    headOf: ["*"],
                     divisions: []
                 }
             ]

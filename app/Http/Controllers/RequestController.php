@@ -24,13 +24,13 @@ class RequestController extends Controller
             foreach ($division->users as $user) {
                 $users[] = $user->id;
             }
-            $requests = UserRequest::whereIn('user_id', $users)->with('parameters', 'user')->get();
+            $requests = UserRequest::whereIn('user_id', $users)->where('user_id', '!=', auth()->user()->id)->with('parameters', 'user')->get();
 
             return $requests;
 
         } else if ($request->isHead) {
 
-            $requests = UserRequest::with('parameters', 'user')->where('status', '!=', 2)->get();
+            $requests = UserRequest::with('parameters', 'user')->where('user_id', '!=', auth()->user()->id)->where('verified', true)->get();
 
             return $requests;
 
@@ -96,7 +96,7 @@ class RequestController extends Controller
     {
         $userRequest = UserRequest::find($id);
 
-        if($request->isHeadOfHR) {
+        if($request->isHead) {
             $userRequest->status = 1;
         } else {
             $userRequest->verified = 1;
