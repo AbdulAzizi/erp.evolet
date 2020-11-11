@@ -3,7 +3,7 @@
     <v-card outlined>
       <v-card-text class="d-flex justify-space-between align-center">
         <h1>Заявки</h1>
-        <create-request-btn v-if="!employee" />
+        <create-request-btn v-if="!headView" />
       </v-card-text>
     </v-card>
     <requests-table :requests="localRequests" v-if="localRequests.length > 0" />
@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       localRequests: [],
-      employee: window.location.search
+      headView: window.location.search.indexOf('employer') !== -1
     };
   },
   methods: {
@@ -29,8 +29,8 @@ export default {
 
       axios
         .post("/api/getRequests", {
-           isHeadOfDivision: authID === headOfDivisionID && !isHead && !!window.location.search,
-           isHead: isHead && authID === headOfDivisionID && !!window.location.search
+           isHeadOfDivision: authID === headOfDivisionID && !isHead && !!this.headView,
+           isHead: isHead && authID === headOfDivisionID && !!this.headView
         })
         .then(res => this.localRequests.push(...res.data))
         .then(err => err.messages);

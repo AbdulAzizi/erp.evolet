@@ -57,6 +57,7 @@
                 class="font-weight-bold"
                 label
                 small
+                dark
                 :color="status[item.status].color"
               >{{ status[item.status].text }}</v-chip>
             </div>
