@@ -229,6 +229,14 @@ export default {
       this.currentRequestID = requestID;
       this.dialog = true;
     }
+  },
+  created() {
+    Event.listen("searchRequest", val => {
+      this.localRequests = this.requests.filter(item => {
+         if (new RegExp(val, "gi").test(item.user.name)) return true;
+         if (new RegExp(val, "gi").test(item.user.surname)) return true;
+       });
+    })
   }
 };
 </script>

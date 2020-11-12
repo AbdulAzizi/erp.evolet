@@ -17,7 +17,7 @@ class RequestController extends Controller
 
     public function getRequests(Request $request)
     {
-        // dd($request->all());
+        
         if ($request->isHeadOfDivision) {
             $users = [];
             $division = Division::find(auth()->user()->division_id);
