@@ -234,9 +234,9 @@ export default {
             ],
             links: [
                 {
-                    title: "Задачи",
-                    path: `/users/${this.user.id}`,
-                    icon: "mdi-calendar-check"
+                    title: "Резюме",
+                    path: `/users/${this.user.id}/cv`,
+                    icon: "mdi-account-card-details"
                 },
                 {
                     title: "ДИ",
@@ -249,17 +249,7 @@ export default {
                     icon: "mdi-clock-fast"
                 },
                 {
-                    title: "Резюме",
-                    path: `/users/${this.user.id}/cv`,
-                    icon: "mdi-account-card-details"
-                },
-                {
-                    title: "ПЗ",
-                    path: `/users/${this.user.id}/setTasks`,
-                    icon: "mdi-calendar"
-                },
-                {
-                    title: "Турникет",
+                    title: "Итоги",
                     path: `/users/${this.user.id}/entries`,
                     icon: "mdi-door-open"
                 },
@@ -267,7 +257,17 @@ export default {
                     title: "Оборудования",
                     path: `/users/${this.user.id}/facilities`,
                     icon: "mdi-desktop-classic"
-                }
+                },
+                {
+                    title: "Задачи",
+                    path: `/users/${this.user.id}`,
+                    icon: "mdi-calendar-check"
+                },
+                {
+                    title: "ПЗ",
+                    path: `/users/${this.user.id}/setTasks`,
+                    icon: "mdi-calendar"
+                },
             ],
             url: window.location.pathname
         };
