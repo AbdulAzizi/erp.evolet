@@ -9,8 +9,8 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 am4core.useTheme(am4themes_animated);
 
 export default {
-    props:{
-        data:{
+    props: {
+        data: {
             required: true
         }
     },
@@ -23,6 +23,12 @@ export default {
         let series = chart.series.push(new am4charts.PieSeries3D());
         series.dataFields.value = "value";
         series.dataFields.category = "text";
+        this.chart = chart;
+    },
+    beforeDestroy() {
+        if (this.chart) {
+            this.chart.dispose();
+        }
     }
 };
 </script>
