@@ -319,6 +319,12 @@ Vue.component("add-employee", require("./components/division/AddEmployee.vue").d
 Vue.component("edit-record", require("./components/EditRecord.vue").default);
 Vue.component("attachments", require("./components/Attachments.vue").default);
 
+// ************************* REQUESTS ***************************************
+Vue.component("requests-table", () => import("./components/request/Table.vue"));
+Vue.component("create-request-btn", () => import("./components/request/Create"));
+Vue.component("update-request-btn", () => import("./components/request/Update.vue"));
+Vue.component("delete-request-btn", () => import("./components/request/Delete.vue"));
+
 /****************************RESPONSIBILITIES********************************/
 Vue.component("attach-responsibilities-btn", require("./components/responsibility/AttachResponsibilityBtn.vue").default);
 Vue.component("add-responsibility", require("./components/responsibility/AddResponsibility.vue").default);
@@ -394,6 +400,9 @@ Vue.component("views-entries-add", require("./components/views/entries/Add.vue")
 Vue.component("views-entries-index", require("./components/views/entries/Index.vue").default);
 Vue.component("views-entries-totals", require("./components/views/entries/Totals.vue").default);
 Vue.component("views-facilities-index", require("./components/views/users/Facilities.vue").default);
+
+/****************************REQUESTS*************************************************************/
+Vue.component("views-requests-index", () => import("./components/views/request/Index.vue"));
 
 /****************************TASKS********************************/
 Vue.component("tasks-priority", require("./components/tasks/Priority.vue").default);

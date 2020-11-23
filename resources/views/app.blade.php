@@ -52,7 +52,8 @@
             'asset_path' => asset(''),
             'auth'       => Auth::user(),
             'alerts'    => session()->get('alerts'),
-            'currentTask' => isset($currentTask) ? $currentTask : null
+            'currentTask' => isset($currentTask) ? $currentTask : null,
+            'userRequests' => isset($userRequests) ? $userRequests : null
         ]); !!}
 	</script>
 
