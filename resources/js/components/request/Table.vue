@@ -1,144 +1,58 @@
 <template>
-  <v-row>
-    <v-col cols="4" v-for="item in localRequests" :key="item.id">
-      <v-card flat>
-        <v-toolbar flat class="px-6 custom-toolbar">
-          <v-toolbar-title class="pa-0 font-weight-bold primary--text">{{ item.type }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn
-            icon
-            color="red lighten-1"
-            dark
-            small
-            depressed
-            v-if="isHeadOfDivision(item.user_id) && !item.verified && item.status == 0 || isHead() && item.status == 0"
-            @click="getCurrentRequestID(item.id)"
+  <div class="my-3">
+    <v-simple-table dense>
+      <template v-slot:default>
+        <thead>
+          <tr>
+            <th v-for="(header, i) in headers" :key="i">{{header}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(request, i) in localRequests"
+            :key="i"
+            @click="displayRequest(request)"
+            style="cursor: pointer"
           >
-            <v-icon>mdi-close-outline</v-icon>
-          </v-btn>
-          <v-btn
-            icon
-            class="ml-2"
-            color="green lighten-1"
-            dark
-            small
-            depressed
-            v-if="isHeadOfDivision(item.user_id) && !item.verified && item.status == 0 || isHead() && item.status == 0"
-            @click="verify(item.id)"
-          >
-            <v-icon>mdi-check-outline</v-icon>
-          </v-btn>
-          <update-request-btn v-if="auth.id === item.user_id" :request="item" />
-          <delete-request-btn v-if="auth.id === item.user_id" :requestId="item.id" />
-          <v-icon
-            color="green lighten-1"
-            v-if="isHeadOfDivision(item.user_id) && item.status == 0 && item.verified && !isHead()"
-          >mdi-check-all</v-icon>
-        </v-toolbar>
-        <v-divider></v-divider>
-        <v-card-text class="px-5">
-          <div class="d-flex justify-space-between flex-row align-center">
-            <h3 class="font-weight-bold">Сотрудник</h3>
-            <div>
-              <v-avatar size="50">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on:tooltip }">
-                    <img v-on="{ ...tooltip }" :src="thumb(item.user.img) " alt="avatar" />
-                  </template>
-                  <span>{{ item.user.name }} {{ item.user.surname }}</span>
-                </v-tooltip>
-              </v-avatar>
-            </div>
-          </div>
-          <div class="mt-2 d-flex justify-space-between flex-row align-center">
-            <h3 class="font-weight-bold">Статус</h3>
-            <div>
+            <td>{{request.type}}</td>
+            <td>
+              <div v-for="(parameter, j) in request.parameters" :key="`p-${j}`">{{parameter.value}}</div>
+            </td>
+            <td>
+              <div class="py-1">
+                <v-avatar size="30">
+                  <img :src="thumb(request.user.img) " alt="avatar" />
+                </v-avatar>
+                <span class="pl-1">{{ request.user.name }} {{ request.user.surname }}</span>
+              </div>
+            </td>
+            <td>
+              <p style="max-width: 150px" class="text-truncate mb-0">{{request.description}}</p>
+            </td>
+            <td>
               <v-chip
+                small
+                dark
+                label
                 class="font-weight-bold"
-                label
-                small
-                dark
-                :color="status[item.status].color"
-              >{{ status[item.status].text }}</v-chip>
-            </div>
-          </div>
-          <div
-            :class="item.type == 'Оборудования' && item.parameters.length > 2 ? 'd-flex justify-start flex-column mt-2' : 'd-flex justify-space-between flex-row align-center mt-2'"
-          >
-            <h3 class="font-weight-bold">{{ parameterText(item.type) }}</h3>
-            <div>
-              <v-chip
-                small
-                :class="item.parameters.length > 2 ? 'mr-1 mt-1 font-weight-bold' : 'ml-1 mt-1 font-weight-bold'"
-                dark
-                label
-                color="primary"
-                v-for="(parameter, i) in item.parameters"
-                :key="`param-${i}`"
-              >{{ parameter.value }}</v-chip>
-            </div>
-          </div>
-
-          <div v-if="item.description" class="mt-2 d-flex justify-start flex-column">
-            <h3 class="font-weight-bold">Описание</h3>
-            <p :class="more ? 'ma-0 pt-1' : 'text-truncate ma-0 pt-1'">{{ item.description }}</p>
-            <v-btn
-              icon
-              small
-              v-if="item.description.length >= 60"
-              absolute
-              right
-              @click="more = !more"
-            >
-              <v-icon v-if="!more">mdi-chevron-down</v-icon>
-              <v-icon v-if="more">mdi-chevron-up</v-icon>
-            </v-btn>
-          </div>
-          <div class="mt-2 d-flex justify-start flex-column" v-if="item.status == 2 && item.message">
-            <h3 class="font-weight-bold">Сообщение</h3>
-            <p :class="msgMore ? 'ma-0 pt-1' : 'text-truncate ma-0 pt-1'">{{ item.message }}</p>
-            <v-btn
-              icon
-              small
-              v-if="item.message.length >= 60"
-              absolute
-              right
-              @click="msgMore = !msgMore"
-            >
-              <v-icon v-if="!msgMore">mdi-chevron-down</v-icon>
-              <v-icon v-if="msgMore">mdi-chevron-up</v-icon>
-            </v-btn>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-col>
-    <v-dialog v-model="dialog" width="500" persistent>
-      <v-toolbar color="primary" dense dark flat>
-        <v-toolbar-title class="font-weight-bold">Причина отказа</v-toolbar-title>
-      </v-toolbar>
-      <v-card tile>
-        <v-form ref="messageForm">
-          <v-card-text>
-            <v-textarea
-              v-model="message"
-              placeholder="Напишите причину отказа"
-              filled
-              rounded
-              hide-details="auto"
-              :rules="required"
-            ></v-textarea>
-          </v-card-text>
-        </v-form>
-        <v-card-actions class="px-5 pb-3">
-          <v-spacer />
-          <v-btn text class="font-weight-bold" color="primary" @click="cancel()">Отмена</v-btn>
-          <v-btn depressed class="font-weight-bold" color="primary" @click="decline()">Отправить</v-btn>
-        </v-card-actions>
-      </v-card>
+                :color="statuses[request.status].color"
+              >{{statuses[request.status].text}}</v-chip>
+            </td>
+            <td>
+              <dismiss-request-btn :request="request" />
+              <accept-request-btn :request="request" />
+              <update-request-btn v-if="auth.id === request.user_id" :request="request" />
+              <delete-request-btn v-if="auth.id === request.user_id" :requestId="request.id" />
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
+    <v-dialog width="500" v-model="dialog">
+      <requests-card v-if="dialog" :request="currentRequest" :displayInDialog="true" />
     </v-dialog>
-  </v-row>
+  </div>
 </template>
-
 <script>
 export default {
   props: {
@@ -148,101 +62,42 @@ export default {
   },
   data() {
     return {
-      dialog: false,
-      msgMore: false,
-      message: null,
-      currentRequestID: null,
       localRequests: this.requests,
-      headers: ["Тип", "Статус", "Действия"],
-      more: false,
-      required: [v => !!v || "Форма должна быть заполнена"],
-      status: [
+      currentRequest: null,
+      dialog: false,
+      statuses: [
         {
           text: "На рассмотрении",
-          color: "orange"
+          color: "orange lighten-1"
+        },
+        {
+          text: "Рассмотрено",
+          color: "orange lighten-1"
         },
         {
           text: "Одобрено",
-          color: "green"
+          color: "green lighten-1"
         },
-        { text: "Отклонено", color: "red lighten-1" }
+        {
+          text: "Отклонено",
+          color: "red lighten-1"
+        }
+      ],
+      headers: [
+        "Тип",
+        "Значения",
+        "Сотрудник",
+        "Описание",
+        "Статус",
+        "Действия"
       ]
     };
   },
   methods: {
-    parameterText(type) {
-      switch (type) {
-        case "Повышение зарплаты":
-        case "Аванс":
-          return "Сумма";
-          break;
-        case "Оборудования":
-          return "Наименования";
-          break;
-        default:
-          return "Период";
-          break;
-      }
-    },
-    verify(requestID) {
-      axios
-        .post(`/api/requests/${requestID}/verify`, {
-          isHead: this.isHead()
-        })
-        .then(res => Event.fire("requestVerified", res.data))
-        .catch(err => console.error(err.message));
-    },
-    decline() {
-      const FORM = this.$refs.messageForm;
-      if (FORM.validate())
-        axios
-          .post(`/api/requests/${this.currentRequestID}/changeStatus`, {
-            status: 2,
-            message: this.message
-          })
-          .then(res => {
-            Event.fire("requestStatusChanged", res.data);
-            this.dialog = false;
-            FORM.reset();
-          })
-          .catch(err => this.cancel());
-    },
-    cancel() {
-      const FORM = this.$refs.messageForm;
-      FORM.reset();
-      this.dialog = false;
-    },
-    isHeadOfDivision(userID) {
-      return (
-        this.auth.id === this.auth.division.head_id && this.auth.id !== userID && !this.isHead()
-      );
-    },
-    isHead() {
-      return (
-        (this.auth.id === this.auth.division.head_id &&
-          this.auth.positions.some(el => el.name === "ОУПС")) ||
-        (this.auth.id === this.auth.division.head_id &&
-          this.auth.positions.some(el => el.name === "РВЗ"))
-      );
-    },
-    getCurrentRequestID(requestID) {
-      this.currentRequestID = requestID;
+    displayRequest(request) {
       this.dialog = true;
+      this.currentRequest = request;
     }
-  },
-  created() {
-    Event.listen("searchRequest", val => {
-      this.localRequests = this.requests.filter(item => {
-         if (new RegExp(val, "gi").test(item.user.name)) return true;
-         if (new RegExp(val, "gi").test(item.user.surname)) return true;
-       });
-    })
   }
 };
 </script>
-
-<style>
-.custom-toolbar .v-toolbar__content {
-  padding: 0 !important;
-}
-</style>

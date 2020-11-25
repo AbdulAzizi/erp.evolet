@@ -98,8 +98,8 @@
       </v-card-text>
       <v-card-actions class="px-4 pb-4">
         <v-spacer />
-        <v-btn text color="primary" @click="cancel()">Отмена</v-btn>
-        <v-btn :disabled="!btnIsDisabled" @click="update()" depressed color="primary">Отправить</v-btn>
+        <v-btn text color="primary" class="font-weight-bold" @click="cancel()">Отмена</v-btn>
+        <v-btn :disabled="!btnIsDisabled" class="font-weight-bold" @click="update()" depressed color="primary">Отправить</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
