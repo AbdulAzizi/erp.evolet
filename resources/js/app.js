@@ -260,6 +260,9 @@ Vue.mixin({
         currentTask() {
             return window.Laravel.currentTask;
         },
+        userRequests(){
+            return window.Laravel.userRequests;
+        },
         availableFileFormats() {
             return [
                 'image/*',
@@ -320,10 +323,15 @@ Vue.component("edit-record", require("./components/EditRecord.vue").default);
 Vue.component("attachments", require("./components/Attachments.vue").default);
 
 // ************************* REQUESTS ***************************************
-Vue.component("requests-table", () => import("./components/request/Table.vue"));
-Vue.component("create-request-btn", () => import("./components/request/Create"));
-Vue.component("update-request-btn", () => import("./components/request/Update.vue"));
-Vue.component("delete-request-btn", () => import("./components/request/Delete.vue"));
+Vue.component("requests-table", require("./components/request/Table.vue").default);
+Vue.component("create-request-btn",require("./components/request/Create").default);
+Vue.component("update-request-btn", require("./components/request/Update.vue").default);
+Vue.component("delete-request-btn", require("./components/request/Delete.vue").default);
+Vue.component("requests-card", require("./components/request/Card.vue").default);
+Vue.component("requests-table", require("./components/request/Table.vue").default);
+Vue.component("accept-request-btn", require("./components/request/Accept.vue").default);
+Vue.component("dismiss-request-btn", require("./components/request/Dismiss.vue").default);
+
 
 /****************************RESPONSIBILITIES********************************/
 Vue.component("attach-responsibilities-btn", require("./components/responsibility/AttachResponsibilityBtn.vue").default);
@@ -402,7 +410,8 @@ Vue.component("views-entries-totals", require("./components/views/entries/Totals
 Vue.component("views-facilities-index", require("./components/views/users/Facilities.vue").default);
 
 /****************************REQUESTS*************************************************************/
-Vue.component("views-requests-index", () => import("./components/views/request/Index.vue"));
+Vue.component("views-requests-user-view", require("./components/views/request/User.vue").default);
+Vue.component("views-requests-head-view", require("./components/views/request/Head.vue").default);
 
 /****************************TASKS********************************/
 Vue.component("tasks-priority", require("./components/tasks/Priority.vue").default);
