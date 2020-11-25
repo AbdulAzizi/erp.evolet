@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Division;
-use App\Entry;
-use App\Filters\TimesetFilters;
-use App\Timeset;
 use App\User;
+use App\Entry;
+use App\Timeset;
+use App\Division;
+use App\Status;
 use Illuminate\Http\Request;
+use App\Filters\TimesetFilters;
+use Illuminate\Database\Eloquent\Builder;
 
 class TimesetController extends Controller
 {
@@ -57,6 +59,42 @@ class TimesetController extends Controller
             ->orderBy('user_id')
             ->orderBy('date')
             ->get();
+        
+        $data['users'] = User::alone()
+        ->withCount(['tasks as new' => function (Builder $query) use ($month, $year) {
+            $query
+                ->whereMonth('created_at', '=', $month)
+                ->whereYear('created_at', '=', $year)
+                ->whereHas('status', function (Builder $query) {
+                    $query->where('name', 'Новый');
+                });
+        }])
+        ->withCount(['tasks as in_proccess' => function (Builder $query) use ($month, $year) {
+            $query
+                ->whereMonth('created_at', '=', $month)
+                ->whereYear('created_at', '=', $year)
+                ->whereHas('status', function (Builder $query) {
+                    $query->where('name', 'В процессе');
+                });
+        }])
+        ->withCount(['tasks as paused' => function (Builder $query) use ($month, $year) {
+            $query
+                ->whereMonth('created_at', '=', $month)
+                ->whereYear('created_at', '=', $year)
+                ->whereHas('status', function (Builder $query) {
+                    $query->where('name', 'Приостановлен');
+                });
+        }])
+        ->withCount(['tasks as closed' => function (Builder $query) use ($month, $year) {
+            $query
+                ->whereMonth('created_at', '=', $month)
+                ->whereYear('created_at', '=', $year)
+                ->whereHas('status', function (Builder $query) {
+                    $query->where('name', 'Закрытый');
+                });
+        }])
+        ->find($users);
+        
         return $data;
     }
 
