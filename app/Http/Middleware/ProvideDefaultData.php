@@ -38,8 +38,7 @@ class ProvideDefaultData
         $userRequests = 0;
         if (($authUser->positions->contains('name', 'РВЗ') || $authUser->positions->contains('name', 'ОУПС')) && $authUser->division->head_id == $authUser->id) {
             $userRequests = UserRequest::where('user_id', '!=', $authUser->id)->where([
-                'status' => 0,
-                'verified' => true
+                'status' => 1,
             ])->count();
         } else if ($authUser->division->head_id == $authUser->id) {
             $usersID = [];
@@ -47,7 +46,7 @@ class ProvideDefaultData
             foreach ($division->users as $user) {
                 $usersID[] = $user->id;
             }
-            $userRequests = UserRequest::whereIn('user_id', $usersID)->where('user_id', '!=', $authUser->id)->where('verified', false)->count();
+            $userRequests = UserRequest::whereIn('user_id', $usersID)->where('user_id', '!=', $authUser->id)->where('status', 0)->count();
         }
 
         View::share('authUser', $authUser);

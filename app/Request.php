@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Filters\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class Request extends Model
 {
+    use Filterable;
+    
     public $guarded = [];
 
     public $timestamps = false;

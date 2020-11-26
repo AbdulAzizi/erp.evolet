@@ -31,7 +31,7 @@
      <template>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on" :href="appPath('requests')">
+          <v-btn icon v-on="on" :href="appPath('requests/user')">
             <v-icon color="grey darken-1">mdi-newspaper</v-icon>
           </v-btn>
         </template>

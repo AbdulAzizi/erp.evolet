@@ -205,7 +205,7 @@ export default {
                 {
                     icon: "mdi-newspaper",
                     text: "Заявки сотрудников",
-                    url: "/requests?employer=true",
+                    url: "/requests/head",
                     positions: ["РВЗ"],
                     headOf: ["*"],
                     divisions: []

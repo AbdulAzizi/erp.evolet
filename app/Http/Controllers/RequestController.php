@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Division;
+use App\Filters\RequestFilters;
 use App\Parameter;
 use Illuminate\Http\Request;
 use App\Request as UserRequest;
@@ -11,35 +12,16 @@ class RequestController extends Controller
 {
     public function index(Request $request)
     {
-
-        return view('request.index');
+       // seperate views for user and (CEO || HR || head of division8) -> Head
+       return $request->is('requests/head') ? view('request.headView') : view('request.userView');
     }
 
-    public function getRequests(Request $request)
+    public function getRequests(RequestFilters $filters)
     {
         
-        if ($request->isHeadOfDivision) {
-            $users = [];
-            $division = Division::find(auth()->user()->division_id);
-            foreach ($division->users as $user) {
-                $users[] = $user->id;
-            }
-            $requests = UserRequest::whereIn('user_id', $users)->where('user_id', '!=', auth()->user()->id)->with('parameters', 'user')->get();
-
-            return $requests;
-
-        } else if ($request->isHead) {
-
-            $requests = UserRequest::with('parameters', 'user')->where('user_id', '!=', auth()->user()->id)->where('verified', true)->get();
-
-            return $requests;
-
-        } else {
-
-            $requests = UserRequest::where('user_id', auth()->user()->id)->with('parameters', 'user')->get();
-
-            return $requests;
-        }
+        $requests = UserRequest::filter($filters)->with('parameters', 'user')->paginate(20);
+        
+        return $requests;
     }
 
     public function store(Request $request, $id = null)
@@ -49,13 +31,13 @@ class RequestController extends Controller
                 'user_id' => auth()->user()->id,
                 'type' => $request->type,
                 'description' => $request->description,
-                'status' => 0, // 0 => На рассмотрении, 1 => Одобрено, 2 => Отклонено
-                'verified' => auth()->user()->division->head_id == auth()->user()->id ? 1 : 0
+                'status' => auth()->user()->division->head_id == auth()->user()->id ? 1 : 0, // 0 => На рассмотрении, 1 => Рассмотрено, 2 => Одобрено, 3 => Отклонено
             ]);
 
             $this->createParameter($userRequest->id, $request->values);
 
             return $userRequest->load('parameters', 'user');
+
         } else if ($request->isMethod('put')) {
 
             $userRequest = UserRequest::find($id);
@@ -92,31 +74,13 @@ class RequestController extends Controller
         $userRequest->delete();
     }
 
-    public function verify(Request $request, $id)
-    {
-        $userRequest = UserRequest::find($id);
-
-        if($request->isHead) {
-            $userRequest->status = 1;
-        } else {
-            $userRequest->verified = 1;
-        }
-        
-        $userRequest->save();
-
-        $userRequest->load('parameters', 'user');
-        
-        return $userRequest;
-
-    }
-
     public function changeStatus(Request $request, $id)
     {
         $userRequest = UserRequest::find($id);
 
         $userRequest->status = $request->status;
 
-        $userRequest->message = $request->status == 2 ? $request->message : null;
+        $userRequest->message = $request->status == 3 ? $request->message : null;
 
         $userRequest->save();
 

@@ -1,5 +1,5 @@
 @extends('layouts.default')
 
 @section('content')
-    <views-requests-index></views-requests-index>
+    <views-requests-user-view></views-requests-user-view>
 @endsection
