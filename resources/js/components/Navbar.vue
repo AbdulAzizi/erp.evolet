@@ -40,14 +40,14 @@
      </template>
 
     <template>
-      <v-tooltip bottom>
+      <!-- <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on" :href="appPath('users')">
             <v-icon color="grey darken-1">mdi-account-group</v-icon>
           </v-btn>
         </template>
         <span>Сотрудники</span>
-      </v-tooltip>
+      </v-tooltip> -->
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
