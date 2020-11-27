@@ -192,4 +192,5 @@ Route::prefix('api')->group(function () {
     Route::delete('/requests/{id}', 'RequestController@delete')->name('requests.delete');
     Route::post('/requests/{id}/verify', 'RequestController@verify')->name('requests.verify');
     Route::post('/requests/{id}/changeStatus', 'RequestController@changeStatus')->name('requests.changeStatus');
+    Route::get('/requests/users', 'RequestController@users')->name('requests.users');
 });

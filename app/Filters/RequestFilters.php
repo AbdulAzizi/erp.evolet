@@ -5,7 +5,6 @@ namespace App\Filters;
 use App\Division;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use \App\Request as UserRequest;
 
 class RequestFilters extends QueryFilters
 {
@@ -25,7 +24,12 @@ class RequestFilters extends QueryFilters
 
         $headOfDivision = auth()->user()->division->head_id == auth()->user()->id;
 
-        if($headOfDivision) 
+        if($ceo && $headOfDivision || $ceo)
+        {
+            // dd($ceo);
+            return $this->builder->where('user_id', '!=', auth()->user()->id)->where('status', '>=', 1);
+        }
+        else if($headOfDivision && !$ceo) 
         {
             $users = [];
     
@@ -37,10 +41,6 @@ class RequestFilters extends QueryFilters
     
             return $this->builder->whereIn('user_id', $users)->where('user_id', "!=", auth()->user()->id);
         }
-        else if($ceo)
-        {
-            return $this->builder->where('user_id', '!=', auth()->user()->id)->where('status', '>=', 1);
-        }
     }
 
     public function isUser()
@@ -48,9 +48,11 @@ class RequestFilters extends QueryFilters
         return $this->builder->where('user_id', auth()->user()->id);
     }
 
-    public function type($term)
+    public function id($term)
     {
-        return $this->defineRole()->having('type', $term);
+        return $this->isHead()->whereHas("user", function($q) use ($term){
+            $q->having('id', $term);
+        });
     }
 
     public function defineRole()

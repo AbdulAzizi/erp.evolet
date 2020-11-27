@@ -1,15 +1,44 @@
 <template>
   <div>
-    <v-text-field
-      v-model="search"
-      solo
-      placeholder="Поиск"
-      hide-details="auto"
-      clearable
-      prepend-inner-icon="mdi-magnify"
-    ></v-text-field>
-    <requests-table :requests="localRequests" v-if="localRequests.length > 0" />
-    <div class="d-flex justify-center align-center height" v-else>
+    <v-card flat>
+      <v-autocomplete
+        v-model="filters.id"
+        solo
+        :items="users"
+        placeholder="Поиск"
+        hide-details="auto"
+        item-text="name"
+        item-value="id"
+        clearable
+        prepend-inner-icon="mdi-magnify"
+        @click="loadUsers()"
+      >
+        <template v-slot:selection="data">
+          <v-chip v-bind="data.attrs" :input-value="data.selected" @click="data.select">
+            <v-avatar left>
+              <v-img :src="thumb(data.item.img)"></v-img>
+            </v-avatar>
+            {{ data.item.name }} {{ data.item.surname }}
+          </v-chip>
+        </template>
+        <template v-slot:item="data">
+          <template>
+            <v-list-item-avatar>
+              <img :src="thumb(data.item.img)" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{data.item.name}} {{data.item.surname}}</v-list-item-title>
+            </v-list-item-content>
+          </template>
+        </template>
+      </v-autocomplete>
+      <v-progress-linear v-if="loader" color="primary" indeterminate height="5"></v-progress-linear>
+    </v-card>
+      <requests-table v-if="localRequests.length > 0" :requests="localRequests" />
+    <div class="text-center">
+      <v-btn v-if="requestsAmount > 0" fixed depressed class="font-weight-bold text-capitalize" color="primary" @click="filterRequests()">Еще {{ requestsAmount }}</v-btn>
+    </div>
+    <div class="d-flex justify-center align-center height" v-if="localRequests.length == 0">
       <h3 class="grey--text text--darken-2">У Вас нет заявок</h3>
     </div>
   </div>
@@ -20,19 +49,39 @@ export default {
   data() {
     return {
       localRequests: [],
-      search: null
+      search: null,
+      users: [],
+      laoder: false,
+      total: null,
+      page: 1,
+      filters: {
+        isHead: true,
+        id: null
+      }
     };
   },
   methods: {
-    loadRequests() {
+    filterRequests() {
+      this.loader = true;
       axios
         .get("/api/getRequests", {
           params: {
-            isHead: true,
+            ...this.filters,
+            page: this.page
           }
         })
-        .then(res => this.localRequests.push(...res.data.data))
-        .then(err => err.messages);
+        .then(res => {
+          this.loader = false;
+          this.localRequests.push(...res.data.data);
+          this.total = res.data.total;
+          this.page++;
+        });
+    },
+    loadUsers() {
+      if (!this.users.length)
+        axios
+          .get("/api/requests/users")
+          .then(res => this.users.push(...res.data));
     },
     removeRequest(requestID) {
       this.localRequests.forEach((item, i) => {
@@ -40,8 +89,16 @@ export default {
       });
     }
   },
+  computed: {
+    id() {
+      return this.filters.id;
+    },
+    requestsAmount() {
+      return this.total - this.localRequests.length;
+    }
+  },
   created() {
-    this.loadRequests();
+    this.filterRequests();
     Event.listen("requestApproved", data => {
       this.localRequests.forEach(item => {
         if (item.id === data.request.id) Object.assign(item, data.request);
@@ -54,6 +111,13 @@ export default {
       });
       Event.fire("notify", ["Заявка отклонена"]);
     });
+  },
+  watch: {
+    id(val) {
+      this.page = 1;
+      this.localRequests = [];
+      this.filterRequests();
+    }
   }
 };
 </script>

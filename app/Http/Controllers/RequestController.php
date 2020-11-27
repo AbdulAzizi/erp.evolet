@@ -19,7 +19,7 @@ class RequestController extends Controller
     public function getRequests(RequestFilters $filters)
     {
         
-        $requests = UserRequest::filter($filters)->with('parameters', 'user')->paginate(20);
+        $requests = UserRequest::filter($filters)->with('parameters', 'user.division')->paginate(20);
         
         return $requests;
     }
@@ -104,5 +104,19 @@ class RequestController extends Controller
                 'value' => $values
             ]);
         }
+    }
+
+    public function users()
+    {
+        $requests = UserRequest::where('user_id', '!=', auth()->user()->id)->get();
+
+        $users = [];
+
+        foreach($requests as $request)
+        {
+            $users[] = $request->user;
+        }
+
+        return $users;
     }
 }

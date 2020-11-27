@@ -9,7 +9,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="(request, i) in localRequests"
+            v-for="(request, i) in requests"
             :key="i"
             @click="displayRequest(request)"
             style="cursor: pointer"
@@ -39,10 +39,11 @@
               >{{statuses[request.status].text}}</v-chip>
             </td>
             <td>
-              <dismiss-request-btn :request="request" />
-              <accept-request-btn :request="request" />
               <update-request-btn v-if="auth.id === request.user_id" :request="request" />
               <delete-request-btn v-if="auth.id === request.user_id" :requestId="request.id" />
+              <dismiss-request-btn :request="request" />
+              <accept-request-btn :request="request" />
+              <print-request-btn :request="request" />
             </td>
           </tr>
         </tbody>

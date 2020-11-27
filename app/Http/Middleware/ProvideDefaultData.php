@@ -36,10 +36,8 @@ class ProvideDefaultData
             $currentTask->setTimesetEndtime();
         }
         $userRequests = 0;
-        if (($authUser->positions->contains('name', 'РВЗ') || $authUser->positions->contains('name', 'ОУПС')) && $authUser->division->head_id == $authUser->id) {
-            $userRequests = UserRequest::where('user_id', '!=', $authUser->id)->where([
-                'status' => 1,
-            ])->count();
+        if (($authUser->positions->contains('name', 'РВЗ') || $authUser->positions->contains('name', 'ОУПС'))) {
+            $userRequests = UserRequest::where('user_id', '!=', $authUser->id)->where('status', 1)->count();
         } else if ($authUser->division->head_id == $authUser->id) {
             $usersID = [];
             $division = Division::find($authUser->division_id);

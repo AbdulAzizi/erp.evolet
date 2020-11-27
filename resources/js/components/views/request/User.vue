@@ -2,22 +2,23 @@
   <div>
     <v-card outlined>
       <v-card-text class="d-flex justify-space-between align-center">
-        <h1>Заявки</h1>
+        <h1>Мои Заявки</h1>
         <create-request-btn />
       </v-card-text>
     </v-card>
     <requests-table :requests="localRequests" v-if="localRequests.length > 0" />
+    <div class="text-center">
+      <v-btn
+        v-if="requestsAmount > 0"
+        fixed
+        depressed
+        class="font-weight-bold text-capitalize"
+        color="primary"
+        @click="loadRequests()"
+      >Еще {{ requestsAmount }}</v-btn>
+    </div>
     <div class="d-flex justify-center align-center height" v-if="localRequests.length == 0">
       <h3 class="grey--text text--darken-2">У Вас нет заявок</h3>
-    </div>
-    <div class="d-flex justify-center align-center mb-2">
-      <v-btn
-        color="primary"
-        depressed
-        class="font-weight-bold"
-        @click="loadMoreRequests()"
-        v-if="(totalRequests - localRequests.length) > 0"
-      >Еще {{totalRequests - localRequests.length}}</v-btn>
     </div>
   </div>
 </template>
@@ -29,41 +30,25 @@ export default {
       localRequests: [],
       totalRequests: null,
       page: 1,
-      filter: {
-        type: null,
-        status: null
-      }
+      total: null
     };
   },
   methods: {
-    loadMoreRequests() {
-      this.page++;
-      this.loadRequests();
-    },
-    changeView() {
-      if(this.tableView) {
-        this.tableView = false;
-        this.cardView = true;
-      } else {
-        this.tableView = true;
-        this.cardView = false;
-      }
-    },
     loadRequests() {
+      this.loader = true;
       axios
         .get("/api/getRequests", {
           params: {
             isUser: true,
-            type: this.filter.type,
-            status: this.filter.status,
             page: this.page
           }
         })
         .then(res => {
-          this.totalRequests = res.data.total;
+          this.loader = false;
           this.localRequests.push(...res.data.data);
-        })
-        .then(err => err.messages);
+          this.page++;
+          this.total = res.data.total;
+        });
     },
     removeRequest(requestID) {
       this.localRequests.forEach((item, i) => {
@@ -71,12 +56,13 @@ export default {
       });
     }
   },
+  computed: {
+    requestsAmount() {
+      return this.total - this.localRequests.length;
+    }
+  },
   created() {
     this.loadRequests();
-    Event.listen("loadRequests", page => {
-      this.page = page;
-      this.loadRequests();
-    });
     Event.listen("requestCreated", data => {
       this.localRequests.push(data);
       Event.fire("notify", ["Ваша заявка успешно создана"]);
