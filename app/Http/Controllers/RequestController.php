@@ -112,9 +112,9 @@ class RequestController extends Controller
 
         $users = [];
 
-        foreach($requests as $request)
+        foreach($requests as $item)
         {
-            $users[] = $request->user;
+            $users[] = $item->user;
         }
 
         return $users;
