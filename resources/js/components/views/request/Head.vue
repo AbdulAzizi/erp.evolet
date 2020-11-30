@@ -80,7 +80,7 @@ export default {
     loadUsers() {
       if (!this.users.length)
         axios
-          .get("/api/requests/users")
+          .get("/api/requests/head/users")
           .then(res => this.users.push(...res.data));
     },
     removeRequest(requestID) {

@@ -106,7 +106,7 @@ class RequestController extends Controller
         }
     }
 
-    public function users()
+    public function headUsers()
     {
         $requests = UserRequest::where('user_id', '!=', auth()->user()->id)->get();
 
