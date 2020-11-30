@@ -19,17 +19,16 @@ class RequestFilters extends QueryFilters
     public function isHead()
     {
         $ceo = collect(auth()->user()->positions)->filter(function ($elem) {
-            return $elem->name == "РВЗ" || $elem->name == "ОУПС";
+            return $elem->name == "РВЗ" || $elem->name == "HR";
         });
 
         $headOfDivision = auth()->user()->division->head_id == auth()->user()->id;
 
-        if($ceo && $headOfDivision || $ceo)
+        if(count($ceo) && $headOfDivision || count($ceo))
         {
-            // dd($ceo);
             return $this->builder->where('user_id', '!=', auth()->user()->id)->where('status', '>=', 1);
         }
-        else if($headOfDivision && !$ceo) 
+        else if($headOfDivision && !count($ceo)) 
         {
             $users = [];
     
