@@ -152,7 +152,7 @@ export default {
     loadUsers() {
       if (!this.users.length)
         axios
-          .get("/api/requests/head/users")
+          .get("/api/head/users")
           .then(res => this.users.push(...res.data));
     },
     loadDivisions() {
