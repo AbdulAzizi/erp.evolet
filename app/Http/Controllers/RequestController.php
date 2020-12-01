@@ -13,6 +13,7 @@ class RequestController extends Controller
     public function index(Request $request)
     {
        // seperate views for user and (CEO || HR || head of division8) -> Head
+
        return $request->is('requests/head') ? view('request.headView') : view('request.userView');
     }
 
@@ -108,7 +109,7 @@ class RequestController extends Controller
 
     public function headUsers()
     {
-        $requests = UserRequest::where('user_id', '!=', auth()->user()->id)->get();
+        $requests = UserRequest::all();
 
         $users = [];
 

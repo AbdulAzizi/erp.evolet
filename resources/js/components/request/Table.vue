@@ -27,6 +27,9 @@
               </div>
             </td>
             <td>
+              {{ request.user.division.abbreviation }}
+            </td>
+            <td>
               <p style="max-width: 150px" class="text-truncate mb-0">{{request.description}}</p>
             </td>
             <td>
@@ -88,6 +91,7 @@ export default {
         "Тип",
         "Значения",
         "Сотрудник",
+        "Отдел",
         "Описание",
         "Статус",
         "Действия"

@@ -26,7 +26,7 @@ class RequestFilters extends QueryFilters
 
         if(count($ceo) && $headOfDivision || count($ceo))
         {
-            return $this->builder->where('user_id', '!=', auth()->user()->id)->where('status', '>=', 1);
+            return $this->builder->where('status', '>=', 1);
         }
         else if($headOfDivision && !count($ceo)) 
         {
@@ -38,7 +38,7 @@ class RequestFilters extends QueryFilters
                 $users[] = $user->id;
             }
     
-            return $this->builder->whereIn('user_id', $users)->where('user_id', "!=", auth()->user()->id);
+            return $this->builder->whereIn('user_id', $users);
         }
     }
 
@@ -47,11 +47,28 @@ class RequestFilters extends QueryFilters
         return $this->builder->where('user_id', auth()->user()->id);
     }
 
-    public function id($term)
+    public function user($term)
     {
         return $this->isHead()->whereHas("user", function($q) use ($term){
             $q->having('id', $term);
         });
+    }
+
+    public function division($term)
+    {
+        return $this->isHead()->whereHas("user", function($q) use ($term){
+            $q->having('division_id', $term);
+        });
+    }
+
+    public function status($term)
+    {
+        return $this->isHead()->where('status', $term);
+    }
+
+    public function type($term)
+    {
+        return $this->isHead()->where('type', $term);
     }
 
     public function defineRole()
