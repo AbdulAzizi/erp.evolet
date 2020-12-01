@@ -110,5 +110,7 @@ Route::delete('/tasks/{id}', 'TaskController@delete')->name('api.tasks.delete');
 Route::get('/statuses', 'StatusController@all')->name('api.statuses.all');
 
 Route::post('/resume/{id}/edit', 'ResumeController@edit')->name('api.resume.edit');
+Route::get('/requests/head/users', 'RequestController@headUsers')->name('requests.users');
+
 
 
