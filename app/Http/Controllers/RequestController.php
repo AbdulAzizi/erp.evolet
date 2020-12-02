@@ -109,15 +109,35 @@ class RequestController extends Controller
 
     public function headUsers()
     {
-        $requests = UserRequest::all();
+        $ceo = collect(auth()->user()->positions)->filter(function ($elem) {
+            return $elem->name == "РВЗ" || $elem->name == "HR";
+        });
 
-        $users = [];
-
-        foreach($requests as $item)
+        if(count($ceo)) 
         {
-            $users[] = $item->user;
+            $requests = UserRequest::all();
+            $users = [];
+    
+            foreach($requests as $item)
+            {
+                $users[] = $item->user;
+            }
+    
+            return $users;
+        }
+        else 
+        {
+            $division = Division::find(auth()->user()->division_id);
+
+            $users = [];
+
+            foreach($division->users as $user)
+            {
+                $users[] = $user;
+            }
+
+            return $users;
         }
 
-        return $users;
     }
 }
