@@ -1,256 +1,307 @@
 <template>
-  <v-expansion-panels accordion mandatory class="d-inline-flex justify-end division-expansion-panel">
-    <v-dialog eager width="600" v-model="addEmployeeDialog">
-      <add-employee :division="localDivision" :addHeadEmployee="addHeadEmployee"/>
-    </v-dialog>
-    <v-dialog eager persistent width="600" v-model="addDivisionDialog">
-      <add-division :division="localDivision" />
-    </v-dialog>
-    <delete-record
-      :route="`/api/divisions/${localDivision.id}`"
-      :visible="deleteDivision"
-      :caution="usersCount > 0"
-      :cautionMsg="`Невозможно удалить. ${localDivision.abbreviation} имеет сотрудников!`"
-      @close="deleteDivision = false"
-    />
-    <edit-record
-      :route="`/api/divisions/${localDivision.id}/edit`"
-      :visible="editDivisionDialog"
-      title="Изменить название"
-      :fields="[{
-        name: 'name',
-        type: 'string',
-        label: 'Название',
-        rules: ['required'],
-        value: localDivision.name
-        }]"
-      @close="editDivisionDialog = false"
-      @edit="editDivision"
-    />
-    <v-expansion-panel v-if="isDivision">
-      <v-expansion-panel-header class="px-4 py-0">
-        {{ localDivision.name }} • {{usersCount}} сотрудников
-        <div class="text-sm-right" v-if="hrUser">
-          <v-menu offset-y>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                text
-                small
-                right
-                icon
-                v-on="on"
-                class="ma-0 mr-2"
-                @click.native.stop
-                color="rgba(0,0,0,.54)"
-              >
-                <v-icon>mdi-dots-horizontal</v-icon>
-              </v-btn>
-            </template>
-            <v-card>
-              <v-list-item @click="addDivision()" v-if="isDepartment">
-                <v-list-item-title>Добавить</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="deleteDivision = !deleteDivision">
-                <v-list-item-title>Удалить</v-list-item-title>
-              </v-list-item>
-              <v-list-item  @click="editDivisionDialog = !editDivisionDialog">
-                <v-list-item-title>Изменить</v-list-item-title>
-              </v-list-item>
-            </v-card>
-          </v-menu>
-        </div>
-      </v-expansion-panel-header>
-      <v-expansion-panel-content class="pr-0 py-2">
-        <v-container grid-list-lg fluid pa-0>
-          <v-row v-if="localDivision.head" class="ma-0">
-            <v-col md="12" lg="4" xl="3" class="pa-2 pt-0 pr-0">
-              <user-card-horizontal :editable="hrUser" :link="true" :user="localDivision.head"></user-card-horizontal>
-            </v-col>
-          </v-row>
-          <v-row class="ma-0">
-            <v-col
-              md="4"
-              xl="3"
-              class="pa-2 pt-0 pr-0"
-              v-for="user in divisionEmployees"
-              :key="user.id"
-            >
-              <user-card-horizontal :editable="hrUser" :link="true" :user="user" v-if="divisionEmployees.length"></user-card-horizontal>
-            </v-col>
-          </v-row>
-          <v-row class="ma-0">
-            <v-col cols="4" class="pa-0 pl-2 pb-2" v-if="hrUser && isDepartment">
-              <v-btn
-                outlined
-                block
-                @click="addHead()"
-                color="primary"
-              >Добавить руководителя</v-btn>
-            </v-col>
-            <v-col cols="4" class="pa-0 pl-2" v-if="hrUser && isSubdivision">
-              <v-btn
-                outlined
-                block
-                @click="addEmployee()"
-                color="primary"
-              >Добавить сотрудника</v-btn>
-            </v-col>
-          </v-row>
+    <v-expansion-panels
+        accordion
+        class="d-inline-flex justify-end division-expansion-panel"
+        multiple
+        :value="[0]"
+    >
+        <v-dialog width="600" v-model="addEmployeeDialog">
+            <add-employee
+                :division="localDivision"
+                :addHeadEmployee="addHeadEmployee"
+            />
+        </v-dialog>
+        <v-dialog persistent width="600" v-model="addDivisionDialog">
+            <add-division :division="localDivision" />
+        </v-dialog>
+        <delete-record
+            :route="`/api/divisions/${localDivision.id}`"
+            :visible="deleteDivision"
+            :caution="usersCount > 0"
+            :cautionMsg="
+                `Невозможно удалить. ${
+                    localDivision.abbreviation
+                } имеет сотрудников!`
+            "
+            @close="deleteDivision = false"
+        />
+        <edit-record
+            :route="`/api/divisions/${localDivision.id}/edit`"
+            :visible="editDivisionDialog"
+            title="Изменить название"
+            :fields="[
+                {
+                    name: 'name',
+                    type: 'string',
+                    label: 'Название',
+                    rules: ['required'],
+                    value: localDivision.name
+                }
+            ]"
+            @close="editDivisionDialog = false"
+            @edit="editDivision"
+        />
+        <v-expansion-panel v-if="isDivision">
+            <v-expansion-panel-header class="px-4 py-0">
+                {{ localDivision.name }} • {{ usersCount }} сотрудников
+                <div class="text-sm-right" v-if="hrUser">
+                    <v-menu offset-y>
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                text
+                                small
+                                right
+                                icon
+                                v-on="on"
+                                class="ma-0 mr-2"
+                                @click.native.stop
+                                color="rgba(0,0,0,.54)"
+                            >
+                                <v-icon>mdi-dots-horizontal</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-card>
+                            <v-list-item
+                                @click="addDivision()"
+                                v-if="isDepartment"
+                            >
+                                <v-list-item-title>Добавить</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item
+                                @click="deleteDivision = !deleteDivision"
+                            >
+                                <v-list-item-title>Удалить</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item
+                                @click="
+                                    editDivisionDialog = !editDivisionDialog
+                                "
+                            >
+                                <v-list-item-title>Изменить</v-list-item-title>
+                            </v-list-item>
+                        </v-card>
+                    </v-menu>
+                </div>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content class="pr-0 py-2">
+                <v-container grid-list-lg fluid pa-0>
+                    <v-row v-if="localDivision.head" class="ma-0">
+                        <v-col md="12" lg="4" xl="3" class="pa-2 pt-0 pr-0">
+                            <user-card-horizontal
+                                :editable="hrUser"
+                                :link="true"
+                                :user="localDivision.head"
+                            ></user-card-horizontal>
+                        </v-col>
+                    </v-row>
+                    <v-row class="ma-0">
+                        <v-col
+                            md="4"
+                            xl="3"
+                            class="pa-2 pt-0 pr-0"
+                            v-for="user in divisionEmployees"
+                            :key="user.id"
+                        >
+                            <user-card-horizontal
+                                :editable="hrUser"
+                                :link="true"
+                                :user="user"
+                                v-if="divisionEmployees.length"
+                            ></user-card-horizontal>
+                        </v-col>
+                    </v-row>
+                    <v-row class="ma-0">
+                        <v-col
+                            cols="4"
+                            class="pa-0 pl-2 pb-2"
+                            v-if="hrUser && isDepartment"
+                        >
+                            <v-btn
+                                outlined
+                                block
+                                @click="addHead()"
+                                color="primary"
+                                >Добавить руководителя</v-btn
+                            >
+                        </v-col>
+                        <v-col
+                            cols="4"
+                            class="pa-0 pl-2"
+                            v-if="hrUser && isSubdivision"
+                        >
+                            <v-btn
+                                outlined
+                                block
+                                @click="addEmployee()"
+                                color="primary"
+                                >Добавить сотрудника</v-btn
+                            >
+                        </v-col>
+                    </v-row>
 
-          <div>
-            <v-expansion-panels>
-              <division-structure
-                v-for="( subDivision ) in localDivision.children"
-                :key="subDivision.id"
-                :division="subDivision"
-                :is-user-head="isUserHead"
-              />
-            </v-expansion-panels>
-          </div>
-        </v-container>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-  </v-expansion-panels>
+                    <div>
+                        <v-expansion-panels>
+                            <division-structure
+                                v-for="subDivision in localDivision.children"
+                                :key="subDivision.id"
+                                :division="subDivision"
+                                :is-user-head="isUserHead"
+                            />
+                        </v-expansion-panels>
+                    </div>
+                </v-container>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
+    </v-expansion-panels>
 </template>
 
 <script>
 const divisionUsersRecursiveCount = function(division) {
-  let count = division.users.length;
-  division.children.map(subdivision => {
-    count += divisionUsersRecursiveCount(subdivision);
-  });
-  return count;
+    let count = division.users.length;
+    division.children.map(subdivision => {
+        count += divisionUsersRecursiveCount(subdivision);
+    });
+    return count;
 };
 
 export default {
-  props: {
-    division: {
-      required: true
-    },
-    isUserHead: {
-      required: true
-    },
-    isRoot: {
-      required: false
-    }
-  },
-  data() {
-    return {
-      isDivision: true,
-      localDivision: this.division,
-      tab: null,
-      items: [],
-      addEmployeeDialog: false,
-      addDivisionDialog: false,
-      deleteDivision: false,
-      editDivisionDialog: false,
-      addHeadEmployee: false
-    };
-  },
-
-  methods: {
-    addUser: function() {
-      Event.fire("addUser", [
-        { type: "input", name: "divisionId", value: this.division.id }
-      ]);
-    },
-    addDivision() {
-      Event.fire("division", this.localDivision);
-      this.addDivisionDialog = true;
-    },
-    addEmployee(){
-      this.addEmployeeDialog = true;
-    },
-    addHead(){
-      this.addEmployeeDialog = true;
-      this.addHeadEmployee = true;
-    },
-    editDivision(value){
-      this.editDivisionDialog = false;
-      Event.fire('notify', [`${this.localDivision.name} изменен на ${value.name}`]);
-      this.localDivision.name = value.name;
-    }
-  },
-
-  computed: {
-    divisionEmployees: function() {
-      const headOfDivisionId = this.localDivision.head_id;
-      return this.localDivision.users.filter(
-        user => user.id !== headOfDivisionId
-      );
-    },
-
-    hrUser() {
-      const position = this.auth.positions.filter(
-        position => position.name == "HR"
-      );
-
-      return position.length > 0;
-    },
-    usersCount: function() {
-      return divisionUsersRecursiveCount(this.localDivision);
-    },
-    isDepartment() {
-      return this.localDivision.depth < 3;
-    },
-    isSubdivision(){
-      return this.localDivision.depth >= 3;
-    }
-  },
-  created() {
-    Event.listen("userAdded", data => {
-      this.addEmployeeDialog = false;
-      if (this.localDivision.id == data.divisionId) {
-        this.localDivision.users.push(data.user);
-        if(data.headEmployee){
-          this.localDivision.head_id = data.user.id;
-          this.localDivision.head = data.user;
+    props: {
+        division: {
+            required: true
+        },
+        isUserHead: {
+            required: true
+        },
+        isRoot: {
+            required: false
         }
-        Event.fire("notify", [
-          `Создан сотрудник ${data.user.name} ${data.user.surname}`
-        ]);
-      }
-    });
-    Event.listen("cancelEmployeeSubmition", data => {
-      this.addEmployeeDialog = false;
-    });
+    },
+    data() {
+        return {
+            isDivision: true,
+            localDivision: this.division,
+            tab: null,
+            items: [],
+            addEmployeeDialog: false,
+            addDivisionDialog: false,
+            deleteDivision: false,
+            editDivisionDialog: false,
+            addHeadEmployee: false
+        };
+    },
 
-    Event.listen("divisionCreated", data => {
-      if (this.localDivision.id == data.divisionId) {
-        this.localDivision.children.push(data.division);
-        this.addDivisionDialog = false;
-        Event.fire("notify", [`Создан отдел ${data.division.name}`]);
-      }
-    });
+    methods: {
+        addUser: function() {
+            Event.fire("addUser", [
+                { type: "input", name: "divisionId", value: this.division.id }
+            ]);
+        },
+        addDivision() {
+            Event.fire("division", this.localDivision);
+            this.addDivisionDialog = true;
+        },
+        addEmployee() {
+            this.addEmployeeDialog = true;
+        },
+        addHead() {
+            this.addEmployeeDialog = true;
+            this.addHeadEmployee = true;
+        },
+        editDivision(value) {
+            this.editDivisionDialog = false;
+            Event.fire("notify", [
+                `${this.localDivision.name} изменен на ${value.name}`
+            ]);
+            this.localDivision.name = value.name;
+        }
+    },
+    computed: {
+        divisionEmployees: function() {
+            const headOfDivisionId = this.localDivision.head_id;
+            return this.localDivision.users.filter(
+                user => user.id !== headOfDivisionId
+            );
+        },
 
-    Event.listen("cancelDivision", dialog => (this.addDivisionDialog = false));
-  }
+        hrUser() {
+            const position = this.auth.positions.filter(
+                position => position.name == "HR"
+            );
+
+            return position.length > 0;
+        },
+        usersCount: function() {
+            return divisionUsersRecursiveCount(this.localDivision);
+        },
+        isDepartment() {
+            return this.localDivision.depth < 3;
+        },
+        isSubdivision() {
+            return this.localDivision.depth >= 3;
+        }
+    },
+    created() {
+        Event.listen("userAdded", data => {
+            this.addEmployeeDialog = false;
+            if (this.localDivision.id == data.divisionId) {
+                this.localDivision.users.push(data.user);
+                if (data.headEmployee) {
+                    this.localDivision.head_id = data.user.id;
+                    this.localDivision.head = data.user;
+                }
+                Event.fire("notify", [
+                    `Создан сотрудник ${data.user.name} ${data.user.surname}`
+                ]);
+            }
+        });
+        Event.listen("cancelEmployeeSubmition", data => {
+            this.addEmployeeDialog = false;
+        });
+
+        Event.listen("divisionCreated", data => {
+            if (this.localDivision.id == data.divisionId) {
+                this.localDivision.children.push(data.division);
+                this.addDivisionDialog = false;
+                Event.fire("notify", [`Создан отдел ${data.division.name}`]);
+            }
+        });
+
+        Event.listen(
+            "cancelDivision",
+            dialog => (this.addDivisionDialog = false)
+        );
+    },
+    watch:{
+        division(val){
+            this.localDivision = val;
+        }
+    }
 };
 </script>
 
 <style>
 .divisions .v-expansion-panel:before {
-  box-shadow: none;
-  border-radius: 0;
+    box-shadow: none;
+    border-radius: 0;
 }
 
 .v-expansion-panel-header {
-  border-radius: 0;
+    border-radius: 0;
 }
 .division-expansion-panel .v-expansion-panel-header--active {
-  background-color: #6897f5 !important;
-  color: white;
+    background-color: #6897f5 !important;
+    color: white;
 }
 .division-expansion-panel.theme--light.v-expansion-panels .v-expansion-panel {
-  background-color: transparent !important;
+    background-color: transparent !important;
 }
 .division-expansion-panel .v-expansion-panel-header {
-  background-color: white;
+    background-color: white;
 }
 .division-expansion-panel .v-expansion-panel-content__wrap {
-  padding-right: 0;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  padding-left: 40px;
+    padding-right: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 40px;
 }
 </style>

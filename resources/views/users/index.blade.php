@@ -1,5 +1,5 @@
 @extends('layouts.default')
 
 @section('content')
-    <views-users-index :users="{{ $users }}"></views-users-index>
+    <views-users-index :division="{{ $division }}"></views-users-index>
 @endsection

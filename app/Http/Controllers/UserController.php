@@ -21,10 +21,9 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-
-        $users = User::with('division')->get();
-
-        return view('users.index', compact('users'));
+        $division = Division::with('users', 'head')->withDepth()->descendantsAndSelf(1)->toTree()->first();
+        
+        return view('users.index', compact('division'));
     }
 
     public function delete($id)
