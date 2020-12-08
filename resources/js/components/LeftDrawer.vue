@@ -171,7 +171,7 @@ export default {
 
                 {
                     icon: "mdi-script-text",
-                    text: "ДО Компании",
+                    text: "ДО Сотрудников",
                     url: "/hr/positions",
                     positions: ["РВЗ"],
                     headOf: [],
