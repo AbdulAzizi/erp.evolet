@@ -17,14 +17,15 @@
             <v-tab href="#cards">
                 Cards
             </v-tab>
+            <template v-if="hrUser">
+                <v-tab href="#tree">
+                    Tree
+                </v-tab>
 
-            <v-tab href="#tree">
-                Tree
-            </v-tab>
-
-            <v-tab href="#list">
-                List
-            </v-tab>
+                <v-tab href="#list">
+                    List
+                </v-tab>
+            </template>
         </v-tabs>
 
         <v-tabs-items v-model="tab" class="transparent">
@@ -134,6 +135,15 @@ export default {
             });
             this.filteredDivisions = [];
             this.findUserInDivision(this.division, value);
+        }
+    },
+    computed: {
+        hrUser() {
+            const position = this.auth.positions.filter(
+                position => position.name == "HR"
+            );
+
+            return position.length > 0;
         }
     }
 };
