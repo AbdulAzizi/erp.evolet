@@ -13,13 +13,14 @@ class RequestController extends Controller
     public function index(Request $request)
     {
        // seperate views for user and (CEO || HR || head of division8) -> Head
+
        return $request->is('requests/head') ? view('request.headView') : view('request.userView');
     }
 
     public function getRequests(RequestFilters $filters)
     {
         
-        $requests = UserRequest::filter($filters)->with('parameters', 'user')->paginate(20);
+        $requests = UserRequest::filter($filters)->with('parameters', 'user.division')->paginate(20);
         
         return $requests;
     }
@@ -104,5 +105,39 @@ class RequestController extends Controller
                 'value' => $values
             ]);
         }
+    }
+
+    public function headUsers()
+    {
+        $ceo = collect(auth()->user()->positions)->filter(function ($elem) {
+            return $elem->name == "РВЗ" || $elem->name == "HR";
+        });
+
+        if(count($ceo)) 
+        {
+            $requests = UserRequest::all();
+            $users = [];
+    
+            foreach($requests as $item)
+            {
+                $users[] = $item->user;
+            }
+    
+            return $users;
+        }
+        else 
+        {
+            $division = Division::find(auth()->user()->division_id);
+
+            $users = [];
+
+            foreach($division->users as $user)
+            {
+                $users[] = $user;
+            }
+
+            return $users;
+        }
+
     }
 }

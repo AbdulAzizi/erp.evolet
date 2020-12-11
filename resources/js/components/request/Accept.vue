@@ -48,7 +48,7 @@ export default {
       const headOfDivision =
         this.auth.id === this.auth.division.head_id && !ceo;
       const ceo = this.auth.positions.some(
-        el => el.name == "ОУПС" || el.name == "РВЗ"
+        el => el.name == "HR" || el.name == "РВЗ"
       );
       return {
         headOfDivision: headOfDivision,

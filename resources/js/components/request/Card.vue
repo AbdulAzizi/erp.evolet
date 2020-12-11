@@ -9,6 +9,7 @@
           <accept-request-btn :request="request" />
           <update-request-btn v-if="auth.id === request.user_id" :request="request" />
           <delete-request-btn v-if="auth.id === request.user_id" :requestId="request.id" />
+          <print-request-btn :request="request" />
         </v-toolbar>
         <v-divider></v-divider>
         <v-card-text class="px-5">

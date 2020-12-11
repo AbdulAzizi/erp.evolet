@@ -186,6 +186,6 @@ Route::prefix('api')->group(function () {
     Route::post('/requests', 'RequestController@store')->name('requests.create');
     Route::put('/requests/{id}', 'RequestController@store')->name('requests.store');
     Route::delete('/requests/{id}', 'RequestController@delete')->name('requests.delete');
-    Route::post('/requests/{id}/verify', 'RequestController@verify')->name('requests.verify');
     Route::post('/requests/{id}/changeStatus', 'RequestController@changeStatus')->name('requests.changeStatus');
+    Route::get('/requests/head/users', 'RequestController@headUsers')->name('head.users');
 });

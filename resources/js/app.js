@@ -331,6 +331,7 @@ Vue.component("requests-card", require("./components/request/Card.vue").default)
 Vue.component("requests-table", require("./components/request/Table.vue").default);
 Vue.component("accept-request-btn", require("./components/request/Accept.vue").default);
 Vue.component("dismiss-request-btn", require("./components/request/Dismiss.vue").default);
+Vue.component("print-request-btn", require("./components/request/Print.vue").default);
 
 
 /****************************RESPONSIBILITIES********************************/

@@ -112,3 +112,4 @@ Route::get('/statuses', 'StatusController@all')->name('api.statuses.all');
 Route::post('/resume/{id}/edit', 'ResumeController@edit')->name('api.resume.edit');
 
 
+
