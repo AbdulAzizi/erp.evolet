@@ -177,15 +177,6 @@ export default {
                     headOf: [],
                     divisions: ["ОУПС"]
                 },
-
-                {
-                    icon: "mdi-account-group",
-                    text: "Сотрудники",
-                    url: "/hr/users",
-                    positions: [],
-                    headOf: [],
-                    divisions: ["ОУПС"]
-                },
                 {
                     icon: "mdi-chart-timeline",
                     text: "История задач",

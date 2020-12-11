@@ -34,14 +34,6 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function usersForHr()
-    {
-        $division = Division::with('users', 'head')->withDepth()->descendantsAndSelf(1)->toTree()->first();
-        // $users = User::with('division')->get();
-
-        return view('hr.users', compact('division'));
-    }
-
     public function edit(Request $request)
     {
         $user = User::find(auth()->user()->id);

@@ -90,7 +90,6 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
     });
 
     Route::group(['prefix' => 'hr', 'middleware' => 'hr'], function () {
-        Route::get('/users', 'UserController@usersForHr')->name('hr.users');
         Route::get('/positions', 'PositionController@index')->name('position.index');
         Route::get('/entries', 'EntryController@index')->name('entries.index');
         Route::post('/entries', 'EntryController@store')->name('entries.store');
