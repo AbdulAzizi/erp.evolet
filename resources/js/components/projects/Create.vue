@@ -145,18 +145,18 @@ export default {
         {
           type: "users",
           name: "kurator_pc",
-          label: "Куратор Портфеля ПК стран",
+          label: "Куратор Промо кампания при Головном офисе (КПГ)",
           rules: ["required"],
           icon: "mdi-account-tie",
-          users: this.filterUsers("Куратор Портфеля ПК стран")
+          users: this.filterUsers("Куратор Промо кампания при Головном офисе (КПГ)")
         },
         {
           type: "users",
           name: "no",
-          label: "НО",
+          label: "Научный аналитик",
           rules: ["required"],
           icon: "mdi-account-tie",
-          users: this.filterUsers("НО")
+          users: this.filterUsers("Научный аналитик")
         },
         {
           type: "users",
