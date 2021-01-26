@@ -35,7 +35,7 @@ class ListsSeeder extends Seeder
             $this->seedListFromFile($listFilePath, $listName);
         }
         
-        // $this->seedMnnForms();
+        $this->seedMnnForms();
 
     }
 
