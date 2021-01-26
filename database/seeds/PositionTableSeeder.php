@@ -31,13 +31,13 @@ class PositionTableSeeder extends Seeder
                 'division_id' => Division::where('abbreviation', 'ОЦМ')->first()->id
             ],
             [
-                'name' => 'Куратор Портфеля ПК стран',
-                'label' => 'Куратор Портфеля ПК стран',
+                'name' => 'Куратор Портфеля при Головном офисе (КПГ)',
+                'label' => 'Куратор Портфеля при Головном офисе (КПГ)',
                 'division_id' => Division::where('abbreviation', 'ОМАР')->first()->id
             ],
             [
-                'name' => 'НО',
-                'label' => 'НО',
+                'name' => 'Научный аналитик',
+                'label' => 'Научный аналитик',
                 'division_id' => Division::where('abbreviation', 'НО')->first()->id
             ],
             [

@@ -106,7 +106,7 @@ export default {
             preparedItems: [],
             productDialog: false,
             selectedProduct: null,
-            usersThatCanCreate: ["Куратор Портфеля ПК стран", "ПК", "НО"]
+            usersThatCanCreate: ["Куратор Портфеля при Головном офисе (КПГ)", "ПК", "Научный аналитик"]
         };
     },
     methods: {
