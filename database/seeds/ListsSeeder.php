@@ -14,8 +14,8 @@ class ListsSeeder extends Seeder
     {
         
         $listsFromFiles = [
-            // 'mnns_list' => '/lists/mnns.php',
-            // 'drug_forms_list' => '/lists/drug_forms.php',
+            'mnns_list' => '/lists/mnns.php',
+            'drug_forms_list' => '/lists/drug_forms.php',
             'countries_list' => '/lists/countries.php',
             'stability_zone_list' => '/lists/stability_zone.php',
             'product_class_list' => '/lists/product_class.php',
