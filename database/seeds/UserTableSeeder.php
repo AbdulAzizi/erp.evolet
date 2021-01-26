@@ -105,7 +105,7 @@ class UserTableSeeder extends Seeder
                 'password' => 'admin',
                 'division' => 'ОМАР',
                 'positionLevel' => 'Главный специалист',
-                'positions' => ['Куратор Портфеля при Головном офисе (КПГ)'],
+                'positions' => ['Куратор Промо кампания при Головном офисе (КПГ)'],
             ],
             [
                 'name' => 'Akbar',
