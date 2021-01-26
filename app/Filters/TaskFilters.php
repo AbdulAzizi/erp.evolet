@@ -47,10 +47,10 @@ class TaskFilters extends QueryFilters
 
         return $this->builder->where(function ($q) use ($authUser){
             $q->where('from_id', $authUser->id)
-              ->orWhere('responsible_id', $authUser->id)
-              ->orWhereHas('watchers', function ($watcher) use ($authUser) {
-                  $watcher->where('user_id', $authUser->id);
-              });
+              ->orWhere('responsible_id', $authUser->id);
+            //   ->orWhereHas('watchers', function ($watcher) use ($authUser) {
+            //       $watcher->where('user_id', $authUser->id);
+            //   });
         });
     }
 
