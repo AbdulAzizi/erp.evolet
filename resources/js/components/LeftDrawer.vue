@@ -123,7 +123,7 @@ export default {
                     text: "Бизнес процессы",
                     url: "/bp",
                     positions: ["Программист"],
-                    headOf: ["ОРПО", "ОМАР"],
+                    headOf: ["ОРПО"],
                     divisions: []
                 },
                 {
@@ -131,7 +131,7 @@ export default {
                     text: "HR",
                     url: "/human-resources",
                     positions: ["Программист"],
-                    headOf: ["ОРПО", "ДЧ", "ОМАР"],
+                    headOf: ["ОРПО", "ДЧ"],
                     divisions: []
                 },
                 {
@@ -139,7 +139,7 @@ export default {
                     text: "Резерв кандидатов",
                     url: "/head-resumes",
                     positions: ["Программист"],
-                    headOf: ["*", "ОМАР"],
+                    headOf: ["*"],
                     divisions: []
                 },
                 // {
@@ -147,7 +147,7 @@ export default {
                 //     text: "Фильтры",
                 //     url: "/admin/products",
                 //     positions: ["Программист", "РВЗ"],
-                //     headOf: ["НАП", "ОМАР"],
+                //     headOf: ["НАП"],
                 //     divisions: []
                 // },
 
@@ -156,7 +156,7 @@ export default {
                 //     text: "Файлы",
                 //     url: "/admin/files",
                 //     positions: ["Программист", "РВЗ"],
-                //     headOf: ["НАП", "ОМАР"],
+                //     headOf: ["НАП"],
                 //     divisions: []
                 // },
 
@@ -165,7 +165,7 @@ export default {
                 //     text: "Заводы",
                 //     url: "/factories",
                 //     positions: ["Программист", "МРБ"],
-                //     headOf: ["ОМАР"],
+                //     headOf: [],
                 //     divisions: []
                 // },
 
