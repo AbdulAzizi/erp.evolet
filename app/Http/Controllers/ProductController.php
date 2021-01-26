@@ -76,36 +76,37 @@ class ProductController extends Controller
                 $form = Form::where('name', 'Форма НО Этап 1')->first();
                 $formExists = true;
             }
-            if ($formExists) {
-                // Load fields of that form
-                $form->load('fields');
-                // Make new field select PC
-                $form->fields[] = [
-                    'label' => 'ПК',
-                    'type' => ['name' => 'input'],
-                    'name' => 'pc',
-                    'value' => $request->pc_id,
-                ];
-                // Make new field select country of PC
-                $form->fields[] = [
-                    'label' => 'Страна',
-                    'type' => ['name' => 'input'],
-                    'name' => 'strana',
-                    'value' => $request->country_id,
-                ];
-                $form->fields[] = [
-                    'label' => 'Проект',
-                    'type' => ['name' => 'input'],
-                    'name' => 'project',
-                    'value' => $request->project_id,
-                ];
-            } else {
-                $this->alert("Вы не можете добавить продукт!");
-                return redirect()->back();
-            }
+        }
+        if ($formExists) {
+            // Load fields of that form
+            $form->load('fields');
+            // Make new field select PC
+            $form->fields[] = [
+                'label' => 'ПК',
+                'type' => ['name' => 'input'],
+                'name' => 'pc',
+                'value' => $request->pc_id,
+            ];
+            // Make new field select country of PC
+            $form->fields[] = [
+                'label' => 'Страна',
+                'type' => ['name' => 'input'],
+                'name' => 'strana',
+                'value' => $request->country_id,
+            ];
+            $form->fields[] = [
+                'label' => 'Проект',
+                'type' => ['name' => 'input'],
+                'name' => 'project',
+                'value' => $request->project_id,
+            ];
+            return view('products.create', compact('form'));
+        } else {
+            $this->alert("Вы не можете добавить продукт!");
+            return redirect()->back();
         }
 
-        return view('products.create', compact('form'));
+        
     }
 
     public function store(Request $request)
