@@ -79,18 +79,18 @@ export default {
             drawer: true,
             items: [],
             dynamicLinks: [
-                {
-                    icon: "mdi-attachment",
-                    text: "АСИ",
-                    url: "/#",
-                    positions: [
-                        "Куратор Портфел ПК стран",
-                        "Руководитель ЭН",
-                        "ПК"
-                    ],
-                    headOf: ["Evolet", "НАП", "ОМАР"],
-                    divisions:[]
-                },
+                // {
+                //     icon: "mdi-attachment",
+                //     text: "АСИ",
+                //     url: "/#",
+                //     positions: [
+                //         "Куратор Портфел ПК стран",
+                //         "Руководитель ЭН",
+                //         "ПК"
+                //     ],
+                //     headOf: ["Evolet", "НАП", "ОМАР"],
+                //     divisions:[]
+                // },
 
                 {
                     icon: "mdi-attachment",
