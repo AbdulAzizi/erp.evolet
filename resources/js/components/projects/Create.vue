@@ -160,7 +160,7 @@ export default {
         },
         {
           type: "users",
-          name: "pc_representative",
+          name: "pc",
           label: "ПК",
           rules: ["required"],
           icon: "mdi-account-tie",
