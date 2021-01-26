@@ -66,12 +66,12 @@ class ProductController extends Controller
         // loop through each positions
         foreach ($positions as $position) {
             // If Portfolio Manager
-            if ($position->name == 'Куратор Портфеля ПК стран' || $position->name == 'ПК') {
+            if ($position->name == 'Куратор Портфеля при Головном офисе (КПГ)' || $position->name == 'ПК') {
                 // Get First BP form
                 $form = Form::where('name', 'Форма ПК Этап 1')->first();
                 $formExists = true;
             }
-            if ($position->name == 'НО') {
+            if ($position->name == 'Научный аналитик') {
                 // Get First BP form
                 $form = Form::where('name', 'Форма НО Этап 1')->first();
                 $formExists = true;
