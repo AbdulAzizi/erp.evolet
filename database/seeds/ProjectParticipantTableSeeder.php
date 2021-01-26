@@ -42,8 +42,8 @@ class ProjectParticipantTableSeeder extends Seeder
                         $query->where('name','Рук НАП');
                     })->first();
         $RVZ = User::where([
-                'name' => 'Sayora',
-                'surname' => 'Mirzoeva'
+                'name' => 'Сайёра',
+                'surname' => 'Мирзоева'
             ])->first();
 
         foreach ($projects as $project) {
