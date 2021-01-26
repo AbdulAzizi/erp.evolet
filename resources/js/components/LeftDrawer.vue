@@ -79,32 +79,32 @@ export default {
             drawer: true,
             items: [],
             dynamicLinks: [
-                // {
-                //     icon: "mdi-attachment",
-                //     text: "АСИ",
-                //     url: "/#",
-                //     positions: [
-                //         "Куратор Портфел ПК стран",
-                //         "Руководитель ЭН",
-                //         "ПК"
-                //     ],
-                //     headOf: ["Evolet", "НАП", "ОМАР"],
-                //     divisions:[]
-                // },
+                {
+                    icon: "mdi-attachment",
+                    text: "АСИ",
+                    url: "/#",
+                    positions: [
+                        "Куратор Портфел ПК стран",
+                        "Руководитель ЭН",
+                        "ПК"
+                    ],
+                    headOf: ["Evolet", "НАП", "ОМАР"],
+                    divisions:[]
+                },
 
-                // {
-                //     icon: "mdi-attachment",
-                //     text: "ЭП",
-                //     url: "/projects?sortBy=country",
-                //     positions: [
-                //         "Программист",
-                //         "Куратор Портфеля ПК стран",
-                //         "НО",
-                //         "ПК"
-                //     ],
-                //     headOf: ["Evolet", "НАП", "ОМАР"],
-                //     divisions: []
-                // },
+                {
+                    icon: "mdi-attachment",
+                    text: "ЭП",
+                    url: "/projects?sortBy=country",
+                    positions: [
+                        "Программист",
+                        "Куратор Портфеля ПК стран",
+                        "НО",
+                        "ПК"
+                    ],
+                    headOf: ["Evolet", "НАП", "ОМАР"],
+                    divisions: []
+                },
 
                 // {
                 //     icon: "mdi-attachment",
@@ -118,6 +118,34 @@ export default {
                 //     headOf: ["Evolet", "НАП", "ОМАР"],
                 //     divisions:[]
                 // },
+
+                {
+                    icon: "mdi-sort-variant",
+                    text: "Фильтры",
+                    url: "/admin/products",
+                    positions: ["Программист", "РВЗ"],
+                    headOf: ["НАП"],
+                    divisions: []
+                },
+
+                {
+                    icon: "mdi-file-document-box-multiple",
+                    text: "Файлы",
+                    url: "/admin/files",
+                    positions: ["Программист", "РВЗ"],
+                    headOf: ["НАП"],
+                    divisions: []
+                },
+
+                {
+                    icon: "mdi-factory",
+                    text: "Заводы",
+                    url: "/factories",
+                    positions: ["Программист", "МРБ"],
+                    headOf: [],
+                    divisions: []
+                },
+// ###################################################################################
                 {
                     icon: "mdi-sitemap",
                     text: "Бизнес процессы",
@@ -142,33 +170,6 @@ export default {
                     headOf: ["*"],
                     divisions: []
                 },
-                // {
-                //     icon: "mdi-sort-variant",
-                //     text: "Фильтры",
-                //     url: "/admin/products",
-                //     positions: ["Программист", "РВЗ"],
-                //     headOf: ["НАП"],
-                //     divisions: []
-                // },
-
-                // {
-                //     icon: "mdi-file-document-box-multiple",
-                //     text: "Файлы",
-                //     url: "/admin/files",
-                //     positions: ["Программист", "РВЗ"],
-                //     headOf: ["НАП"],
-                //     divisions: []
-                // },
-
-                // {
-                //     icon: "mdi-factory",
-                //     text: "Заводы",
-                //     url: "/factories",
-                //     positions: ["Программист", "МРБ"],
-                //     headOf: [],
-                //     divisions: []
-                // },
-
                 {
                     icon: "mdi-script-text",
                     text: "ДО Сотрудников",
