@@ -208,6 +208,14 @@ export default {
                     positions: [],
                     headOf: [],
                     divisions: ["*"]
+                },
+                {
+                    icon: "mdi-door-open",
+                    text: "Турникет",
+                    url: "/hr/entries",
+                    positions: [],
+                    headOf: [],
+                    divisions: ["ОУПС"]
                 }
             ]
         };
