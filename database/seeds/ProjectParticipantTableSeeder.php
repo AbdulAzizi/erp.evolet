@@ -21,22 +21,22 @@ class ProjectParticipantTableSeeder extends Seeder
         //                 $query->where('name','Куратор Портфел ПК стран');
         //             })->get();
         $kuratorUser = User::where([
-                        'name' => 'Alisher',
-                        'surname' => 'Baratov'
+                        'name' => 'Саидчон',
+                        'surname' => 'Комилов'
                     ])->first();
         // $noUsers = User::whereHas('positions',function (Builder $query){
         //                 $query->where('name','НО');
         //             })->get();
         $noUser = User::where([
-                            'name' => 'Mehroj',
-                            'surname' => 'Khakimov'
+                            'name' => 'Парвина',
+                            'surname' => 'Мирахмедова'
                         ])->first();
         // $pcUsers = User::whereHas('positions',function (Builder $query){
         //                 $query->where('name','ПК');
         //             })->get();
         $pcUser = User::where([
-                            'name' => 'Azimjon',
-                            'surname' => 'Vohidi'
+                            'name' => 'Абдулазиз',
+                            'surname' => 'Нуров'
                         ])->first();
         $rukNAP = User::whereHas('positions',function (Builder $query){
                         $query->where('name','Рук НАП');
