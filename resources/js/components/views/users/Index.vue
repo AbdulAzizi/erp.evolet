@@ -17,7 +17,7 @@
             <v-tab href="#cards">
                 Cards
             </v-tab>
-            <template v-if="hrUser">
+            <template v-if="userCanViewInAllTabs">
                 <v-tab href="#tree">
                     Tree
                 </v-tab>
@@ -42,7 +42,7 @@
                             xl="3"
                             class="pa-1 d-flex align-content-stretch"
                         >
-                            <user-card-horizontal :user="user" :link="false" />
+                            <user-card-horizontal :user="user" :link="userCanViewInAllTabs" />
                         </v-col>
                     </v-row>
                 </v-container>
@@ -138,10 +138,10 @@ export default {
         }
     },
     computed: {
-        hrUser() {
-            const position = this.auth.positions.filter(
-                position => position.name == "HR"
-            );
+        userCanViewInAllTabs() {
+            const position = this.auth.positions.filter(position => {
+                return position.name == "HR" || "РВЗ" || "Программист" ;
+            });
 
             return position.length > 0;
         }
