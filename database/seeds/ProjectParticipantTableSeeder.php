@@ -48,9 +48,9 @@ class ProjectParticipantTableSeeder extends Seeder
 
         foreach ($projects as $project) {
             $project->participants()->attach([
-                $kuratorUser->id => ['role_id'=>23],
-                $noUser->id => ['role_id'=>32],
-                $pcUser->id => ['role_id'=>6],
+                $kuratorUser->id => ['role_id'=> Position::where('name','Куратор Промо кампания при Головном офисе (КПГ)')->first()->id ],
+                $noUser->id => ['role_id'=> Position::where('name','Научный аналитик')->first()->id ],
+                $pcUser->id => ['role_id'=> Position::where('name','ПК')->first()->id],
                 $rukNAP->id => [ 'role_id' => Position::where('name','Рук НАП')->first()->id ],
                 $RVZ->id => [ 'role_id' => Position::where('name','РВЗ')->first()->id ],
             ]);

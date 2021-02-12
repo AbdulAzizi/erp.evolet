@@ -31,7 +31,7 @@ class PositionTableSeeder extends Seeder
                 'division_id' => Division::where('abbreviation', 'ОЦМ')->first()->id
             ],
             [
-                'name' => 'Куратор Портфеля при Головном офисе (КПГ)',
+                'name' => 'Куратор Промо кампания при Головном офисе (КПГ)',
                 'label' => 'Куратор Портфеля при Головном офисе (КПГ)',
                 'division_id' => Division::where('abbreviation', 'ОМАР')->first()->id
             ],

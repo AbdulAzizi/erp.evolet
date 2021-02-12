@@ -8,14 +8,14 @@ class CreateListsMigration extends Migration
 {
 
     private $lists = [
-        // 'mnns_list' => [
-        //     'bigIncrements' => 'id',
-        //     'longText' => 'name',
-        // ],
-        // 'drug_forms_list' => [
-        //     'bigIncrements' => 'id',
-        //     'longText' => 'name',
-        // ],
+        'mnns_list' => [
+            'bigIncrements' => 'id',
+            'longText' => 'name',
+        ],
+        'drug_forms_list' => [
+            'bigIncrements' => 'id',
+            'longText' => 'name',
+        ],
         'countries_list' => [
             'bigIncrements' => 'id',
             'longText' => 'name',
