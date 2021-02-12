@@ -162,14 +162,14 @@ export default {
                     headOf: ["ОРПО", "ДЧ"],
                     divisions: []
                 },
-                {
-                    icon: "mdi-account-box-multiple",
-                    text: "Резерв кандидатов",
-                    url: "/head-resumes",
-                    positions: ["Программист"],
-                    headOf: ["*"],
-                    divisions: []
-                },
+                // {
+                //     icon: "mdi-account-box-multiple",
+                //     text: "Резерв кандидатов",
+                //     url: "/head-resumes",
+                //     positions: ["Программист"],
+                //     headOf: ["*"],
+                //     divisions: []
+                // },
                 {
                     icon: "mdi-script-text",
                     text: "ДО Сотрудников",
