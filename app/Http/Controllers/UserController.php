@@ -29,7 +29,7 @@ class UserController extends Controller
     public function delete($id)
     {
         $user = User::find($id);
-        $user->delete();
+        $user->forceDelete();
 
         return redirect()->back();
     }
@@ -255,5 +255,13 @@ class UserController extends Controller
     public function tasks()
     {
         return view('users.tasks');
+    }
+
+    public function fire($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+
+        return redirect()->back();
     }
 }
