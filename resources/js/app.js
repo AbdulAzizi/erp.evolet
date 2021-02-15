@@ -376,6 +376,7 @@ Vue.component("user-card-horizontal", require("./components/profile/UserCardHori
 Vue.component("human-resources-view", require("./components/views/HumanResources.vue").default);
 
 Vue.component("views-users-index", require("./components/views/users/Index.vue").default);
+Vue.component("views-users-fired", require("./components/views/users/Fired.vue").default);
 
 Vue.component("resumes-view", require("./components/views/Resume.vue").default);
 

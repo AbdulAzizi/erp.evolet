@@ -23,6 +23,8 @@ Route::group(['middleware' => ['auth', 'data.default']], function () {
 
     Route::get('/division', 'DivisionController@show')->name('division.single'); //FIXME Maybe convert to /divisions
 
+    Route::get('/users/fired', 'UserController@fired')->name('users.fired');
+    
     Route::group(['middleware' => 'profile'], function () {
         Route::get('/users/{id}/tasks', 'ProfileController@tasks')->name('profile.tasks');
         Route::get('/users/{id}/positions', 'ProfileController@positions')->name('profile.positions');

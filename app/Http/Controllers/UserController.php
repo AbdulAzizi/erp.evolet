@@ -264,4 +264,10 @@ class UserController extends Controller
 
         return redirect()->back();
     }
+
+    public function fired()
+    {
+        $users = User::onlyTrashed()->get();
+        return view('users.fired',compact('users'));
+    }
 }

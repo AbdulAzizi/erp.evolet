@@ -154,14 +154,14 @@ export default {
                     headOf: ["ОРПО"],
                     divisions: []
                 },
-                {
-                    icon: "mdi-account-tie",
-                    text: "HR",
-                    url: "/human-resources",
-                    positions: ["Программист"],
-                    headOf: ["ОРПО", "ДЧ"],
-                    divisions: []
-                },
+                // {
+                //     icon: "mdi-account-tie",
+                //     text: "HR",
+                //     url: "/human-resources",
+                //     positions: ["Программист"],
+                //     headOf: ["ОРПО", "ДЧ"],
+                //     divisions: []
+                // },
                 // {
                 //     icon: "mdi-account-box-multiple",
                 //     text: "Резерв кандидатов",
@@ -170,6 +170,14 @@ export default {
                 //     headOf: ["*"],
                 //     divisions: []
                 // },
+                {
+                    icon: "mdi-account-remove",
+                    text: "Уволенный сотрудники",
+                    url: "/users/fired",
+                    positions: [],
+                    headOf: [],
+                    divisions: ["ОУПС"]
+                },
                 {
                     icon: "mdi-script-text",
                     text: "ДО Сотрудников",

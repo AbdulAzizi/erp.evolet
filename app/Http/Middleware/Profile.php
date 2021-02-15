@@ -18,7 +18,7 @@ class Profile
      */
     public function handle($request, Closure $next)
     {
-        $user = User::find($request->id);
+        $user = User::withTrashed()->find($request->id);
         View::share('user', $user);
 
         return $next($request);
