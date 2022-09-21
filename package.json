@@ -35,6 +35,6 @@
         "v-infinite-scroll": "^1.0.4",
         "v-mask": "^2.2.1",
         "vuedraggable": "^2.23.2",
-        "vuetify": "^2.3.3"
+        "vuetify": "^2.6.10"
     }
 }
